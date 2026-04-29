@@ -1,0 +1,1421 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model action_logs {
+  id             String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  distributor_id String?       @db.Uuid
+  user_id        String?       @db.Uuid
+  store_staff_id String?       @db.Uuid
+  entity_type    String        @db.VarChar(50)
+  entity_id      String?       @db.Uuid
+  action_type    String        @db.VarChar(50)
+  action_label   String?       @db.VarChar(150)
+  action_data    Json?
+  ip_address     String?       @db.Inet
+  user_agent     String?
+  created_at     DateTime      @default(now()) @db.Timestamptz(6)
+  distributors   distributors? @relation(fields: [distributor_id], references: [id], onUpdate: NoAction)
+  store_staff    store_staff?  @relation(fields: [store_staff_id], references: [id], onUpdate: NoAction)
+  users          users?        @relation(fields: [user_id], references: [id], onUpdate: NoAction)
+
+  @@index([created_at], map: "idx_action_logs_created_at")
+  @@index([distributor_id], map: "idx_action_logs_distributor_id")
+  @@index([entity_type, entity_id], map: "idx_action_logs_entity_type_entity_id")
+  @@index([store_staff_id], map: "idx_action_logs_store_staff_id")
+  @@index([user_id], map: "idx_action_logs_user_id")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model alert_rules {
+  id                    String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  distributor_id        String       @db.Uuid
+  alert_type            String       @db.VarChar(50)
+  name                  String       @db.VarChar(150)
+  is_active             Boolean      @default(true)
+  initial_delay_minutes Int          @default(60)
+  repeat_every_minutes  Int?
+  max_repeats           Int          @default(0)
+  send_to_cdv           Boolean      @default(true)
+  send_to_atc           Boolean      @default(true)
+  send_to_store         Boolean      @default(false)
+  created_at            DateTime     @default(now()) @db.Timestamptz(6)
+  updated_at            DateTime     @default(now()) @db.Timestamptz(6)
+  distributors          distributors @relation(fields: [distributor_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  bon_alerts            bon_alerts[]
+
+  @@index([distributor_id], map: "idx_alert_rules_distributor_id")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model anomaly_types {
+  id             String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  distributor_id String          @db.Uuid
+  code           String          @db.VarChar(50)
+  label          String          @db.VarChar(150)
+  description    String?
+  severity       String          @default("medium") @db.VarChar(30)
+  is_active      Boolean         @default(true)
+  created_at     DateTime        @default(now()) @db.Timestamptz(6)
+  updated_at     DateTime        @default(now()) @db.Timestamptz(6)
+  distributors   distributors    @relation(fields: [distributor_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  bon_anomalies  bon_anomalies[]
+
+  @@unique([distributor_id, code])
+  @@index([distributor_id], map: "idx_anomaly_types_distributor_id")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model auth_logs {
+  id               String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  distributor_id   String?         @db.Uuid
+  user_id          String?         @db.Uuid
+  store_account_id String?         @db.Uuid
+  store_staff_id   String?         @db.Uuid
+  actor_type       String          @db.VarChar(30)
+  event_type       String          @db.VarChar(30)
+  success          Boolean         @default(true)
+  email_attempt    String?         @db.VarChar(150)
+  ip_address       String?         @db.Inet
+  user_agent       String?
+  event_at         DateTime        @default(now()) @db.Timestamptz(6)
+  created_at       DateTime        @default(now()) @db.Timestamptz(6)
+  distributors     distributors?   @relation(fields: [distributor_id], references: [id], onUpdate: NoAction)
+  store_accounts   store_accounts? @relation(fields: [store_account_id], references: [id], onUpdate: NoAction)
+  store_staff      store_staff?    @relation(fields: [store_staff_id], references: [id], onUpdate: NoAction)
+  users            users?          @relation(fields: [user_id], references: [id], onUpdate: NoAction)
+
+  @@index([distributor_id], map: "idx_auth_logs_distributor_id")
+  @@index([event_at], map: "idx_auth_logs_event_at")
+  @@index([store_account_id], map: "idx_auth_logs_store_account_id")
+  @@index([store_staff_id], map: "idx_auth_logs_store_staff_id")
+  @@index([user_id], map: "idx_auth_logs_user_id")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model auth_reset_tokens {
+  id               String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  distributor_id   String?         @db.Uuid
+  user_id          String?         @db.Uuid
+  store_account_id String?         @db.Uuid
+  store_staff_id   String?         @db.Uuid
+  token_hash       String
+  reset_type       String          @db.VarChar(30)
+  is_used          Boolean         @default(false)
+  expires_at       DateTime        @db.Timestamptz(6)
+  used_at          DateTime?       @db.Timestamptz(6)
+  created_at       DateTime        @default(now()) @db.Timestamptz(6)
+  distributors     distributors?   @relation(fields: [distributor_id], references: [id], onUpdate: NoAction)
+  store_accounts   store_accounts? @relation(fields: [store_account_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  store_staff      store_staff?    @relation(fields: [store_staff_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  users            users?          @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([expires_at], map: "idx_auth_reset_tokens_expires_at")
+  @@index([store_account_id], map: "idx_auth_reset_tokens_store_account_id")
+  @@index([store_staff_id], map: "idx_auth_reset_tokens_store_staff_id")
+  @@index([user_id], map: "idx_auth_reset_tokens_user_id")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model auth_sessions {
+  id                 String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  distributor_id     String?         @db.Uuid
+  user_id            String?         @db.Uuid
+  store_account_id   String?         @db.Uuid
+  store_staff_id     String?         @db.Uuid
+  session_token_hash String
+  refresh_token_hash String?
+  actor_type         String          @db.VarChar(30)
+  is_active          Boolean         @default(true)
+  ip_address         String?         @db.Inet
+  user_agent         String?
+  expires_at         DateTime        @db.Timestamptz(6)
+  last_seen_at       DateTime?       @db.Timestamptz(6)
+  revoked_at         DateTime?       @db.Timestamptz(6)
+  created_at         DateTime        @default(now()) @db.Timestamptz(6)
+  updated_at         DateTime        @default(now()) @db.Timestamptz(6)
+  distributors       distributors?   @relation(fields: [distributor_id], references: [id], onUpdate: NoAction)
+  store_accounts     store_accounts? @relation(fields: [store_account_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  store_staff        store_staff?    @relation(fields: [store_staff_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  users              users?          @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([distributor_id], map: "idx_auth_sessions_distributor_id")
+  @@index([expires_at], map: "idx_auth_sessions_expires_at")
+  @@index([is_active], map: "idx_auth_sessions_is_active")
+  @@index([store_account_id], map: "idx_auth_sessions_store_account_id")
+  @@index([store_staff_id], map: "idx_auth_sessions_store_staff_id")
+  @@index([user_id], map: "idx_auth_sessions_user_id")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model bon_alert_events {
+  id            String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  bon_alert_id  String     @db.Uuid
+  event_type    String     @db.VarChar(30)
+  event_at      DateTime   @default(now()) @db.Timestamptz(6)
+  sent_to_cdv   Boolean    @default(false)
+  sent_to_atc   Boolean    @default(false)
+  sent_to_store Boolean    @default(false)
+  event_note    String?
+  created_at    DateTime   @default(now()) @db.Timestamptz(6)
+  bon_alerts    bon_alerts @relation(fields: [bon_alert_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([bon_alert_id], map: "idx_bon_alert_events_bon_alert_id")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model bon_alerts {
+  id                 String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  bon_id             String             @db.Uuid
+  alert_rule_id      String?            @db.Uuid
+  alert_type         String             @db.VarChar(50)
+  status             String             @default("active") @db.VarChar(30)
+  first_triggered_at DateTime           @default(now()) @db.Timestamptz(6)
+  last_triggered_at  DateTime           @default(now()) @db.Timestamptz(6)
+  next_trigger_at    DateTime?          @db.Timestamptz(6)
+  repeat_count       Int                @default(0)
+  stopped_at         DateTime?          @db.Timestamptz(6)
+  stop_reason        String?            @db.VarChar(50)
+  context_data       Json?
+  created_at         DateTime           @default(now()) @db.Timestamptz(6)
+  updated_at         DateTime           @default(now()) @db.Timestamptz(6)
+  bon_alert_events   bon_alert_events[]
+  alert_rules        alert_rules?       @relation(fields: [alert_rule_id], references: [id], onUpdate: NoAction)
+  bons               bons               @relation(fields: [bon_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([bon_id], map: "idx_bon_alerts_bon_id")
+  @@index([next_trigger_at], map: "idx_bon_alerts_next_trigger_at")
+  @@index([status], map: "idx_bon_alerts_status")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model bon_anomalies {
+  id                   String                @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  bon_id               String                @db.Uuid
+  anomaly_type_id      String                @db.Uuid
+  detected_by_user_id  String?               @db.Uuid
+  detected_by_staff_id String?               @db.Uuid
+  status               String                @default("open") @db.VarChar(30)
+  severity             String                @db.VarChar(30)
+  description          String?
+  resolution_note      String?
+  detected_at          DateTime              @default(now()) @db.Timestamptz(6)
+  resolved_at          DateTime?             @db.Timestamptz(6)
+  created_at           DateTime              @default(now()) @db.Timestamptz(6)
+  updated_at           DateTime              @default(now()) @db.Timestamptz(6)
+  anomaly_types        anomaly_types         @relation(fields: [anomaly_type_id], references: [id], onUpdate: NoAction)
+  bons                 bons                  @relation(fields: [bon_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  store_staff          store_staff?          @relation(fields: [detected_by_staff_id], references: [id], onUpdate: NoAction)
+  users                users?                @relation(fields: [detected_by_user_id], references: [id], onUpdate: NoAction)
+  bon_anomaly_history  bon_anomaly_history[]
+
+  @@index([bon_id], map: "idx_bon_anomalies_bon_id")
+  @@index([status], map: "idx_bon_anomalies_status")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model bon_anomaly_history {
+  id                  String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  bon_anomaly_id      String        @db.Uuid
+  old_status          String?       @db.VarChar(30)
+  new_status          String        @db.VarChar(30)
+  changed_by_user_id  String?       @db.Uuid
+  changed_by_staff_id String?       @db.Uuid
+  note                String?
+  created_at          DateTime      @default(now()) @db.Timestamptz(6)
+  bon_anomalies       bon_anomalies @relation(fields: [bon_anomaly_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  store_staff         store_staff?  @relation(fields: [changed_by_staff_id], references: [id], onUpdate: NoAction)
+  users               users?        @relation(fields: [changed_by_user_id], references: [id], onUpdate: NoAction)
+
+  @@index([bon_anomaly_id], map: "idx_bon_anomaly_history_bon_anomaly_id")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model bon_comment_reads {
+  id             String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  comment_id     String       @db.Uuid
+  user_id        String?      @db.Uuid
+  store_staff_id String?      @db.Uuid
+  read_at        DateTime     @default(now()) @db.Timestamptz(6)
+  created_at     DateTime     @default(now()) @db.Timestamptz(6)
+  bon_comments   bon_comments @relation(fields: [comment_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  store_staff    store_staff? @relation(fields: [store_staff_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  users          users?       @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([comment_id, user_id, store_staff_id])
+  @@index([comment_id], map: "idx_bon_comment_reads_comment_id")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model bon_comments {
+  id                    String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  bon_id                String              @db.Uuid
+  parent_comment_id     String?             @db.Uuid
+  author_user_id        String?             @db.Uuid
+  author_store_staff_id String?             @db.Uuid
+  comment_type          String              @default("internal") @db.VarChar(30)
+  visibility            String              @default("internal") @db.VarChar(30)
+  content               String
+  is_edited             Boolean             @default(false)
+  edited_at             DateTime?           @db.Timestamptz(6)
+  is_deleted            Boolean             @default(false)
+  deleted_at            DateTime?           @db.Timestamptz(6)
+  created_at            DateTime            @default(now()) @db.Timestamptz(6)
+  updated_at            DateTime            @default(now()) @db.Timestamptz(6)
+  bon_comment_reads     bon_comment_reads[]
+  store_staff           store_staff?        @relation(fields: [author_store_staff_id], references: [id], onUpdate: NoAction)
+  users                 users?              @relation(fields: [author_user_id], references: [id], onUpdate: NoAction)
+  bons                  bons                @relation(fields: [bon_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  bon_comments          bon_comments?       @relation("bon_commentsTobon_comments", fields: [parent_comment_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  other_bon_comments    bon_comments[]      @relation("bon_commentsTobon_comments")
+
+  @@index([bon_id], map: "idx_bon_comments_bon_id")
+  @@index([parent_comment_id], map: "idx_bon_comments_parent_comment_id")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model contains an expression index which requires additional setup for migrations. Visit https://pris.ly/d/expression-indexes for more info.
+model bon_lines {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  bon_id       String   @db.Uuid
+  line_number  Int
+  quantity     Decimal? @default(1) @db.Decimal(10, 2)
+  item_type    String   @default("reference") @db.VarChar(30)
+  reference    String?  @db.VarChar(100)
+  designation  String?
+  unit_price   Decimal? @db.Decimal(10, 2)
+  comment      String?
+  created_at   DateTime @default(now()) @db.Timestamptz(6)
+  updated_at   DateTime @default(now()) @db.Timestamptz(6)
+  billing_code String?  @db.VarChar(50)
+  bons         bons     @relation(fields: [bon_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([bon_id, line_number])
+  @@index([bon_id], map: "idx_bon_lines_bon_id")
+  @@index([billing_code], map: "idx_bon_lines_billing_code")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model bon_photos {
+  id                   String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  bon_id               String        @db.Uuid
+  bon_vehicle_id       String?       @db.Uuid
+  file_name            String        @db.VarChar(255)
+  original_name        String?       @db.VarChar(255)
+  mime_type            String?       @db.VarChar(100)
+  file_size_bytes      BigInt?
+  storage_provider     String        @default("local") @db.VarChar(50)
+  storage_path         String
+  public_url           String?
+  uploaded_by_user_id  String?       @db.Uuid
+  uploaded_by_staff_id String?       @db.Uuid
+  photo_type           String        @default("general") @db.VarChar(50)
+  caption              String?
+  sort_order           Int           @default(1)
+  created_at           DateTime      @default(now()) @db.Timestamptz(6)
+  updated_at           DateTime      @default(now()) @db.Timestamptz(6)
+  bons                 bons          @relation(fields: [bon_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  bon_vehicles         bon_vehicles? @relation(fields: [bon_vehicle_id], references: [id], onUpdate: NoAction)
+  store_staff          store_staff?  @relation(fields: [uploaded_by_staff_id], references: [id], onUpdate: NoAction)
+  users                users?        @relation(fields: [uploaded_by_user_id], references: [id], onUpdate: NoAction)
+
+  @@index([bon_id], map: "idx_bon_photos_bon_id")
+  @@index([bon_vehicle_id], map: "idx_bon_photos_bon_vehicle_id")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model bon_status_history {
+  id                  String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  bon_id              String       @db.Uuid
+  old_status          String?      @db.VarChar(50)
+  new_status          String       @db.VarChar(50)
+  changed_by_user_id  String?      @db.Uuid
+  changed_by_staff_id String?      @db.Uuid
+  reason              String?
+  created_at          DateTime     @default(now()) @db.Timestamptz(6)
+  action_key          String?      @db.VarChar(50)
+  bons                bons         @relation(fields: [bon_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  store_staff         store_staff? @relation(fields: [changed_by_staff_id], references: [id], onUpdate: NoAction)
+  users               users?       @relation(fields: [changed_by_user_id], references: [id], onUpdate: NoAction)
+
+  @@index([bon_id], map: "idx_bon_status_history_bon_id")
+  @@index([created_at], map: "idx_bon_status_history_created_at")
+  @@index([action_key], map: "idx_bon_status_history_action_key")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model bon_vehicles {
+  id                String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  bon_id            String          @db.Uuid
+  vehicle_memory_id String?         @db.Uuid
+  vehicle_order     Int             @default(1)
+  plate_number      String?         @db.VarChar(20)
+  vin               String?         @db.VarChar(50)
+  brand             String?         @db.VarChar(100)
+  model             String?         @db.VarChar(100)
+  engine            String?         @db.VarChar(100)
+  registration_date DateTime?       @db.Date
+  mileage           Int?
+  notes             String?
+  created_at        DateTime        @default(now()) @db.Timestamptz(6)
+  updated_at        DateTime        @default(now()) @db.Timestamptz(6)
+  bon_photos        bon_photos[]
+  bons              bons            @relation(fields: [bon_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  vehicle_memory    vehicle_memory? @relation(fields: [vehicle_memory_id], references: [id], onUpdate: NoAction)
+
+  @@unique([bon_id, vehicle_order])
+  @@index([bon_id], map: "idx_bon_vehicles_bon_id")
+  @@index([plate_number], map: "idx_bon_vehicles_plate_number")
+  @@index([vin], map: "idx_bon_vehicles_vin")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model bons {
+  id                 String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  distributor_id     String               @db.Uuid
+  client_id          String               @db.Uuid
+  created_by_user_id String               @db.Uuid
+  assigned_store_id  String?              @db.Uuid
+  taken_by_staff_id  String?              @db.Uuid
+  bon_number         String               @db.VarChar(50)
+  bon_type           String               @db.VarChar(50)
+  status             String               @default("frigo") @db.VarChar(50)
+  title              String?              @db.VarChar(150)
+  comment            String?
+  refusal_reason     String?
+  correction_reason  String?
+  sent_at            DateTime?            @db.Timestamptz(6)
+  taken_at           DateTime?            @db.Timestamptz(6)
+  started_at         DateTime?            @db.Timestamptz(6)
+  completed_at       DateTime?            @db.Timestamptz(6)
+  refused_at         DateTime?            @db.Timestamptz(6)
+  corrected_at       DateTime?            @db.Timestamptz(6)
+  created_at         DateTime             @default(now()) @db.Timestamptz(6)
+  updated_at         DateTime             @default(now()) @db.Timestamptz(6)
+  priority           String?              @db.VarChar(20)
+  due_at             DateTime?            @db.Timestamptz(6)
+  bon_alerts         bon_alerts[]
+  bon_anomalies      bon_anomalies[]
+  bon_comments       bon_comments[]
+  bon_lines          bon_lines[]
+  bon_photos         bon_photos[]
+  bon_status_history bon_status_history[]
+  bon_vehicles       bon_vehicles[]
+  stores             stores?              @relation(fields: [assigned_store_id], references: [id], onUpdate: NoAction)
+  clients            clients              @relation(fields: [client_id], references: [id], onUpdate: NoAction)
+  users              users                @relation(fields: [created_by_user_id], references: [id], onUpdate: NoAction)
+  distributors       distributors         @relation(fields: [distributor_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  store_staff        store_staff?         @relation(fields: [taken_by_staff_id], references: [id], onUpdate: NoAction)
+  documents          documents[]
+  releve_parc_items  releve_parc_items[]
+  client_equipment   client_equipment[]
+
+  @@unique([distributor_id, bon_number])
+  @@index([assigned_store_id], map: "idx_bons_assigned_store_id")
+  @@index([bon_number], map: "idx_bons_bon_number")
+  @@index([bon_type], map: "idx_bons_bon_type")
+  @@index([client_id], map: "idx_bons_client_id")
+  @@index([created_at], map: "idx_bons_created_at")
+  @@index([created_by_user_id], map: "idx_bons_created_by_user_id")
+  @@index([priority], map: "idx_bons_priority")
+  @@index([due_at], map: "idx_bons_due_at")
+  @@index([distributor_id], map: "idx_bons_distributor_id")
+  @@index([sent_at], map: "idx_bons_sent_at")
+  @@index([status], map: "idx_bons_status")
+  @@index([taken_by_staff_id], map: "idx_bons_taken_by_staff_id")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model catalogue_campaigns {
+  id                       String                     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  distributor_id           String                     @db.Uuid
+  catalogue_id             String?                    @db.Uuid
+  code                     String                     @db.VarChar(50)
+  name                     String                     @db.VarChar(150)
+  campaign_type            String                     @db.VarChar(30)
+  description              String?
+  billing_code             String?                    @db.VarChar(50)
+  valid_from               DateTime?                  @db.Date
+  valid_to                 DateTime?                  @db.Date
+  is_active                Boolean                    @default(true)
+  created_at               DateTime                   @default(now()) @db.Timestamptz(6)
+  updated_at               DateTime                   @default(now()) @db.Timestamptz(6)
+  catalogues               catalogues?                @relation(fields: [catalogue_id], references: [id], onUpdate: NoAction)
+  distributors             distributors               @relation(fields: [distributor_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  catalogue_item_campaigns catalogue_item_campaigns[]
+
+  @@unique([distributor_id, code])
+  @@index([campaign_type], map: "idx_catalogue_campaigns_campaign_type")
+  @@index([catalogue_id], map: "idx_catalogue_campaigns_catalogue_id")
+  @@index([distributor_id], map: "idx_catalogue_campaigns_distributor_id")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model catalogue_import_staging {
+  id                  String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  import_batch_id     String             @db.Uuid
+  import_batch_row_id String?            @db.Uuid
+  distributor_id      String             @db.Uuid
+  supplier_code       String?            @db.VarChar(50)
+  catalogue_code      String?            @db.VarChar(50)
+  campaign_code       String?            @db.VarChar(50)
+  internal_code       String?            @db.VarChar(100)
+  supplier_reference  String?            @db.VarChar(100)
+  billing_code        String?            @db.VarChar(50)
+  designation         String?            @db.VarChar(255)
+  description         String?
+  item_family         String?            @db.VarChar(50)
+  brand               String?            @db.VarChar(100)
+  unit_price_ht       Decimal?           @db.Decimal(12, 2)
+  unit_price_ttc      Decimal?           @db.Decimal(12, 2)
+  vat_rate            Decimal?           @db.Decimal(5, 2)
+  stock_quantity      Decimal?           @db.Decimal(12, 2)
+  attribute_data      Json?
+  validation_status   String             @default("pending") @db.VarChar(30)
+  validation_message  String?
+  created_at          DateTime           @default(now()) @db.Timestamptz(6)
+  updated_at          DateTime           @default(now()) @db.Timestamptz(6)
+  distributors        distributors       @relation(fields: [distributor_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  import_batches      import_batches     @relation(fields: [import_batch_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  import_batch_rows   import_batch_rows? @relation(fields: [import_batch_row_id], references: [id], onUpdate: NoAction)
+
+  @@index([import_batch_id], map: "idx_catalogue_import_staging_import_batch_id")
+  @@index([validation_status], map: "idx_catalogue_import_staging_validation_status")
+}
+
+model catalogue_item_attributes {
+  id                String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  catalogue_item_id String          @db.Uuid
+  attribute_key     String          @db.VarChar(100)
+  attribute_value   String
+  created_at        DateTime        @default(now()) @db.Timestamptz(6)
+  catalogue_items   catalogue_items @relation(fields: [catalogue_item_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([catalogue_item_id, attribute_key])
+  @@index([catalogue_item_id], map: "idx_catalogue_item_attributes_catalogue_item_id")
+}
+
+model catalogue_item_campaigns {
+  id                  String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  catalogue_item_id   String              @db.Uuid
+  campaign_id         String              @db.Uuid
+  promo_price_ht      Decimal?            @db.Decimal(12, 2)
+  promo_price_ttc     Decimal?            @db.Decimal(12, 2)
+  discount_percent    Decimal?            @db.Decimal(5, 2)
+  is_active           Boolean             @default(true)
+  created_at          DateTime            @default(now()) @db.Timestamptz(6)
+  updated_at          DateTime            @default(now()) @db.Timestamptz(6)
+  catalogue_campaigns catalogue_campaigns @relation(fields: [campaign_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  catalogue_items     catalogue_items     @relation(fields: [catalogue_item_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([catalogue_item_id, campaign_id])
+  @@index([campaign_id], map: "idx_catalogue_item_campaigns_campaign_id")
+  @@index([catalogue_item_id], map: "idx_catalogue_item_campaigns_catalogue_item_id")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model contains an expression index which requires additional setup for migrations. Visit https://pris.ly/d/expression-indexes for more info.
+model catalogue_items {
+  id                        String                      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  distributor_id            String                      @db.Uuid
+  catalogue_id              String?                     @db.Uuid
+  supplier_id               String?                     @db.Uuid
+  internal_code             String?                     @db.VarChar(100)
+  supplier_reference        String?                     @db.VarChar(100)
+  billing_code              String?                     @db.VarChar(50)
+  designation               String                      @db.VarChar(255)
+  description               String?
+  item_family               String                      @db.VarChar(50)
+  brand                     String?                     @db.VarChar(100)
+  unit_price_ht             Decimal?                    @db.Decimal(12, 2)
+  unit_price_ttc            Decimal?                    @db.Decimal(12, 2)
+  vat_rate                  Decimal?                    @db.Decimal(5, 2)
+  currency                  String                      @default("EUR") @db.VarChar(10)
+  stock_quantity            Decimal?                    @db.Decimal(12, 2)
+  is_active                 Boolean                     @default(true)
+  is_featured               Boolean                     @default(false)
+  searchable_text           String?
+  image_url                 String?
+  created_at                DateTime                    @default(now()) @db.Timestamptz(6)
+  updated_at                DateTime                    @default(now()) @db.Timestamptz(6)
+  catalogue_item_attributes catalogue_item_attributes[]
+  catalogue_item_campaigns  catalogue_item_campaigns[]
+  catalogues                catalogues?                 @relation(fields: [catalogue_id], references: [id], onUpdate: NoAction)
+  distributors              distributors                @relation(fields: [distributor_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  suppliers                 suppliers?                  @relation(fields: [supplier_id], references: [id], onUpdate: NoAction)
+
+  @@index([catalogue_id], map: "idx_catalogue_items_catalogue_id")
+  @@index([distributor_id], map: "idx_catalogue_items_distributor_id")
+  @@index([internal_code], map: "idx_catalogue_items_internal_code")
+  @@index([item_family], map: "idx_catalogue_items_item_family")
+  @@index([supplier_id], map: "idx_catalogue_items_supplier_id")
+  @@index([supplier_reference], map: "idx_catalogue_items_supplier_reference")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model catalogues {
+  id                  String                @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  distributor_id      String                @db.Uuid
+  supplier_id         String?               @db.Uuid
+  code                String                @db.VarChar(50)
+  name                String                @db.VarChar(150)
+  catalogue_type      String                @db.VarChar(30)
+  description         String?
+  is_active           Boolean               @default(true)
+  valid_from          DateTime?             @db.Date
+  valid_to            DateTime?             @db.Date
+  created_at          DateTime              @default(now()) @db.Timestamptz(6)
+  updated_at          DateTime              @default(now()) @db.Timestamptz(6)
+  catalogue_campaigns catalogue_campaigns[]
+  catalogue_items     catalogue_items[]
+  distributors        distributors          @relation(fields: [distributor_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  suppliers           suppliers?            @relation(fields: [supplier_id], references: [id], onUpdate: NoAction)
+
+  @@unique([distributor_id, code])
+  @@index([catalogue_type], map: "idx_catalogues_catalogue_type")
+  @@index([distributor_id], map: "idx_catalogues_distributor_id")
+  @@index([supplier_id], map: "idx_catalogues_supplier_id")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model client_import_staging {
+  id                  String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  import_batch_id     String             @db.Uuid
+  import_batch_row_id String?            @db.Uuid
+  distributor_id      String             @db.Uuid
+  client_code         String?            @db.VarChar(50)
+  client_name         String?            @db.VarChar(150)
+  email               String?            @db.VarChar(150)
+  phone               String?            @db.VarChar(30)
+  mobile              String?            @db.VarChar(30)
+  address_line_1      String?            @db.VarChar(200)
+  address_line_2      String?            @db.VarChar(200)
+  postal_code         String?            @db.VarChar(20)
+  city                String?            @db.VarChar(100)
+  assigned_atc_email  String?            @db.VarChar(150)
+  assigned_store_code String?            @db.VarChar(50)
+  representative_name String?            @db.VarChar(150)
+  validation_status   String             @default("pending") @db.VarChar(30)
+  validation_message  String?
+  created_at          DateTime           @default(now()) @db.Timestamptz(6)
+  updated_at          DateTime           @default(now()) @db.Timestamptz(6)
+  distributors        distributors       @relation(fields: [distributor_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  import_batches      import_batches     @relation(fields: [import_batch_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  import_batch_rows   import_batch_rows? @relation(fields: [import_batch_row_id], references: [id], onUpdate: NoAction)
+
+  @@index([import_batch_id], map: "idx_client_import_staging_import_batch_id")
+  @@index([validation_status], map: "idx_client_import_staging_validation_status")
+}
+
+/// This model contains an expression index which requires additional setup for migrations. Visit https://pris.ly/d/expression-indexes for more info.
+model clients {
+  id                       String                     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  distributor_id           String                     @db.Uuid
+  assigned_user_id         String?                    @db.Uuid
+  store_id                 String?                    @db.Uuid
+  code                     String?                    @db.VarChar(50)
+  name                     String                     @db.VarChar(150)
+  billing_name             String?                    @db.VarChar(160)
+  representative_name      String?                    @db.VarChar(160)
+  email                    String?                    @db.VarChar(150)
+  phone                    String?                    @db.VarChar(30)
+  address_line_1           String?                    @db.VarChar(200)
+  address_line_2           String?                    @db.VarChar(200)
+  postal_code              String?                    @db.VarChar(20)
+  city                     String?                    @db.VarChar(100)
+  is_active                Boolean                    @default(true)
+  client_transfer_requests client_transfer_requests[]
+  created_import_batch_id  String?                    @db.Uuid
+
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  updated_at DateTime @default(now()) @db.Timestamptz(6)
+
+  bons         bons[]
+  documents    documents[]
+  users        users?       @relation(fields: [assigned_user_id], references: [id], onUpdate: NoAction)
+  distributors distributors @relation(fields: [distributor_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  stores       stores?      @relation(fields: [store_id], references: [id], onUpdate: NoAction)
+
+  client_import_batch client_import_batches? @relation("ClientCreatedByImportBatch", fields: [created_import_batch_id], references: [id], onDelete: SetNull)
+  client_equipment    client_equipment[]
+  garanties           garanties[]
+
+  @@unique([distributor_id, code])
+  @@index([assigned_user_id], map: "idx_clients_assigned_user_id")
+  @@index([code], map: "idx_clients_code")
+  @@index([distributor_id], map: "idx_clients_distributor_id")
+  @@index([store_id], map: "idx_clients_store_id")
+  @@index([created_import_batch_id], map: "idx_clients_created_import_batch_id")
+}
+
+model client_import_batches {
+  id                  String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  distributor_id      String   @db.Uuid
+  imported_by_user_id String   @db.Uuid
+  mode                String   @db.VarChar(20)
+  original_filename   String?  @db.VarChar(255)
+  total_rows          Int      @default(0)
+  created_count       Int      @default(0)
+  updated_count       Int      @default(0)
+  skipped_count       Int      @default(0)
+  error_count         Int      @default(0)
+  created_at          DateTime @default(now()) @db.Timestamptz(6)
+
+  distributors distributors @relation(fields: [distributor_id], references: [id], onDelete: Cascade)
+  users        users        @relation(fields: [imported_by_user_id], references: [id], onDelete: Cascade)
+
+  created_clients clients[] @relation("ClientCreatedByImportBatch")
+}
+
+model distributor_settings {
+  id                         String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  distributor_id             String       @unique @db.Uuid
+  company_display_name       String?      @db.VarChar(150)
+  support_email              String?      @db.VarChar(150)
+  support_phone              String?      @db.VarChar(30)
+  alerts_configured          Boolean      @default(false)
+  legal_documents_configured Boolean      @default(false)
+  support_address            String?
+  pdf_template               String?      @default("standard") @db.VarChar(50)
+  primary_color              String?      @default("#0a4d9b") @db.VarChar(7)
+  secondary_color            String?      @default("#1e73d8") @db.VarChar(7)
+  logo_url                   String?
+  bon_types_enabled          Json?
+  workflow_config            Json?
+  notifications_config       Json?
+  juridique_config           Json?
+  created_at                 DateTime     @default(now()) @db.Timestamptz(6)
+  updated_at                 DateTime     @default(now()) @db.Timestamptz(6)
+  distributors               distributors @relation(fields: [distributor_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model distributor_tools {
+  id             String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  distributor_id String       @db.Uuid
+  tool_id        String       @db.Uuid
+  is_enabled     Boolean      @default(true)
+  activated_at   DateTime?    @db.Timestamptz(6)
+  status         String?      @default("enabled") @db.VarChar(30)
+  has_extra_cost Boolean      @default(false)
+  extra_cost_ht  Decimal?     @db.Decimal(10, 2)
+  created_at     DateTime     @default(now()) @db.Timestamptz(6)
+  distributors   distributors @relation(fields: [distributor_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  tools          tools        @relation(fields: [tool_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([distributor_id, tool_id])
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model distributors {
+  id                             String                           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                           String                           @db.VarChar(150)
+  legal_name                     String?                          @db.VarChar(200)
+  siret                          String?                          @db.VarChar(20)
+  vat_number                     String?                          @db.VarChar(30)
+  email                          String?                          @db.VarChar(150)
+  phone                          String?                          @db.VarChar(30)
+  status                         String                           @default("setup_pending") @db.VarChar(30)
+  created_at                     DateTime                         @default(now()) @db.Timestamptz(6)
+  updated_at                     DateTime                         @default(now()) @db.Timestamptz(6)
+  slug                           String                           @db.VarChar(100)
+  action_logs                    action_logs[]
+  alert_rules                    alert_rules[]
+  anomaly_types                  anomaly_types[]
+  auth_logs                      auth_logs[]
+  auth_reset_tokens              auth_reset_tokens[]
+  auth_sessions                  auth_sessions[]
+  bons                           bons[]
+  catalogue_campaigns            catalogue_campaigns[]
+  catalogue_import_staging       catalogue_import_staging[]
+  catalogue_items                catalogue_items[]
+  catalogues                     catalogues[]
+  client_import_staging          client_import_staging[]
+  clients                        clients[]
+  client_transfer_requests       client_transfer_requests[]
+  distributor_settings           distributor_settings?
+  distributor_tools              distributor_tools[]
+  documents                      documents[]
+  error_logs                     error_logs[]
+  import_batches                 import_batches[]
+  legal_acceptances              legal_acceptances[]
+  legal_documents                legal_documents[]
+  notification_templates         notification_templates[]
+  notifications                  notifications[]
+  stores                         stores[]
+  suppliers                      suppliers[]
+  users                          users[]
+  vehicle_memory                 vehicle_memory[]
+  clientImportBatches            client_import_batches[]
+  maintenance_contract_templates maintenance_contract_templates[]
+  client_equipment               client_equipment[]
+  garanties                      garanties[]
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model document_versions {
+  id                                                        String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  document_id                                               String       @db.Uuid
+  version_number                                            Int
+  file_name                                                 String       @db.VarChar(255)
+  original_name                                             String?      @db.VarChar(255)
+  mime_type                                                 String       @db.VarChar(100)
+  file_size_bytes                                           BigInt?
+  storage_provider                                          String       @default("local") @db.VarChar(50)
+  storage_path                                              String
+  public_url                                                String?
+  checksum                                                  String?      @db.VarChar(255)
+  generated_at                                              DateTime     @default(now()) @db.Timestamptz(6)
+  generated_by_user_id                                      String?      @db.Uuid
+  generated_by_staff_id                                     String?      @db.Uuid
+  created_at                                                DateTime     @default(now()) @db.Timestamptz(6)
+  documents_document_versions_document_idTodocuments        documents    @relation("document_versions_document_idTodocuments", fields: [document_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  store_staff                                               store_staff? @relation(fields: [generated_by_staff_id], references: [id], onUpdate: NoAction)
+  users                                                     users?       @relation(fields: [generated_by_user_id], references: [id], onUpdate: NoAction)
+  documents_documents_current_version_idTodocument_versions documents[]  @relation("documents_current_version_idTodocument_versions")
+
+  @@unique([document_id, version_number])
+  @@index([document_id], map: "idx_document_versions_document_id")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model documents {
+  id                                                                String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  distributor_id                                                    String              @db.Uuid
+  bon_id                                                            String?             @db.Uuid
+  client_id                                                         String?             @db.Uuid
+  document_type                                                     String              @db.VarChar(50)
+  document_status                                                   String              @default("draft") @db.VarChar(30)
+  title                                                             String              @db.VarChar(200)
+  description                                                       String?
+  current_version_id                                                String?             @db.Uuid
+  generated_by_user_id                                              String?             @db.Uuid
+  generated_by_staff_id                                             String?             @db.Uuid
+  is_active                                                         Boolean             @default(true)
+  created_at                                                        DateTime            @default(now()) @db.Timestamptz(6)
+  updated_at                                                        DateTime            @default(now()) @db.Timestamptz(6)
+  document_versions_document_versions_document_idTodocuments        document_versions[] @relation("document_versions_document_idTodocuments")
+  bons                                                              bons?               @relation(fields: [bon_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  clients                                                           clients?            @relation(fields: [client_id], references: [id], onUpdate: NoAction)
+  distributors                                                      distributors        @relation(fields: [distributor_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  store_staff                                                       store_staff?        @relation(fields: [generated_by_staff_id], references: [id], onUpdate: NoAction)
+  users                                                             users?              @relation(fields: [generated_by_user_id], references: [id], onUpdate: NoAction)
+  document_versions_documents_current_version_idTodocument_versions document_versions?  @relation("documents_current_version_idTodocument_versions", fields: [current_version_id], references: [id], onUpdate: NoAction, map: "fk_documents_current_version")
+
+  @@index([bon_id], map: "idx_documents_bon_id")
+  @@index([client_id], map: "idx_documents_client_id")
+  @@index([distributor_id], map: "idx_documents_distributor_id")
+  @@index([document_type], map: "idx_documents_document_type")
+}
+
+model error_logs {
+  id                  String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  distributor_id      String?       @db.Uuid
+  user_id             String?       @db.Uuid
+  store_staff_id      String?       @db.Uuid
+  error_type          String        @db.VarChar(50)
+  error_code          String?       @db.VarChar(100)
+  error_message       String
+  error_stack         String?
+  context_entity_type String?       @db.VarChar(50)
+  context_entity_id   String?       @db.Uuid
+  context_data        Json?
+  ip_address          String?       @db.Inet
+  user_agent          String?
+  created_at          DateTime      @default(now()) @db.Timestamptz(6)
+  distributors        distributors? @relation(fields: [distributor_id], references: [id], onUpdate: NoAction)
+  store_staff         store_staff?  @relation(fields: [store_staff_id], references: [id], onUpdate: NoAction)
+  users               users?        @relation(fields: [user_id], references: [id], onUpdate: NoAction)
+
+  @@index([created_at], map: "idx_error_logs_created_at")
+  @@index([distributor_id], map: "idx_error_logs_distributor_id")
+  @@index([store_staff_id], map: "idx_error_logs_store_staff_id")
+  @@index([user_id], map: "idx_error_logs_user_id")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model import_batch_rows {
+  id                       String                     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  import_batch_id          String                     @db.Uuid
+  row_number               Int
+  raw_data                 Json?
+  processing_status        String                     @default("pending") @db.VarChar(30)
+  error_code               String?                    @db.VarChar(100)
+  error_message            String?
+  target_entity_type       String?                    @db.VarChar(50)
+  target_entity_id         String?                    @db.Uuid
+  created_at               DateTime                   @default(now()) @db.Timestamptz(6)
+  updated_at               DateTime                   @default(now()) @db.Timestamptz(6)
+  catalogue_import_staging catalogue_import_staging[]
+  client_import_staging    client_import_staging[]
+  import_batches           import_batches             @relation(fields: [import_batch_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([import_batch_id, row_number])
+  @@index([import_batch_id], map: "idx_import_batch_rows_import_batch_id")
+  @@index([processing_status], map: "idx_import_batch_rows_processing_status")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model import_batches {
+  id                       String                     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  distributor_id           String                     @db.Uuid
+  import_type              String                     @db.VarChar(30)
+  source_file_name         String                     @db.VarChar(255)
+  source_file_path         String?
+  source_file_size_bytes   BigInt?
+  status                   String                     @default("uploaded") @db.VarChar(30)
+  total_rows               Int                        @default(0)
+  success_rows             Int                        @default(0)
+  error_rows               Int                        @default(0)
+  started_at               DateTime?                  @db.Timestamptz(6)
+  completed_at             DateTime?                  @db.Timestamptz(6)
+  created_by_user_id       String?                    @db.Uuid
+  created_by_staff_id      String?                    @db.Uuid
+  notes                    String?
+  created_at               DateTime                   @default(now()) @db.Timestamptz(6)
+  updated_at               DateTime                   @default(now()) @db.Timestamptz(6)
+  catalogue_import_staging catalogue_import_staging[]
+  client_import_staging    client_import_staging[]
+  import_batch_rows        import_batch_rows[]
+  store_staff              store_staff?               @relation(fields: [created_by_staff_id], references: [id], onUpdate: NoAction)
+  users                    users?                     @relation(fields: [created_by_user_id], references: [id], onUpdate: NoAction)
+  distributors             distributors               @relation(fields: [distributor_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([distributor_id], map: "idx_import_batches_distributor_id")
+  @@index([import_type], map: "idx_import_batches_import_type")
+  @@index([status], map: "idx_import_batches_status")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model legal_acceptances {
+  id               String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  distributor_id   String       @db.Uuid
+  user_id          String?      @db.Uuid
+  document_type    String       @db.VarChar(50)
+  document_version String       @db.VarChar(50)
+  accepted_at      DateTime     @default(now()) @db.Timestamptz(6)
+  ip_address       String?      @db.Inet
+  user_agent       String?
+  created_at       DateTime     @default(now()) @db.Timestamptz(6)
+  distributors     distributors @relation(fields: [distributor_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  users            users?       @relation(fields: [user_id], references: [id], onUpdate: NoAction)
+
+  @@unique([user_id, document_type, document_version], map: "uq_legal_acceptances_user_doc_version")
+  @@index([distributor_id], map: "idx_legal_acceptances_distributor_id")
+  @@index([user_id], map: "idx_legal_acceptances_user_id")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model legal_documents {
+  id             String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  distributor_id String       @db.Uuid
+  document_type  String       @db.VarChar(50)
+  version        String       @db.VarChar(50)
+  title          String       @db.VarChar(150)
+  content_text   String?
+  is_active      Boolean      @default(true)
+  published_at   DateTime     @default(now()) @db.Timestamptz(6)
+  created_at     DateTime     @default(now()) @db.Timestamptz(6)
+  updated_at     DateTime     @default(now()) @db.Timestamptz(6)
+  distributors   distributors @relation(fields: [distributor_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([distributor_id], map: "idx_legal_documents_distributor_id")
+  @@index([document_type], map: "idx_legal_documents_document_type")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model notification_recipients {
+  id               String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  notification_id  String          @db.Uuid
+  user_id          String?         @db.Uuid
+  store_account_id String?         @db.Uuid
+  store_staff_id   String?         @db.Uuid
+  recipient_type   String          @db.VarChar(30)
+  recipient_email  String?         @db.VarChar(150)
+  delivery_status  String          @default("pending") @db.VarChar(30)
+  delivered_at     DateTime?       @db.Timestamptz(6)
+  read_at          DateTime?       @db.Timestamptz(6)
+  created_at       DateTime        @default(now()) @db.Timestamptz(6)
+  updated_at       DateTime        @default(now()) @db.Timestamptz(6)
+  notifications    notifications   @relation(fields: [notification_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  store_accounts   store_accounts? @relation(fields: [store_account_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  store_staff      store_staff?    @relation(fields: [store_staff_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  users            users?          @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([notification_id], map: "idx_notification_recipients_notification_id")
+  @@index([store_account_id], map: "idx_notification_recipients_store_account_id")
+  @@index([store_staff_id], map: "idx_notification_recipients_store_staff_id")
+  @@index([user_id], map: "idx_notification_recipients_user_id")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model notification_templates {
+  id             String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  distributor_id String?         @db.Uuid
+  code           String          @db.VarChar(100)
+  channel        String          @db.VarChar(30)
+  title_template String          @db.VarChar(200)
+  body_template  String
+  is_active      Boolean         @default(true)
+  created_at     DateTime        @default(now()) @db.Timestamptz(6)
+  updated_at     DateTime        @default(now()) @db.Timestamptz(6)
+  distributors   distributors?   @relation(fields: [distributor_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  notifications  notifications[]
+
+  @@unique([distributor_id, code, channel])
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model notifications {
+  id                      String                    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  distributor_id          String                    @db.Uuid
+  template_id             String?                   @db.Uuid
+  notification_type       String                    @db.VarChar(50)
+  channel                 String                    @db.VarChar(30)
+  entity_type             String?                   @db.VarChar(50)
+  entity_id               String?                   @db.Uuid
+  title                   String                    @db.VarChar(200)
+  body                    String
+  payload                 Json?
+  status                  String                    @default("pending") @db.VarChar(30)
+  scheduled_at            DateTime?                 @db.Timestamptz(6)
+  sent_at                 DateTime?                 @db.Timestamptz(6)
+  failed_at               DateTime?                 @db.Timestamptz(6)
+  cancelled_at            DateTime?                 @db.Timestamptz(6)
+  failure_reason          String?
+  created_at              DateTime                  @default(now()) @db.Timestamptz(6)
+  updated_at              DateTime                  @default(now()) @db.Timestamptz(6)
+  notification_recipients notification_recipients[]
+  distributors            distributors              @relation(fields: [distributor_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  notification_templates  notification_templates?   @relation(fields: [template_id], references: [id], onUpdate: NoAction)
+
+  @@index([channel], map: "idx_notifications_channel")
+  @@index([distributor_id], map: "idx_notifications_distributor_id")
+  @@index([entity_type, entity_id], map: "idx_notifications_entity_type_entity_id")
+  @@index([status], map: "idx_notifications_status")
+}
+
+model roles {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  code       String   @unique @db.VarChar(50)
+  label      String   @db.VarChar(100)
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  users      users[]
+}
+
+/// This model contains an expression index which requires additional setup for migrations. Visit https://pris.ly/d/expression-indexes for more info.
+model store_accounts {
+  id                      String                    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  store_id                String                    @unique @db.Uuid
+  login_email             String                    @unique @db.VarChar(150)
+  password_hash           String
+  is_active               Boolean                   @default(true)
+  last_login_at           DateTime?                 @db.Timestamptz(6)
+  created_at              DateTime                  @default(now()) @db.Timestamptz(6)
+  updated_at              DateTime                  @default(now()) @db.Timestamptz(6)
+  failed_login_attempts   Int                       @default(0)
+  locked_until            DateTime?                 @db.Timestamptz(6)
+  password_updated_at     DateTime?                 @db.Timestamptz(6)
+  must_change_password    Boolean                   @default(true)
+  auth_logs               auth_logs[]
+  auth_reset_tokens       auth_reset_tokens[]
+  auth_sessions           auth_sessions[]
+  notification_recipients notification_recipients[]
+  stores                  stores                    @relation(fields: [store_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([store_id], map: "idx_store_accounts_store_id")
+}
+
+model store_staff {
+  id                      String                    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  store_id                String                    @db.Uuid
+  first_name              String                    @db.VarChar(100)
+  last_name               String                    @db.VarChar(100)
+  initials                String                    @db.VarChar(10)
+  pin_hash                String                    @db.Text
+  is_active               Boolean                   @default(true)
+  created_at              DateTime                  @default(now()) @db.Timestamptz(6)
+  updated_at              DateTime                  @default(now()) @db.Timestamptz(6)
+  failed_pin_attempts     Int                       @default(0)
+  locked_until            DateTime?                 @db.Timestamptz(6)
+  pin_updated_at          DateTime?                 @db.Timestamptz(6)
+  must_change_pin         Boolean                   @default(true)
+  action_logs             action_logs[]
+  auth_logs               auth_logs[]
+  auth_reset_tokens       auth_reset_tokens[]
+  auth_sessions           auth_sessions[]
+  bon_anomalies           bon_anomalies[]
+  bon_anomaly_history     bon_anomaly_history[]
+  bon_comment_reads       bon_comment_reads[]
+  bon_comments            bon_comments[]
+  bon_photos              bon_photos[]
+  bon_status_history      bon_status_history[]
+  bons                    bons[]
+  document_versions       document_versions[]
+  documents               documents[]
+  error_logs              error_logs[]
+  import_batches          import_batches[]
+  notification_recipients notification_recipients[]
+  stores                  stores                    @relation(fields: [store_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([store_id, initials])
+  @@index([store_id], map: "idx_store_staff_store_id")
+}
+
+model stores {
+  id               String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  distributor_id   String             @db.Uuid
+  code             String             @db.VarChar(50)
+  internal_code    String?            @db.VarChar(50)
+  name             String             @db.VarChar(150)
+  email            String?            @db.VarChar(150)
+  phone            String?            @db.VarChar(30)
+  address_line_1   String?            @db.VarChar(200)
+  address_line_2   String?            @db.VarChar(200)
+  postal_code      String?            @db.VarChar(20)
+  city             String?            @db.VarChar(100)
+  is_active        Boolean            @default(true)
+  store_type       String             @default("standard") @db.VarChar(30)
+  created_at       DateTime           @default(now()) @db.Timestamptz(6)
+  updated_at       DateTime           @default(now()) @db.Timestamptz(6)
+  bons             bons[]
+  clients          clients[]
+  store_accounts   store_accounts?
+  store_staff      store_staff[]
+  distributors     distributors       @relation(fields: [distributor_id], references: [id], onUpdate: NoAction)
+  user_store_links user_store_links[]
+  garanties        garanties[]
+
+  @@unique([distributor_id, internal_code])
+  @@unique([distributor_id, code])
+  @@index([distributor_id], map: "idx_stores_distributor_id")
+}
+
+model client_transfer_requests {
+  id                   String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  distributor_id       String       @db.Uuid
+  client_id            String       @db.Uuid
+  requested_by_user_id String       @db.Uuid
+  current_user_id      String?      @db.Uuid
+  target_user_id       String       @db.Uuid
+  status               String       @default("pending") @db.VarChar(30)
+  reviewed_by_user_id  String?      @db.Uuid
+  reviewed_at          DateTime?    @db.Timestamptz(6)
+  note                 String?
+  created_at           DateTime     @default(now()) @db.Timestamptz(6)
+  updated_at           DateTime     @default(now()) @db.Timestamptz(6)
+  distributors         distributors @relation(fields: [distributor_id], references: [id], onDelete: Cascade)
+  clients              clients      @relation(fields: [client_id], references: [id], onDelete: Cascade)
+  requested_by         users        @relation("TransferRequested", fields: [requested_by_user_id], references: [id])
+  current_user         users?       @relation("TransferCurrent", fields: [current_user_id], references: [id])
+  target_user          users        @relation("TransferTarget", fields: [target_user_id], references: [id])
+  reviewed_by          users?       @relation("TransferReviewed", fields: [reviewed_by_user_id], references: [id])
+}
+
+model supplier_contacts {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  supplier_id String    @db.Uuid
+  first_name  String?   @db.VarChar(100)
+  last_name   String?   @db.VarChar(100)
+  role_label  String?   @db.VarChar(100)
+  email       String?   @db.VarChar(150)
+  phone       String?   @db.VarChar(30)
+  mobile      String?   @db.VarChar(30)
+  notes       String?
+  is_active   Boolean   @default(true)
+  created_at  DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at  DateTime  @default(now()) @db.Timestamptz(6)
+  suppliers   suppliers @relation(fields: [supplier_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([supplier_id], map: "idx_supplier_contacts_supplier_id")
+}
+
+/// This model contains an expression index which requires additional setup for migrations. Visit https://pris.ly/d/expression-indexes for more info.
+model suppliers {
+  id                String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  distributor_id    String              @db.Uuid
+  code              String              @db.VarChar(50)
+  name              String              @db.VarChar(150)
+  legal_name        String?             @db.VarChar(200)
+  email             String?             @db.VarChar(150)
+  phone             String?             @db.VarChar(30)
+  website           String?             @db.VarChar(200)
+  address_line_1    String?             @db.VarChar(200)
+  address_line_2    String?             @db.VarChar(200)
+  postal_code       String?             @db.VarChar(20)
+  city              String?             @db.VarChar(100)
+  country           String?             @db.VarChar(100)
+  accounting_code   String?             @db.VarChar(50)
+  notes             String?
+  image_url         String?
+  is_active         Boolean             @default(true)
+  created_at        DateTime            @default(now()) @db.Timestamptz(6)
+  updated_at        DateTime            @default(now()) @db.Timestamptz(6)
+  catalogue_items   catalogue_items[]
+  catalogues        catalogues[]
+  supplier_contacts supplier_contacts[]
+  distributors      distributors        @relation(fields: [distributor_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([distributor_id, code])
+  @@index([code], map: "idx_suppliers_code")
+  @@index([distributor_id], map: "idx_suppliers_distributor_id")
+}
+
+model tools {
+  id                String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  code              String              @unique @db.VarChar(100)
+  name              String              @db.VarChar(150)
+  description       String?
+  is_active         Boolean             @default(true)
+  created_at        DateTime            @default(now()) @db.Timestamptz(6)
+  updated_at        DateTime            @default(now()) @db.Timestamptz(6)
+  distributor_tools distributor_tools[]
+}
+
+model user_store_links {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id    String   @db.Uuid
+  store_id   String   @db.Uuid
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  stores     stores   @relation(fields: [store_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  users      users    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([user_id, store_id])
+  @@index([store_id], map: "idx_user_store_links_store_id")
+  @@index([user_id], map: "idx_user_store_links_user_id")
+}
+
+/// This model contains an expression index which requires additional setup for migrations. Visit https://pris.ly/d/expression-indexes for more info.
+model users {
+  id                         String                     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  distributor_id             String                     @db.Uuid
+  role_id                    String                     @db.Uuid
+  first_name                 String                     @db.VarChar(100)
+  last_name                  String                     @db.VarChar(100)
+  email                      String                     @db.VarChar(150)
+  password_hash              String
+  is_active                  Boolean                    @default(true)
+  last_login_at              DateTime?                  @db.Timestamptz(6)
+  created_at                 DateTime                   @default(now()) @db.Timestamptz(6)
+  updated_at                 DateTime                   @default(now()) @db.Timestamptz(6)
+  failed_login_attempts      Int                        @default(0)
+  locked_until               DateTime?                  @db.Timestamptz(6)
+  password_updated_at        DateTime?                  @db.Timestamptz(6)
+  must_change_password       Boolean                    @default(true)
+  action_logs                action_logs[]
+  auth_logs                  auth_logs[]
+  auth_reset_tokens          auth_reset_tokens[]
+  auth_sessions              auth_sessions[]
+  bon_anomalies              bon_anomalies[]
+  bon_anomaly_history        bon_anomaly_history[]
+  bon_comment_reads          bon_comment_reads[]
+  bon_comments               bon_comments[]
+  bon_photos                 bon_photos[]
+  bon_status_history         bon_status_history[]
+  bons                       bons[]
+  clients                    clients[]
+  transfer_requests_made     client_transfer_requests[] @relation("TransferRequested")
+  transfer_requests_current  client_transfer_requests[] @relation("TransferCurrent")
+  transfer_requests_target   client_transfer_requests[] @relation("TransferTarget")
+  transfer_requests_reviewed client_transfer_requests[] @relation("TransferReviewed")
+  document_versions          document_versions[]
+  documents                  documents[]
+  error_logs                 error_logs[]
+  import_batches             import_batches[]
+  legal_acceptances          legal_acceptances[]
+  notification_recipients    notification_recipients[]
+  user_store_links           user_store_links[]
+  distributors               distributors               @relation(fields: [distributor_id], references: [id], onUpdate: NoAction)
+  roles                      roles                      @relation(fields: [role_id], references: [id], onUpdate: NoAction)
+  clientImportBatches        client_import_batches[]
+  code                       String?                    @db.VarChar(50)
+  phone                      String?                    @db.VarChar(30)
+  supervisor_id              String?                    @db.Uuid
+  supervisor                 users?                     @relation("UserSupervisor", fields: [supervisor_id], references: [id], onDelete: SetNull)
+  supervised_users           users[]                    @relation("UserSupervisor")
+  garanties                  garanties[]
+
+  @@unique([distributor_id, email])
+  @@index([supervisor_id], map: "idx_users_supervisor_id")
+  @@index([code], map: "idx_users_code")
+  @@index([distributor_id], map: "idx_users_distributor_id")
+  @@index([role_id], map: "idx_users_role_id")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model vehicle_memory {
+  id             String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  distributor_id String         @db.Uuid
+  plate_number   String?        @db.VarChar(20)
+  vin            String?        @db.VarChar(50)
+  brand          String?        @db.VarChar(100)
+  model          String?        @db.VarChar(100)
+  engine         String?        @db.VarChar(100)
+  notes          String?
+  created_at     DateTime       @default(now()) @db.Timestamptz(6)
+  updated_at     DateTime       @default(now()) @db.Timestamptz(6)
+  bon_vehicles   bon_vehicles[]
+  distributors   distributors   @relation(fields: [distributor_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([distributor_id], map: "idx_vehicle_memory_distributor_id")
+  @@index([plate_number], map: "idx_vehicle_memory_plate_number")
+  @@index([vin], map: "idx_vehicle_memory_vin")
+}
+
+model account_requests {
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  first_name      String   @db.VarChar(100)
+  last_name       String   @db.VarChar(100)
+  phone           String?  @db.VarChar(30)
+  email           String   @db.VarChar(150)
+  company_name    String   @db.VarChar(150)
+  company_address String?  @db.VarChar(200)
+  postal_code     String?  @db.VarChar(20)
+  city            String?  @db.VarChar(100)
+  message         String?
+  status          String   @default("new") @db.VarChar(30)
+  created_at      DateTime @default(now()) @db.Timestamptz(6)
+  updated_at      DateTime @default(now()) @db.Timestamptz(6)
+
+  @@index([status], map: "idx_account_requests_status")
+  @@index([created_at], map: "idx_account_requests_created_at")
+}
+
+model lysma_customers {
+  id                 String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  company_name       String   @db.VarChar(150)
+  contact_first_name String?  @db.VarChar(100)
+  contact_last_name  String?  @db.VarChar(100)
+  email              String   @unique @db.VarChar(150)
+  phone              String?  @db.VarChar(30)
+  address_line_1     String?  @db.VarChar(200)
+  address_line_2     String?  @db.VarChar(200)
+  postal_code        String?  @db.VarChar(20)
+  city               String?  @db.VarChar(100)
+  country            String?  @db.VarChar(100)
+  status             String   @default("active") @db.VarChar(30)
+  source             String   @default("manual") @db.VarChar(30)
+  password_hash      String?
+  temporary_password String?  @db.VarChar(120)
+  tools_enabled      Json?
+  notes              String?
+  source_request_id  String?  @db.Uuid
+  created_at         DateTime @default(now()) @db.Timestamptz(6)
+  updated_at         DateTime @default(now()) @db.Timestamptz(6)
+
+  @@index([company_name], map: "idx_lysma_customers_company_name")
+  @@index([status], map: "idx_lysma_customers_status")
+  @@index([source_request_id], map: "idx_lysma_customers_source_request_id")
+}
+
+model maintenance_contract_templates {
+  id             String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  distributor_id String       @db.Uuid
+  name           String       @db.VarChar(150)
+  sections       Json         @default("[]")
+  tarifs         Json         @default("[]")
+  conditions     String?
+  is_active      Boolean      @default(true)
+  created_at     DateTime     @default(now()) @db.Timestamptz(6)
+  updated_at     DateTime     @default(now()) @db.Timestamptz(6)
+  distributors   distributors @relation(fields: [distributor_id], references: [id], onDelete: Cascade)
+
+  @@unique([distributor_id, name])
+  @@index([distributor_id], map: "idx_maintenance_contract_templates_distributor")
+}
+
+model releve_parc_items {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  bon_id       String   @db.Uuid
+  designation  String?  @db.VarChar(255)
+  marque       String?  @db.VarChar(100)
+  modele       String?  @db.VarChar(100)
+  numero_serie String?  @db.VarChar(100)
+  annee        Int?
+  formule      String?  @db.VarChar(100)
+  tarif_ht     Decimal? @db.Decimal(10, 2)
+  notes        String?
+  sort_order   Int      @default(1)
+  created_at   DateTime @default(now()) @db.Timestamptz(6)
+  bons         bons     @relation(fields: [bon_id], references: [id], onDelete: Cascade)
+
+  @@index([bon_id], map: "idx_releve_parc_items_bon_id")
+}
+
+model client_equipment {
+  id             String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  distributor_id String       @db.Uuid
+  client_id      String       @db.Uuid
+  type_materiel  String       @db.VarChar(100)
+  marque         String?      @db.VarChar(100)
+  modele         String?      @db.VarChar(100)
+  num_serie      String?      @db.VarChar(100)
+  annee          Int?
+  notes          String?
+  source         String?      @default("manuel") @db.VarChar(30)
+  bon_id         String?      @db.Uuid
+  is_active      Boolean      @default(true)
+  created_at     DateTime     @default(now()) @db.Timestamptz(6)
+  updated_at     DateTime     @default(now()) @db.Timestamptz(6)
+  distributors   distributors @relation(fields: [distributor_id], references: [id], onDelete: Cascade)
+  clients        clients      @relation(fields: [client_id], references: [id], onDelete: Cascade)
+  bons           bons?        @relation(fields: [bon_id], references: [id], onDelete: SetNull)
+
+  @@index([client_id], map: "idx_client_equipment_client")
+  @@index([distributor_id], map: "idx_client_equipment_distribut")
+}
+
+model garanties {
+  id                   String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  distributor_id       String    @db.Uuid
+  client_id            String?   @db.Uuid
+  assigned_user_id     String?   @db.Uuid
+  magasin_id           String?   @db.Uuid
+  status               String    @default("brouillon") @db.VarChar(30)
+  marque_piece         String?   @db.VarChar(100)
+  fournisseur          String?   @db.VarChar(100)
+  reference_piece      String?   @db.VarChar(100)
+  quantite             Int?      @default(1)
+  n_bon_livraison      String?   @db.VarChar(100)
+  date_bon_livraison   DateTime? @db.Date
+  defaut_constate      String?
+  date_montage_1       DateTime? @db.Date
+  km_montage_1         Int?
+  date_montage_2       DateTime? @db.Date
+  km_montage_2         Int?
+  marque_vehicule      String?   @db.VarChar(100)
+  type_vehicule        String?   @db.VarChar(100)
+  cylindree            String?   @db.VarChar(20)
+  annee_vehicule       String?   @db.VarChar(10)
+  immat_vehicule       String?   @db.VarChar(20)
+  retour_fournisseur   Boolean?  @default(false)
+  date_envoi_expert    DateTime? @db.Date
+  date_decision        DateTime? @db.Date
+  decision             String?   @db.VarChar(30)
+  decision_bl          String?   @db.VarChar(100)
+  decision_commentaire String?
+  doc_carte_grise      String?
+  doc_facture_1        String?
+  doc_facture_2        String?
+  doc_bl_1             String?
+  doc_bl_2             String?
+  commentaire          String?
+  numero_garantie      String?   @db.VarChar(50)
+  created_at           DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at           DateTime  @default(now()) @db.Timestamptz(6)
+
+  distributors distributors @relation(fields: [distributor_id], references: [id], onDelete: Cascade)
+  clients      clients?     @relation(fields: [client_id], references: [id], onDelete: SetNull)
+  users        users?       @relation(fields: [assigned_user_id], references: [id], onDelete: SetNull)
+  stores       stores?      @relation(fields: [magasin_id], references: [id], onDelete: SetNull)
+
+  @@index([distributor_id], map: "idx_garanties_distributor")
+  @@index([client_id], map: "idx_garanties_client")
+  @@index([assigned_user_id], map: "idx_garanties_user")
+  @@index([status], map: "idx_garanties_status")
+}
