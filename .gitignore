@@ -5,5 +5,7 @@ dist
 build
 coverage
 .env.local
+apps/super-admin/.env
 .DS_Store
 *.log
+.archives/

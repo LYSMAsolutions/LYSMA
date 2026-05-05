@@ -1,0 +1,310 @@
+.page {
+  min-height: 100dvh;
+  background: var(--color-bg-base);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+}
+
+/* ── Card ─────────────────────────────────────────────────── */
+.card {
+  width: 100%;
+  max-width: 400px;
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  align-items: center;
+  box-shadow: var(--shadow-xl);
+  animation: scaleIn var(--duration-base) var(--ease-spring) both;
+}
+
+.cardLarge {
+  width: 100%;
+  max-width: 700px;
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  align-items: center;
+  box-shadow: var(--shadow-xl);
+  animation: scaleIn var(--duration-base) var(--ease-spring) both;
+}
+
+/* ── Logo ─────────────────────────────────────────────────── */
+.logoWrap {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.logoIcon {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-xl);
+  background: rgba(26,111,255,0.15);
+  color: var(--color-blue-electric);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logoName {
+  font-size: var(--text-lg);
+  font-weight: var(--font-bold);
+  color: var(--color-text-primary);
+  line-height: 1;
+}
+
+.logoSub {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  margin-top: 2px;
+}
+
+/* ── Title ────────────────────────────────────────────────── */
+.title {
+  font-size: var(--text-2xl);
+  font-weight: var(--font-bold);
+  color: var(--color-text-primary);
+  text-align: center;
+}
+
+/* ── Form ─────────────────────────────────────────────────── */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 100%;
+}
+
+.input {
+  width: 100%;
+  height: 52px;
+  background: var(--color-bg-input);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-lg);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  padding: 0 var(--space-4);
+  outline: none;
+  transition: border-color var(--duration-base) var(--ease-out), box-shadow var(--duration-base) var(--ease-out);
+}
+
+.input:focus {
+  border-color: var(--color-border-focus);
+  box-shadow: 0 0 0 3px rgba(26,111,255,0.12);
+}
+
+.input::placeholder { color: var(--color-text-muted); }
+
+.btnPrimary {
+  width: 100%;
+  height: 56px;
+  background: var(--color-blue-electric);
+  border: none;
+  border-radius: var(--radius-lg);
+  color: white;
+  font-family: var(--font-sans);
+  font-size: var(--text-lg);
+  font-weight: var(--font-semibold);
+  cursor: pointer;
+  transition: opacity var(--duration-fast) var(--ease-out), transform var(--duration-fast) var(--ease-out);
+}
+
+.btnPrimary:hover { opacity: 0.9; transform: translateY(-1px); }
+.btnPrimary:disabled { opacity: 0.5; pointer-events: none; }
+
+.error {
+  font-size: var(--text-sm);
+  color: var(--color-error);
+  background: var(--color-error-bg);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+  text-align: center;
+}
+
+.adminLink {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+.adminLink:hover { color: var(--color-text-primary); }
+
+/* ── Garage header ────────────────────────────────────────── */
+.garageHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.garageDot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--color-success);
+  box-shadow: 0 0 6px var(--color-success);
+}
+
+.garageNom {
+  font-size: var(--text-base);
+  font-weight: var(--font-medium);
+  color: var(--color-text-secondary);
+}
+
+/* ── Compagnons grid ──────────────────────────────────────── */
+.compagnonsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: var(--space-4);
+  width: 100%;
+}
+
+.compagnonBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-5) var(--space-3);
+  background: var(--color-bg-surface);
+  border: 2px solid var(--color-border-subtle);
+  border-radius: var(--radius-xl);
+  cursor: pointer;
+  font-family: var(--font-sans);
+  transition: all var(--duration-base) var(--ease-out);
+}
+
+.compagnonBtn:hover {
+  border-color: var(--color-blue-electric);
+  background: rgba(26,111,255,0.06);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.compagnonAvatar {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, var(--color-blue-deep), var(--color-blue-electric));
+  color: white;
+  font-size: var(--text-xl);
+  font-weight: var(--font-bold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.compagnonNom {
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  color: var(--color-text-primary);
+}
+
+.compagnonPoste {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+/* ── PIN ──────────────────────────────────────────────────── */
+.backBtn {
+  align-self: flex-start;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  background: transparent;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  padding: 0;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+.backBtn:hover { color: var(--color-text-primary); }
+
+.compagnonSelected {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.compagnonAvatarLg {
+  width: 80px;
+  height: 80px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, var(--color-blue-deep), var(--color-blue-electric));
+  color: white;
+  font-size: var(--text-2xl);
+  font-weight: var(--font-bold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-glow-blue);
+}
+
+.compagnonNomLg {
+  font-size: var(--text-lg);
+  font-weight: var(--font-semibold);
+  color: var(--color-text-primary);
+}
+
+.pinLabel {
+  font-size: var(--text-base);
+  color: var(--color-text-muted);
+}
+
+.pinDots {
+  display: flex;
+  gap: var(--space-4);
+}
+
+.pinDot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid var(--color-border-default);
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.pinDotFilled {
+  background: var(--color-blue-electric);
+  border-color: var(--color-blue-electric);
+  box-shadow: 0 0 8px rgba(26,111,255,0.4);
+}
+
+/* ── PIN pad ──────────────────────────────────────────────── */
+.pinPad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-3);
+  width: 100%;
+  max-width: 280px;
+}
+
+.pinKey {
+  height: 72px;
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-xl);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  font-size: var(--text-2xl);
+  font-weight: var(--font-bold);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.pinKey:hover {
+  background: var(--color-bg-elevated);
+  border-color: var(--color-blue-electric);
+  color: var(--color-blue-electric);
+  transform: scale(0.97);
+}
+
+.pinKey:active { transform: scale(0.93); }
+.pinKeyEmpty { opacity: 0; pointer-events: none; }

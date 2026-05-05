@@ -1,0 +1,249 @@
+.page {
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  font-family: var(--font-mono);
+  animation: slideIn var(--dur-base) var(--ease) both;
+}
+
+.termHeader {
+  display: flex;
+  align-items: center;
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.termPrompt {
+  color: var(--green);
+  font-weight: 600;
+}
+
+.termCmd {
+  color: var(--text-primary);
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: 2fr repeat(3, 1fr);
+  gap: 12px;
+}
+
+.statCard,
+.command,
+.explorer,
+.viewer {
+  min-width: 0;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+}
+
+.statCard {
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.statLabel {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: lowercase;
+  letter-spacing: 0.05em;
+}
+
+.statValue {
+  color: var(--cyan);
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.compactValue {
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.statValue[data-tone='green'] { color: var(--green); }
+.statValue[data-tone='yellow'] { color: var(--yellow); }
+.statValue[data-tone='purple'] { color: var(--purple); }
+
+.commandGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.command {
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.commandTitle {
+  color: var(--blue);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.commandValue {
+  color: var(--text-muted);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(260px, 380px) minmax(0, 1fr);
+  gap: 16px;
+  min-height: 620px;
+}
+
+.explorer,
+.viewer {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.panelHeader {
+  min-height: 42px;
+  padding: 10px 14px;
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.panelTitle {
+  color: var(--cyan);
+  font-size: 11px;
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.smallBtn,
+.crumb,
+.entry {
+  border: 0;
+  background: transparent;
+  font-family: var(--font-mono);
+  cursor: pointer;
+}
+
+.smallBtn {
+  color: var(--blue);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  padding: 2px 7px;
+}
+
+.smallBtn:disabled {
+  color: var(--text-muted);
+  cursor: not-allowed;
+}
+
+.pathBar {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.crumb {
+  color: var(--blue);
+  font-size: 11px;
+}
+
+.fileList {
+  overflow: auto;
+  padding: 6px;
+}
+
+.entry {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) 58px;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 8px;
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  text-align: left;
+}
+
+.entry:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.entryIcon {
+  color: var(--yellow);
+  font-size: 10px;
+}
+
+.entryName {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 12px;
+}
+
+.entryMeta {
+  color: var(--text-muted);
+  font-size: 10px;
+  text-align: right;
+}
+
+.loading,
+.error,
+.empty,
+.placeholder {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.error {
+  color: var(--red);
+  padding: 14px;
+}
+
+.empty,
+.placeholder {
+  padding: 18px 14px;
+}
+
+.code {
+  flex: 1;
+  margin: 0;
+  padding: 14px;
+  overflow: auto;
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+@media (max-width: 1100px) {
+  .statsGrid,
+  .commandGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .workspace {
+    grid-template-columns: 1fr;
+  }
+}

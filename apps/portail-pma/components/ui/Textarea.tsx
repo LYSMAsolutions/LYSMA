@@ -1,0 +1,10 @@
+import type { TextareaHTMLAttributes } from "react";
+
+type TextareaProps = TextareaHTMLAttributes<HTMLTextAreaElement>;
+
+export default function Textarea({
+  className = "",
+  ...props
+}: TextareaProps) {
+  return <textarea className={`textarea ${className}`.trim()} {...props} />;
+}

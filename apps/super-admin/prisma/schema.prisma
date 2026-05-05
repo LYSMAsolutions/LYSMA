@@ -1,0 +1,86 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model AdminUser {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  nom          String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("admin_users")
+}
+
+model Client {
+  id              String        @id @default(cuid())
+  nom             String
+  email           String        @unique
+  telephone       String?
+  societe         String?
+  outil           String        @default("livo-app")
+  statut          ClientStatut  @default(TRIAL)
+  abonnement      String?       // starter / pro / entreprise
+  trialDebutAt    DateTime?
+  trialFinAt      DateTime?
+  abonnementActif Boolean       @default(false)
+  notes           String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  acces           Acces[]
+  messages        Message[]
+
+  @@map("clients")
+}
+
+model Acces {
+  id            String    @id @default(cuid())
+  clientId      String
+  client        Client    @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  email         String
+  motDePasseTemp String?
+  actif         Boolean   @default(true)
+  premiereConnexion Boolean @default(false)
+  createdAt     DateTime  @default(now())
+
+  @@map("acces")
+}
+
+model Message {
+  id        String        @id @default(cuid())
+  clientId  String?
+  client    Client?       @relation(fields: [clientId], references: [id])
+  nom       String
+  email     String
+  societe   String?
+  telephone String?
+  outil     String        @default("livo-app")
+  message   String
+  statut    MessageStatut @default(NOUVEAU)
+  reponse   String?
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  @@map("messages")
+}
+
+enum ClientStatut {
+  TRIAL
+  ACTIF
+  SUSPENDU
+  RESILIE
+}
+
+enum MessageStatut {
+  NOUVEAU
+  LU
+  TRAITE
+}

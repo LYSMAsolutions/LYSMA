@@ -1,0 +1,253 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(4, 6, 15, 0.80);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: var(--z-modal);
+  padding: var(--space-4);
+  animation: fadeIn var(--duration-base) var(--ease-out) both;
+}
+
+.modal {
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-2xl);
+  width: 100%;
+  max-width: 480px;
+  max-height: 90dvh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-xl);
+  animation: scaleIn var(--duration-base) var(--ease-spring) both;
+  overflow: hidden;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: var(--space-5) var(--space-6);
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.title {
+  font-size: var(--text-lg);
+  font-weight: var(--font-semibold);
+  color: var(--color-text-primary);
+  line-height: 1;
+  margin-bottom: var(--space-1);
+}
+
+.sub {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.closeBtn {
+  width: 32px; height: 32px;
+  border-radius: var(--radius-md);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--color-text-muted);
+  background: transparent; cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out);
+  flex-shrink: 0;
+}
+.closeBtn:hover { background: var(--color-error-bg); color: var(--color-error); }
+
+.body {
+  padding: var(--space-5) var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* ── Recap temps réel ───────────────────────────────────────── */
+.recapTemps {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  background: rgba(64,192,255,0.08);
+  border: 1px solid rgba(64,192,255,0.20);
+  border-radius: var(--radius-lg);
+  font-size: var(--text-sm);
+  color: var(--color-cyan);
+}
+
+.recapTemps strong { font-weight: var(--font-semibold); }
+
+/* ── Field ──────────────────────────────────────────────────── */
+.field { display: flex; flex-direction: column; gap: var(--space-2); }
+
+.label {
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: var(--color-text-secondary);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.auto {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  background: var(--color-bg-input);
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  font-weight: var(--font-normal);
+}
+
+.hint { font-size: var(--text-xs); color: var(--color-text-muted); }
+
+.input {
+  width: 100%;
+  height: 44px;
+  background: var(--color-bg-input);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-md);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  padding: 0 var(--space-3);
+  outline: none;
+  transition: border-color var(--duration-base) var(--ease-out), box-shadow var(--duration-base) var(--ease-out);
+}
+
+.input:focus {
+  border-color: var(--color-border-focus);
+  box-shadow: 0 0 0 3px rgba(26,111,255,0.12);
+}
+
+/* ── Taux grid ──────────────────────────────────────────────── */
+.tauxGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-2);
+}
+
+.tauxBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: var(--space-3) var(--space-2);
+  background: var(--color-bg-input);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  font-family: var(--font-sans);
+  transition: all var(--duration-base) var(--ease-out);
+}
+
+.tauxBtn:hover {
+  border-color: var(--color-border-strong);
+  background: var(--color-bg-elevated);
+}
+
+.tauxBtnActive {
+  background: rgba(26,111,255,0.10);
+  border-color: var(--color-blue-electric);
+  box-shadow: 0 0 0 1px rgba(26,111,255,0.25);
+}
+
+.tauxType {
+  font-size: var(--text-sm);
+  font-weight: var(--font-bold);
+  color: var(--color-text-primary);
+}
+
+.tauxBtnActive .tauxType { color: var(--color-blue-electric); }
+
+.tauxMontant {
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  color: var(--color-gold);
+  font-variant-numeric: tabular-nums;
+}
+
+.tauxLibelle {
+  font-size: 10px;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+/* ── Montant ────────────────────────────────────────────────── */
+.montantWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.montantIcon {
+  position: absolute;
+  left: var(--space-3);
+  color: var(--color-text-muted);
+  pointer-events: none;
+}
+
+.montantWrapper .input { padding-left: 36px; }
+
+.resetBtn {
+  font-size: var(--text-xs);
+  color: var(--color-blue-electric);
+  background: transparent;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  padding: 0;
+  text-align: left;
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+.resetBtn:hover { opacity: 0.75; }
+
+/* ── Rentabilité recap ──────────────────────────────────────── */
+.rentaRecap {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-lg);
+  border: 1px solid transparent;
+}
+
+.gain {
+  background: var(--color-success-bg);
+  border-color: rgba(32,192,96,0.25);
+  color: var(--color-success);
+}
+
+.perte {
+  background: var(--color-error-bg);
+  border-color: rgba(255,64,64,0.25);
+  color: var(--color-error);
+}
+
+.rentaLabel { font-size: var(--text-sm); font-weight: var(--font-medium); flex: 1; }
+.rentaVal { font-size: var(--text-lg); font-weight: var(--font-bold); font-variant-numeric: tabular-nums; }
+.rentaSub { font-size: var(--text-xs); opacity: 0.75; }
+
+/* ── Footer ─────────────────────────────────────────────────── */
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-6);
+  border-top: 1px solid var(--color-border-subtle);
+  background: rgba(255,255,255,0.01);
+}
+
+.autreWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+  padding: var(--space-3);
+  background: rgba(26,111,255,0.06);
+  border: 1px solid rgba(26,111,255,0.20);
+  border-radius: var(--radius-md);
+}

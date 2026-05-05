@@ -1,0 +1,1 @@
+export { FicheCard } from './FicheCard'

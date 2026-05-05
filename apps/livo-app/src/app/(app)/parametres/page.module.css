@@ -1,0 +1,4 @@
+.content {
+  padding: var(--space-8);
+  max-width: 800px;
+}

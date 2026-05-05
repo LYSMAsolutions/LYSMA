@@ -1,0 +1,147 @@
+.page {
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  height: 100%;
+  font-family: var(--font-mono);
+  animation: slideIn var(--dur-base) var(--ease) both;
+}
+
+.header { display: flex; align-items: center; gap: 8px; padding-bottom: 12px; border-bottom: 1px solid var(--border-subtle); }
+.prompt { color: var(--green); font-size: var(--text-sm); font-weight: 600; }
+.cmd { color: var(--text-primary); font-size: var(--text-sm); }
+.count { color: var(--red); font-size: var(--text-xs); }
+
+/* Inbox layout */
+.inbox {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 0;
+  flex: 1;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  min-height: 0;
+  max-height: calc(100vh - 140px);
+}
+
+/* List */
+.list {
+  border-right: 1px solid var(--border-subtle);
+  overflow-y: auto;
+  background: var(--bg-surface);
+}
+
+.msgRow {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border-subtle);
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease);
+  border-left: 2px solid transparent;
+}
+.msgRow:hover { background: var(--bg-hover); }
+.msgSelected { background: var(--blue-dim) !important; border-left-color: var(--blue) !important; }
+.msgNew { border-left-color: var(--red); }
+
+.msgRowTop { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px; }
+.msgNom { font-size: var(--text-sm); font-weight: 600; color: var(--text-primary); }
+.msgDate { font-size: 10px; color: var(--text-muted); }
+
+.msgRowSub { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+.msgOutil { font-size: 10px; color: var(--cyan); }
+.msgStatutDot { width: 6px; height: 6px; border-radius: 50%; }
+
+.msgPreview { font-size: 11px; color: var(--text-muted); font-family: var(--font-sans); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* Detail */
+.detail {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-elevated);
+  overflow-y: auto;
+}
+
+.detailHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-subtle);
+  background: var(--bg-surface);
+}
+
+.detailFrom { display: flex; flex-direction: column; gap: 3px; }
+.detailNom { font-size: var(--text-md); font-weight: 700; color: var(--text-primary); }
+.detailEmail { font-size: var(--text-sm); color: var(--blue); }
+.detailSociete { font-size: var(--text-xs); color: var(--text-muted); }
+
+.detailActions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
+.btnCreate {
+  padding: 5px 10px;
+  background: var(--cyan-dim);
+  border: 1px solid rgba(121,192,255,0.3);
+  border-radius: var(--radius-sm);
+  color: var(--cyan);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  cursor: pointer;
+  transition: all var(--dur-fast) var(--ease);
+}
+.btnCreate:hover { background: rgba(121,192,255,0.2); }
+
+.linkedClient { font-size: var(--text-xs); color: var(--green); }
+
+.btnTraite {
+  padding: 5px 10px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  cursor: pointer;
+  transition: all var(--dur-fast) var(--ease);
+}
+.btnTraite:hover { border-color: var(--green); color: var(--green); background: var(--green-dim); }
+.btnTraiteDone { border-color: var(--green) !important; color: var(--green) !important; background: var(--green-dim) !important; }
+
+.detailMeta {
+  display: flex;
+  gap: 16px;
+  padding: 8px 20px;
+  font-size: 11px;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border-subtle);
+  background: var(--bg-surface);
+}
+
+.detailMsg, .detailReponse { padding: 16px 20px; display: flex; flex-direction: column; gap: 8px; }
+.msgLabel { font-size: 10px; color: var(--cyan); font-weight: 600; }
+.msgContent { font-size: var(--text-sm); color: var(--text-secondary); font-family: var(--font-sans); line-height: 1.7; white-space: pre-wrap; }
+
+.reponseArea {
+  background: var(--bg-input);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 10px 12px;
+  resize: vertical;
+  outline: none;
+  line-height: 1.6;
+  transition: border-color var(--dur-fast) var(--ease);
+}
+.reponseArea:focus { border-color: var(--border-focus); }
+.reponseArea::placeholder { color: var(--text-muted); }
+
+.noSelection {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+}
+.empty { padding: 20px; text-align: center; color: var(--text-muted); font-size: var(--text-sm); }

@@ -1,0 +1,93 @@
+/* ============================================================
+   LIVO — Animations & Keyframes
+   ============================================================ */
+
+/* ── Fade ───────────────────────────────────────────────────── */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+/* ── Slide ──────────────────────────────────────────────────── */
+@keyframes slideInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInDown {
+  from { opacity: 0; transform: translateY(-12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-12px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(12px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ── Scale ──────────────────────────────────────────────────── */
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes scaleInBounce {
+  from { opacity: 0; transform: scale(0.90); }
+  60%  { transform: scale(1.03); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* ── Pulse / Glow ───────────────────────────────────────────── */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
+}
+
+@keyframes glowBlue {
+  0%, 100% { box-shadow: 0 0 8px rgba(26, 111, 255, 0.2); }
+  50%       { box-shadow: 0 0 24px rgba(26, 111, 255, 0.5); }
+}
+
+@keyframes glowGold {
+  0%, 100% { box-shadow: 0 0 8px rgba(240, 160, 32, 0.2); }
+  50%       { box-shadow: 0 0 24px rgba(240, 160, 32, 0.5); }
+}
+
+/* ── Spinner ────────────────────────────────────────────────── */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* ── Blink (status live) ────────────────────────────────────── */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+/* ── Classes utilitaires ────────────────────────────────────── */
+.animate-fade-in      { animation: fadeIn       var(--duration-base) var(--ease-out) both; }
+.animate-slide-in-up  { animation: slideInUp    var(--duration-base) var(--ease-out) both; }
+.animate-slide-in-left { animation: slideInLeft var(--duration-base) var(--ease-out) both; }
+.animate-scale-in     { animation: scaleIn      var(--duration-base) var(--ease-spring) both; }
+.animate-pulse        { animation: pulse        2s var(--ease-default) infinite; }
+.animate-spin         { animation: spin         1s linear infinite; }
+.animate-blink        { animation: blink        1.2s step-start infinite; }
+.animate-glow-blue    { animation: glowBlue     2.5s var(--ease-default) infinite; }
+.animate-glow-gold    { animation: glowGold     2.5s var(--ease-default) infinite; }
+
+/* ── Stagger helper via CSS custom prop ─────────────────────── */
+.stagger-1 { animation-delay: 50ms; }
+.stagger-2 { animation-delay: 100ms; }
+.stagger-3 { animation-delay: 150ms; }
+.stagger-4 { animation-delay: 200ms; }
+.stagger-5 { animation-delay: 250ms; }

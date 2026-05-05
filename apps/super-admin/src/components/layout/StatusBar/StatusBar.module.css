@@ -1,0 +1,23 @@
+.bar {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--blue);
+  padding: 0 8px;
+  font-family: var(--font-mono);
+}
+
+.left, .right { display: flex; align-items: center; gap: 0; }
+
+.item {
+  font-size: 11px;
+  color: rgba(255,255,255,0.9);
+  padding: 0 8px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  cursor: default;
+  transition: background var(--dur-fast) var(--ease);
+}
+.item:hover { background: rgba(0,0,0,0.2); }

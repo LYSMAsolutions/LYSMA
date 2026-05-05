@@ -1,0 +1,91 @@
+/* ── Responsive ATC — mobile first ────────────────────────
+   Ce fichier complète atc-lysma.css avec les overrides
+   spécifiques à la navigation ATC et aux breakpoints fins.
+   ────────────────────────────────────────────────────── */
+
+/* ── MOBILE ≤ 768px ─────────────────────────────────────── */
+@media (max-width: 768px) {
+
+  /* Grilles → 1 colonne */
+  .atc-grid-2,
+  .atc-grid-3 {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Grille 4 colonnes → 2 (lignes de bon) */
+  .atc-grid-4 {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  /* Padding réduit sur les cartes */
+  .card-lysma,
+  .card-section {
+    padding: 1rem !important;
+    border-radius: var(--r-lg) !important;
+  }
+
+  /* Boutons d'action → pleine largeur */
+  .atc-actions {
+    flex-direction: column !important;
+  }
+  .atc-actions .btn-primary,
+  .atc-actions .btn-secondary {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  /* TypeBar → scroll horizontal */
+  .atc-typebar {
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    scrollbar-width: none !important;
+    -webkit-overflow-scrolling: touch !important;
+    padding-bottom: 2px;
+  }
+  .atc-typebar::-webkit-scrollbar { display: none; }
+
+  /* Carousel catalogue */
+  .catalogue-card {
+    width: calc(85vw) !important;
+    min-width: calc(85vw) !important;
+  }
+
+  /* Drawer pleine largeur */
+  .atc-drawer {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    border-left: none !important;
+  }
+
+  /* Tableaux → scroll horizontal */
+  .table-shell {
+    overflow-x: auto !important;
+  }
+
+  /* Titres h1 de formulaires */
+  h1 {
+    font-size: 1.25rem !important;
+  }
+
+  /* Data tables — cellules resserrées */
+  .data-table thead th,
+  .data-table tbody td {
+    padding: 0.625rem 0.875rem !important;
+    font-size: var(--font-xs) !important;
+  }
+}
+
+/* ── TRÈS PETIT ≤ 480px ─────────────────────────────────── */
+@media (max-width: 480px) {
+
+  /* Dashboard iOS — grille 3 colonnes */
+  .atc-tile-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 1rem 0.5rem !important;
+  }
+
+  /* KPI cards → 2 colonnes */
+  .atc-grid-4 {
+    grid-template-columns: 1fr 1fr !important;
+  }
+}

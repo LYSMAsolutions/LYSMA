@@ -1,0 +1,364 @@
+@import "tailwindcss";
+
+/* =========================
+   LYSMA DESIGN SYSTEM — PMA
+========================= */
+
+:root {
+  --lysma-primary: #0a4d9b;
+  --lysma-primary-2: #1e73d8;
+  --lysma-bg: #f2f4f7;
+  --lysma-text: #0f172a;
+  --lysma-muted: #6b7280;
+
+  --lysma-white: rgba(255, 255, 255, 0.72);
+  --lysma-white-strong: rgba(255, 255, 255, 0.88);
+  --lysma-border: rgba(217, 227, 240, 0.95);
+
+  --lysma-shadow-soft: 0 10px 30px rgba(15, 23, 42, 0.06);
+  --lysma-shadow-card: 0 18px 48px rgba(15, 23, 42, 0.08);
+
+  --lysma-success-bg: rgba(16, 185, 129, 0.12);
+  --lysma-success-text: #0f9f6e;
+  --lysma-success-border: rgba(16, 185, 129, 0.22);
+
+  --lysma-warning-bg: rgba(245, 158, 11, 0.12);
+  --lysma-warning-text: #b45309;
+  --lysma-warning-border: rgba(245, 158, 11, 0.22);
+
+  --lysma-danger-bg: rgba(239, 68, 68, 0.12);
+  --lysma-danger-text: #dc2626;
+  --lysma-danger-border: rgba(239, 68, 68, 0.22);
+}
+
+html,
+body {
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "DM Sans", Arial, Helvetica, sans-serif;
+  color: var(--lysma-text);
+  background:
+    radial-gradient(circle at 20% 10%, rgba(99, 162, 255, 0.55), transparent 30%),
+    radial-gradient(circle at 85% 0%, rgba(30, 115, 216, 0.45), transparent 28%),
+    radial-gradient(circle at 60% 70%, rgba(143, 194, 255, 0.3), transparent 35%),
+    linear-gradient(180deg, #c8dcff 0%, #b8d4fa 20%, #ccdcfb 50%, #dce8fb 100%);
+  background-attachment: fixed;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  transform: none;
+}
+
+/* =========================
+   LYSMA CORE CLASSES
+========================= */
+
+.card-lysma {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1.75rem;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.82) 0%,
+    rgba(255, 255, 255, 0.68) 100%
+  );
+  border: 1px solid var(--lysma-border);
+  box-shadow:
+    var(--lysma-shadow-soft),
+    inset 0 1px 0 rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease,
+    border-color 0.22s ease;
+}
+
+.card-lysma::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    135deg,
+    rgba(30, 115, 216, 0.07),
+    transparent 46%,
+    rgba(10, 77, 155, 0.04)
+  );
+  opacity: 0;
+  transition: opacity 0.22s ease;
+}
+
+.card-lysma:hover {
+  transform: translateY(-3px);
+  border-color: rgba(30, 115, 216, 0.22);
+  box-shadow:
+    var(--lysma-shadow-card),
+    inset 0 1px 0 rgba(255, 255, 255, 0.55);
+}
+
+.card-lysma:hover::before {
+  opacity: 1;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 44px;
+  border: 0;
+  border-radius: 0.95rem;
+  padding: 0.78rem 1.1rem;
+  background: linear-gradient(135deg, var(--lysma-primary), var(--lysma-primary-2));
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  box-shadow: 0 12px 30px rgba(30, 115, 216, 0.22);
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    opacity 0.18s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 34px rgba(30, 115, 216, 0.28);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 44px;
+  border-radius: 0.95rem;
+  padding: 0.78rem 1.1rem;
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--lysma-primary);
+  font-size: 0.95rem;
+  font-weight: 700;
+  border: 1px solid rgba(196, 213, 236, 0.95);
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
+  transition:
+    transform 0.18s ease,
+    background 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.btn-secondary:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(30, 115, 216, 0.26);
+}
+
+.badge-lysma {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border-radius: 999px;
+  padding: 0.38rem 0.8rem;
+  background: rgba(255, 255, 255, 0.82);
+  color: var(--lysma-primary);
+  border: 1px solid rgba(186, 208, 236, 0.95);
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.section-title {
+  margin: 0;
+  color: var(--lysma-text);
+  font-size: clamp(1.5rem, 2.4vw, 2.2rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+.section-copy {
+  margin: 0;
+  color: var(--lysma-muted);
+  font-size: 0.98rem;
+  line-height: 1.65;
+  max-width: 70ch;
+}
+
+.kpi-card {
+  display: block;
+  border-radius: 1.5rem;
+  padding: 1.25rem;
+  border: 1px solid #d9e3f0;
+  background: linear-gradient(135deg, #f8fbff, #ffffff);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.kpi-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(30, 115, 216, 0.22);
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.08);
+}
+
+.table-shell {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 1.4rem;
+  border: 1px solid rgba(217, 227, 240, 0.95);
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow:
+    var(--lysma-shadow-soft),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.data-table {
+  width: 100%;
+  min-width: 720px;
+  border-collapse: collapse;
+}
+
+.data-table thead th {
+  padding: 0.95rem 1rem;
+  border-bottom: 1px solid rgba(217, 227, 240, 0.9);
+  color: #334155;
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.88) 0%,
+    rgba(248, 251, 255, 0.92) 100%
+  );
+}
+
+.data-table tbody td {
+  padding: 1rem;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.72);
+  color: var(--lysma-text);
+  font-size: 0.94rem;
+  vertical-align: top;
+}
+
+.data-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.data-table tbody tr:hover {
+  background: rgba(248, 251, 255, 0.8);
+}
+
+/* =========================
+   USEFUL EXTRA CLASSES
+========================= */
+
+.input-lysma {
+  width: 100%;
+  min-height: 46px;
+  border-radius: 0.95rem;
+  border: 1px solid #dce5f0;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--lysma-text);
+  padding: 0.78rem 0.95rem;
+  outline: none;
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease;
+}
+
+.input-lysma::placeholder {
+  color: #94a3b8;
+}
+
+.input-lysma:focus {
+  border-color: var(--lysma-primary);
+  box-shadow: 0 0 0 3px rgba(10, 77, 155, 0.08);
+  background: #ffffff;
+}
+
+.badge-success {
+  background: var(--lysma-success-bg);
+  color: var(--lysma-success-text);
+  border: 1px solid var(--lysma-success-border);
+  border-radius: 999px;
+  padding: 0.38rem 0.8rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.badge-warning {
+  background: var(--lysma-warning-bg);
+  color: var(--lysma-warning-text);
+  border: 1px solid var(--lysma-warning-border);
+  border-radius: 999px;
+  padding: 0.38rem 0.8rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.badge-danger {
+  background: var(--lysma-danger-bg);
+  color: var(--lysma-danger-text);
+  border: 1px solid var(--lysma-danger-border);
+  border-radius: 999px;
+  padding: 0.38rem 0.8rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+@media (max-width: 768px) {
+  .card-lysma {
+    border-radius: 1.25rem;
+  }
+
+  .kpi-card {
+    border-radius: 1.2rem;
+    padding: 1rem;
+  }
+
+  .table-shell {
+    border-radius: 1rem;
+  }
+
+  .data-table {
+    min-width: 640px;
+  }
+
+  .data-table thead th,
+  .data-table tbody td {
+    padding: 0.85rem 0.8rem;
+  }
+}

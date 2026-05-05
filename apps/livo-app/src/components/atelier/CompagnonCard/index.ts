@@ -1,0 +1,1 @@
+export { CompagnonCard } from './CompagnonCard'

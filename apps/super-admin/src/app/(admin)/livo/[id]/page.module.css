@@ -1,0 +1,59 @@
+.page { padding: 20px 24px; display: flex; flex-direction: column; gap: 16px; font-family: var(--font-mono); animation: slideIn var(--dur-base) var(--ease) both; }
+
+.breadcrumb { display: flex; align-items: center; font-size: var(--text-xs); color: var(--text-muted); }
+.breadLink { color: var(--blue); }
+.breadLink:hover { text-decoration: underline; }
+.sep { padding: 0 4px; }
+
+.detail { display: flex; flex-direction: column; gap: 16px; }
+
+.header { display: flex; align-items: flex-start; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border-subtle); }
+.nom { font-size: var(--text-xl); font-weight: 700; color: var(--text-primary); }
+.owner { font-size: 11px; color: var(--blue); margin-top: 3px; }
+.addr { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+.headerRight { display: flex; gap: 8px; }
+.btnSave { padding: 6px 14px; background: var(--green-dim); border: 1px solid var(--green); border-radius: var(--radius-sm); color: var(--green); font-family: var(--font-mono); font-size: var(--text-xs); cursor: pointer; transition: all var(--dur-fast) var(--ease); }
+.btnSave:hover { background: rgba(63,185,80,0.25); }
+.btnSave:disabled { opacity: 0.5; pointer-events: none; }
+
+.cols { display: grid; grid-template-columns: 1fr 1.6fr; gap: 16px; }
+.col { display: flex; flex-direction: column; gap: 12px; }
+
+.panel { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); overflow: hidden; }
+.panelTitle { padding: 8px 14px; font-size: 10px; font-weight: 600; color: var(--cyan); background: var(--bg-elevated); border-bottom: 1px solid var(--border-subtle); }
+
+.statsGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border-subtle); }
+.statBox { background: var(--bg-surface); padding: 10px 14px; display: flex; flex-direction: column; gap: 4px; }
+.statLabel { font-size: 10px; color: var(--text-muted); }
+.statVal { font-size: 18px; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+.controls { padding: 10px 14px; display: flex; flex-direction: column; gap: 10px; }
+.control { display: flex; align-items: center; justify-content: space-between; }
+.controlLabel { font-size: 11px; color: var(--text-muted); }
+
+.toggle { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+.toggle input { display: none; }
+.slider { width: 28px; height: 14px; background: var(--border-default); border-radius: 7px; position: relative; transition: all var(--dur-fast) var(--ease); }
+.slider::after { content: ''; position: absolute; width: 10px; height: 10px; border-radius: 50%; background: var(--text-muted); top: 2px; left: 2px; transition: all var(--dur-fast) var(--ease); }
+.sliderOn { background: rgba(63,185,80,0.2); border: 1px solid var(--green); }
+.sliderOn::after { background: var(--green); transform: translateX(14px); }
+
+.infoList { padding: 8px 14px; display: flex; flex-direction: column; gap: 8px; }
+.infoRow { display: flex; align-items: center; justify-content: space-between; }
+.infoVal { font-size: 11px; color: var(--text-secondary); }
+
+.miniTable { width: 100%; border-collapse: collapse; font-size: 11px; }
+.miniTable th { padding: 5px 12px; text-align: left; font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; border-bottom: 1px solid var(--border-subtle); background: var(--bg-elevated); }
+.miniTable td { padding: 6px 12px; border-bottom: 1px solid var(--border-subtle); color: var(--text-secondary); }
+.miniTable tr:last-child td { border-bottom: none; }
+.miniTable tr:hover td { background: var(--bg-hover); }
+.mono { font-family: var(--font-mono); }
+.muted { color: var(--text-muted) !important; }
+.empty { padding: 14px; text-align: center; color: var(--text-muted); }
+
+.tauxGrid { display: flex; flex-wrap: wrap; gap: 8px; padding: 10px 14px; }
+.taux { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px 12px; background: var(--bg-elevated); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); min-width: 80px; }
+.tauxType { font-size: 10px; font-weight: 700; color: var(--cyan); }
+.tauxVal { font-size: 14px; font-weight: 700; color: var(--purple); }
+.tauxLib { font-size: 10px; color: var(--text-muted); text-align: center; }

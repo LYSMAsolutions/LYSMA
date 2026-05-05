@@ -1,0 +1,82 @@
+:root {
+  /* ── Couleurs VS Code dark ──────────────────────────────── */
+  --bg-base:        #0d1117;
+  --bg-surface:     #161b22;
+  --bg-elevated:    #1c2128;
+  --bg-input:       #0d1117;
+  --bg-hover:       rgba(255,255,255,0.06);
+
+  /* Bordures */
+  --border-subtle:  #21262d;
+  --border-default: #30363d;
+  --border-focus:   #58a6ff;
+
+  /* Accents — vert terminal + cyan + bleu github */
+  --green:          #3fb950;
+  --green-dim:      rgba(63,185,80,0.15);
+  --cyan:           #79c0ff;
+  --cyan-dim:       rgba(121,192,255,0.12);
+  --blue:           #58a6ff;
+  --blue-dim:       rgba(88,166,255,0.12);
+  --yellow:         #e3b341;
+  --yellow-dim:     rgba(227,179,65,0.12);
+  --red:            #f85149;
+  --red-dim:        rgba(248,81,73,0.12);
+  --purple:         #bc8cff;
+  --orange:         #ffa657;
+
+  /* Texte */
+  --text-primary:   #e6edf3;
+  --text-secondary: #8b949e;
+  --text-muted:     #6e7681;
+  --text-inverse:   #0d1117;
+
+  /* Fonts */
+  --font-mono:  'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+  --font-sans:  'Inter', -apple-system, sans-serif;
+
+  /* Tailles texte */
+  --text-xs:   11px;
+  --text-sm:   12px;
+  --text-base: 13px;
+  --text-md:   14px;
+  --text-lg:   16px;
+  --text-xl:   20px;
+  --text-2xl:  24px;
+  --text-3xl:  32px;
+
+  /* Spacing */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 24px;
+  --sp-8: 32px;
+  --sp-10: 40px;
+  --sp-12: 48px;
+
+  /* Radius */
+  --radius-sm:  3px;
+  --radius-md:  6px;
+  --radius-lg:  8px;
+  --radius-xl:  12px;
+  --radius-full: 9999px;
+
+  /* Layout */
+  --sidebar-w:     220px;
+  --sidebar-w-col: 44px;
+  --header-h:      36px;
+  --status-h:      22px;
+
+  /* Z-index */
+  --z-sidebar: 30;
+  --z-header:  20;
+  --z-modal:   100;
+  --z-tooltip: 200;
+
+  /* Transitions */
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --dur-fast: 100ms;
+  --dur-base: 200ms;
+}

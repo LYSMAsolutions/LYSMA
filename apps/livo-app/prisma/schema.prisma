@@ -1,0 +1,318 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Role {
+  SUPER_ADMIN
+  OWNER
+  MANAGER
+  COMPAGNON
+}
+
+enum TauxType {
+  T1
+  T2
+  T3
+  T4
+  CARROSSERIE
+  PEINTURE
+  AUTRE
+}
+
+enum StatutFiche {
+  EN_ATTENTE
+  EN_COURS
+  EN_PAUSE
+  TERMINEE
+  CLOTUREE
+  ANNULEE
+}
+
+enum StatutPointageFiche {
+  EN_COURS
+  EN_PAUSE
+  TERMINE
+}
+
+enum StatutPointageJour {
+  ABSENT
+  ARRIVE
+  EN_TRAVAIL
+  PAUSE_CAFE
+  PAUSE_DEJEUNER
+  PARTI
+}
+
+enum TypeAbsence {
+  CONGE_PAYE
+  RTT
+  ARRET_MALADIE
+  FORMATION
+  CONGE_SANS_SOLDE
+  AUTRE
+}
+
+enum StatutGarage {
+  OUVERT
+  FERME
+  PAUSE
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  emailVerified DateTime?
+  nom           String
+  prenom        String
+  telephone     String?
+  role          Role      @default(OWNER)
+  passwordHash  String?
+  avatarUrl     String?
+  actif         Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts   Account[]
+  sessions   Session[]
+  garages    Garage[]
+  compagnons Compagnon[]
+
+  @@map("users")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+model Garage {
+  id          String       @id @default(cuid())
+  nom         String
+  adresse     String?
+  ville       String?
+  codePostal  String?
+  telephone   String?
+  email       String?
+  siret       String?
+  logoUrl     String?
+  statutJour  StatutGarage @default(FERME)
+  actif       Boolean      @default(true)
+  trialEndsAt     DateTime?
+  abonnementActif Boolean   @default(false)
+  passwordAtelier String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  ownerId String
+  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  taux         TauxGarage[]
+  compagnons   Compagnon[]
+  vehicules    Vehicule[]
+  fiches       FicheTravaux[]
+  joursOuverts JourOuvert[]
+
+  @@map("garages")
+}
+
+model TauxGarage {
+  id        String   @id @default(cuid())
+  type      TauxType
+  libelle   String
+  montant   Decimal  @db.Decimal(10, 2)
+  actif     Boolean  @default(true)
+  pin       String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  garageId String
+  garage   Garage @relation(fields: [garageId], references: [id], onDelete: Cascade)
+
+  @@unique([garageId, type])
+  @@map("taux_garage")
+}
+
+model JourOuvert {
+  id             String  @id @default(cuid())
+  jourSemaine    Int
+  heureOuverture String
+  heureFermeture String
+  actif          Boolean @default(true)
+
+  garageId String
+  garage   Garage @relation(fields: [garageId], references: [id], onDelete: Cascade)
+
+  @@unique([garageId, jourSemaine])
+  @@map("jours_ouverts")
+}
+
+model Compagnon {
+  id            String    @id @default(cuid())
+  nom           String   @default("")
+  prenom        String   @default("")
+  matricule     String?
+  poste         String?
+  heuresContrat Decimal   @default(35) @db.Decimal(5, 2)
+  dateEntree    DateTime?
+  dateSortie    DateTime?
+  pin           String?
+  actif         Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  userId   String?
+  user     User?  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  garageId String
+  garage   Garage @relation(fields: [garageId], references: [id], onDelete: Cascade)
+
+  pointagesJour  PointageJour[]
+  pointagesFiche PointageFiche[]
+  absences       Absence[]
+
+  @@map("compagnons")
+}
+
+model PointageJour {
+  id             String             @id @default(cuid())
+  date           DateTime           @db.Date
+  statutActuel   StatutPointageJour @default(ABSENT)
+  heureArrivee   DateTime?
+  heureDepart    DateTime?
+  pauseCafeDebut DateTime?
+  pauseCafeFin   DateTime?
+  pauseDejDebut  DateTime?
+  pauseDejFin    DateTime?
+  dureeMinutes   Int?
+  notes          String?            @db.Text
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+
+  compagnonId String
+  compagnon   Compagnon @relation(fields: [compagnonId], references: [id], onDelete: Cascade)
+
+  @@unique([compagnonId, date])
+  @@map("pointages_jour")
+}
+
+model Vehicule {
+  id              String   @id @default(cuid())
+  immatriculation String?
+  marque          String
+  modele          String
+  vin             String?
+  annee           Int?
+  clientNom       String
+  clientPrenom    String?
+  clientTel       String?
+  clientEmail     String?
+  notes           String?  @db.Text
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  garageId String
+  garage   Garage @relation(fields: [garageId], references: [id], onDelete: Cascade)
+
+  fiches FicheTravaux[]
+
+  @@map("vehicules")
+}
+
+model FicheTravaux {
+  id            String      @id @default(cuid())
+  numero        String
+  statut        StatutFiche @default(EN_ATTENTE)
+  travaux       String      @db.Text
+  notes         String?     @db.Text
+  tempsFacture  Decimal?    @db.Decimal(6, 2)
+  tauxApplique  TauxType?
+  montantHT     Decimal?    @db.Decimal(10, 2)
+  tempsReel     Decimal?    @db.Decimal(6, 2)
+  dateOuverture DateTime    @default(now())
+  dateFermeture DateTime?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  garageId   String
+  garage     Garage   @relation(fields: [garageId], references: [id], onDelete: Cascade)
+  vehiculeId String
+  vehicule   Vehicule @relation(fields: [vehiculeId], references: [id])
+
+  pointagesFiche PointageFiche[]
+
+  @@unique([garageId, numero])
+  @@map("fiches_travaux")
+}
+
+model PointageFiche {
+  id           String              @id @default(cuid())
+  debutAt      DateTime            @default(now())
+  finAt        DateTime?
+  dureeMinutes Int?
+  statut       StatutPointageFiche @default(EN_COURS)
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt
+
+  compagnonId String
+  compagnon   Compagnon    @relation(fields: [compagnonId], references: [id], onDelete: Cascade)
+  ficheId     String
+  fiche       FicheTravaux @relation(fields: [ficheId], references: [id], onDelete: Cascade)
+
+  @@map("pointages_fiche")
+}
+
+model Absence {
+  id           String      @id @default(cuid())
+  type         TypeAbsence
+  dateDebut    DateTime    @db.Date
+  dateFin      DateTime    @db.Date
+  nbJours      Decimal     @db.Decimal(5, 1)
+  justificatif String?
+  approuve     Boolean     @default(false)
+  notes        String?     @db.Text
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  compagnonId String
+  compagnon   Compagnon @relation(fields: [compagnonId], references: [id], onDelete: Cascade)
+
+  @@map("absences")
+}

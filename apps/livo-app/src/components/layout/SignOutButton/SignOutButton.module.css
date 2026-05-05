@@ -1,0 +1,25 @@
+.signOut {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted);
+  background: transparent;
+  cursor: pointer;
+  transition:
+    background var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
+  flex-shrink: 0;
+}
+
+.signOut:hover {
+  background: var(--color-error-bg);
+  color: var(--color-error);
+}
+
+.signOut svg {
+  width: 15px;
+  height: 15px;
+}

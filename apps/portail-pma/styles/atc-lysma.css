@@ -1,0 +1,655 @@
+/* ═══════════════════════════════════════════════════════════════
+   LYSMA DESIGN SYSTEM — Portail PMA
+   Stack : Next.js / Tailwind v4 (classes générées off → style inline)
+   Ce fichier CSS est la source unique de vérité pour :
+     · Les tokens de design (variables CSS)
+     · Les classes utilitaires réutilisables
+     · Le responsive ATC (breakpoints 768px et 480px)
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── 0. TOKENS ─────────────────────────────────────────────── */
+:root {
+  /* Couleurs */
+  --c-blue-primary:   #0A4D9B;
+  --c-blue-secondary: #1E73D8;
+  --c-blue-light:     #EBF3FF;
+  --c-blue-hover:     #083d7a;
+
+  --c-bg:             #F2F4F7;
+  --c-white:          #FFFFFF;
+  --c-border:         #D9E3F0;
+  --c-border-focus:   #1E73D8;
+
+  --c-text:           #0F172A;
+  --c-text-secondary: #6B7280;
+  --c-text-muted:     #94A3B8;
+
+  --c-success:        #10B981;
+  --c-success-bg:     #ECFDF5;
+  --c-warning:        #F59E0B;
+  --c-warning-bg:     #FFFBEB;
+  --c-danger:         #EF4444;
+  --c-danger-bg:      #FEF2F2;
+
+  /* Ombres */
+  --shadow-xs:  0 1px 3px rgba(10,77,155,0.06);
+  --shadow-sm:  0 2px 8px rgba(10,77,155,0.08);
+  --shadow-md:  0 4px 16px rgba(10,77,155,0.10);
+  --shadow-lg:  0 8px 32px rgba(10,77,155,0.12);
+
+  /* Rayons */
+  --r-sm:  8px;
+  --r-md:  12px;
+  --r-lg:  16px;
+  --r-xl:  20px;
+  --r-2xl: 24px;
+
+  /* Espacement */
+  --gap-xs:  0.5rem;
+  --gap-sm:  0.75rem;
+  --gap-md:  1rem;
+  --gap-lg:  1.5rem;
+  --gap-xl:  2rem;
+
+  /* Typographie */
+  --font-xs:  0.72rem;
+  --font-sm:  0.8125rem;
+  --font-md:  0.875rem;
+  --font-lg:  1rem;
+  --font-xl:  1.125rem;
+  --font-2xl: 1.375rem;
+}
+
+/* ── 1. RESET LEGER ─────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+/* ── 2. CARTES ──────────────────────────────────────────────── */
+
+/* Carte principale blanche */
+.card-lysma {
+  background:    var(--c-white);
+  border:        1px solid var(--c-border);
+  border-radius: var(--r-xl);
+  padding:       1.5rem;
+  box-shadow:    var(--shadow-sm);
+}
+
+/* Carte section dans un formulaire */
+.card-section {
+  background:    var(--c-white);
+  border:        1px solid var(--c-border);
+  border-radius: var(--r-lg);
+  padding:       1.25rem 1.5rem;
+  box-shadow:    var(--shadow-xs);
+}
+
+/* Carte KPI */
+.kpi-card {
+  background:    var(--c-white);
+  border:        1px solid var(--c-border);
+  border-radius: var(--r-lg);
+  padding:       1.125rem 1.25rem;
+  box-shadow:    var(--shadow-sm);
+  display:       flex;
+  flex-direction:column;
+  gap:           0.375rem;
+  transition:    box-shadow 0.2s, transform 0.15s;
+}
+.kpi-card:hover {
+  box-shadow: var(--shadow-md);
+  transform:  translateY(-1px);
+}
+
+/* ── 3. TYPOGRAPHIE ─────────────────────────────────────────── */
+.section-title {
+  font-size:   var(--font-xl);
+  font-weight: 700;
+  color:       var(--c-text);
+  letter-spacing: -0.01em;
+  margin:      0 0 0.25rem;
+}
+
+.section-copy {
+  font-size:  var(--font-md);
+  color:      var(--c-text-secondary);
+  margin:     0 0 1.25rem;
+  line-height: 1.5;
+}
+
+.label-field {
+  font-size:   var(--font-sm);
+  font-weight: 600;
+  color:       var(--c-text);
+  margin:      0 0 0.375rem;
+  display:     block;
+}
+
+.label-secondary {
+  font-size:  var(--font-xs);
+  color:      var(--c-text-secondary);
+  font-weight:500;
+}
+
+/* ── 4. BOUTONS ─────────────────────────────────────────────── */
+.btn-primary {
+  display:         inline-flex;
+  align-items:     center;
+  justify-content: center;
+  gap:             0.5rem;
+  padding:         0.625rem 1.375rem;
+  border-radius:   var(--r-md);
+  background:      linear-gradient(135deg, var(--c-blue-primary), var(--c-blue-secondary));
+  color:           #fff;
+  font-size:       var(--font-md);
+  font-weight:     600;
+  border:          none;
+  cursor:          pointer;
+  box-shadow:      0 2px 8px rgba(10,77,155,0.25);
+  transition:      all 0.2s;
+  white-space:     nowrap;
+}
+.btn-primary:hover {
+  background:  linear-gradient(135deg, var(--c-blue-hover), var(--c-blue-primary));
+  box-shadow:  0 4px 14px rgba(10,77,155,0.35);
+  transform:   translateY(-1px);
+}
+.btn-primary:active {
+  transform:   translateY(0);
+  box-shadow:  0 1px 4px rgba(10,77,155,0.2);
+}
+.btn-primary:disabled {
+  opacity:     0.5;
+  cursor:      not-allowed;
+  transform:   none;
+}
+
+.btn-secondary {
+  display:         inline-flex;
+  align-items:     center;
+  justify-content: center;
+  gap:             0.5rem;
+  padding:         0.625rem 1.375rem;
+  border-radius:   var(--r-md);
+  background:      var(--c-white);
+  color:           var(--c-blue-primary);
+  font-size:       var(--font-md);
+  font-weight:     600;
+  border:          1.5px solid var(--c-border);
+  cursor:          pointer;
+  transition:      all 0.2s;
+  white-space:     nowrap;
+}
+.btn-secondary:hover {
+  border-color: var(--c-blue-secondary);
+  background:   var(--c-blue-light);
+}
+.btn-secondary:disabled {
+  opacity:  0.5;
+  cursor:   not-allowed;
+}
+
+.btn-ghost {
+  display:         inline-flex;
+  align-items:     center;
+  justify-content: center;
+  gap:             0.375rem;
+  padding:         0.5rem 0.875rem;
+  border-radius:   var(--r-sm);
+  background:      transparent;
+  color:           var(--c-text-secondary);
+  font-size:       var(--font-sm);
+  font-weight:     500;
+  border:          none;
+  cursor:          pointer;
+  transition:      all 0.15s;
+}
+.btn-ghost:hover {
+  background: var(--c-bg);
+  color:      var(--c-text);
+}
+
+.btn-danger {
+  display:         inline-flex;
+  align-items:     center;
+  justify-content: center;
+  gap:             0.5rem;
+  padding:         0.625rem 1.25rem;
+  border-radius:   var(--r-md);
+  background:      var(--c-white);
+  color:           var(--c-danger);
+  font-size:       var(--font-sm);
+  font-weight:     600;
+  border:          1.5px solid rgba(239,68,68,0.25);
+  cursor:          pointer;
+  transition:      all 0.2s;
+}
+.btn-danger:hover {
+  background:   var(--c-danger-bg);
+  border-color: var(--c-danger);
+}
+
+/* ── 5. INPUTS ──────────────────────────────────────────────── */
+.input-lysma {
+  width:         100%;
+  padding:       0.5625rem 0.875rem;
+  border-radius: var(--r-md);
+  border:        1.5px solid var(--c-border);
+  background:    var(--c-white);
+  color:         var(--c-text);
+  font-size:     var(--font-md);
+  transition:    border-color 0.15s, box-shadow 0.15s;
+  outline:       none;
+}
+.input-lysma::placeholder { color: var(--c-text-muted); }
+.input-lysma:focus {
+  border-color: var(--c-border-focus);
+  box-shadow:   0 0 0 3px rgba(30,115,216,0.12);
+}
+
+.select-lysma {
+  width:         100%;
+  padding:       0.5625rem 0.875rem;
+  border-radius: var(--r-md);
+  border:        1.5px solid var(--c-border);
+  background:    var(--c-white);
+  color:         var(--c-text);
+  font-size:     var(--font-md);
+  appearance:    none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat:   no-repeat;
+  background-position: right 0.875rem center;
+  padding-right:  2.25rem;
+  cursor:         pointer;
+  outline:        none;
+  transition:     border-color 0.15s, box-shadow 0.15s;
+}
+.select-lysma:focus {
+  border-color: var(--c-border-focus);
+  box-shadow:   0 0 0 3px rgba(30,115,216,0.12);
+}
+
+.textarea-lysma {
+  width:         100%;
+  padding:       0.5625rem 0.875rem;
+  border-radius: var(--r-md);
+  border:        1.5px solid var(--c-border);
+  background:    var(--c-white);
+  color:         var(--c-text);
+  font-size:     var(--font-md);
+  resize:        vertical;
+  min-height:    80px;
+  outline:       none;
+  transition:    border-color 0.15s, box-shadow 0.15s;
+}
+.textarea-lysma:focus {
+  border-color: var(--c-border-focus);
+  box-shadow:   0 0 0 3px rgba(30,115,216,0.12);
+}
+
+/* ── 6. BADGES ──────────────────────────────────────────────── */
+.badge-lysma {
+  display:         inline-flex;
+  align-items:     center;
+  gap:             0.25rem;
+  padding:         0.2rem 0.625rem;
+  border-radius:   999px;
+  font-size:       var(--font-xs);
+  font-weight:     600;
+  letter-spacing:  0.01em;
+  white-space:     nowrap;
+}
+
+.badge-blue    { background: var(--c-blue-light);   color: var(--c-blue-primary); }
+.badge-green   { background: var(--c-success-bg);   color: var(--c-success);      }
+.badge-yellow  { background: var(--c-warning-bg);   color: #92400e;               }
+.badge-red     { background: var(--c-danger-bg);    color: var(--c-danger);       }
+.badge-gray    { background: #F1F5F9;               color: var(--c-text-secondary);}
+
+/* ── 7. TABLEAUX ────────────────────────────────────────────── */
+.table-shell {
+  background:    var(--c-white);
+  border:        1px solid var(--c-border);
+  border-radius: var(--r-xl);
+  overflow:      hidden;
+  box-shadow:    var(--shadow-sm);
+}
+
+.data-table {
+  width:           100%;
+  border-collapse: collapse;
+  font-size:       var(--font-sm);
+}
+.data-table thead tr {
+  background: var(--c-bg);
+  border-bottom: 1px solid var(--c-border);
+}
+.data-table thead th {
+  padding:      0.75rem 1.25rem;
+  text-align:   left;
+  font-size:    var(--font-xs);
+  font-weight:  700;
+  color:        var(--c-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space:  nowrap;
+}
+.data-table tbody tr {
+  border-bottom: 1px solid var(--c-border);
+  transition:    background 0.12s;
+}
+.data-table tbody tr:last-child { border-bottom: none; }
+.data-table tbody tr:hover      { background: #FAFBFF; }
+.data-table tbody td {
+  padding:    0.875rem 1.25rem;
+  color:      var(--c-text);
+  vertical-align: middle;
+}
+
+/* ── 8. GRILLES ATC ─────────────────────────────────────────── */
+.atc-grid-2 {
+  display:               grid;
+  grid-template-columns: 1fr 1fr;
+  gap:                   1rem;
+}
+
+.atc-grid-3 {
+  display:               grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap:                   1rem;
+}
+
+.atc-grid-4 {
+  display:               grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap:                   0.75rem;
+}
+
+/* ── 9. COMPOSANTS UTILITAIRES ──────────────────────────────── */
+
+/* Barre d'actions (footer de formulaire) */
+.atc-actions {
+  display:     flex;
+  align-items: center;
+  gap:         0.75rem;
+  padding-top: 1.25rem;
+  border-top:  1px solid var(--c-border);
+  flex-wrap:   wrap;
+}
+
+/* Type bar (onglets de type de bon) */
+.atc-typebar {
+  display:  flex;
+  gap:      0.5rem;
+  flex-wrap:wrap;
+}
+
+/* Drawer */
+.atc-drawer {
+  width:         420px;
+  max-width:     95vw;
+  background:    var(--c-white);
+  border-left:   1px solid var(--c-border);
+  height:        100%;
+  overflow-y:    auto;
+  box-shadow:    var(--shadow-lg);
+}
+
+/* Séparateur de section */
+.atc-divider {
+  border:       none;
+  border-top:   1px solid var(--c-border);
+  margin:       1.5rem 0;
+}
+
+/* Toggle Cmd/Dev */
+.toggle-cmddev {
+  display:       inline-flex;
+  border-radius: var(--r-sm);
+  border:        1.5px solid var(--c-border);
+  overflow:      hidden;
+  flex-shrink:   0;
+}
+.toggle-cmddev button {
+  padding:     0.3rem 0.75rem;
+  font-size:   var(--font-xs);
+  font-weight: 600;
+  border:      none;
+  cursor:      pointer;
+  transition:  background 0.15s, color 0.15s;
+  background:  transparent;
+  color:       var(--c-text-secondary);
+}
+.toggle-cmddev button.active-cmd {
+  background: var(--c-blue-primary);
+  color:      #fff;
+}
+.toggle-cmddev button.active-dev {
+  background: var(--c-warning);
+  color:      #fff;
+}
+
+/* Header de page */
+.atc-page-header {
+  display:       flex;
+  align-items:   flex-start;
+  gap:           1rem;
+  margin-bottom: 1.75rem;
+  flex-wrap:     wrap;
+}
+.atc-page-header-icon {
+  width:         48px;
+  height:        48px;
+  border-radius: var(--r-lg);
+  display:       flex;
+  align-items:   center;
+  justify-content: center;
+  flex-shrink:   0;
+}
+
+/* Ligne d'article dans un bon */
+.bon-line {
+  background:    #FAFBFF;
+  border:        1px solid var(--c-border);
+  border-radius: var(--r-md);
+  padding:       0.875rem 1rem;
+  display:       grid;
+  grid-template-columns: 1fr auto 80px auto;
+  gap:           0.75rem;
+  align-items:   center;
+}
+
+/* ── 10. CATALOGUE ──────────────────────────────────────────── */
+.catalogue-card {
+  background:    var(--c-white);
+  border:        1px solid var(--c-border);
+  border-radius: var(--r-xl);
+  padding:       1.25rem;
+  min-width:     220px;
+  width:         220px;
+  flex-shrink:   0;
+  box-shadow:    var(--shadow-sm);
+  transition:    box-shadow 0.2s, transform 0.15s;
+}
+.catalogue-card:hover {
+  box-shadow: var(--shadow-md);
+  transform:  translateY(-2px);
+}
+
+/* ── 11. NOTIFICATIONS / ALERTES ────────────────────────────── */
+.alert-info {
+  background:    var(--c-blue-light);
+  border:        1px solid rgba(30,115,216,0.2);
+  border-radius: var(--r-md);
+  padding:       0.75rem 1rem;
+  display:       flex;
+  align-items:   flex-start;
+  gap:           0.625rem;
+  font-size:     var(--font-sm);
+  color:         var(--c-blue-primary);
+}
+.alert-warning {
+  background:    var(--c-warning-bg);
+  border:        1px solid rgba(245,158,11,0.25);
+  border-radius: var(--r-md);
+  padding:       0.75rem 1rem;
+  display:       flex;
+  align-items:   flex-start;
+  gap:           0.625rem;
+  font-size:     var(--font-sm);
+  color:         #92400e;
+}
+.alert-success {
+  background:    var(--c-success-bg);
+  border:        1px solid rgba(16,185,129,0.25);
+  border-radius: var(--r-md);
+  padding:       0.75rem 1rem;
+  display:       flex;
+  align-items:   flex-start;
+  gap:           0.625rem;
+  font-size:     var(--font-sm);
+  color:         #065f46;
+}
+
+/* ── 12. SKELETON LOADER ────────────────────────────────────── */
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position:  400px 0; }
+}
+.skeleton {
+  background:           linear-gradient(90deg, #E9EEF6 25%, #F2F4F7 50%, #E9EEF6 75%);
+  background-size:      800px 100%;
+  animation:            shimmer 1.5s infinite;
+  border-radius:        var(--r-sm);
+}
+
+/* ── 13. RESPONSIVE — 768px ─────────────────────────────────── */
+@media (max-width: 768px) {
+
+  /* Grilles */
+  .atc-grid-2 { grid-template-columns: 1fr !important; }
+  .atc-grid-3 { grid-template-columns: 1fr !important; }
+  .atc-grid-4 { grid-template-columns: 1fr 1fr !important; }
+
+  /* Cartes */
+  .card-lysma, .card-section {
+    padding:       1rem !important;
+    border-radius: var(--r-lg) !important;
+  }
+
+  /* Actions → colonne */
+  .atc-actions {
+    flex-direction: column !important;
+  }
+  .atc-actions .btn-primary,
+  .atc-actions .btn-secondary {
+    width:           100% !important;
+    justify-content: center !important;
+  }
+
+  /* TypeBar scroll horizontal */
+  .atc-typebar {
+    flex-wrap:                nowrap !important;
+    overflow-x:               auto !important;
+    scrollbar-width:          none !important;
+    -webkit-overflow-scrolling: touch !important;
+    padding-bottom:           2px;
+  }
+  .atc-typebar::-webkit-scrollbar { display: none; }
+
+  /* Catalogue */
+  .catalogue-card {
+    width:     calc(85vw) !important;
+    min-width: calc(85vw) !important;
+  }
+
+  /* Drawer */
+  .atc-drawer {
+    width:      100vw !important;
+    max-width:  100vw !important;
+    border-left:none !important;
+  }
+
+  /* Tableau → scroll horizontal */
+  .table-shell {
+    overflow-x: auto !important;
+  }
+
+  /* Ligne bon → empilée */
+  .bon-line {
+    grid-template-columns: 1fr auto !important;
+    grid-template-rows:    auto auto !important;
+  }
+
+  /* Header page — titre réduit */
+  .atc-page-header { margin-bottom: 1.25rem !important; }
+
+  /* Data table — font réduite */
+  .data-table { font-size: var(--font-xs) !important; }
+  .data-table thead th,
+  .data-table tbody td { padding: 0.625rem 0.875rem !important; }
+}
+
+/* ── 14. RESPONSIVE — 480px ─────────────────────────────────── */
+@media (max-width: 480px) {
+
+  /* Grille tiles dashboard → 3 colonnes */
+  .atc-tile-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap:                   1rem 0.5rem !important;
+  }
+
+  /* KPI cards → 2 colonnes */
+  .kpi-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  /* Cartes — padding minimal */
+  .card-lysma, .card-section {
+    padding: 0.875rem !important;
+  }
+
+  /* Boutons — taille réduite */
+  .btn-primary, .btn-secondary {
+    padding:   0.5rem 1rem !important;
+    font-size: var(--font-sm) !important;
+  }
+}
+
+/* ── 15. ANIMATIONS ─────────────────────────────────────────── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-in {
+  animation: fadeInUp 0.25s ease forwards;
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(16px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.slide-in {
+  animation: slideInRight 0.2s ease forwards;
+}
+
+/* ── 16. SCROLLBAR GLOBALE ──────────────────────────────────── */
+::-webkit-scrollbar       { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--c-border); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: #B8C9DE; }
+
+/* ── Hover liens liste (SAV, Garanties) — Server Components ─ */
+.atc-list-row {
+  display:       flex;
+  align-items:   center;
+  gap:           1rem;
+  padding:       1rem 1.125rem;
+  border-radius: var(--r-md);
+  background:    var(--c-bg);
+  border:        1px solid var(--c-border);
+  transition:    background 0.12s, border-color 0.12s;
+}
+.atc-list-row:hover {
+  background:   #FAFBFF;
+  border-color: var(--c-border-focus);
+}

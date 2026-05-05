@@ -1,0 +1,218 @@
+.card {
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-xl);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  transition: all var(--duration-base) var(--ease-out);
+}
+
+.card.active {
+  border-color: rgba(26,111,255,0.35);
+  background: linear-gradient(160deg, var(--color-bg-surface) 0%, rgba(26,111,255,0.05) 100%);
+  box-shadow: 0 0 0 1px rgba(26,111,255,0.15);
+}
+
+.en_cours  { border-color: rgba(26,111,255,0.20); }
+.terminee  { border-color: rgba(32,192,96,0.15); opacity: 0.7; }
+.cloturee  { opacity: 0.5; }
+
+/* ── Header ─────────────────────────────────────────────────── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.numero {
+  font-size: var(--text-sm);
+  font-weight: var(--font-bold);
+  color: var(--color-text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Pointage button ────────────────────────────────────────── */
+.pointageBtn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  height: 32px;
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-md);
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
+  font-family: var(--font-sans);
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all var(--duration-base) var(--ease-out);
+  white-space: nowrap;
+}
+
+.pointageBtn:disabled { opacity: 0.5; pointer-events: none; }
+
+.startBtn {
+  background: var(--color-blue-electric);
+  color: white;
+}
+.startBtn:hover { background: #2277ff; box-shadow: var(--shadow-glow-blue); }
+
+.stopBtn {
+  background: var(--color-error-bg);
+  color: var(--color-error);
+  border-color: rgba(255,64,64,0.25);
+}
+.stopBtn:hover { background: rgba(255,64,64,0.20); }
+
+/* ── Véhicule ───────────────────────────────────────────────── */
+.vehiculeInfo {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.vehicule {
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  color: var(--color-text-primary);
+}
+
+.immat {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  background: var(--color-bg-elevated);
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+}
+
+.client {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  margin-left: auto;
+}
+
+/* ── Travaux ────────────────────────────────────────────────── */
+.travaux {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-3);
+  background: var(--color-bg-elevated);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-subtle);
+}
+
+.travailItem {
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+}
+
+.travailItem::before {
+  content: '·';
+  color: var(--color-blue-electric);
+  flex-shrink: 0;
+  font-weight: bold;
+}
+
+.more {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  font-style: italic;
+  padding-left: var(--space-3);
+}
+
+/* ── Footer ─────────────────────────────────────────────────── */
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.compagnonsActifs {
+  display: flex;
+  gap: var(--space-1);
+  flex-wrap: wrap;
+}
+
+.compagnonBadge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--color-blue-electric);
+  background: rgba(26,111,255,0.10);
+  border: 1px solid rgba(26,111,255,0.20);
+  border-radius: var(--radius-full);
+  padding: 2px 8px;
+}
+
+.temps {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  margin-left: auto;
+}
+
+/* ── Spinner ────────────────────────────────────────────────── */
+.spinner {
+  width: 12px; height: 12px;
+  border: 2px solid rgba(255,255,255,0.25);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── PDF button ─────────────────────────────────────────────── */
+.pdfBtn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  height: 28px;
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-md);
+  font-size: var(--text-xs);
+  font-weight: var(--font-medium);
+  font-family: var(--font-sans);
+  cursor: pointer;
+  border: 1px solid var(--color-border-default);
+  background: var(--color-bg-elevated);
+  color: var(--color-text-secondary);
+  transition: all var(--duration-fast) var(--ease-out);
+}
+.pdfBtn:hover {
+  border-color: var(--color-border-strong);
+  color: var(--color-text-primary);
+}
+.pdfBtn:disabled { opacity: 0.5; pointer-events: none; }
+
+/* ── Numero lien ─────────────────────────────────────────── */
+.numero {
+  font-size: var(--text-sm);
+  font-weight: var(--font-bold);
+  color: var(--color-text-primary);
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+.numero:hover {
+  color: var(--color-blue-electric);
+  text-decoration: underline;
+}

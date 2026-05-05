@@ -1,0 +1,1 @@
+export { NouvelleFiche } from './NouvelleFiche'

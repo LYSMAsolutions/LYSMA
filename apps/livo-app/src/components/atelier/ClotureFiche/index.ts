@@ -1,0 +1,1 @@
+export { ClotureFiche } from './ClotureFiche'
