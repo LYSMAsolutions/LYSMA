@@ -1,0 +1,85 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Garage {
+  id               String    @id @default(uuid())
+  name             String
+  code             String    @unique
+  email            String?   @unique
+  adminPassword    String?
+  atelierPassword  String?
+  logoUrl          String?   // ← ajoute cette ligne
+  isActive         Boolean   @default(true)
+  users            User[]
+  sessions         Session[]
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+}
+
+model User {
+  id         String    @id @default(uuid())
+  email      String?   @unique
+  nom        String?
+  prenom     String?
+  matricule  String?
+  role       UserRole
+  pinCode    String?
+  password   String?
+  isActive   Boolean   @default(true)
+  garageId   String
+  garage     Garage    @relation(fields: [garageId], references: [id])
+  sessions   Session[]
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+}
+
+model Session {
+  id          String        @id @default(uuid())
+  userId      String
+  garageId    String
+  dossier     String?
+  comment     String?
+  startTime   DateTime
+  endTime     DateTime?
+  durationMin Int?
+  status      SessionStatus @default(OPEN)
+  user        User          @relation(fields: [userId], references: [id])
+  garage      Garage        @relation(fields: [garageId], references: [id])
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+model History {
+  id                   String   @id @default(uuid())
+  garageId             String
+  userId               String
+  matricule            String?
+  nomPrenom            String?
+  dossier              String?
+  comment              String?
+  startTime            DateTime
+  endTime              DateTime
+  durationMin          Int
+  tempsConstructeurMin Int?
+  indice               String?
+  stopPar              String?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @default(now())
+}
+
+enum UserRole {
+  ADMIN
+  ATELIER
+}
+
+enum SessionStatus {
+  OPEN
+  CLOSED
+}
