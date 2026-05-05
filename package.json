@@ -11,10 +11,11 @@
     "turbo": "^2.5.0"
   },
   "dependencies": {
-    
     "@types/bcryptjs": "^3.0.0",
     "@types/node": "^20.19.39",
     "bcryptjs": "^3.0.3"
-    
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": ["@prisma/client", "@prisma/engines", "prisma", "sharp"]
   }
 }
