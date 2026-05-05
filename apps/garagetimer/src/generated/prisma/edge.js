@@ -205,6 +205,10 @@ const config = {
         "fromEnvVar": null,
         "value": "windows",
         "native": true
+      },
+      {
+        "fromEnvVar": null,
+        "value": "rhel-openssl-3.0.x"
       }
     ],
     "previewFeatures": [],
@@ -222,6 +226,7 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
@@ -230,8 +235,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel Garage {\n  id              String    @id @default(uuid())\n  name            String\n  code            String    @unique\n  email           String?   @unique\n  adminPassword   String?\n  atelierPassword String?\n  logoUrl         String? // ← ajoute cette ligne\n  isActive        Boolean   @default(true)\n  users           User[]\n  sessions        Session[]\n  createdAt       DateTime  @default(now())\n  updatedAt       DateTime  @updatedAt\n}\n\nmodel User {\n  id        String    @id @default(uuid())\n  email     String?   @unique\n  nom       String?\n  prenom    String?\n  matricule String?\n  role      UserRole\n  pinCode   String?\n  password  String?\n  isActive  Boolean   @default(true)\n  garageId  String\n  garage    Garage    @relation(fields: [garageId], references: [id])\n  sessions  Session[]\n  createdAt DateTime  @default(now())\n  updatedAt DateTime  @updatedAt\n}\n\nmodel Session {\n  id          String        @id @default(uuid())\n  userId      String\n  garageId    String\n  dossier     String?\n  comment     String?\n  startTime   DateTime\n  endTime     DateTime?\n  durationMin Int?\n  status      SessionStatus @default(OPEN)\n  user        User          @relation(fields: [userId], references: [id])\n  garage      Garage        @relation(fields: [garageId], references: [id])\n  createdAt   DateTime      @default(now())\n  updatedAt   DateTime      @updatedAt\n}\n\nmodel History {\n  id                   String   @id @default(uuid())\n  garageId             String\n  userId               String\n  matricule            String?\n  nomPrenom            String?\n  dossier              String?\n  comment              String?\n  startTime            DateTime\n  endTime              DateTime\n  durationMin          Int\n  tempsConstructeurMin Int?\n  indice               String?\n  stopPar              String?\n  createdAt            DateTime @default(now())\n  updatedAt            DateTime @default(now())\n}\n\nenum UserRole {\n  ADMIN\n  ATELIER\n}\n\nenum SessionStatus {\n  OPEN\n  CLOSED\n}\n",
-  "inlineSchemaHash": "01b8792cd7e9b4a08d5e785b479f8851296789a7466293631ec3a2cabc848ebb",
+  "inlineSchema": "generator client {\n  provider      = \"prisma-client-js\"\n  output        = \"../src/generated/prisma\"\n  binaryTargets = [\"native\", \"rhel-openssl-3.0.x\"]\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel Garage {\n  id              String    @id @default(uuid())\n  name            String\n  code            String    @unique\n  email           String?   @unique\n  adminPassword   String?\n  atelierPassword String?\n  logoUrl         String? // ← ajoute cette ligne\n  isActive        Boolean   @default(true)\n  users           User[]\n  sessions        Session[]\n  createdAt       DateTime  @default(now())\n  updatedAt       DateTime  @updatedAt\n}\n\nmodel User {\n  id        String    @id @default(uuid())\n  email     String?   @unique\n  nom       String?\n  prenom    String?\n  matricule String?\n  role      UserRole\n  pinCode   String?\n  password  String?\n  isActive  Boolean   @default(true)\n  garageId  String\n  garage    Garage    @relation(fields: [garageId], references: [id])\n  sessions  Session[]\n  createdAt DateTime  @default(now())\n  updatedAt DateTime  @updatedAt\n}\n\nmodel Session {\n  id          String        @id @default(uuid())\n  userId      String\n  garageId    String\n  dossier     String?\n  comment     String?\n  startTime   DateTime\n  endTime     DateTime?\n  durationMin Int?\n  status      SessionStatus @default(OPEN)\n  user        User          @relation(fields: [userId], references: [id])\n  garage      Garage        @relation(fields: [garageId], references: [id])\n  createdAt   DateTime      @default(now())\n  updatedAt   DateTime      @updatedAt\n}\n\nmodel History {\n  id                   String   @id @default(uuid())\n  garageId             String\n  userId               String\n  matricule            String?\n  nomPrenom            String?\n  dossier              String?\n  comment              String?\n  startTime            DateTime\n  endTime              DateTime\n  durationMin          Int\n  tempsConstructeurMin Int?\n  indice               String?\n  stopPar              String?\n  createdAt            DateTime @default(now())\n  updatedAt            DateTime @default(now())\n}\n\nenum UserRole {\n  ADMIN\n  ATELIER\n}\n\nenum SessionStatus {\n  OPEN\n  CLOSED\n}\n",
+  "inlineSchemaHash": "a76308609de9fe94f8ccde5c42aeb88dc661e5552686dae24cb0b91462181d93",
   "copyEngine": true
 }
 config.dirname = '/'
