@@ -105,7 +105,9 @@ export default async function AtelierPage() {
     year: 'numeric',
   })
 
-  const compagnonConnecte = compagnons.find((compagnon) => compagnon.user?.id === session.user.id)
+  const compagnonConnecte = compagnons.find(
+    (compagnon: Compagnon) => compagnon.user?.id === session.user.id
+  )
   const compagnonId = compagnonConnecte?.id ?? compagnons[0]?.id ?? ''
 
   const tauxSerialises = taux.map((item) => ({
