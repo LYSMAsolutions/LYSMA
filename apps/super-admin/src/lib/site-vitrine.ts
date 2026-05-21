@@ -1,11 +1,12 @@
 import { existsSync } from 'fs'
 import { mkdir, readdir, readFile, writeFile } from 'fs/promises'
 import path from 'path'
+import { SHOWCASE_MANIFEST, type ShowcaseKind } from './site-vitrine-manifest'
 
 export type ShowcaseSite = {
   id: string
   name: string
-  kind: 'next' | 'static'
+  kind: ShowcaseKind
   path: string
   relativePath: string
   entry: string
@@ -21,7 +22,6 @@ export type ShowcasePreviewPage = {
 }
 
 const SITES_ROOT = path.resolve(process.cwd(), '..', 'site-vitrine')
-const IGNORED_DIRS = new Set(['node_modules', '.next', '.git', 'dist', 'build'])
 
 export function getShowcaseRoot() {
   return SITES_ROOT
@@ -30,11 +30,8 @@ export function getShowcaseRoot() {
 export async function getShowcaseSites(): Promise<ShowcaseSite[]> {
   if (!existsSync(SITES_ROOT)) return []
 
-  const entries = await readdir(SITES_ROOT, { withFileTypes: true })
-  const directories = entries.filter((entry) => entry.isDirectory())
-
   const sites = await Promise.all(
-    directories.map(async (entry) => getShowcaseSite(entry.name)),
+    SHOWCASE_MANIFEST.map(async (site) => getShowcaseSite(site.id)),
   )
 
   return sites
@@ -46,40 +43,16 @@ export async function getShowcaseSite(id: string): Promise<ShowcaseSite | null> 
   if (!/^[a-zA-Z0-9-_]+$/.test(id)) return null
 
   const absolutePath = path.join(SITES_ROOT, id)
-  if (!existsSync(absolutePath)) return null
-
-  const packagePath = path.join(absolutePath, 'package.json')
   const indexPath = path.join(absolutePath, 'index.html')
-  const hasPackage = existsSync(packagePath)
-  const hasIndex = existsSync(indexPath)
+  const manifest = SHOWCASE_MANIFEST.find((site) => site.id === id)
 
-  if (!hasPackage && !hasIndex) return null
+  if (!manifest && !existsSync(indexPath)) return null
 
-  let name = humanize(id)
-  let packageName: string | undefined
-  let scripts: string[] = []
-  let entry = 'ouvrir index.html'
-  let kind: ShowcaseSite['kind'] = hasPackage ? 'next' : 'static'
-
-  if (hasPackage) {
-    const raw = await readFile(packagePath, 'utf8')
-    const pkg = JSON.parse(raw) as {
-      name?: string
-      scripts?: Record<string, string>
-    }
-
-    packageName = pkg.name
-    name = humanize(pkg.name ?? id)
-    scripts = Object.keys(pkg.scripts ?? {})
-    kind = pkg.scripts?.dev?.includes('next') ? 'next' : 'static'
-    entry = pkg.name && scripts.includes('dev')
-      ? `pnpm --filter ${pkg.name} run dev`
-      : 'pnpm install && pnpm run dev'
-  }
-
-  if (!hasPackage && hasIndex) {
-    entry = 'ouvrir index.html'
-  }
+  const name = manifest?.name ?? humanize(id)
+  const packageName = manifest?.packageName
+  const scripts = manifest?.scripts ?? []
+  const entry = manifest?.entry ?? 'ouvrir index.html'
+  const kind: ShowcaseSite['kind'] = manifest?.kind ?? 'static'
 
   return {
     id,
@@ -90,7 +63,7 @@ export async function getShowcaseSite(id: string): Promise<ShowcaseSite | null> 
     entry,
     packageName,
     scripts,
-    files: await countFiles(absolutePath),
+    files: 0,
     status: 'present',
   }
 }
@@ -230,24 +203,6 @@ function defaultShowcaseContent(name: string) {
       description: '',
     },
   }
-}
-
-async function countFiles(directory: string): Promise<number> {
-  const entries = await readdir(directory, { withFileTypes: true })
-  let total = 0
-
-  for (const entry of entries) {
-    if (IGNORED_DIRS.has(entry.name)) continue
-
-    const entryPath = path.join(directory, entry.name)
-    if (entry.isDirectory()) {
-      total += await countFiles(entryPath)
-    } else if (entry.isFile()) {
-      total += 1
-    }
-  }
-
-  return total
 }
 
 function humanize(value: string) {

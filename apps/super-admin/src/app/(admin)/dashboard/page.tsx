@@ -1,7 +1,7 @@
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { getLivoGarages } from '@/lib/livo-api'
-import { getShowcaseSites } from '@/lib/site-vitrine'
+import { getShowcaseOverviewSites } from '@/lib/site-vitrine-manifest'
 import { redirect } from 'next/navigation'
 import styles from './page.module.css'
 
@@ -13,7 +13,7 @@ export default async function DashboardPage() {
     prisma.client.findMany({ orderBy: { createdAt: 'desc' }, take: 5 }),
     prisma.message.findMany({ where: { statut: 'NOUVEAU' }, orderBy: { createdAt: 'desc' }, take: 5 }),
     getLivoGarages(),
-    getShowcaseSites(),
+    getShowcaseOverviewSites(),
     prisma.client.count(),
     prisma.client.count({ where: { statut: 'ACTIF' } }),
     prisma.client.count({ where: { statut: 'TRIAL' } }),

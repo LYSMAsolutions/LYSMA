@@ -1,14 +1,14 @@
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { auth } from '@/lib/auth'
-import { getShowcaseRoot, getShowcaseSites } from '@/lib/site-vitrine'
+import { getShowcaseOverviewSites, getShowcaseRootLabel } from '@/lib/site-vitrine-manifest'
 import styles from './page.module.css'
 
 export default async function SitesPage() {
   const session = await auth()
   if (!session) redirect('/connexion')
 
-  const sites = await getShowcaseSites()
+  const sites = await getShowcaseOverviewSites()
   const nextCount = sites.filter((site) => site.kind === 'next').length
   const staticCount = sites.filter((site) => site.kind === 'static').length
 
@@ -23,7 +23,7 @@ export default async function SitesPage() {
         <StatCard label="sites_detectes" value={sites.length} tone="cyan" />
         <StatCard label="apps_next" value={nextCount} tone="green" />
         <StatCard label="sites_statiques" value={staticCount} tone="yellow" />
-        <StatCard label="racine" value={getShowcaseRoot()} tone="muted" compact />
+        <StatCard label="racine" value={getShowcaseRootLabel()} tone="muted" compact />
       </section>
 
       <section className={styles.panel}>

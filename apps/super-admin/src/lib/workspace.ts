@@ -2,8 +2,16 @@ import { existsSync } from 'fs'
 import { readdir, readFile, stat } from 'fs/promises'
 import path from 'path'
 
-const WORKSPACE_ROOT = path.resolve(process.cwd(), '..', '..')
-const IGNORED = new Set(['.git', '.next', 'node_modules', 'dist', 'build', '.turbo'])
+const WORKSPACE_ROOT = path.resolve(process.cwd(), '..')
+const IGNORED = new Set([
+  '.git',
+  '.next',
+  '.pnpm-store',
+  'node_modules',
+  'dist',
+  'build',
+  '.turbo',
+])
 const TEXT_EXTENSIONS = new Set([
   '.css',
   '.env',

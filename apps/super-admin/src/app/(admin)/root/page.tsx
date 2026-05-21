@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import { auth } from '@/lib/auth'
-import { getShowcaseSites } from '@/lib/site-vitrine'
+import { getShowcaseOverviewSites } from '@/lib/site-vitrine-manifest'
 import { getWorkspaceRoot } from '@/lib/workspace'
 import { RootWorkspaceClient } from './RootWorkspaceClient'
 import styles from './page.module.css'
@@ -11,7 +11,7 @@ export default async function RootPage() {
   const session = await auth()
   if (!session) redirect('/connexion')
 
-  const sites = await getShowcaseSites()
+  const sites = await getShowcaseOverviewSites()
 
   return (
     <main className={styles.page}>
@@ -24,7 +24,7 @@ export default async function RootPage() {
         <StatCard label="workspace" value={getWorkspaceRoot()} tone="cyan" compact />
         <StatCard label="apps_site_vitrine" value={sites.length} tone="green" />
         <StatCard label="mode" value="lecture" tone="yellow" />
-        <StatCard label="scope" value="monorepo" tone="purple" />
+        <StatCard label="scope" value="apps" tone="purple" />
       </section>
 
       <section className={styles.commandGrid}>

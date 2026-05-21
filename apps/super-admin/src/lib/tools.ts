@@ -1,7 +1,3 @@
-import { existsSync } from 'fs'
-import { readFile } from 'fs/promises'
-import path from 'path'
-
 export type LysmaTool = {
   id: string
   name: string
@@ -14,8 +10,6 @@ export type LysmaTool = {
   notes: string[]
 }
 
-const WORKSPACE_ROOT = path.resolve(process.cwd(), '..', '..')
-
 const TOOL_DEFINITIONS = [
   {
     id: 'livo-app',
@@ -24,6 +18,7 @@ const TOOL_DEFINITIONS = [
     relativePath: 'apps/livo-app',
     command: 'pnpm --filter livo-app run dev',
     envFile: '.env.local',
+    packageName: 'livo-app',
   },
   {
     id: 'portail-pma',
@@ -32,6 +27,7 @@ const TOOL_DEFINITIONS = [
     relativePath: 'apps/portail-pma',
     command: 'pnpm --filter portail-pma run dev',
     envFile: '.env.local',
+    packageName: 'portail-pma',
   },
   {
     id: 'sites-vitrine',
@@ -40,40 +36,14 @@ const TOOL_DEFINITIONS = [
     relativePath: 'apps/site-vitrine',
     command: 'ouvrir /sites',
     envFile: '',
+    packageName: undefined,
   },
 ]
 
 export async function getLysmaTools(): Promise<LysmaTool[]> {
-  return Promise.all(TOOL_DEFINITIONS.map(getToolStatus))
-}
-
-async function getToolStatus(definition: typeof TOOL_DEFINITIONS[number]): Promise<LysmaTool> {
-  const absolutePath = path.join(WORKSPACE_ROOT, definition.relativePath)
-  const packagePath = path.join(absolutePath, 'package.json')
-  const envPath = definition.envFile ? path.join(absolutePath, definition.envFile) : ''
-  const notes: string[] = []
-
-  const hasFolder = existsSync(absolutePath)
-  const hasPackage = existsSync(packagePath)
-  const hasEnv = !definition.envFile || existsSync(envPath)
-  let packageName: string | undefined
-
-  if (hasPackage) {
-    const raw = await readFile(packagePath, 'utf8')
-    const pkg = JSON.parse(raw) as { name?: string }
-    packageName = pkg.name
-  }
-
-  if (!hasFolder) notes.push('dossier introuvable')
-  if (definition.kind === 'app' && !hasPackage) notes.push('package.json manquant')
-  if (definition.envFile && !hasEnv) notes.push(`${definition.envFile} manquant`)
-
-  const status = !hasFolder ? 'missing' : notes.length > 0 ? 'partial' : 'ready'
-
-  return {
+  return TOOL_DEFINITIONS.map((definition) => ({
     ...definition,
-    status,
-    packageName,
-    notes,
-  }
+    status: 'ready',
+    notes: [],
+  }))
 }
