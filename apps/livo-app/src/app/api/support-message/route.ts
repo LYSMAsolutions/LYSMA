@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Compte introuvable' }, { status: 404 })
   }
 
-  const inboxUrl = process.env.SUPER_ADMIN_MESSAGES_URL ?? 'http://localhost:3010/api/messages'
+  const inboxUrl = process.env.SUPER_ADMIN_MESSAGES_URL ?? 'https://lysma-super-admin.vercel.app/api/messages'
   const secret = process.env.SUPER_ADMIN_INBOUND_SECRET
 
   const res = await fetch(inboxUrl, {
