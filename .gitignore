@@ -18,3 +18,8 @@ apps/super-admin/.env
 **/.env.production
 **/.env.*
 !.env.example
+.env
+.env.*
+**/.env
+**/.env.*
+!.env.example
