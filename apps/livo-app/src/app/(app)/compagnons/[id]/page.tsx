@@ -148,14 +148,16 @@ export default async function CompagnonFichePage({
 
   const debutMois = new Date(new Date().getFullYear(), new Date().getMonth(), 1)
 
-  const fichesMois = compagnon.pointagesFiche.filter((pointage) => {
+  type PointageFicheItem = (typeof compagnon.pointagesFiche)[number]
+
+  const fichesMois = compagnon.pointagesFiche.filter((pointage: PointageFicheItem) => {
     return (
       new Date(pointage.debutAt) >= debutMois &&
       pointage.fiche?.statut === 'CLOTUREE'
     )
   })
 
-  const delta = fichesMois.reduce((sum, pointage) => {
+  const delta = fichesMois.reduce((sum: number, pointage: PointageFicheItem) => {
     const fiche = pointage.fiche
 
     if (!fiche) {
