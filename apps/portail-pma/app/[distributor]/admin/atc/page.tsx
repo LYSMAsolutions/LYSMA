@@ -39,8 +39,8 @@ export default async function AdminAtcPage({
   });
 
   const totalAtc = atcs.length;
-  const activeAtc = atcs.filter((item) => item.is_active).length;
-  const inactiveAtc = atcs.filter((item) => !item.is_active).length;
+  const activeAtc = atcs.filter((item: any) => item.is_active).length;
+  const inactiveAtc = atcs.filter((item: any) => !item.is_active).length;
   const totalClients = atcs.reduce((sum, item) => sum + item._count.clients, 0);
   const totalBons = atcs.reduce((sum, item) => sum + item._count.bons, 0);
 

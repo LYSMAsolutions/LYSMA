@@ -95,7 +95,7 @@ export default function AdminModulePage({
           gap: "1rem",
           gridTemplateColumns: `repeat(${cols}, 1fr)`,
         }}>
-          {kpis.map((item) => (
+          {kpis.map((item: any) => (
             <KpiCard key={`${item.title}-${item.value}`} item={item} />
           ))}
         </section>

@@ -108,7 +108,7 @@ export default async function AdminUsersPage({ params }: { params: Promise<{ dis
       ]}
     >
       <section className="grid grid-cols-1 gap-4 lg:grid-cols-5">
-        {roleCards.map((item) => {
+        {roleCards.map((item: any) => {
           const Icon = item.icon;
           return (
             <a

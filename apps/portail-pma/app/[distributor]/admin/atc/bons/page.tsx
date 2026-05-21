@@ -23,7 +23,7 @@ export default async function AtcBonsPage({
   });
 
   const total = bons.length;
-  const open = bons.filter((item) =>
+  const open = bons.filter((item: any) =>
     [
       "envoye",
       "non_pris_en_charge",

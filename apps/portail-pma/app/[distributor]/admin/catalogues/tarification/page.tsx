@@ -42,7 +42,7 @@ export default async function AdminCatalogueTarificationPage({
             { emoji: "👤", title: "Remise par client",       desc: "Appliquer un tarif préférentiel à un client en particulier, indépendamment du catalogue général." },
             { emoji: "📦", title: "Remise sur volume",       desc: "Déclencher une remise automatique au-delà d'une quantité commandée dans un même bon." },
             { emoji: "📅", title: "Tarifs temporaires",      desc: "Programmer des grilles tarifaires avec dates de début et de fin, sans modifier le prix de base du produit." },
-          ].map((item) => (
+          ].map((item: any) => (
             <div key={item.title} style={{ padding: "1.25rem", borderRadius: "1rem", background: "#f8fafc", border: "1px solid #e2e8f0" }}>
               <div style={{ fontSize: "1.25rem", marginBottom: "0.5rem" }}>{item.emoji}</div>
               <p style={{ margin: 0, fontSize: "0.875rem", fontWeight: 700, color: "#0f172a" }}>{item.title}</p>

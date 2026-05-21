@@ -216,7 +216,7 @@ export default async function AdminPage({
   );
 
   const roleStats = usersByRole
-    .map((item) => {
+    .map((item: any) => {
       const role = roleLabelById.get(item.role_id);
       return {
         code: role?.code ?? "unknown",
@@ -380,7 +380,7 @@ export default async function AdminPage({
       </section>
 
       <section className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-5">
-        {kpis.map((item) => {
+        {kpis.map((item: any) => {
           const Icon = item.icon;
           const tone = toneClasses[item.tone];
 
@@ -545,7 +545,7 @@ export default async function AdminPage({
             </div>
 
             <div className="mt-6 space-y-4">
-              {priorityCards.map((item) => {
+              {priorityCards.map((item: any) => {
                 const Icon = item.icon;
 
                 return (
@@ -582,7 +582,7 @@ export default async function AdminPage({
             </h3>
 
             <div className="mt-6 space-y-4">
-              {quickActions.map((item) => {
+              {quickActions.map((item: any) => {
                 const Icon = item.icon;
 
                 return (
@@ -633,7 +633,7 @@ export default async function AdminPage({
             {latestUsers.length === 0 ? (
               <p className="text-sm text-[#6B7280]">Aucun utilisateur trouvé.</p>
             ) : (
-              latestUsers.map((item) => (
+              latestUsers.map((item: any) => (
                 <div
                   key={item.id}
                   className="flex items-center justify-between rounded-2xl border border-[#E2E8F0] bg-[#F8FBFF] px-5 py-4"
@@ -678,7 +678,7 @@ export default async function AdminPage({
             {latestBons.length === 0 ? (
               <p className="text-sm text-[#6B7280]">Aucun bon trouvé.</p>
             ) : (
-              latestBons.map((item) => (
+              latestBons.map((item: any) => (
                 <div
                   key={item.id}
                   className="rounded-2xl border border-[#E2E8F0] bg-[#F8FBFF] px-5 py-4"

@@ -38,7 +38,7 @@ export default function Tabs({ value, onChange, items }: TabsProps) {
         })}
       </div>
 
-      <div>{items.find((item) => item.key === value)?.content}</div>
+      <div>{items.find((item: any) => item.key === value)?.content}</div>
     </div>
   );
 }

@@ -26,7 +26,7 @@ function toneClass(tone?: KpiItem["tone"]) {
 export default function BonKpiCards({ items }: { items: KpiItem[] }) {
   return (
     <section className={`grid-kpi ${items.length >= 5 ? "cols-5" : "cols-4"}`}>
-      {items.map((item) => (
+      {items.map((item: any) => (
         <Link key={item.title} href={item.href} className={toneClass(item.tone)}>
           <p className="section-copy" style={{ margin: 0 }}>
             {item.title}

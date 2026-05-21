@@ -67,7 +67,7 @@ export default async function CdvGarantiesPage({
 
       <section className="card-lysma p-8">
         <div className="space-y-4">
-          {garanties.map((item) => (
+          {garanties.map((item: any) => (
             <div key={item.id} className="rounded-2xl border border-[#E2E8F0] bg-[#F8FBFF] px-5 py-4">
               <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                 <div>

@@ -66,7 +66,7 @@ export default function ClientFilters({
     });
   }, [initialClients, search, storeFilter]);
 
-  const storeNames = [...new Set(initialClients.map((item) => item.storeName).filter(Boolean))] as string[];
+  const storeNames = [...new Set(initialClients.map((item: any) => item.storeName).filter(Boolean))] as string[];
 
   return (
     <div className="page-stack">

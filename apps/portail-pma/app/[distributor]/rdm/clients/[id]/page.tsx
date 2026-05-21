@@ -77,7 +77,7 @@ export default async function RdmClientDetailPage({
         <div className="card-lysma p-8">
           <h2 className="text-xl font-semibold text-[#0F172A]">Releves de parc</h2>
           <div className="mt-6 space-y-4">
-            {equipment.map((item) => (
+            {equipment.map((item: any) => (
               <div key={item.id} className="rounded-2xl border border-[#E2E8F0] bg-[#F8FBFF] p-5">
                 <p className="font-semibold text-[#0F172A]">{item.type_materiel}</p>
                 <p className="mt-1 text-sm text-[#6B7280]">{[item.marque, item.modele, item.annee].filter(Boolean).join(" - ") || "Materiel sans detail"}</p>

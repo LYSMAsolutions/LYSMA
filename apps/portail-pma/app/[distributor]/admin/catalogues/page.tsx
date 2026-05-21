@@ -69,7 +69,7 @@ export default async function AdminCataloguesPage({
           { label: "Produits",   href: `${adminBase}/catalogues/produits`,   emoji: "📦", desc: "Référentiel complet" },
           { label: "Catégories", href: `${adminBase}/catalogues/categories`, emoji: "🗂️", desc: "Familles de produits" },
           { label: "Imports",    href: `${adminBase}/catalogues/imports`,    emoji: "📥", desc: "Import CSV"          },
-        ].map((item) => (
+        ].map((item: any) => (
           <Link key={item.href} href={item.href} style={{ display: "flex", alignItems: "center", gap: "0.75rem", padding: "1rem 1.25rem", borderRadius: "1rem", background: "rgba(255,255,255,0.75)", border: "1px solid rgba(217,227,240,0.9)", textDecoration: "none", boxShadow: "0 2px 8px rgba(15,23,42,0.04)" }}>
             <span style={{ fontSize: "1.1rem" }}>{item.emoji}</span>
             <div>

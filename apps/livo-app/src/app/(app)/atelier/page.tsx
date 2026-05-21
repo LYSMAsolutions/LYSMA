@@ -110,7 +110,7 @@ export default async function AtelierPage() {
 )
   const compagnonId = compagnonConnecte?.id ?? compagnons[0]?.id ?? ''
 
-  const tauxSerialises = taux.map((item) => ({
+  const tauxSerialises = taux.map((item: any) => ({
     type: item.type as 'T1' | 'T2' | 'T3' | 'T4' | 'CARROSSERIE' | 'PEINTURE' | 'AUTRE',
     libelle: item.libelle,
     montant: Number(item.montant),

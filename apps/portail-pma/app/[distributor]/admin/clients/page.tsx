@@ -75,7 +75,7 @@ export default async function AdminClientsPage({
   const storeMap = new Map(stores.map((store) => [store.id, store]));
   const atcMap = new Map(atcs.map((atc) => [atc.id, atc]));
   const bonMap = new Map(
-    bonCounts.map((item) => [item.client_id, item._count.client_id ?? 0]),
+    bonCounts.map((item: any) => [item.client_id, item._count.client_id ?? 0]),
   );
 
   const rows = clients.map((client) => {

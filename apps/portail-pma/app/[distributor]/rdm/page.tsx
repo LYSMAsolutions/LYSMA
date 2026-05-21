@@ -41,7 +41,7 @@ export default async function RdmHomePage({
     userId: currentUser.id,
   });
 
-  const storeIds = stores.map((item) => item.id);
+  const storeIds = stores.map((item: any) => item.id);
 
   const [kpis, bons] = await Promise.all([
     getBonKpisForRdm({

@@ -14,7 +14,7 @@ export default async function StoreBonsPage({
   const currentUser = await requireAccess({ allowedRoles: ["store", "store_staff"], distributorSlug: distributor });
   const storeBase = `/${currentUser.distributorSlug}/store`;
   const stores = await getStoreScopeForUser({ distributorId: currentUser.distributorId, userId: currentUser.id });
-  const storeIds = stores.map((item) => item.id);
+  const storeIds = stores.map((item: any) => item.id);
   const bons = await getBonListForStore({ distributorId: currentUser.distributorId, storeIds });
 
   const nonPrisEnCharge = bons.filter((item) => ["envoye", "non_pris_en_charge"].includes(item.status)).length;

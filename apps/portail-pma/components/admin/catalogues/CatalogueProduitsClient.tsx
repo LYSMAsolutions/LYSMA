@@ -233,7 +233,7 @@ export default function CatalogueProduitsClient({ initialItems, suppliers: initi
             </tr>
           </thead>
           <tbody>
-            {filtered.map((item) => (
+            {filtered.map((item: any) => (
               <tr key={item.id}>
                 <td style={td}>
                   <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>

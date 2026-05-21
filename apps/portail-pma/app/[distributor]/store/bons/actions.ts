@@ -141,7 +141,7 @@ export async function updateStoreBonStatusAction(
     },
   });
 
-  const allowedStoreIds = new Set(storeLinks.map((item) => item.store_id));
+  const allowedStoreIds = new Set(storeLinks.map((item: any) => item.store_id));
 
   if (!bon.assigned_store_id || !allowedStoreIds.has(bon.assigned_store_id)) {
     throw new Error("Ce bon n’est pas rattaché à un magasin que tu peux gérer.");

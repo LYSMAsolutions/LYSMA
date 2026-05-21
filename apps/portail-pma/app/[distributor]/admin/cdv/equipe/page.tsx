@@ -94,7 +94,7 @@ export default async function AdminCdvEquipePage({
             </thead>
 
             <tbody>
-              {cdvs.map((item) => (
+              {cdvs.map((item: any) => (
                 <tr key={item.id}>
                   <td>{`${item.first_name} ${item.last_name}`.trim()}</td>
                   <td>{item.email}</td>

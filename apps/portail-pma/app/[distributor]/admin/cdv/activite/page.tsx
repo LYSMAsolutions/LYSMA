@@ -46,7 +46,7 @@ export default async function AdminCdvActivitePage({
   });
 
   const bonMap = new Map(
-    bonCounts.map((item) => [item.created_by_user_id, item._count.created_by_user_id ?? 0])
+    bonCounts.map((item: any) => [item.created_by_user_id, item._count.created_by_user_id ?? 0])
   );
 
   const rows = cdvs.map((cdv) => ({

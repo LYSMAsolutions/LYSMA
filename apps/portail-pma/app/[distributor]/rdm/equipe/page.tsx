@@ -54,7 +54,7 @@ export default async function RdmEquipePage({
               </tr>
             </thead>
             <tbody>
-              {staff.map((item) => (
+              {staff.map((item: any) => (
                 <tr key={item.id}>
                   <td>{`${item.first_name} ${item.last_name}`.trim()}</td>
                   <td>{item.initials}</td>

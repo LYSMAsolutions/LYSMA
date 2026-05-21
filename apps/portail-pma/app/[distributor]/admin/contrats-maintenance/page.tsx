@@ -61,7 +61,7 @@ async function saveContractTemplateAction(formData: FormData) {
 function linesFromJson(value: unknown) {
   if (!Array.isArray(value)) return "";
   return value
-    .map((item) => {
+    .map((item: any) => {
       if (typeof item === "string") return item;
       if (item && typeof item === "object" && "text" in item) {
         return String((item as { text?: unknown }).text || "");

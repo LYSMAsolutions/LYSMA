@@ -114,7 +114,7 @@ export default async function AtcBonDetailPage({
             </thead>
 
             <tbody>
-              {bon.bon_status_history.map((item) => {
+              {bon.bon_status_history.map((item: any) => {
                 const actor = item.users
                   ? `${item.users.first_name} ${item.users.last_name}`.trim()
                   : item.store_staff

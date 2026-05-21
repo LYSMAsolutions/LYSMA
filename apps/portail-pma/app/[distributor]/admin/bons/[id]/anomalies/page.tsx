@@ -88,7 +88,7 @@ export default async function AdminBonAnomaliesPage({
                 </tr>
               </thead>
               <tbody>
-                {anomalies.map((item) => {
+                {anomalies.map((item: any) => {
                   const actor = item.users
                     ? `${item.users.first_name} ${item.users.last_name}`.trim()
                     : item.store_staff

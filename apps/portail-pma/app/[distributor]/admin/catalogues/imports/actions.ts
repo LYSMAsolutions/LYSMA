@@ -58,7 +58,7 @@ function splitCsvLine(line: string, delimiter: string) {
     current += char;
   }
   result.push(current);
-  return result.map((item) => cleanRaw(item.replace(/^"|"$/g,"")));
+  return result.map((item: any) => cleanRaw(item.replace(/^"|"$/g,"")));
 }
 function detectDelimiter(headerLine: string) {
   return (headerLine.match(/;/g)||[]).length > (headerLine.match(/,/g)||[]).length ? ";" : ",";

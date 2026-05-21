@@ -93,7 +93,7 @@ export default async function AdminBonHistoryPage({
               </tr>
             </thead>
             <tbody>
-              {history.map((item) => {
+              {history.map((item: any) => {
                 const actor = item.users
                   ? `${item.users.first_name} ${item.users.last_name}`.trim()
                   : item.store_staff

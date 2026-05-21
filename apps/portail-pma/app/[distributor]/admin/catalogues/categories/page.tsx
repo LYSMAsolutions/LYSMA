@@ -123,7 +123,7 @@ export default async function AdminCatalogueCategoriesPage({
                 </tr>
               </thead>
               <tbody>
-                {(filteredItems ?? []).map((item) => (
+                {(filteredItems ?? []).map((item: any) => (
                   <tr key={item.id}>
                     <td style={{ ...td, fontWeight: 700 }}>{item.designation}</td>
                     <td style={tdM}>{item.suppliers?.name ?? "—"}</td>

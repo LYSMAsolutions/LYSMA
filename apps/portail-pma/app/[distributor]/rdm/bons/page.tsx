@@ -15,7 +15,7 @@ export default async function RdmBonsPage({
   const stores = await getStoreScopeForUser({ distributorId: currentUser.distributorId, userId: currentUser.id });
   const bons = await getBonListForRdm({
     distributorId: currentUser.distributorId,
-    storeIds: stores.map((item) => item.id),
+    storeIds: stores.map((item: any) => item.id),
   });
 
   return (

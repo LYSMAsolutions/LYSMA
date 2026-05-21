@@ -27,7 +27,7 @@ export function BonActionPanel({
   const [selectedKey, setSelectedKey] = useState(actions[0]?.key ?? "");
 
   const selectedAction = useMemo(
-    () => actions.find((item) => item.key === selectedKey) ?? null,
+    () => actions.find((item: any) => item.key === selectedKey) ?? null,
     [actions, selectedKey]
   );
 

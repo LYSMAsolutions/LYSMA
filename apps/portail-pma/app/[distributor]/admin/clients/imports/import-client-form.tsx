@@ -153,7 +153,7 @@ export function ImportClientForm({ action, deleteAction }: Props) {
                 { label: "Créés",       value: state.summary.created,   color: "#15803d", border: "#bbf7d0", bg: "#f0fdf4" },
                 { label: "Mis à jour",  value: state.summary.updated,   color: "#0a4d9b", border: "#bfdbfe", bg: "#eff6ff" },
                 { label: "Ignorés",     value: state.summary.skipped,   color: "#b45309", border: "#fde68a", bg: "#fffbeb" },
-              ].map((item) => (
+              ].map((item: any) => (
                 <div key={item.label} style={{ padding: "1.25rem", borderRight: "1px solid rgba(226,232,240,0.5)", background: item.bg, borderTop: "none" }}>
                   <p style={{ margin: 0, fontSize: "0.72rem", fontWeight: 700, color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.08em" }}>{item.label}</p>
                   <p style={{ margin: "0.5rem 0 0", fontSize: "2rem", fontWeight: 800, color: item.color, lineHeight: 1 }}>{item.value}</p>

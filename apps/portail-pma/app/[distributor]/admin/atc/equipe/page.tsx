@@ -94,7 +94,7 @@ export default async function AdminAtcEquipePage({
             </thead>
 
             <tbody>
-              {atcs.map((item) => (
+              {atcs.map((item: any) => (
                 <tr key={item.id}>
                   <td>{`${item.first_name} ${item.last_name}`.trim()}</td>
                   <td>{item.email}</td>
