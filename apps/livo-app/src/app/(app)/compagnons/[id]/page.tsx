@@ -138,9 +138,12 @@ export default async function CompagnonFichePage({
     },
   })
 
-  const tauxMap = Object.fromEntries(taux.map((t) => [t.type, Number(t.montant)]))
+  const tauxMap = Object.fromEntries(
+    taux.map((t: any) => [t.type, Number(t.montant)])
+  )
+
   const tauxMoyen = taux.length
-    ? taux.reduce((sum, t) => sum + Number(t.montant), 0) / taux.length
+    ? taux.reduce((sum: number, t: any) => sum + Number(t.montant), 0) / taux.length
     : 65
 
   const debutMois = new Date(new Date().getFullYear(), new Date().getMonth(), 1)
