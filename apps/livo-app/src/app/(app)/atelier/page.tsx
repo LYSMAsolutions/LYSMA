@@ -143,7 +143,7 @@ export default async function AtelierPage() {
               </div>
             ) : (
               <div className={styles.compagnonsGrid}>
-                {compagnons.map((compagnon) => {
+                {compagnons.map((compagnon: any) => {
                   const pointageJour = compagnon.pointagesJour[0]
 
                   const heureArrivee = pointageJour?.heureArrivee
@@ -184,9 +184,9 @@ export default async function AtelierPage() {
               </div>
             ) : (
               <div className={styles.fichesGrid}>
-                {fiches.map((fiche) => {
+                {fiches.map((fiche: any) => {
                   const estPointe = compagnonId
-                    ? fiche.pointagesFiche.some((pointage) => pointage.compagnonId === compagnonId)
+                    ? fiche.pointagesFiche.some((pointage: any) => pointage.compagnonId === compagnonId)
                     : false
 
                   return (
@@ -200,7 +200,7 @@ export default async function AtelierPage() {
                       immat={fiche.vehicule.immatriculation}
                       clientNom={fiche.vehicule.clientNom}
                       tempsReel={fiche.tempsReel ? Number(fiche.tempsReel) : null}
-                      pointagesActifs={fiche.pointagesFiche.map((pointage) => {
+                      pointagesActifs={fiche.pointagesFiche.map((pointage: any) => {
                         const prenom =
                           pointage.compagnon.user?.prenom ??
                           pointage.compagnon.prenom ??
