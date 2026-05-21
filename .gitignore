@@ -9,3 +9,12 @@ apps/super-admin/.env
 .DS_Store
 *.log
 .archives/
+.env
+.env.local
+.env.production
+.env.*
+**/.env
+**/.env.local
+**/.env.production
+**/.env.*
+!.env.example
