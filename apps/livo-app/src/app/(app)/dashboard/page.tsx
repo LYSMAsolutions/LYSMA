@@ -1,10 +1,13 @@
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
+import { getPrimaryGarageForUser } from '@/lib/garage'
 import { redirect } from 'next/navigation'
 import { getDashboardData } from '@/lib/dashboard'
 import { Header } from '@/components/layout/Header'
 import { Button, Badge } from '@/components/ui'
-import { Plus, TrendUp, TrendDown, Clock, Users, Wrench } from '@phosphor-icons/react/dist/ssr'
+import { TrendUp, TrendDown, Clock, Users, Wrench } from '@phosphor-icons/react/dist/ssr'
+import { DashboardNewFicheButton } from '@/components/atelier/NouvelleFiche/DashboardNewFicheButton'
+import Link from 'next/link'
 import styles from './page.module.css'
 
 function formatEur(val: number) {
@@ -20,12 +23,7 @@ export default async function DashboardPage() {
   const session = await auth()
   if (!session?.user?.id) redirect('/connexion')
 
-  const user = await prisma.user.findUnique({
-    where: { id: session.user.id },
-    include: { garages: { take: 1 } },
-  })
-
-  const garage = user?.garages[0]
+  const garage = await getPrimaryGarageForUser(session.user.id)
   if (!garage) redirect('/parametres')
 
   const data = await getDashboardData(garage.id)
@@ -33,7 +31,7 @@ export default async function DashboardPage() {
 
   return (
     <>
-      <Header title="Tableau de bord" description={today} action={<Button variant="primary" size="sm" icon={<Plus />}>Nouvelle fiche</Button>} />
+      <Header title="Tableau de bord" description={today} action={<DashboardNewFicheButton garageId={garage.id} />} />
       <div className={styles.content}>
 
         <div className={styles.kpiGrid}>
@@ -123,7 +121,9 @@ export default async function DashboardPage() {
           <section className={styles.section}>
             <div className={styles.sectionHeader}>
               <h2 className={styles.sectionTitle}>Fiches en cours <span className={styles.count}>{data.fichesEnCours.length}</span></h2>
-              <Button variant="ghost" size="sm">Voir tout</Button>
+              <Link href="/atelier">
+                <Button variant="ghost" size="sm">Voir tout</Button>
+              </Link>
             </div>
             <div className={styles.orList}>
               {data.fichesEnCours.map((f) => {
@@ -157,7 +157,7 @@ export default async function DashboardPage() {
           <div className={styles.empty}>
             <Wrench size={36} />
             <p>Aucune activité aujourd&apos;hui</p>
-            <Button variant="primary" icon={<Plus />}>Créer une fiche</Button>
+            <DashboardNewFicheButton garageId={garage.id} size="md" label="Créer une fiche" />
           </div>
         )}
 

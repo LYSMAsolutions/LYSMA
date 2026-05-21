@@ -70,6 +70,8 @@ export default async function AdminStoreRdmPage({
       <section className="card-lysma" style={{ padding: "2rem" }}>
         <StoreRdmForm
           storeId={store.id}
+          storeCode={store.code}
+          storeName={store.name}
           currentRdmId={currentLink?.user_id ?? null}
           rdms={rdms}
           roles={roles}

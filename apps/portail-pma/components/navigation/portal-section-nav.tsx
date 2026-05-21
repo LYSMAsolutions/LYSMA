@@ -7,12 +7,24 @@ import {
   FileText,
   History,
   ListOrdered,
+  Files,
+  Image,
+  MessageSquare,
+  AlertTriangle,
 } from "lucide-react";
 
 type PortalNavItem = {
   label: string;
   href: string;
-  icon: "layout-dashboard" | "file-text" | "history" | "list-ordered";
+  icon:
+    | "layout-dashboard"
+    | "file-text"
+    | "history"
+    | "list-ordered"
+    | "file-stack"
+    | "image"
+    | "message-square"
+    | "alert-triangle";
 };
 
 type PortalSectionNavProps = {
@@ -24,6 +36,10 @@ const iconMap = {
   "file-text": FileText,
   history: History,
   "list-ordered": ListOrdered,
+  "file-stack": Files,
+  image: Image,
+  "message-square": MessageSquare,
+  "alert-triangle": AlertTriangle,
 } as const;
 
 export function PortalSectionNav({ items }: PortalSectionNavProps) {

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { auth } from '@/lib/auth'
+import { getPointageAccess } from '@/lib/access'
 import { z } from 'zod'
 
 const schema = z.object({
@@ -11,178 +11,114 @@ const schema = z.object({
 
 async function recalculateFicheTempsReel(ficheId: string) {
   const pointages = await prisma.pointageFiche.findMany({
-    where: {
-      ficheId,
-      statut: 'TERMINE',
-    },
+    where: { ficheId, statut: 'TERMINE' },
   })
-
-  const totalMinutes = pointages.reduce(
-    (sum, pointage) => sum + (pointage.dureeMinutes ?? 0),
-    0
-  )
-
+  const totalMinutes = pointages.reduce((sum, pointage) => sum + (pointage.dureeMinutes ?? 0), 0)
   return prisma.ficheTravaux.update({
-    where: {
-      id: ficheId,
-    },
-    data: {
-      tempsReel: totalMinutes / 60,
-    },
+    where: { id: ficheId },
+    data: { tempsReel: totalMinutes / 60 },
   })
 }
 
 export async function POST(req: NextRequest) {
-  const session = await auth()
+  const access = await getPointageAccess()
+  if (!access) return NextResponse.json({ error: 'Non autorise' }, { status: 401 })
 
-  if (!session?.user?.id) {
-    return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
-  }
-
-  const body = await req.json()
-  const parsed = schema.safeParse(body)
-
-  if (!parsed.success) {
-    return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 })
-  }
+  const parsed = schema.safeParse(await req.json())
+  if (!parsed.success) return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 })
 
   const { compagnonId, ficheId, action } = parsed.data
   const now = new Date()
 
   const compagnon = await prisma.compagnon.findFirst({
-    where: {
-      id: compagnonId,
-      actif: true,
-      garage: {
-        ownerId: session.user.id,
-      },
-    },
+    where:
+      access.mode === 'admin'
+        ? { id: compagnonId, actif: true, garage: { ownerId: access.userId } }
+        : { id: compagnonId, garageId: access.garageId, actif: true },
   })
 
-  if (!compagnon) {
-    return NextResponse.json(
-      { error: 'Compagnon introuvable ou non autorisé' },
-      { status: 404 }
-    )
+  if (!compagnon || (access.mode === 'atelier' && access.compagnonId !== compagnon.id)) {
+    return NextResponse.json({ error: 'Compagnon introuvable ou non autorise' }, { status: 404 })
   }
 
   const fiche = await prisma.ficheTravaux.findFirst({
     where: {
       id: ficheId,
       garageId: compagnon.garageId,
-      garage: {
-        ownerId: session.user.id,
-      },
-      statut: {
-        in: ['EN_ATTENTE', 'EN_COURS', 'EN_PAUSE', 'TERMINEE'],
-      },
+      ...(access.mode === 'admin' ? { garage: { ownerId: access.userId } } : {}),
+      statut: { in: ['EN_ATTENTE', 'EN_COURS', 'EN_PAUSE', 'TERMINEE'] },
     },
   })
 
-  if (!fiche) {
-    return NextResponse.json(
-      { error: 'Fiche introuvable ou non autorisée' },
-      { status: 404 }
-    )
-  }
+  if (!fiche) return NextResponse.json({ error: 'Fiche introuvable ou non autorisee' }, { status: 404 })
 
   if (action === 'POINTER') {
-    const existing = await prisma.pointageFiche.findFirst({
-      where: {
-        compagnonId,
-        ficheId,
-        statut: {
-          in: ['EN_COURS', 'EN_PAUSE'],
-        },
-      },
+    const pointageFiche = await prisma.$transaction(async (tx) => {
+      await tx.$queryRaw`SELECT id FROM compagnons WHERE id = ${compagnonId} FOR UPDATE`
+      const existing = await tx.pointageFiche.findFirst({
+        where: { compagnonId, ficheId, statut: { in: ['EN_COURS', 'EN_PAUSE'] } },
+      })
+      if (existing) return null
+
+      const created = await tx.pointageFiche.create({
+        data: { compagnonId, ficheId, debutAt: now, statut: 'EN_COURS' },
+      })
+      await tx.ficheTravaux.update({
+        where: { id: ficheId },
+        data: { statut: 'EN_COURS', dateFermeture: null },
+      })
+      return created
     })
 
-    if (existing) {
-      return NextResponse.json(
-        { error: 'Déjà pointé sur cette fiche' },
-        { status: 400 }
-      )
+    if (!pointageFiche) {
+      return NextResponse.json({ error: 'Deja pointe sur cette fiche' }, { status: 400 })
     }
-
-    const pointageFiche = await prisma.pointageFiche.create({
-      data: {
-        compagnonId,
-        ficheId,
-        debutAt: now,
-        statut: 'EN_COURS',
-      },
-    })
-
-    await prisma.ficheTravaux.update({
-      where: {
-        id: ficheId,
-      },
-      data: {
-        statut: 'EN_COURS',
-        dateFermeture: null,
-      },
-    })
 
     return NextResponse.json({ success: true, pointageFiche })
   }
 
-  if (action === 'DEPOINTER') {
-    const pointageFiche = await prisma.pointageFiche.findFirst({
-      where: {
-        compagnonId,
-        ficheId,
-        statut: {
-          in: ['EN_COURS', 'EN_PAUSE'],
-        },
-      },
+  const pointageFiche = await prisma.$transaction(async (tx) => {
+    await tx.$queryRaw`SELECT id FROM compagnons WHERE id = ${compagnonId} FOR UPDATE`
+    await tx.$queryRaw`SELECT id FROM fiches_travaux WHERE id = ${ficheId} FOR UPDATE`
+
+    const activePointage = await tx.pointageFiche.findFirst({
+      where: { compagnonId, ficheId, statut: { in: ['EN_COURS', 'EN_PAUSE'] } },
     })
 
-    if (!pointageFiche) {
-      return NextResponse.json(
-        { error: 'Pas de pointage actif sur cette fiche' },
-        { status: 400 }
-      )
+    if (!activePointage) {
+      return null
     }
 
     const dureeMinutes = Math.max(
       0,
-      Math.round((now.getTime() - pointageFiche.debutAt.getTime()) / 60000)
+      Math.round((now.getTime() - activePointage.debutAt.getTime()) / 60000)
     )
 
-    await prisma.pointageFiche.update({
-      where: {
-        id: pointageFiche.id,
-      },
-      data: {
-        statut: 'TERMINE',
-        finAt: now,
-        dureeMinutes,
-      },
+    await tx.pointageFiche.update({
+      where: { id: activePointage.id },
+      data: { statut: 'TERMINE', finAt: now, dureeMinutes },
     })
 
-    await recalculateFicheTempsReel(ficheId)
-
-    const activeCount = await prisma.pointageFiche.count({
-      where: {
-        ficheId,
-        statut: {
-          in: ['EN_COURS', 'EN_PAUSE'],
-        },
-      },
+    const activeCount = await tx.pointageFiche.count({
+      where: { ficheId, statut: { in: ['EN_COURS', 'EN_PAUSE'] } },
     })
 
-    await prisma.ficheTravaux.update({
-      where: {
-        id: ficheId,
-      },
+    await tx.ficheTravaux.update({
+      where: { id: ficheId },
       data: {
         statut: activeCount > 0 ? 'EN_COURS' : 'TERMINEE',
         dateFermeture: activeCount > 0 ? null : now,
       },
     })
 
-    return NextResponse.json({ success: true })
+    return activePointage
+  })
+
+  if (!pointageFiche) {
+    return NextResponse.json({ error: 'Pas de pointage actif sur cette fiche' }, { status: 400 })
   }
 
-  return NextResponse.json({ error: 'Action inconnue' }, { status: 400 })
+  await recalculateFicheTempsReel(ficheId)
+
+  return NextResponse.json({ success: true })
 }

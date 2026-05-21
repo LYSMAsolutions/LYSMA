@@ -29,6 +29,9 @@ export async function POST(req: NextRequest) {
         where: {
           actif: true,
         },
+        orderBy: {
+          createdAt: 'asc',
+        },
         take: 1,
       },
     },

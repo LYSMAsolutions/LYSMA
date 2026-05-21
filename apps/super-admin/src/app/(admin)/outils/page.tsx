@@ -74,6 +74,7 @@ export default async function OutilsPage() {
             <div className={styles.actions}>
               {tool.id === 'livo-app' && <Link href="/livo">ouvrir</Link>}
               {tool.id === 'sites-vitrine' && <Link href="/sites">ouvrir</Link>}
+              {tool.id === 'portail-pma' && <Link href="/pma">ouvrir pma</Link>}
               {tool.id === 'portail-pma' && <Link href="/clients?outil=portail-pma">clients</Link>}
               <Link href="/acces">acces</Link>
             </div>

@@ -108,7 +108,7 @@ export async function updateStoreBonStatusAction(
   formData: FormData
 ) {
   const currentUser = await requireAccess({
-    allowedRoles: ["store", "store_staff"],
+    allowedRoles: ["store", "store_staff", "rdm"],
     distributorSlug: distributor,
   });
 
@@ -215,6 +215,9 @@ export async function updateStoreBonStatusAction(
 
   revalidatePath(`${storeBase}/bons`);
   revalidatePath(`${storeBase}/bons/${bon.id}`);
+  revalidatePath(`/${currentUser.distributorSlug}/rdm`);
+  revalidatePath(`/${currentUser.distributorSlug}/rdm/bons`);
+  revalidatePath(`/${currentUser.distributorSlug}/rdm/bons/${bon.id}`);
   revalidatePath(`/${currentUser.distributorSlug}/admin/bons`);
   revalidatePath(`/${currentUser.distributorSlug}/admin/bons/${bon.id}`);
   revalidatePath(`/${currentUser.distributorSlug}/admin/bons/${bon.id}/historique`);

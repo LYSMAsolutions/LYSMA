@@ -8,12 +8,16 @@ type RoleItem = {
   code: string;
   label: string;
 };
+type CdvItem = { id: string; first_name: string; last_name: string; email: string };
+type StoreItem = { id: string; code: string; name: string };
 
 type Props = {
   open: boolean;
   onClose: () => void;
   roles: RoleItem[];
   forcedRoleCode?: "admin" | "cdv" | "rdm" | "atc";
+  cdvs?: CdvItem[];
+  stores?: StoreItem[];
 };
 
 export default function CreateUserPopup({
@@ -21,6 +25,8 @@ export default function CreateUserPopup({
   onClose,
   roles,
   forcedRoleCode,
+  cdvs,
+  stores,
 }: Props) {
   return (
     <EntityModal
@@ -32,6 +38,8 @@ export default function CreateUserPopup({
       <UserCreateForm
         roles={roles}
         forcedRoleCode={forcedRoleCode}
+        cdvs={cdvs}
+        stores={stores}
         onSuccess={onClose}
       />
     </EntityModal>

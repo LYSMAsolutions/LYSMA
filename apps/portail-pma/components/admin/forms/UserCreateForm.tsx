@@ -8,9 +8,15 @@ type RoleItem = {
   label: string;
 };
 
+type CdvItem = { id: string; first_name: string; last_name: string; email: string };
+type StoreItem = { id: string; code: string; name: string };
+
 type Props = {
   roles: RoleItem[];
   forcedRoleCode?: "admin" | "cdv" | "rdm" | "atc";
+  cdvs?: CdvItem[];
+  stores?: StoreItem[];
+  initialStoreIds?: string[];
   onSuccess?: () => void;
 };
 
@@ -47,7 +53,7 @@ const field: React.CSSProperties = {
   flexDirection: "column",
 };
 
-export default function UserCreateForm({ roles, forcedRoleCode, onSuccess }: Props) {
+export default function UserCreateForm({ roles, forcedRoleCode, cdvs = [], stores = [], initialStoreIds = [], onSuccess }: Props) {
   const forcedRole = roles.find((r) => r.code === forcedRoleCode) || null;
 
   const [firstName, setFirstName]   = useState("");
@@ -57,6 +63,8 @@ export default function UserCreateForm({ roles, forcedRoleCode, onSuccess }: Pro
   const [code, setCode]             = useState("");
   const [password, setPassword]     = useState("");
   const [roleId, setRoleId]         = useState(forcedRole?.id || "");
+  const [supervisorId, setSupervisorId] = useState("");
+  const [storeIds, setStoreIds] = useState<string[]>(initialStoreIds);
   const [loading, setLoading]       = useState(false);
   const [errorMsg, setErrorMsg]     = useState("");
   const [successMsg, setSuccessMsg] = useState("");
@@ -67,6 +75,7 @@ export default function UserCreateForm({ roles, forcedRoleCode, onSuccess }: Pro
   }, [forcedRole, roleId, roles]);
 
   const isAtc = selectedRole?.code === "atc";
+  const needsStores = selectedRole?.code === "cdv" || selectedRole?.code === "rdm";
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -81,6 +90,8 @@ export default function UserCreateForm({ roles, forcedRoleCode, onSuccess }: Pro
         body: JSON.stringify({
           firstName, lastName, email, phone, code, password,
           roleId: forcedRole?.id || roleId,
+          supervisorId: isAtc ? supervisorId || null : null,
+          storeIds: needsStores ? storeIds : [],
         }),
       });
 
@@ -94,6 +105,7 @@ export default function UserCreateForm({ roles, forcedRoleCode, onSuccess }: Pro
       setSuccessMsg("Utilisateur créé avec succès.");
       setFirstName(""); setLastName(""); setEmail("");
       setPhone(""); setCode(""); setPassword("");
+      setSupervisorId(""); setStoreIds([]);
       if (!forcedRole) setRoleId("");
 
       setTimeout(() => onSuccess?.(), 300);
@@ -156,8 +168,44 @@ export default function UserCreateForm({ roles, forcedRoleCode, onSuccess }: Pro
 
       <div style={field}>
         <label style={label}>{isAtc ? "Code ATC" : "Code interne"}</label>
-        <input style={input} value={code} onChange={(e) => setCode(e.target.value.toUpperCase())} autoComplete="off" />
+        <input style={input} value={code} onChange={(e) => setCode(e.target.value.toUpperCase())} autoComplete="off" required={isAtc} />
       </div>
+
+      {isAtc && cdvs.length ? (
+        <div style={field}>
+          <label style={label}>CDV superviseur</label>
+          <select style={{ ...input, cursor: "pointer" }} value={supervisorId} onChange={(e) => setSupervisorId(e.target.value)}>
+            <option value="">Aucun CDV</option>
+            {cdvs.map((cdv) => (
+              <option key={cdv.id} value={cdv.id}>
+                {`${cdv.first_name} ${cdv.last_name}`.trim()} - {cdv.email}
+              </option>
+            ))}
+          </select>
+        </div>
+      ) : null}
+
+      {needsStores ? (
+        <div style={field}>
+          <label style={label}>Magasins rattaches</label>
+          <select
+            multiple
+            style={{ ...input, minHeight: "7.5rem", cursor: "pointer" }}
+            value={storeIds}
+            onChange={(e) => setStoreIds(Array.from(e.currentTarget.selectedOptions).map((option) => option.value))}
+            required={selectedRole?.code === "rdm"}
+          >
+            {stores.map((store) => (
+              <option key={store.id} value={store.id}>
+                {store.code} - {store.name}
+              </option>
+            ))}
+          </select>
+          <p style={{ margin: "0.35rem 0 0", fontSize: "0.78rem", color: "#94a3b8" }}>
+            Ctrl + clic pour selectionner plusieurs magasins.
+          </p>
+        </div>
+      ) : null}
 
       {errorMsg  && <div className="alert-error">{errorMsg}</div>}
       {successMsg && <div className="alert-success">{successMsg}</div>}

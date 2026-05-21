@@ -1,6 +1,7 @@
 import { Sidebar } from '@/components/layout/Sidebar'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
+import { getPrimaryGarageForUser } from '@/lib/garage'
 import { redirect } from 'next/navigation'
 import styles from './AppShell.module.css'
 
@@ -15,29 +16,26 @@ export async function AppShell({ children }: AppShellProps) {
     redirect('/connexion')
   }
 
-  const user = await prisma.user.findUnique({
-    where: {
-      id: session.user.id,
-      actif: true,
-    },
-    include: {
-      garages: {
-        where: {
-          actif: true,
-        },
-        take: 1,
+  const [user, garage] = await Promise.all([
+    prisma.user.findUnique({
+      where: {
+        id: session.user.id,
+        actif: true,
       },
-    },
-  })
+    }),
+    getPrimaryGarageForUser(session.user.id),
+  ])
 
   if (!user) {
     redirect('/connexion')
   }
 
-  const garage = user.garages[0]
-
   if (!garage) {
     redirect('/connexion')
+  }
+
+  if (!garage.abonnementActif && garage.trialEndsAt && new Date() > garage.trialEndsAt) {
+    redirect('/abonnement-expire')
   }
 
   const garageNom = garage.nom ?? 'Mon Garage'

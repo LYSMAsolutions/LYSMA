@@ -31,6 +31,7 @@ export function NouvelleFiche({ garageId, onClose, onCreated }: Props) {
   const [nouveauVehicule, setNouveauVehicule] = useState(false)
   const [loading, setLoading] = useState(false)
   const [submitting, setSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState('')
   const [ficheCreee, setFicheCreee] = useState<{ id: string; numero: string } | null>(null)
   const [pdfLoading, setPdfLoading] = useState(false)
 
@@ -61,6 +62,7 @@ export function NouvelleFiche({ garageId, onClose, onCreated }: Props) {
 
   async function handleSubmit() {
     if (!travaux.trim()) return
+    setSubmitError('')
     setSubmitting(true)
     try {
       const body: Record<string, unknown> = { garageId, travaux, notes }
@@ -85,7 +87,12 @@ export function NouvelleFiche({ garageId, onClose, onCreated }: Props) {
       if (res.ok) {
         const data = await res.json()
         setFicheCreee(data.fiche)
+      } else {
+        const data = await res.json().catch(() => null)
+        setSubmitError(data?.error ?? 'Impossible de creer la fiche')
       }
+    } catch {
+      setSubmitError('Impossible de creer la fiche')
     } finally { setSubmitting(false) }
   }
 
@@ -173,14 +180,17 @@ export function NouvelleFiche({ garageId, onClose, onCreated }: Props) {
           <div className={styles.body}>
             {!nouveauVehicule ? (
               <>
-                <Input
-                  placeholder="Rechercher par immat, marque, client..."
-                  autoFocus
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  iconLeft={<MagnifyingGlass />}
-                  inputSize="lg"
-                />
+                <div className={styles.searchPanel}>
+                  <p className={styles.searchLabel}>Vehicule existant</p>
+                  <Input
+                    placeholder="Rechercher par immat, marque, client..."
+                    autoFocus
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    iconLeft={<MagnifyingGlass />}
+                    inputSize="lg"
+                  />
+                </div>
 
                 {vehiculeSelectionne && (
                   <div className={styles.selected}>
@@ -212,9 +222,15 @@ export function NouvelleFiche({ garageId, onClose, onCreated }: Props) {
                   <p className={styles.noResult}>Aucun véhicule trouvé</p>
                 )}
 
-                <button className={styles.newVehiculeBtn} onClick={() => setNouveauVehicule(true)}>
-                  <Plus size={14} /> Nouveau véhicule
-                </button>
+                <div className={styles.createPanel}>
+                  <div>
+                    <p className={styles.createTitle}>Vehicule non trouve ?</p>
+                    <p className={styles.createHint}>Ajoutez-le puis creez sa premiere fiche.</p>
+                  </div>
+                  <button className={styles.newVehiculeBtn} onClick={() => setNouveauVehicule(true)}>
+                    <Plus size={14} /> Nouveau vehicule
+                  </button>
+                </div>
               </>
             ) : (
               <div className={styles.newVehiculeForm}>
@@ -330,6 +346,8 @@ export function NouvelleFiche({ garageId, onClose, onCreated }: Props) {
                 rows={3}
               />
             </div>
+
+            {submitError && <p className={styles.submitError}>{submitError}</p>}
           </div>
         )}
 

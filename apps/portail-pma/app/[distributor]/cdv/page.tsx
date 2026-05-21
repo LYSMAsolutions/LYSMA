@@ -1,35 +1,23 @@
-import Link from "next/link";
-import { requireAccess } from "@/lib/require-access";
 import {
-  getBonKpisForCdv,
-  getBonListForCdv,
-} from "@/lib/admin/bons";
+  AlertTriangle,
+  Activity,
+  CheckCircle2,
+  ClipboardList,
+  Store,
+  UserCheck,
+  Users,
+  XCircle,
+} from "lucide-react";
+import { requireAccess } from "@/lib/require-access";
+import { getBonKpisForCdv, getBonListForCdv } from "@/lib/admin/bons";
 import BonStatusBadge from "@/components/admin/bons/BonStatusBadge";
-
-function StatCard({
-  href,
-  title,
-  value,
-  helper,
-}: {
-  href: string;
-  title: string;
-  value: number;
-  helper: string;
-}) {
-  return (
-    <Link
-      href={href}
-      className="kpi-card transition hover:-translate-y-0.5 hover:shadow-[0_22px_60px_rgba(15,23,42,0.10)]"
-    >
-      <p className="text-sm font-medium text-[#6B7280]">{title}</p>
-      <p className="mt-4 text-4xl font-semibold tracking-tight text-[#0F172A]">
-        {value}
-      </p>
-      <p className="mt-2 text-sm text-[#6B7280]">{helper}</p>
-    </Link>
-  );
-}
+import {
+  PriorityPanel,
+  QuickActions,
+  RecentCard,
+  RoleHero,
+  RoleKpiGrid,
+} from "@/components/role-dashboard/RoleDashboardKit";
 
 export default async function CdvHomePage({
   params,
@@ -48,9 +36,11 @@ export default async function CdvHomePage({
   const [kpis, bons] = await Promise.all([
     getBonKpisForCdv({
       distributorId: currentUser.distributorId,
+      userId: currentUser.id,
     }),
     getBonListForCdv({
       distributorId: currentUser.distributorId,
+      userId: currentUser.id,
     }),
   ]);
 
@@ -58,176 +48,127 @@ export default async function CdvHomePage({
 
   return (
     <div className="space-y-8">
-      <section className="card-lysma" style={{ padding: "2rem" }}>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            gap: "1rem",
-            flexWrap: "wrap",
-          }}
-        >
-          <div>
-            <p className="badge-lysma">CDV · Accueil</p>
-            <h1 className="section-title" style={{ marginTop: ".75rem" }}>
-              Bonjour {currentUser.firstName || "CDV"}
-            </h1>
-            <p className="section-copy" style={{ marginTop: ".5rem" }}>
-              Vue de pilotage des bons et de l’activité distributeur.
-            </p>
-          </div>
+      <RoleHero
+        eyebrow="Espace chef des ventes"
+        title={`Bonjour ${currentUser.firstName || "CDV"}`}
+        description="Pilotage commercial propre: les bons de tes ATC, les clients de ton perimetre et les magasins qui te sont rattaches."
+        primary={{ href: `${cdvBase}/bons`, label: "Piloter les bons" }}
+        secondary={{ href: `${cdvBase}/equipe`, label: "Voir mon equipe" }}
+      />
 
-          <div
-            style={{
-              display: "flex",
-              gap: ".75rem",
-              flexWrap: "wrap",
-              alignItems: "flex-start",
-            }}
-          >
-            <Link href={`${cdvBase}/bons`} className="btn-primary">
-              Ouvrir le pilotage bons
-            </Link>
-            <Link href={`/${currentUser.distributorSlug}`} className="btn-secondary">
-              Retour distributeur
-            </Link>
-          </div>
+      <RoleKpiGrid
+        items={[
+          {
+            title: "Bons suivis",
+            value: kpis.total,
+            subtitle: "dans ton perimetre",
+            href: `${cdvBase}/bons`,
+            icon: ClipboardList,
+            tone: "info",
+          },
+          {
+            title: "A surveiller",
+            value: kpis.nonPrisEnCharge,
+            subtitle: "envoyes ou non pris",
+            href: `${cdvBase}/bons`,
+            icon: AlertTriangle,
+            tone: "warning",
+          },
+          {
+            title: "En cours",
+            value: kpis.enCours,
+            subtitle: "activite terrain",
+            href: `${cdvBase}/bons`,
+            icon: Activity,
+            tone: "default",
+          },
+          {
+            title: "Traites",
+            value: kpis.traites,
+            subtitle: "finalises",
+            href: `${cdvBase}/bons`,
+            icon: CheckCircle2,
+            tone: "success",
+          },
+          {
+            title: "Refuses",
+            value: kpis.refuses,
+            subtitle: "a relire",
+            href: `${cdvBase}/bons`,
+            icon: XCircle,
+            tone: "danger",
+          },
+        ]}
+      />
+
+      <section className="grid grid-cols-1 gap-8 xl:grid-cols-[1.2fr_0.8fr]">
+        <RecentCard title="Derniers bons du perimetre" href={`${cdvBase}/bons`} empty={!lastFive.length}>
+          {lastFive.map((row) => (
+            <a
+              key={row.id}
+              href={`${cdvBase}/bons/${row.id}`}
+              className="flex flex-col gap-4 rounded-2xl border border-[#E2E8F0] bg-[#F8FBFF] px-5 py-4 transition hover:border-[#C9D8EB] hover:bg-white md:flex-row md:items-center md:justify-between"
+            >
+              <div>
+                <p className="font-semibold text-[#0F172A]">{row.bon_number}</p>
+                <p className="mt-1 text-sm text-[#6B7280]">{row.clientName}</p>
+              </div>
+              <div className="grid gap-2 text-sm text-[#6B7280] md:min-w-[320px] md:grid-cols-3 md:text-right">
+                <span>{row.creatorName}</span>
+                <span>{row.storeName}</span>
+                <span>{row.createdAt}</span>
+              </div>
+              <BonStatusBadge status={row.status} />
+            </a>
+          ))}
+        </RecentCard>
+
+        <div className="space-y-8">
+          <PriorityPanel
+            title="Priorites commerciales"
+            subtitle="Ce qui merite ton attention en premier"
+            icon={AlertTriangle}
+            items={[
+              {
+                title: "Bons a reprendre",
+                value: kpis.nonPrisEnCharge,
+                hint: "Suivre les demandes envoyees avant prise en charge magasin.",
+                href: `${cdvBase}/bons`,
+                icon: ClipboardList,
+              },
+              {
+                title: "Bons actifs",
+                value: kpis.enCours,
+                hint: "Verifier que les dossiers ne restent pas bloques.",
+                href: `${cdvBase}/bons`,
+                icon: Activity,
+              },
+            ]}
+          />
+
+          <QuickActions
+            items={[
+              {
+                title: "Equipe ATC",
+                description: "Voir les ATC rattaches, leurs clients et leurs bons.",
+                href: `${cdvBase}/equipe`,
+                icon: Users,
+              },
+              {
+                title: "Portefeuille clients",
+                description: "Consulter les clients de tes ATC et magasins rattaches.",
+                href: `${cdvBase}/clients`,
+                icon: UserCheck,
+              },
+              {
+                title: "Magasins rattaches",
+                description: "Garder une lecture claire du perimetre magasin.",
+                href: `${cdvBase}/equipe`,
+                icon: Store,
+              },
+            ]}
+          />
         </div>
-      </section>
-
-      <section className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-5">
-        <StatCard
-          href={`${cdvBase}/bons`}
-          title="Total"
-          value={kpis.total}
-          helper="bons du distributeur"
-        />
-        <StatCard
-          href={`${cdvBase}/bons`}
-          title="Non pris en charge"
-          value={kpis.nonPrisEnCharge}
-          helper="à surveiller"
-        />
-        <StatCard
-          href={`${cdvBase}/bons`}
-          title="En cours"
-          value={kpis.enCours}
-          helper="activité en traitement"
-        />
-        <StatCard
-          href={`${cdvBase}/bons`}
-          title="Traités"
-          value={kpis.traites}
-          helper="finalisés"
-        />
-        <StatCard
-          href={`${cdvBase}/bons`}
-          title="Refusés"
-          value={kpis.refuses}
-          helper="à relire"
-        />
-      </section>
-
-      <section className="grid grid-cols-1 gap-8 xl:grid-cols-[1.15fr_.85fr]">
-        <section className="card-lysma" style={{ padding: "2rem" }}>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              gap: "1rem",
-              flexWrap: "wrap",
-              alignItems: "center",
-            }}
-          >
-            <div>
-              <h2 className="section-title">Derniers bons</h2>
-              <p className="section-copy" style={{ marginTop: ".5rem" }}>
-                Dernières demandes remontées sur le distributeur.
-              </p>
-            </div>
-
-            <Link href={`${cdvBase}/bons`} className="btn-secondary">
-              Voir tout
-            </Link>
-          </div>
-
-          <div className="table-shell" style={{ marginTop: "1.25rem" }}>
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th>Numéro</th>
-                  <th>Client</th>
-                  <th>ATC</th>
-                  <th>Magasin</th>
-                  <th>Statut</th>
-                  <th>Date</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                {lastFive.map((row) => (
-                  <tr key={row.id}>
-                    <td>{row.bon_number}</td>
-                    <td>{row.clientName}</td>
-                    <td>{row.creatorName}</td>
-                    <td>{row.storeName}</td>
-                    <td>
-                      <BonStatusBadge status={row.status} />
-                    </td>
-                    <td>{row.createdAt}</td>
-                    <td>
-                      <Link href={`${cdvBase}/bons/${row.id}`} className="btn-secondary">
-                        Voir
-                      </Link>
-                    </td>
-                  </tr>
-                ))}
-
-                {!lastFive.length ? (
-                  <tr>
-                    <td
-                      colSpan={7}
-                      style={{ textAlign: "center", color: "var(--muted)" }}
-                    >
-                      Aucun bon trouvé.
-                    </td>
-                  </tr>
-                ) : null}
-              </tbody>
-            </table>
-          </div>
-        </section>
-
-        <section className="card-lysma" style={{ padding: "2rem" }}>
-          <h2 className="section-title">Accès rapides</h2>
-          <p className="section-copy" style={{ marginTop: ".5rem" }}>
-            Lecture et pilotage sans modifier les flux métier.
-          </p>
-
-          <div className="mt-6 grid gap-4">
-            <Link
-              href={`${cdvBase}/bons`}
-              className="rounded-[22px] border border-[#D9E3F0] bg-white px-5 py-4 text-sm font-medium text-[#0F172A] transition hover:bg-[#F8FBFF]"
-            >
-              Consulter tous les bons
-            </Link>
-
-            <Link
-              href={`${cdvBase}/bons`}
-              className="rounded-[22px] border border-[#D9E3F0] bg-white px-5 py-4 text-sm font-medium text-[#0F172A] transition hover:bg-[#F8FBFF]"
-            >
-              Suivre les statuts distributeur
-            </Link>
-
-            <Link
-              href={`/${currentUser.distributorSlug}`}
-              className="rounded-[22px] border border-[#D9E3F0] bg-white px-5 py-4 text-sm font-medium text-[#0F172A] transition hover:bg-[#F8FBFF]"
-            >
-              Revenir à l’espace distributeur
-            </Link>
-          </div>
-        </section>
       </section>
     </div>
   );

@@ -17,6 +17,7 @@ type Line = StandardLine | VehicleLine;
 
 type Props = {
   distributorSlug: string;
+  basePath?: string;
   clients:         Client[];
   normalStores:    Store[];
   savStores:       Store[];
@@ -234,9 +235,9 @@ function VehicleLineRow({ line, idx, total, onChange, onSubLineChange, onAddSubL
 }
 
 // ── Composant principal ───────────────────────────────────────────────────────
-export default function CreateBonForm({ distributorSlug, clients, normalStores, savStores, activeCodes, initialBonType }: Props) {
+export default function CreateBonForm({ distributorSlug, basePath, clients, normalStores, savStores, activeCodes, initialBonType }: Props) {
   const router  = useRouter();
-  const atcBase = `/${distributorSlug}/atc`;
+  const atcBase = basePath ?? `/${distributorSlug}/atc`;
 
   const [clientId,    setClientId]    = useState("");
   const [storeId,     setStoreId]     = useState("");

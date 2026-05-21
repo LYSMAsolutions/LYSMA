@@ -71,7 +71,7 @@ function getCompagnonName(absence: Absence) {
 export function RHClient({ compagnons, absences: absencesInit }: Props) {
   const router = useRouter()
   const [modal, setModal] = useState(false)
-  const [absences] = useState(absencesInit ?? [])
+  const [absences, setAbsences] = useState(absencesInit ?? [])
 
   async function toggleApproval(id: string, approuve: boolean) {
     const res = await fetch('/api/absences', {
@@ -81,6 +81,11 @@ export function RHClient({ compagnons, absences: absencesInit }: Props) {
     })
 
     if (res.ok) {
+      setAbsences((current) =>
+        current.map((absence) =>
+          absence.id === id ? { ...absence, approuve } : absence
+        )
+      )
       router.refresh()
     }
   }
@@ -93,6 +98,7 @@ export function RHClient({ compagnons, absences: absencesInit }: Props) {
     })
 
     if (res.ok) {
+      setAbsences((current) => current.filter((absence) => absence.id !== id))
       router.refresh()
     }
   }
@@ -225,7 +231,8 @@ export function RHClient({ compagnons, absences: absencesInit }: Props) {
         <AbsenceForm
           compagnons={compagnons}
           onClose={() => setModal(false)}
-          onCreated={() => {
+          onCreated={(absence) => {
+            setAbsences((current) => [absence, ...current])
             setModal(false)
             router.refresh()
           }}

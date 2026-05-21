@@ -1,5 +1,6 @@
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
+import { getPrimaryGarageForUser } from '@/lib/garage'
 import { redirect } from 'next/navigation'
 import { Header } from '@/components/layout/Header'
 import { Badge } from '@/components/ui'
@@ -38,22 +39,7 @@ export default async function VehiculesPage({
   const { q = '' } = await searchParams
   const query = q.trim()
 
-  const user = await prisma.user.findUnique({
-    where: {
-      id: session.user.id,
-      actif: true,
-    },
-    include: {
-      garages: {
-        where: {
-          actif: true,
-        },
-        take: 1,
-      },
-    },
-  })
-
-  const garage = user?.garages[0]
+  const garage = await getPrimaryGarageForUser(session.user.id)
 
   if (!garage) {
     redirect('/dashboard')

@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 type RoleItem = { id: string; code: string; label: string };
 type CdvItem  = { id: string; first_name: string; last_name: string; email: string };
 type AtcItem  = { id: string; first_name: string; last_name: string; email: string };
+type StoreItem = { id: string; code: string; name: string };
 
 type UserData = {
   id: string;
@@ -17,6 +18,8 @@ type UserData = {
   role_id: string;
   supervisor_id?: string | null;
   roles?: { code: string; label: string } | null;
+  user_store_links?: { store_id: string }[];
+  supervised_atc_ids?: string[];
 };
 
 const inp: React.CSSProperties = { width: "100%", padding: "0.75rem 1rem", borderRadius: "0.875rem", border: "1px solid #dce5f0", background: "rgba(255,255,255,0.92)", fontSize: "0.9rem", color: "#0f172a", outline: "none" };
@@ -25,13 +28,15 @@ const row2: React.CSSProperties = { display: "grid", gridTemplateColumns: "1fr 1
 const fld: React.CSSProperties  = { display: "flex", flexDirection: "column" };
 
 export default function UserEditForm({
-  user, roles, cdvs, atcs,
+  user, roles, cdvs, atcs, stores,
 }: {
   user: UserData;
   roles: RoleItem[];
   cdvs: CdvItem[];   // CDVs actifs du distributeur
   atcs: AtcItem[];   // ATCs actifs (pour remplacement si changement de rôle)
+  stores?: StoreItem[];
 }) {
+  stores = stores || [];
   const router = useRouter();
 
   const [firstName,    setFirstName]    = useState(user.first_name);
@@ -41,6 +46,8 @@ export default function UserEditForm({
   const [code,         setCode]         = useState(user.code || "");
   const [roleId,       setRoleId]       = useState(user.role_id);
   const [supervisorId, setSupervisorId] = useState(user.supervisor_id || "");
+  const [supervisedAtcIds, setSupervisedAtcIds] = useState<string[]>(user.supervised_atc_ids || []);
+  const [storeIds,     setStoreIds]     = useState<string[]>((user.user_store_links || []).map((link) => link.store_id));
   const [loading,      setLoading]      = useState(false);
   const [error,        setError]        = useState("");
   const [success,      setSuccess]      = useState("");
@@ -53,6 +60,8 @@ export default function UserEditForm({
   const selectedRole = useMemo(() => roles.find((r) => r.id === roleId), [roles, roleId]);
   const isCurrentlyAtc = user.roles?.code === "atc";
   const willBeAtc      = selectedRole?.code === "atc";
+  const willBeCdv      = selectedRole?.code === "cdv";
+  const needsStores    = selectedRole?.code === "cdv" || selectedRole?.code === "rdm";
   const willLeaveAtc   = isCurrentlyAtc && !willBeAtc;
 
   async function handleSubmit(e: React.FormEvent) {
@@ -68,6 +77,8 @@ export default function UserEditForm({
         body: JSON.stringify({
           firstName, lastName, email, phone, code, roleId,
           supervisorId: willBeAtc ? (supervisorId || null) : null,
+          supervisedAtcIds: willBeCdv ? supervisedAtcIds : [],
+          storeIds: needsStores ? storeIds : [],
           replacementUserId: replacementId || undefined,
         }),
       });
@@ -137,7 +148,48 @@ export default function UserEditForm({
         </div>
       )}
 
+      {willBeCdv && (
+        <div style={fld}>
+          <label style={lbl}>ATC rattaches au CDV</label>
+          <select
+            multiple
+            style={{ ...inp, minHeight: "9rem", cursor: "pointer" }}
+            value={supervisedAtcIds}
+            onChange={(e) => setSupervisedAtcIds(Array.from(e.currentTarget.selectedOptions).map((option) => option.value))}
+          >
+            {atcs.map((a) => (
+              <option key={a.id} value={a.id}>
+                {`${a.first_name} ${a.last_name}`.trim()} - {a.email}
+              </option>
+            ))}
+          </select>
+          <p style={{ margin: "0.35rem 0 0", fontSize: "0.78rem", color: "#94a3b8" }}>
+            Ctrl + clic pour rattacher plusieurs ATC a ce CDV.
+          </p>
+        </div>
+      )}
+
       {/* Avertissement changement de rôle depuis ATC */}
+      {needsStores && (
+        <div style={fld}>
+          <label style={lbl}>Magasins rattaches</label>
+          <select
+            multiple
+            style={{ ...inp, minHeight: "8rem", cursor: "pointer" }}
+            value={storeIds}
+            onChange={(e) => setStoreIds(Array.from(e.currentTarget.selectedOptions).map((option) => option.value))}
+            required={selectedRole?.code === "rdm"}
+          >
+            {stores.map((store) => (
+              <option key={store.id} value={store.id}>{store.code} - {store.name}</option>
+            ))}
+          </select>
+          <p style={{ margin: "0.35rem 0 0", fontSize: "0.78rem", color: "#94a3b8" }}>
+            Ctrl + clic pour selectionner plusieurs magasins. Obligatoire pour un RDM.
+          </p>
+        </div>
+      )}
+
       {willLeaveAtc && (
         <div style={{ borderRadius: "0.875rem", background: "#fffbeb", border: "1px solid #fde68a", padding: "1rem 1.25rem" }}>
           <p style={{ margin: 0, fontSize: "0.875rem", fontWeight: 700, color: "#b45309" }}>⚠️ Changement de rôle depuis ATC</p>

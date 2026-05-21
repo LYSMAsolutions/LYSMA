@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { Wrench } from '@phosphor-icons/react'
+import { Buildings, IdentificationCard, LockKey, Wrench } from '@phosphor-icons/react'
 import styles from './page.module.css'
 
 type Compagnon = {
@@ -50,7 +50,7 @@ export default function AtelierLoginPage() {
       setGarageId(data.garageId)
 
       // Charger les compagnons
-      const r2 = await fetch(`/api/atelier-auth/compagnons?garageId=${data.garageId}`)
+      const r2 = await fetch('/api/atelier-auth/compagnons')
       const d2 = await r2.json()
       setCompagnons(d2.compagnons ?? [])
       setStep('compagnon')
@@ -118,6 +118,24 @@ export default function AtelierLoginPage() {
           </div>
 
           <h1 className={styles.title}>Connexion atelier</h1>
+          <p className={styles.intro}>
+            Connectez d&apos;abord le garage. Ensuite, chaque compagnon choisit son profil et saisit son code PIN.
+          </p>
+
+          <div className={styles.steps}>
+            <div className={`${styles.step} ${styles.stepActive}`}>
+              <Buildings size={16} />
+              <span>1. Garage</span>
+            </div>
+            <div className={styles.step}>
+              <IdentificationCard size={16} />
+              <span>2. Compagnon</span>
+            </div>
+            <div className={styles.step}>
+              <LockKey size={16} />
+              <span>3. PIN</span>
+            </div>
+          </div>
 
           <div className={styles.form}>
             <input
@@ -156,6 +174,8 @@ export default function AtelierLoginPage() {
             <span className={styles.garageNom}>{garageNom}</span>
           </div>
           <h1 className={styles.title}>Qui êtes-vous ?</h1>
+
+          <p className={styles.intro}>Choisissez votre profil pour ouvrir votre espace atelier.</p>
 
           <div className={styles.compagnonsGrid}>
             {compagnons.map(c => (

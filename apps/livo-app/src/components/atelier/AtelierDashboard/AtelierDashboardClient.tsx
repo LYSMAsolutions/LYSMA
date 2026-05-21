@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui'
 import styles from './AtelierDashboard.module.css'
 
 type Statut = 'ABSENT' | 'EN_TRAVAIL' | 'PAUSE_CAFE' | 'PAUSE_DEJEUNER' | 'PARTI'
-type StatutFiche = 'EN_ATTENTE' | 'EN_COURS' | 'EN_PAUSE' | 'TERMINEE'
+type StatutFiche = 'EN_ATTENTE' | 'EN_COURS' | 'EN_PAUSE' | 'TERMINEE' | 'CLOTUREE' | 'ANNULEE'
 
 type Compagnon = {
   id: string; prenom: string; nom: string; poste: string | null
@@ -197,9 +197,9 @@ export function AtelierDashboardClient({ garage, compagnons: compagnonsInit, fic
     }
   }
 
-  function deconnecter() {
+  async function deconnecter() {
+    await fetch('/api/atelier-auth/compagnon-pin', { method: 'DELETE' })
     setCompagnonConnecteId(null)
-    document.cookie = 'atelier-compagnon-id=; Max-Age=0; path=/'
   }
 
   const statut = compagnonConnecte?.statut ?? 'ABSENT'

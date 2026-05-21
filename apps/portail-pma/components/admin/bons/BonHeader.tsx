@@ -3,6 +3,7 @@ import BonStatusBadge from "./BonStatusBadge";
 
 type Props = {
   distributor: string;
+  showAdminNav?: boolean;
   bon: {
     id: string;
     bon_number: string;
@@ -42,7 +43,7 @@ function formatDate(value?: Date | null) {
   }).format(value);
 }
 
-export default function BonHeader({ distributor, bon }: Props) {
+export default function BonHeader({ distributor, bon, showAdminNav = true }: Props) {
   const creatorName = bon.users
     ? `${bon.users.first_name} ${bon.users.last_name}`.trim()
     : "—";
@@ -99,7 +100,7 @@ export default function BonHeader({ distributor, bon }: Props) {
         <div className="section-copy">Échéance : {formatDate(bon.due_at)}</div>
       </div>
 
-      <div style={{ display: "flex", gap: ".75rem", flexWrap: "wrap", marginTop: "1.5rem" }}>
+      {showAdminNav ? <div style={{ display: "flex", gap: ".75rem", flexWrap: "wrap", marginTop: "1.5rem" }}>
         <Link href={`/${distributor}/admin/bons/${bon.id}/detail`} className="btn-secondary">
           Détail
         </Link>
@@ -121,7 +122,7 @@ export default function BonHeader({ distributor, bon }: Props) {
         <Link href={`/${distributor}/admin/bons/${bon.id}/anomalies`} className="btn-secondary">
           Anomalies
         </Link>
-      </div>
+      </div> : null}
     </section>
   );
 }

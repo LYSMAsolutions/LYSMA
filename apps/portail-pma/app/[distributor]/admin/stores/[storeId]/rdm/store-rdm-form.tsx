@@ -24,11 +24,15 @@ type RoleItem = {
 
 export default function StoreRdmForm({
   storeId,
+  storeCode,
+  storeName,
   currentRdmId,
   rdms,
   roles,
 }: {
   storeId: string;
+  storeCode: string;
+  storeName: string;
   currentRdmId: string | null;
   rdms: RdmItem[];
   roles: RoleItem[];
@@ -87,6 +91,8 @@ export default function StoreRdmForm({
           window.location.reload();
         }}
         roles={roles}
+        stores={[{ id: storeId, code: storeCode, name: storeName }]}
+        initialStoreIds={[storeId]}
       />
     </>
   );

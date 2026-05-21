@@ -2,13 +2,18 @@ import { prisma } from "@/lib/prisma";
 import { requireAccess } from "@/lib/require-access";
 import AdminModulePage from "@/components/admin/layout/AdminModulePage";
 import ClientFilters from "@/components/admin/clients/ClientFilters";
+import ClientSearchPanel from "@/components/clients/ClientSearchPanel";
+import { buildClientSearchWhere, normalizeClientSearch } from "@/lib/client-search";
 
 export default async function AdminClientsPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ distributor: string }>;
+  searchParams?: Promise<{ q?: string }>;
 }) {
   const { distributor } = await params;
+  const query = normalizeClientSearch((await searchParams)?.q);
 
   const currentUser = await requireAccess({
     allowedRoles: ["admin"],
@@ -16,11 +21,15 @@ export default async function AdminClientsPage({
   });
 
   const adminBase = `/${currentUser.distributorSlug}/admin`;
+  const searchWhere = buildClientSearchWhere(query);
 
   const [clients, stores, atcs, bonCounts] = await Promise.all([
     prisma.clients.findMany({
       where: {
-        distributor_id: currentUser.distributorId,
+        AND: [
+          { distributor_id: currentUser.distributorId },
+          ...(searchWhere ? [searchWhere] : []),
+        ],
       },
       orderBy: [{ created_at: "desc" }],
     }),
@@ -109,6 +118,8 @@ export default async function AdminClientsPage({
         },
       ]}
     >
+      <ClientSearchPanel action={`${adminBase}/clients`} query={query} resultCount={rows.length} />
+
       <section className="card-lysma" style={{ padding: "2rem" }}>
         <ClientFilters
           distributor={currentUser.distributorSlug}
@@ -116,6 +127,7 @@ export default async function AdminClientsPage({
           stores={stores}
           atcs={atcs}
           initialClients={rows}
+          showSearch={false}
         />
       </section>
     </AdminModulePage>

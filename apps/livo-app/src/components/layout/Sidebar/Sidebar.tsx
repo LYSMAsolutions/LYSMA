@@ -58,7 +58,7 @@ export function Sidebar({ garageNom, userNom, userEmail, userInitiale }: Sidebar
       {/* Garage actif */}
       <div className={styles.garageSelector}>
         <div className={styles.garageDot} />
-        <span className={cn(styles.garageName, styles.fadeItem)}>Mon Garage</span>
+        <span className={cn(styles.garageName, styles.fadeItem)}>{garageNom}</span>
       </div>
 
       {/* Nav principale */}
@@ -102,9 +102,8 @@ export function Sidebar({ garageNom, userNom, userEmail, userInitiale }: Sidebar
 
         {/* User */}
         <div className={styles.userRow}>
-          
           <div className={cn(styles.userInfo, styles.fadeItem)}>
-            <span className={styles.userName}>{garageNom}</span>
+            <span className={styles.userName}>{userNom}</span>
             <span className={styles.userEmail}>{userEmail}</span>
           </div>
           <SignOutButton />

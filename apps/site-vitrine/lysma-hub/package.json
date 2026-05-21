@@ -1,0 +1,11 @@
+{
+  "name": "site-vitrine-lysma-hub",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/static-server.mjs --port 3022",
+    "start": "node scripts/static-server.mjs --port 3022",
+    "check": "node scripts/check-static-site.mjs"
+  }
+}

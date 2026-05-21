@@ -34,6 +34,13 @@ export async function PATCH(
     const phone     = String(body.phone     || "").trim();
     const code      = String(body.code      || "").trim().toUpperCase();
     const roleId    = String(body.roleId    || "").trim();
+    const requestedSupervisorId = String(body.supervisorId || "").trim() || null;
+    const supervisedAtcIds: string[] = Array.isArray(body.supervisedAtcIds)
+      ? Array.from(new Set(body.supervisedAtcIds.map((item: unknown) => String(item || "").trim()).filter(Boolean)))
+      : [];
+    const storeIds: string[] = Array.isArray(body.storeIds)
+      ? Array.from(new Set(body.storeIds.map((item: unknown) => String(item || "").trim()).filter(Boolean)))
+      : [];
 
     if (!firstName || !lastName || !email || !roleId)
       return NextResponse.json({ success: false, message: "Champs obligatoires manquants." }, { status: 400 });
@@ -49,6 +56,66 @@ export async function PATCH(
 
     const newRole = await prisma.roles.findUnique({ where: { id: roleId } });
     if (!newRole) return NextResponse.json({ success: false, message: "Rôle introuvable." }, { status: 400 });
+
+    if (newRole.code === "atc" && !code) {
+      return NextResponse.json({ success: false, message: "Le code ATC est obligatoire." }, { status: 400 });
+    }
+
+    if (newRole.code === "rdm" && !storeIds.length) {
+      return NextResponse.json({ success: false, message: "Un RDM doit etre rattache a au moins un magasin." }, { status: 400 });
+    }
+
+    const supervisorId = newRole.code === "atc" ? requestedSupervisorId : null;
+
+    if (supervisorId) {
+      const supervisor = await prisma.users.findFirst({
+        where: {
+          id: supervisorId,
+          distributor_id: session.user.distributorId,
+          roles: { code: "cdv" },
+          is_active: true,
+        },
+        select: { id: true },
+      });
+
+      if (!supervisor) {
+        return NextResponse.json({ success: false, message: "CDV superviseur introuvable." }, { status: 400 });
+      }
+    }
+
+    let validStoreIds: string[] = [];
+    if (storeIds.length) {
+      const stores = await prisma.stores.findMany({
+        where: {
+          distributor_id: session.user.distributorId,
+          id: { in: storeIds },
+        },
+        select: { id: true },
+      });
+      validStoreIds = stores.map((store) => store.id);
+
+      if (validStoreIds.length !== storeIds.length) {
+        return NextResponse.json({ success: false, message: "Un magasin selectionne est introuvable." }, { status: 400 });
+      }
+    }
+
+    let validSupervisedAtcIds: string[] = [];
+    if (newRole.code === "cdv" && supervisedAtcIds.length) {
+      const supervisedAtcs = await prisma.users.findMany({
+        where: {
+          distributor_id: session.user.distributorId,
+          id: { in: supervisedAtcIds },
+          roles: { code: "atc" },
+          is_active: true,
+        },
+        select: { id: true },
+      });
+      validSupervisedAtcIds = supervisedAtcs.map((atc) => atc.id);
+
+      if (validSupervisedAtcIds.length !== supervisedAtcIds.length) {
+        return NextResponse.json({ success: false, message: "Un ATC selectionne est introuvable." }, { status: 400 });
+      }
+    }
 
     const wasAtc = currentUser.roles?.code === "atc";
     const isNoLongerAtc = newRole.code !== "atc";
@@ -69,20 +136,57 @@ export async function PATCH(
       }
     }
 
-const supervisorId = String(body.supervisorId || "").trim() || null;
+    const updated = await prisma.$transaction(async (tx) => {
+      const user = await tx.users.update({
+        where: { id },
+        data: {
+          first_name: firstName,
+          last_name: lastName,
+          email,
+          phone: phone || null,
+          code: code || null,
+          role_id: roleId,
+          supervisor_id: supervisorId,
+        },
+      });
 
-const updated = await prisma.users.update({
-  where: { id },
-  data: {
-    first_name: firstName,
-    last_name: lastName,
-    email,
-    phone: phone || null,
-    code: code || null,
-    role_id: roleId,
-    supervisor_id: supervisorId,
-  },
-});
+      await tx.user_store_links.deleteMany({ where: { user_id: id } });
+
+      if (validStoreIds.length) {
+        await tx.user_store_links.createMany({
+          data: validStoreIds.map((storeId) => ({
+            user_id: id,
+            store_id: storeId,
+          })),
+          skipDuplicates: true,
+        });
+      }
+
+      if (newRole.code === "cdv") {
+        await tx.users.updateMany({
+          where: {
+            distributor_id: session.user.distributorId,
+            supervisor_id: id,
+            roles: { code: "atc" },
+            id: { notIn: validSupervisedAtcIds },
+          },
+          data: { supervisor_id: null },
+        });
+
+        if (validSupervisedAtcIds.length) {
+          await tx.users.updateMany({
+            where: {
+              distributor_id: session.user.distributorId,
+              id: { in: validSupervisedAtcIds },
+              roles: { code: "atc" },
+            },
+            data: { supervisor_id: id },
+          });
+        }
+      }
+
+      return user;
+    });
 
     return NextResponse.json({ success: true, userId: updated.id });
   } catch (error) {

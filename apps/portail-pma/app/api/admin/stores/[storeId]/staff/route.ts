@@ -9,7 +9,7 @@ export async function POST(
 ) {
   try {
     const session = await getCurrentSession();
-    if (!session || session.user.roleCode !== "admin")
+    if (!session || !["admin", "rdm"].includes(session.user.roleCode))
       return NextResponse.json({ success: false, message: "Accès refusé." }, { status: 403 });
 
     const { storeId } = await context.params;
@@ -19,6 +19,17 @@ export async function POST(
     });
     if (!store)
       return NextResponse.json({ success: false, message: "Magasin introuvable." }, { status: 404 });
+
+    if (session.user.roleCode === "rdm") {
+      const link = await prisma.user_store_links.findFirst({
+        where: { user_id: session.user.id, store_id: store.id },
+        select: { id: true },
+      });
+
+      if (!link) {
+        return NextResponse.json({ success: false, message: "Ce magasin n'est pas dans ton perimetre RDM." }, { status: 403 });
+      }
+    }
 
     const body      = await req.json();
     const firstName = String(body.firstName || "").trim();

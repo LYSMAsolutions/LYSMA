@@ -12,6 +12,8 @@ type Store  = { id: string; name: string; code: string };
 
 type Props = {
   distributorSlug: string;
+  basePath?: string;
+  roleLabel?: string;
   clients:         Client[];
   normalStores:    Store[];
   savStores:       Store[];
@@ -65,8 +67,9 @@ function TypeBar({ types, selected, onSelect, onBack }: { types: typeof TYPES; s
   );
 }
 
-export default function NewBonEntry({ distributorSlug, clients, normalStores, savStores, allStores, activeCodes, retourConfig }: Props) {
+export default function NewBonEntry({ distributorSlug, basePath, roleLabel = "ATC", clients, normalStores, savStores, allStores, activeCodes, retourConfig }: Props) {
   const router = useRouter();
+  const portalBase = basePath ?? `/${distributorSlug}/atc`;
   
   const searchParams = useSearchParams();
   const fromCatalogue = searchParams.get("from") === "catalogue";
@@ -83,7 +86,7 @@ export default function NewBonEntry({ distributorSlug, clients, normalStores, sa
         <div>
           <div>{bar}</div>
           <div style={{ marginTop: "1.5rem" }}>
-            <CreateBonForm distributorSlug={distributorSlug} clients={clients as any} normalStores={normalStores} savStores={savStores} activeCodes={activeCodes} initialBonType="commande_devis" />
+            <CreateBonForm distributorSlug={distributorSlug} basePath={portalBase} clients={clients as any} normalStores={normalStores} savStores={savStores} activeCodes={activeCodes} initialBonType="commande_devis" />
           </div>
         </div>
       );
@@ -92,7 +95,7 @@ export default function NewBonEntry({ distributorSlug, clients, normalStores, sa
         <div>
           <div>{bar}</div>
           <div style={{ marginTop: "1.5rem" }}>
-            <CreateRetourForm distributorSlug={distributorSlug} clients={clients as any} stores={allStores} {...retourConfig} />
+            <CreateRetourForm distributorSlug={distributorSlug} basePath={portalBase} clients={clients as any} stores={allStores} {...retourConfig} />
           </div>
         </div>
       );
@@ -104,7 +107,7 @@ export default function NewBonEntry({ distributorSlug, clients, normalStores, sa
       {/* Hero */}
       <div style={{ padding: "1.75rem", borderRadius: "var(--r-2xl)", background: "linear-gradient(135deg,rgba(10,77,155,0.07),rgba(30,115,216,0.04))", border: "1px solid rgba(191,219,254,0.5)" }}>
         <p style={{ margin: "0 0 0.25rem", fontSize: "var(--font-xs)", fontWeight: 800, color: "var(--c-blue-primary)", textTransform: "uppercase", letterSpacing: "0.1em" }}>
-          ATC · Bons
+          {roleLabel} · Bons
         </p>
         <h1 style={{ margin: 0, fontSize: "1.5rem", fontWeight: 800, color: "var(--c-text)", letterSpacing: "-0.02em" }}>
           Nouveau bon pièces
@@ -136,7 +139,7 @@ export default function NewBonEntry({ distributorSlug, clients, normalStores, sa
 
       {/* Retour */}
       <div style={{ display: "flex", justifyContent: "center" }}>
-        <button type="button" onClick={() => router.push(`/${distributorSlug}/atc/bons`)} className="btn-secondary"
+        <button type="button" onClick={() => router.push(`${portalBase}/bons`)} className="btn-secondary"
           style={{ borderRadius: "999px" }}>
           <ArrowLeft size={15} strokeWidth={2} /> Retour à mes bons
         </button>

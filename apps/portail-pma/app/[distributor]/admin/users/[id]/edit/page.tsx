@@ -11,10 +11,10 @@ export default async function AdminUserEditPage({
   const currentUser = await requireAccess({ allowedRoles: ["admin"], distributorSlug: distributor });
   const adminBase = `/${currentUser.distributorSlug}/admin`;
 
-  const [user, roles, cdvs, atcs] = await Promise.all([
+  const [user, roles, cdvs, atcs, stores, supervisedAtcs] = await Promise.all([
     prisma.users.findFirst({
       where: { id, distributor_id: currentUser.distributorId },
-      include: { roles: true },
+      include: { roles: true, user_store_links: true },
     }),
     prisma.roles.findMany({ orderBy: { label: "asc" } }),
     // CDVs actifs du distributeur
@@ -33,10 +33,22 @@ export default async function AdminUserEditPage({
         distributor_id: currentUser.distributorId,
         is_active: true,
         roles: { code: "atc" },
-        NOT: { id },
       },
       select: { id: true, first_name: true, last_name: true, email: true },
       orderBy: { last_name: "asc" },
+    }),
+    prisma.stores.findMany({
+      where: { distributor_id: currentUser.distributorId, is_active: true },
+      select: { id: true, code: true, name: true },
+      orderBy: [{ code: "asc" }],
+    }),
+    prisma.users.findMany({
+      where: {
+        distributor_id: currentUser.distributorId,
+        supervisor_id: id,
+        roles: { code: "atc" },
+      },
+      select: { id: true },
     }),
   ]);
 
@@ -51,7 +63,13 @@ export default async function AdminUserEditPage({
       backLabel="Retour fiche utilisateur"
     >
       <section style={{ borderRadius: "1.5rem", background: "rgba(255,255,255,0.75)", border: "1px solid rgba(217,227,240,0.9)", padding: "1.75rem", boxShadow: "0 8px 24px rgba(15,23,42,0.05)" }}>
-        <UserEditForm user={user} roles={roles} cdvs={cdvs} atcs={atcs} />
+        <UserEditForm
+          user={{ ...user, supervised_atc_ids: supervisedAtcs.map((atc) => atc.id) }}
+          roles={roles}
+          cdvs={cdvs}
+          atcs={atcs.filter((atc) => atc.id !== user.id)}
+          stores={stores}
+        />
       </section>
     </AdminModulePage>
   );

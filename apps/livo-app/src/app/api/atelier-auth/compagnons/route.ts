@@ -1,13 +1,10 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { cookies } from 'next/headers'
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   const cookieStore = await cookies()
-  const garageIdFromCookie = cookieStore.get('atelier-garage-id')?.value
-  const garageIdFromQuery = new URL(req.url).searchParams.get('garageId')
-
-  const garageId = garageIdFromCookie ?? garageIdFromQuery
+  const garageId = cookieStore.get('atelier-garage-id')?.value
 
   if (!garageId) {
     return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })

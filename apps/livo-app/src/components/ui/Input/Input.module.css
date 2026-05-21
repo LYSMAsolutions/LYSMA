@@ -97,7 +97,6 @@
   align-items: center;
   justify-content: center;
   color: var(--color-text-muted);
-  right: var(--space-3);
   pointer-events: auto;
   transition: color var(--duration-fast) var(--ease-out);
 }
@@ -106,8 +105,13 @@
   color: var(--color-text-secondary);
 }
 
-.iconLeft { left: var(--space-3); }
-.iconRight { right: var(--space-3); }
+.iconLeft {
+  left: var(--space-3);
+}
+
+.iconRight {
+  right: var(--space-3);
+}
 
 .icon svg {
   width: 16px;

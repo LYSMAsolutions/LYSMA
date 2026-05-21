@@ -22,7 +22,21 @@ type Compagnon = {
 type Props = {
   compagnons: Compagnon[]
   onClose: () => void
-  onCreated: () => void
+  onCreated: (absence: {
+    id: string
+    type: string
+    dateDebut: string
+    dateFin: string
+    nbJours: number
+    approuve: boolean
+    notes: string | null
+    compagnon?: {
+      user?: {
+        nom?: string
+        prenom?: string
+      }
+    }
+  }) => void
 }
 
 const TYPE_LABELS: Record<TypeAbsence, string> = {
@@ -133,7 +147,21 @@ export function AbsenceForm({ compagnons, onClose, onCreated }: Props) {
         return
       }
 
-      onCreated()
+      onCreated({
+        id: data.absence.id,
+        type: data.absence.type,
+        dateDebut: data.absence.dateDebut,
+        dateFin: data.absence.dateFin,
+        nbJours: Number(data.absence.nbJours ?? 0),
+        approuve: data.absence.approuve,
+        notes: data.absence.notes ?? null,
+        compagnon: {
+          user: {
+            nom: data.absence.compagnon?.user?.nom ?? data.absence.compagnon?.nom,
+            prenom: data.absence.compagnon?.user?.prenom ?? data.absence.compagnon?.prenom,
+          },
+        },
+      })
     } catch {
       setError('Impossible de contacter le serveur.')
     } finally {

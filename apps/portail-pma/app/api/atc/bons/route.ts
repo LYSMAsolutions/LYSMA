@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentSession } from "@/lib/auth-session";
 import { revalidatePath } from "next/cache";
+import { buildCdvClientWhere, getCdvScope } from "@/lib/admin/access-scope";
 
 // Génère un numéro de bon unique : BON-2025-00042
 async function generateBonNumber(distributorId: string): Promise<string> {
@@ -14,7 +15,7 @@ async function generateBonNumber(distributorId: string): Promise<string> {
 export async function POST(req: NextRequest) {
   try {
     const session = await getCurrentSession();
-    if (!session || session.user.roleCode !== "atc")
+    if (!session || !["atc", "cdv"].includes(session.user.roleCode))
       return NextResponse.json({ success: false, message: "Accès refusé." }, { status: 403 });
 
     const body = await req.json();
@@ -32,8 +33,22 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: false, message: "Client, magasin et type de bon obligatoires." }, { status: 400 });
 
     // Vérifier que le client appartient bien à ce distributeur ET à cet ATC
+    const clientWhere =
+      session.user.roleCode === "cdv"
+        ? buildCdvClientWhere({
+            distributorId: session.user.distributorId,
+            ...(await getCdvScope({
+              distributorId: session.user.distributorId,
+              userId: session.user.id,
+            })),
+          })
+        : {
+            distributor_id: session.user.distributorId,
+            assigned_user_id: session.user.id,
+          };
+
     const client = await prisma.clients.findFirst({
-      where: { id: client_id, distributor_id: session.user.distributorId, assigned_user_id: session.user.id },
+      where: { id: client_id, ...clientWhere },
     });
     if (!client)
       return NextResponse.json({ success: false, message: "Client introuvable ou non assigné." }, { status: 404 });
@@ -103,6 +118,7 @@ export async function POST(req: NextRequest) {
     }).catch(() => {});
 
     revalidatePath(`/${session.user.distributorSlug}/atc/bons`);
+    revalidatePath(`/${session.user.distributorSlug}/cdv/bons`);
 
     // Alimenter le registre matériel si relevé de parc
     if (body.save_to_registry && body.lines && client_id) {
@@ -135,7 +151,7 @@ export async function POST(req: NextRequest) {
 export async function GET() {
   try {
     const session = await getCurrentSession();
-    if (!session || session.user.roleCode !== "atc")
+    if (!session || !["atc", "cdv"].includes(session.user.roleCode))
       return NextResponse.json({ success: false, message: "Accès refusé." }, { status: 403 });
 
     const bons = await prisma.bons.findMany({

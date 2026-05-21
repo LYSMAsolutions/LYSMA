@@ -5,6 +5,11 @@
   gap: var(--space-8);
 }
 
+.headerActions {
+  display: flex;
+  gap: var(--space-2);
+}
+
 /* ── Top grid ────────────────────────────────────────────────── */
 .topGrid {
   display: grid;

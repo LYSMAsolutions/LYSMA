@@ -27,7 +27,12 @@
       ]
     },
     "allowJs": true,
-    "noEmit": true
+    "noEmit": true,
+    "types": [
+      "node",
+      "react",
+      "react-dom"
+    ]
   },
   "include": [
     "next-env.d.ts",

@@ -1,5 +1,6 @@
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
+import { getPrimaryGarageForUser } from '@/lib/garage'
 import { redirect } from 'next/navigation'
 import { Header } from '@/components/layout/Header'
 import { ParametresClient } from '@/components/parametres/ParametresClient/ParametresClient'
@@ -11,12 +12,7 @@ export default async function ParametresPage() {
   const session = await auth()
   if (!session?.user?.id) redirect('/connexion')
 
-  const user = await prisma.user.findUnique({
-    where: { id: session.user.id },
-    include: { garages: { take: 1 } },
-  })
-
-  const garage = user?.garages[0]
+  const garage = await getPrimaryGarageForUser(session.user.id)
   if (!garage) redirect('/dashboard')
 
   const [taux, compagnons] = await Promise.all([

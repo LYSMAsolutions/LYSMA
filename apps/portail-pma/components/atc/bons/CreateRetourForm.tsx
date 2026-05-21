@@ -13,6 +13,7 @@ type RetLine = { id: number; reference: string; quantity: number; motif: string 
 
 type Props = {
   distributorSlug:    string;
+  basePath?:          string;
   clients:            Client[];
   stores:             Store[];
   requireBonRef:      boolean;
@@ -27,9 +28,9 @@ const MOTIFS = [
   "PIÈCE NON CONFORME", "SURPLUS DE STOCK", "AUTRE",
 ];
 
-export default function CreateRetourForm({ distributorSlug, clients, stores, requireBonRef, requireMotif, requireDesignation }: Props) {
+export default function CreateRetourForm({ distributorSlug, basePath, clients, stores, requireBonRef, requireMotif, requireDesignation }: Props) {
   const router  = useRouter();
-  const atcBase = `/${distributorSlug}/atc`;
+  const atcBase = basePath ?? `/${distributorSlug}/atc`;
 
   const [clientId, setClientId] = useState("");
   const [storeId,  setStoreId]  = useState("");

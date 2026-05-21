@@ -1,10 +1,12 @@
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
+import { getPrimaryGarageForUser } from '@/lib/garage'
 import { redirect, notFound } from 'next/navigation'
 import { Header } from '@/components/layout/Header'
 import { Button, Badge } from '@/components/ui'
 import { ArrowLeft, Car, Clock, CurrencyEur, TrendUp, TrendDown } from '@phosphor-icons/react/dist/ssr'
 import Link from 'next/link'
+import { VehicleEditForm } from '@/components/vehicules/VehicleEditForm/VehicleEditForm'
 import styles from './page.module.css'
 
 export const dynamic = 'force-dynamic'
@@ -60,22 +62,7 @@ export default async function VehiculeFichePage({
     redirect('/connexion')
   }
 
-  const user = await prisma.user.findUnique({
-    where: {
-      id: session.user.id,
-      actif: true,
-    },
-    include: {
-      garages: {
-        where: {
-          actif: true,
-        },
-        take: 1,
-      },
-    },
-  })
-
-  const garage = user?.garages[0]
+  const garage = await getPrimaryGarageForUser(session.user.id)
 
   if (!garage) {
     redirect('/dashboard')
@@ -144,11 +131,19 @@ export default async function VehiculeFichePage({
         title={`${vehicule.marque} ${vehicule.modele}`}
         description={vehicule.immatriculation ?? 'Sans immatriculation'}
         action={
-          <Link href="/vehicules">
-            <Button variant="secondary" size="sm" icon={<ArrowLeft />}>
-              Retour
-            </Button>
-          </Link>
+          <div className={styles.headerActions}>
+            <VehicleEditForm
+              vehiculeId={vehicule.id}
+              immatriculation={vehicule.immatriculation}
+              clientNom={vehicule.clientNom}
+              clientPrenom={vehicule.clientPrenom}
+            />
+            <Link href="/vehicules">
+              <Button variant="secondary" size="sm" icon={<ArrowLeft />}>
+                Retour
+              </Button>
+            </Link>
+          </div>
         }
       />
 
@@ -170,6 +165,7 @@ export default async function VehiculeFichePage({
               {vehicule.annee && <InfoRow label="Année" value={String(vehicule.annee)} />}
               {vehicule.vin && <InfoRow label="N° de série" value={vehicule.vin} mono />}
             </div>
+
           </div>
 
           <div className={styles.infoCard}>

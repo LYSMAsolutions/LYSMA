@@ -77,6 +77,41 @@
   text-align: center;
 }
 
+.intro {
+  max-width: 34ch;
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+  line-height: 1.45;
+  text-align: center;
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-2);
+  width: 100%;
+}
+
+.step {
+  min-height: 52px;
+  padding: var(--space-2);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  color: var(--color-text-muted);
+  font-size: var(--text-xs);
+}
+
+.stepActive {
+  border-color: rgba(26,111,255,0.35);
+  background: rgba(26,111,255,0.08);
+  color: var(--color-text-primary);
+}
+
 /* ── Form ─────────────────────────────────────────────────── */
 .form {
   display: flex;
@@ -308,3 +343,14 @@
 
 .pinKey:active { transform: scale(0.93); }
 .pinKeyEmpty { opacity: 0; pointer-events: none; }
+
+@media (max-width: 520px) {
+  .card,
+  .cardLarge {
+    padding: var(--space-5);
+  }
+
+  .steps {
+    grid-template-columns: 1fr;
+  }
+}

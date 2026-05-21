@@ -1,4 +1,12 @@
-import Link from "next/link";
+import {
+  Activity,
+  AlertTriangle,
+  CheckCircle2,
+  ClipboardList,
+  Store,
+  UserCheck,
+  Users,
+} from "lucide-react";
 import { requireAccess } from "@/lib/require-access";
 import {
   getBonKpisForRdm,
@@ -6,31 +14,13 @@ import {
   getStoreScopeForUser,
 } from "@/lib/admin/bons";
 import BonStatusBadge from "@/components/admin/bons/BonStatusBadge";
-
-function StatCard({
-  href,
-  title,
-  value,
-  helper,
-}: {
-  href: string;
-  title: string;
-  value: number;
-  helper: string;
-}) {
-  return (
-    <Link
-      href={href}
-      className="kpi-card transition hover:-translate-y-0.5 hover:shadow-[0_22px_60px_rgba(15,23,42,0.10)]"
-    >
-      <p className="text-sm font-medium text-[#6B7280]">{title}</p>
-      <p className="mt-4 text-4xl font-semibold tracking-tight text-[#0F172A]">
-        {value}
-      </p>
-      <p className="mt-2 text-sm text-[#6B7280]">{helper}</p>
-    </Link>
-  );
-}
+import {
+  PriorityPanel,
+  QuickActions,
+  RecentCard,
+  RoleHero,
+  RoleKpiGrid,
+} from "@/components/role-dashboard/RoleDashboardKit";
 
 export default async function RdmHomePage({
   params,
@@ -68,191 +58,134 @@ export default async function RdmHomePage({
 
   return (
     <div className="space-y-8">
-      <section className="card-lysma" style={{ padding: "2rem" }}>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            gap: "1rem",
-            flexWrap: "wrap",
-          }}
-        >
-          <div>
-            <p className="badge-lysma">RDM · Accueil</p>
-            <h1 className="section-title" style={{ marginTop: ".75rem" }}>
-              Bonjour {currentUser.firstName || "RDM"}
-            </h1>
-            <p className="section-copy" style={{ marginTop: ".5rem" }}>
-              Vue de supervision des bons sur ton périmètre magasin.
-            </p>
-          </div>
-
-          <div
-            style={{
-              display: "flex",
-              gap: ".75rem",
-              flexWrap: "wrap",
-              alignItems: "flex-start",
-            }}
-          >
-            <Link href={`${rdmBase}/bons`} className="btn-primary">
-              Ouvrir les bons magasin
-            </Link>
-            <Link href={`/${currentUser.distributorSlug}`} className="btn-secondary">
-              Retour distributeur
-            </Link>
-          </div>
-        </div>
-      </section>
+      <RoleHero
+        eyebrow="Espace responsable magasin"
+        title={`Bonjour ${currentUser.firstName || "RDM"}`}
+        description="Supervision atelier et magasin: bons a traiter, clients rattaches aux magasins et equipe magasinier."
+        primary={{ href: `${rdmBase}/bons`, label: "Traiter les bons" }}
+        secondary={{ href: `${rdmBase}/equipe`, label: "Equipe magasin" }}
+      />
 
       {!stores.length ? (
-        <section className="card-lysma" style={{ padding: "2rem" }}>
+        <section className="card-lysma p-8">
           <div className="rounded-2xl border border-dashed border-[#D9E3F0] bg-[#F8FBFF] px-5 py-6 text-sm text-[#6B7280]">
-            Aucun magasin n’est lié à cet utilisateur.  
-            Ajoute une relation dans <code>user_store_links</code> pour activer le périmètre RDM.
+            Aucun magasin n'est lie a ce RDM. L'admin doit rattacher au moins un magasin pour activer son perimetre.
           </div>
         </section>
       ) : (
         <>
-          <section className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-6">
-            <StatCard
-              href={`${rdmBase}/bons`}
-              title="Total"
-              value={kpis.total}
-              helper="bons du périmètre"
-            />
-            <StatCard
-              href={`${rdmBase}/bons`}
-              title="Non pris en charge"
-              value={kpis.nonPrisEnCharge}
-              helper="à surveiller"
-            />
-            <StatCard
-              href={`${rdmBase}/bons`}
-              title="Pris en charge"
-              value={kpis.prisEnCharge}
-              helper="attribués"
-            />
-            <StatCard
-              href={`${rdmBase}/bons`}
-              title="En cours"
-              value={kpis.enCours}
-              helper="traitement actif"
-            />
-            <StatCard
-              href={`${rdmBase}/bons`}
-              title="En attente"
-              value={kpis.enAttente}
-              helper="bloqués"
-            />
-            <StatCard
-              href={`${rdmBase}/bons`}
-              title="Traités"
-              value={kpis.traites}
-              helper="finalisés"
-            />
-          </section>
+          <RoleKpiGrid
+            items={[
+              {
+                title: "Bons magasin",
+                value: kpis.total,
+                subtitle: "dans ton perimetre",
+                href: `${rdmBase}/bons`,
+                icon: ClipboardList,
+                tone: "info",
+              },
+              {
+                title: "A prendre",
+                value: kpis.nonPrisEnCharge,
+                subtitle: "nouveaux dossiers",
+                href: `${rdmBase}/bons`,
+                icon: AlertTriangle,
+                tone: "warning",
+              },
+              {
+                title: "Pris",
+                value: kpis.prisEnCharge,
+                subtitle: "en responsabilite",
+                href: `${rdmBase}/bons`,
+                icon: Store,
+                tone: "default",
+              },
+              {
+                title: "En cours",
+                value: kpis.enCours,
+                subtitle: "traitement actif",
+                href: `${rdmBase}/bons`,
+                icon: Activity,
+                tone: "default",
+              },
+              {
+                title: "Traites",
+                value: kpis.traites,
+                subtitle: "finalises",
+                href: `${rdmBase}/bons`,
+                icon: CheckCircle2,
+                tone: "success",
+              },
+            ]}
+          />
 
-          <section className="grid grid-cols-1 gap-8 xl:grid-cols-[1.15fr_.85fr]">
-            <section className="card-lysma" style={{ padding: "2rem" }}>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  gap: "1rem",
-                  flexWrap: "wrap",
-                  alignItems: "center",
-                }}
-              >
-                <div>
-                  <h2 className="section-title">Derniers bons du périmètre</h2>
-                  <p className="section-copy" style={{ marginTop: ".5rem" }}>
-                    Lecture rapide des dernières demandes assignées à tes magasins.
-                  </p>
-                </div>
-
-                <Link href={`${rdmBase}/bons`} className="btn-secondary">
-                  Voir tout
-                </Link>
-              </div>
-
-              <div className="table-shell" style={{ marginTop: "1.25rem" }}>
-                <table className="data-table">
-                  <thead>
-                    <tr>
-                      <th>Numéro</th>
-                      <th>Client</th>
-                      <th>ATC</th>
-                      <th>Magasin</th>
-                      <th>Statut</th>
-                      <th>Date</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-
-                  <tbody>
-                    {lastFive.map((row) => (
-                      <tr key={row.id}>
-                        <td>{row.bon_number}</td>
-                        <td>{row.clientName}</td>
-                        <td>{row.creatorName}</td>
-                        <td>{row.storeName}</td>
-                        <td>
-                          <BonStatusBadge status={row.status} />
-                        </td>
-                        <td>{row.createdAt}</td>
-                        <td>
-                          <Link href={`${rdmBase}/bons/${row.id}`} className="btn-secondary">
-                            Voir
-                          </Link>
-                        </td>
-                      </tr>
-                    ))}
-
-                    {!lastFive.length ? (
-                      <tr>
-                        <td
-                          colSpan={7}
-                          style={{ textAlign: "center", color: "var(--muted)" }}
-                        >
-                          Aucun bon trouvé.
-                        </td>
-                      </tr>
-                    ) : null}
-                  </tbody>
-                </table>
-              </div>
-            </section>
-
-            <section className="card-lysma" style={{ padding: "2rem" }}>
-              <h2 className="section-title">Accès rapides</h2>
-              <p className="section-copy" style={{ marginTop: ".5rem" }}>
-                Supervision du périmètre magasin sans casser l’exécution store.
-              </p>
-
-              <div className="mt-6 grid gap-4">
-                <Link
-                  href={`${rdmBase}/bons`}
-                  className="rounded-[22px] border border-[#D9E3F0] bg-white px-5 py-4 text-sm font-medium text-[#0F172A] transition hover:bg-[#F8FBFF]"
+          <section className="grid grid-cols-1 gap-8 xl:grid-cols-[1.2fr_0.8fr]">
+            <RecentCard title="Derniers bons magasin" href={`${rdmBase}/bons`} empty={!lastFive.length}>
+              {lastFive.map((row) => (
+                <a
+                  key={row.id}
+                  href={`${rdmBase}/bons/${row.id}`}
+                  className="flex flex-col gap-4 rounded-2xl border border-[#E2E8F0] bg-[#F8FBFF] px-5 py-4 transition hover:border-[#C9D8EB] hover:bg-white md:flex-row md:items-center md:justify-between"
                 >
-                  Consulter tous les bons du périmètre
-                </Link>
+                  <div>
+                    <p className="font-semibold text-[#0F172A]">{row.bon_number}</p>
+                    <p className="mt-1 text-sm text-[#6B7280]">{row.clientName}</p>
+                  </div>
+                  <div className="grid gap-2 text-sm text-[#6B7280] md:min-w-[300px] md:grid-cols-2 md:text-right">
+                    <span>{row.storeName}</span>
+                    <span>{row.createdAt}</span>
+                  </div>
+                  <BonStatusBadge status={row.status} />
+                </a>
+              ))}
+            </RecentCard>
 
-                <Link
-                  href={`/${currentUser.distributorSlug}/store`}
-                  className="rounded-[22px] border border-[#D9E3F0] bg-white px-5 py-4 text-sm font-medium text-[#0F172A] transition hover:bg-[#F8FBFF]"
-                >
-                  Aller vers la vue magasin
-                </Link>
+            <div className="space-y-8">
+              <PriorityPanel
+                title="Priorites magasin"
+                subtitle="File a piloter avant saturation"
+                icon={AlertTriangle}
+                items={[
+                  {
+                    title: "Non pris en charge",
+                    value: kpis.nonPrisEnCharge,
+                    hint: "A ouvrir pour eviter les retards de traitement.",
+                    href: `${rdmBase}/bons`,
+                    icon: ClipboardList,
+                  },
+                  {
+                    title: "En attente",
+                    value: kpis.enAttente,
+                    hint: "Attente client, fournisseur ou correction.",
+                    href: `${rdmBase}/bons`,
+                    icon: Activity,
+                  },
+                ]}
+              />
 
-                <Link
-                  href={`/${currentUser.distributorSlug}`}
-                  className="rounded-[22px] border border-[#D9E3F0] bg-white px-5 py-4 text-sm font-medium text-[#0F172A] transition hover:bg-[#F8FBFF]"
-                >
-                  Revenir à l’espace distributeur
-                </Link>
-              </div>
-            </section>
+              <QuickActions
+                items={[
+                  {
+                    title: "Clients magasin",
+                    description: "Consulter les clients lies aux magasins de ton perimetre.",
+                    href: `${rdmBase}/clients`,
+                    icon: UserCheck,
+                  },
+                  {
+                    title: "Equipe magasinier",
+                    description: "Voir les magasiniers rattaches aux magasins.",
+                    href: `${rdmBase}/equipe`,
+                    icon: Users,
+                  },
+                  {
+                    title: "Traitement magasin",
+                    description: "Ouvrir la file des bons de ton perimetre.",
+                    href: `${rdmBase}/bons`,
+                    icon: Store,
+                  },
+                ]}
+              />
+            </div>
           </section>
         </>
       )}

@@ -1,5 +1,5 @@
-export function getBonNavItems(distributor: string, id: string) {
-  const base = `/${distributor}/admin/bons/${id}`;
+export function getBonNavItems(distributor: string, id: string, section = "admin") {
+  const base = `/${distributor}/${section}/bons/${id}`;
 
   return [
     {
@@ -21,6 +21,26 @@ export function getBonNavItems(distributor: string, id: string) {
       label: "Lignes",
       href: `${base}/lignes`,
       icon: "list-ordered",
+    },
+    {
+      label: "Documents",
+      href: `${base}/documents`,
+      icon: "file-stack",
+    },
+    {
+      label: "Photos",
+      href: `${base}/photos`,
+      icon: "image",
+    },
+    {
+      label: "Commentaires",
+      href: `${base}/commentaires`,
+      icon: "message-square",
+    },
+    {
+      label: "Anomalies",
+      href: `${base}/anomalies`,
+      icon: "alert-triangle",
     },
   ] as const;
 }

@@ -8,7 +8,13 @@ export async function GET(req: NextRequest) {
 
   const user = await prisma.user.findUnique({
     where: { id: session.user.id },
-    include: { garages: { take: 1 } },
+    include: {
+      garages: {
+        where: { actif: true },
+        orderBy: { createdAt: 'asc' },
+        take: 1,
+      },
+    },
   })
 
   const garage = user?.garages[0]

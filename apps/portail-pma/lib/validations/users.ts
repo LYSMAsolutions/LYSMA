@@ -6,6 +6,8 @@ export type CreateUserPayload = {
   code?: string;
   password: string;
   roleId: string;
+  supervisorId?: string | null;
+  storeIds?: string[];
 };
 
 export function validateCreateUserPayload(body: unknown) {
@@ -18,6 +20,10 @@ export function validateCreateUserPayload(body: unknown) {
   const code = String(payload.code || "").trim().toUpperCase();
   const password = String(payload.password || "");
   const roleId = String(payload.roleId || "").trim();
+  const supervisorId = String(payload.supervisorId || "").trim() || null;
+  const storeIds = Array.isArray(payload.storeIds)
+    ? payload.storeIds.map((item) => String(item || "").trim()).filter(Boolean)
+    : [];
 
   if (!firstName || !lastName || !email || !password || !roleId) {
     return {
@@ -51,6 +57,8 @@ export function validateCreateUserPayload(body: unknown) {
       code,
       password,
       roleId,
+      supervisorId,
+      storeIds: Array.from(new Set(storeIds)),
     },
   };
 }

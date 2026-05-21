@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { buildCdvBonWhere, getCdvScope } from "@/lib/admin/access-scope";
 
 export type BonActionKey =
   | "prendre-en-charge"
@@ -371,11 +372,19 @@ export async function getBonById(params: {
 
 export async function getBonListForCdv(params: {
   distributorId: string;
+  userId: string;
 }) {
+  const scope = await getCdvScope({
+    distributorId: params.distributorId,
+    userId: params.userId,
+  });
+
   const rows = await prisma.bons.findMany({
-    where: {
-      distributor_id: params.distributorId,
-    },
+    where: buildCdvBonWhere({
+      distributorId: params.distributorId,
+      actorUserIds: scope.actorUserIds,
+      storeIds: scope.storeIds,
+    }),
     include: {
       clients: {
         select: {
@@ -425,11 +434,19 @@ export async function getBonListForCdv(params: {
 
 export async function getBonKpisForCdv(params: {
   distributorId: string;
+  userId: string;
 }) {
+  const scope = await getCdvScope({
+    distributorId: params.distributorId,
+    userId: params.userId,
+  });
+
   const rows = await prisma.bons.findMany({
-    where: {
-      distributor_id: params.distributorId,
-    },
+    where: buildCdvBonWhere({
+      distributorId: params.distributorId,
+      actorUserIds: scope.actorUserIds,
+      storeIds: scope.storeIds,
+    }),
     select: {
       status: true,
     },

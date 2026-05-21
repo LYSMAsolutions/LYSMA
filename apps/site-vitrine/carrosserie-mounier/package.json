@@ -1,0 +1,11 @@
+{
+  "name": "site-vitrine-carrosserie-mounier",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/static-server.mjs --port 3021",
+    "start": "node scripts/static-server.mjs --port 3021",
+    "check": "node scripts/check-static-site.mjs"
+  }
+}

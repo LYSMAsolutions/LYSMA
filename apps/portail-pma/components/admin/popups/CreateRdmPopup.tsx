@@ -8,15 +8,20 @@ type RoleItem = {
   code: string;
   label: string;
 };
+type StoreItem = { id: string; code: string; name: string };
 
 export default function CreateRdmPopup({
   open,
   onClose,
   roles,
+  stores = [],
+  initialStoreIds = [],
 }: {
   open: boolean;
   onClose: () => void;
   roles: RoleItem[];
+  stores?: StoreItem[];
+  initialStoreIds?: string[];
 }) {
   return (
     <EntityModal
@@ -28,6 +33,8 @@ export default function CreateRdmPopup({
       <UserCreateForm
         roles={roles}
         forcedRoleCode="rdm"
+        stores={stores}
+        initialStoreIds={initialStoreIds}
         onSuccess={onClose}
       />
     </EntityModal>

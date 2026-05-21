@@ -80,3 +80,9 @@ export async function POST(req: NextRequest) {
     },
   })
 }
+
+export async function DELETE() {
+  const cookieStore = await cookies()
+  cookieStore.delete('atelier-compagnon-id')
+  return NextResponse.json({ success: true })
+}

@@ -35,12 +35,14 @@ export default function ClientFilters({
   stores,
   atcs,
   initialClients,
+  showSearch = true,
 }: {
   distributor: string;
   distributorId: string;
   stores: StoreItem[];
   atcs: AtcItem[];
   initialClients: ClientItem[];
+  showSearch?: boolean;
 }) {
   const [search, setSearch] = useState("");
   const [storeFilter, setStoreFilter] = useState("");
@@ -72,19 +74,21 @@ export default function ClientFilters({
         style={{
           display: "grid",
           gap: "1rem",
-          gridTemplateColumns: "2fr 1fr auto",
+          gridTemplateColumns: showSearch ? "2fr 1fr auto" : "1fr auto",
           alignItems: "end",
         }}
       >
-        <div>
-          <label className="label">Recherche</label>
-          <input
-            className="input"
-            placeholder="Nom, code, email, ville..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </div>
+        {showSearch ? (
+          <div>
+            <label className="label">Recherche</label>
+            <input
+              className="input"
+              placeholder="Nom, code, email, ville..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </div>
+        ) : null}
 
         <div>
           <label className="label">Magasin</label>
