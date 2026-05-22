@@ -1,8 +1,6 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
-import { redirect } from 'next/navigation'
-import { auth } from '@/lib/auth'
 import styles from './page.module.css'
 
 export const metadata: Metadata = {
@@ -40,10 +38,7 @@ const steps = [
   'Puis 89 € par mois, sans engagement',
 ]
 
-export default async function HomePage() {
-  const session = await auth()
-  if (session) redirect('/dashboard')
-
+export default function HomePage() {
   return (
     <main className={styles.page}>
       <header className={styles.header}>
@@ -52,7 +47,7 @@ export default async function HomePage() {
           <span>LIVO-APP</span>
         </Link>
         <nav className={styles.nav} aria-label="Navigation principale">
-          <a href="#fonctionnalites">Fonctionnalites</a>
+          <a href="#fonctionnalites">Fonctionnalités</a>
           <a href="#tarif">Tarif</a>
           <Link href="/connexion">Connexion</Link>
           <Link href="/inscription" className={styles.navCta}>
@@ -66,8 +61,8 @@ export default async function HomePage() {
           <span className={styles.eyebrow}>Gestion atelier automobile</span>
           <h1>Gardez le controle de votre garage, sans complexite.</h1>
           <p className={styles.lead}>
-            LIVO-APP centralise les fiches de travaux, les vehicules, les clients,
-            les pointages atelier, les absences et la rentabilite. Un outil pense
+            LIVO-APP centralise les fiches de travaux, les véhicules, les clients,
+            les pointages atelier, les absences et la rentabilité. Un outil pensé
             pour les garages et carrosseries qui veulent du clair, du rapide, du fiable.
           </p>
           <div className={styles.heroActions}>
@@ -92,9 +87,9 @@ export default async function HomePage() {
           <div className={styles.previewHeader}>
             <div>
               <strong>Tableau de bord atelier</strong>
-              <small>Aujourd hui</small>
+              <small>Aujourd'hui</small>
             </div>
-            <span className={styles.liveBadge}>temps reel</span>
+            <span className={styles.liveBadge}>temps réel</span>
           </div>
           <div className={styles.previewStats}>
             <div><span>Fiches</span><strong>12</strong></div>
@@ -112,19 +107,19 @@ export default async function HomePage() {
       <section className={styles.problem}>
         <div>
           <span className={styles.sectionKicker}>Pourquoi LIVO</span>
-          <h2>Le temps invisible coute cher a l atelier.</h2>
+          <h2>Le temps invisible coute cher à l'atelier.</h2>
         </div>
         <p>
           Quand les fiches papier, les pointages approximatifs et les suivis clients
-          sont disperses, il devient difficile de savoir ce qui est rentable, ce qui
+          sont dispersés, il devient difficile de savoir ce qui est rentable, ce qui
           bloque et ce qui doit etre facture.
         </p>
       </section>
 
       <section id="fonctionnalites" className={styles.features}>
         <div className={styles.sectionIntro}>
-          <span className={styles.sectionKicker}>Fonctionnalites</span>
-          <h2>Tout ce qu il faut pour piloter l atelier.</h2>
+          <span className={styles.sectionKicker}>Fonctionnalités</span>
+          <h2>Tout ce qu'il faut pour piloter l'atelier.</h2>
         </div>
         <div className={styles.featureGrid}>
           {features.map((feature) => (
@@ -139,7 +134,7 @@ export default async function HomePage() {
       <section className={styles.workflow}>
         <div className={styles.sectionIntro}>
           <span className={styles.sectionKicker}>Mise en route</span>
-          <h2>Simple a demarrer, simple a garder.</h2>
+          <h2>Simple à demarrer, simple à garder.</h2>
         </div>
         <div className={styles.steps}>
           {steps.map((step, index) => (
@@ -156,7 +151,7 @@ export default async function HomePage() {
           <span className={styles.sectionKicker}>Tarif</span>
           <h2>Une offre claire pour votre atelier.</h2>
           <p>
-            Pas de module cache, pas de contrat long. Vous testez LIVO-APP pendant
+            Pas de module caché, pas de contrat long. Vous testez LIVO-APP pendant
             30 jours, puis vous continuez uniquement si l outil vous convient.
           </p>
         </div>
@@ -168,13 +163,13 @@ export default async function HomePage() {
           </div>
           <p>Sans engagement. Support LYSMA inclus.</p>
           <ul>
-            <li>Fiches de travaux illimitees</li>
+            <li>Fiches de travaux illimitées</li>
             <li>Vehicules, clients et compagnons</li>
             <li>Pointage atelier et suivi RH</li>
-            <li>Rapports et rentabilite</li>
+            <li>Rapports et rentabilité</li>
           </ul>
           <Link href="/inscription" className={styles.primaryCta}>
-            Demarrer l essai gratuit
+            Demarrer l'essai gratuit
           </Link>
         </div>
       </section>
@@ -184,15 +179,15 @@ export default async function HomePage() {
         <div>
           <article>
             <h3>Est-ce installe sur un ordinateur ?</h3>
-            <p>Non. LIVO-APP est accessible en ligne depuis navigateur, ordinateur, tablette ou mobile.</p>
+            <p>Non. LIVO-APP est accessible en ligne depuis navigateur, ordinateur pour le responsable atelier et sur tablette ou mobile pour l'atelier.</p>
           </article>
           <article>
             <h3>Pourquoi accepter les cookies ?</h3>
-            <p>Les cookies de session sont necessaires pour creer un compte, rester connecte et securiser l acces.</p>
+            <p>Les cookies de session sont necessaires pour creer un compte, rester connecte et sécuriser l'accés.</p>
           </article>
           <article>
-            <h3>Puis-je arreter apres l essai ?</h3>
-            <p>Oui. L essai dure 30 jours et l abonnement est ensuite sans engagement.</p>
+            <h3>Puis-je arréter apres l'essai ?</h3>
+            <p>Oui. L'essai dure 30 jours et l'abonnement est ensuite sans engagement.</p>
           </article>
         </div>
       </section>
