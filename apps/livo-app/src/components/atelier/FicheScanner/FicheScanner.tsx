@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect, useCallback } from 'react'
-import { MagnifyingGlass, Barcode, X, Check, Play, Stop } from '@phosphor-icons/react'
+import { MagnifyingGlass, Barcode, X, Check, Play } from '@phosphor-icons/react'
 import { Badge } from '@/components/ui'
 import styles from './FicheScanner.module.css'
 
@@ -26,7 +26,7 @@ const STATUT_BADGE: Record<string, { label: string; variant: 'blue'|'warning'|'s
   EN_ATTENTE: { label: 'En attente', variant: 'warning' },
   EN_COURS:   { label: 'En cours',   variant: 'blue' },
   EN_PAUSE:   { label: 'En pause',   variant: 'warning' },
-  TERMINEE:   { label: 'Terminée',   variant: 'success' },
+  TERMINEE:   { label: 'Terminee',   variant: 'success' },
 }
 
 export function FicheScanner({ compagnonId, onPointer, onClose }: Props) {
@@ -39,10 +39,9 @@ export function FicheScanner({ compagnonId, onPointer, onClose }: Props) {
   const [scanError, setScanError] = useState('')
   const videoRef = useRef<HTMLVideoElement>(null)
   const streamRef = useRef<MediaStream | null>(null)
-  const scanIntervalRef = useRef<NodeJS.Timeout | null>(null)
+  const scannerControlsRef = useRef<{ stop: () => void } | null>(null)
 
-  // Recherche manuelle
-  async function searchFiche(q: string) {
+  const searchFiche = useCallback(async (q: string) => {
     if (!q || q.length < 2) return
     setSearching(true)
     setNotFound(false)
@@ -58,59 +57,100 @@ export function FicheScanner({ compagnonId, onPointer, onClose }: Props) {
     } finally {
       setSearching(false)
     }
-  }
+  }, [])
 
-  // Scanner caméra
-  async function startScan() {
-    setScanError('')
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } }
-      })
-      streamRef.current = stream
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream
-        videoRef.current.play()
-      }
-      setScanActive(true)
+  const stopScan = useCallback(() => {
+    scannerControlsRef.current?.stop()
+    scannerControlsRef.current = null
 
-      // Import dynamique de @zxing/browser
-      const { BrowserBarcodeReader } = await import('@zxing/browser' as any)
-      const reader = new BrowserBarcodeReader()
-      
-      // Scan en continu
-      const scanLoop = async () => {
-        if (!videoRef.current || !streamRef.current) return
-        try {
-          const result = await reader.decodeOnceFromVideoElement(videoRef.current)
-          if (result) {
-            const text = result.getText()
-            stopScan()
-            setMode('search')
-            setQuery(text)
-            searchFiche(text)
-          }
-        } catch {
-          // Continuer le scan
-        }
-      }
-
-      scanIntervalRef.current = setInterval(scanLoop, 500)
-    } catch (err: any) {
-      setScanError(err.message?.includes('Permission') ? 'Accès caméra refusé' : 'Caméra non disponible')
-    }
-  }
-
-  function stopScan() {
-    if (scanIntervalRef.current) clearInterval(scanIntervalRef.current)
     if (streamRef.current) {
-      streamRef.current.getTracks().forEach(t => t.stop())
+      streamRef.current.getTracks().forEach((track) => track.stop())
       streamRef.current = null
     }
-    setScanActive(false)
-  }
 
-  useEffect(() => () => stopScan(), [])
+    if (videoRef.current) {
+      videoRef.current.srcObject = null
+    }
+
+    setScanActive(false)
+  }, [])
+
+  const startScan = useCallback(async () => {
+    setScanError('')
+
+    if (!window.isSecureContext && window.location.hostname !== 'localhost') {
+      setScanError('La camera necessite une connexion HTTPS securisee.')
+      return
+    }
+
+    if (!navigator.mediaDevices?.getUserMedia) {
+      setScanError("La camera n'est pas disponible sur ce navigateur.")
+      return
+    }
+
+    if (!videoRef.current) {
+      setScanError('Initialisation camera en cours. Reessayez dans une seconde.')
+      return
+    }
+
+    try {
+      stopScan()
+      setScanActive(true)
+
+      const { BrowserMultiFormatOneDReader } = await import('@zxing/browser')
+      const reader = new BrowserMultiFormatOneDReader(undefined, {
+        delayBetweenScanAttempts: 250,
+      })
+
+      const controls = await reader.decodeFromConstraints(
+        {
+          video: {
+            facingMode: { ideal: 'environment' },
+            width: { ideal: 1280 },
+            height: { ideal: 720 },
+          },
+          audio: false,
+        },
+        videoRef.current,
+        (result) => {
+          if (!result) return
+
+          const text = result.getText()
+          stopScan()
+          setMode('search')
+          setQuery(text)
+          searchFiche(text)
+        },
+      )
+
+      scannerControlsRef.current = controls
+      streamRef.current = videoRef.current.srcObject as MediaStream | null
+    } catch (err) {
+      stopScan()
+      const name = err instanceof DOMException ? err.name : ''
+      if (name === 'NotAllowedError' || name === 'PermissionDeniedError') {
+        setScanError('Acces camera refuse. Autorisez la camera dans le navigateur.')
+      } else if (name === 'NotFoundError' || name === 'DevicesNotFoundError') {
+        setScanError('Aucune camera detectee sur cet appareil.')
+      } else if (name === 'NotReadableError' || name === 'TrackStartError') {
+        setScanError('Camera deja utilisee par une autre application.')
+      } else {
+        setScanError("Camera non disponible. Verifiez l'autorisation et le HTTPS.")
+      }
+    }
+  }, [searchFiche, stopScan])
+
+  useEffect(() => () => stopScan(), [stopScan])
+
+  useEffect(() => {
+    if (mode !== 'scan' || scanActive || scanError) return
+
+    const timer = window.setTimeout(() => {
+      startScan()
+    }, 0)
+
+    return () => window.clearTimeout(timer)
+  }, [mode, scanActive, scanError, startScan])
 
   const estDejaPointe = fiche?.pointagesActifs.some(p => p.compagnonId === compagnonId)
   const badge = fiche ? (STATUT_BADGE[fiche.statut] ?? { label: fiche.statut, variant: 'muted' as const }) : null
@@ -124,7 +164,6 @@ export function FicheScanner({ compagnonId, onPointer, onClose }: Props) {
           <button className={styles.closeBtn} onClick={onClose}><X size={18} /></button>
         </div>
 
-        {/* Tabs */}
         <div className={styles.tabs}>
           <button
             className={`${styles.tab} ${mode === 'search' ? styles.tabActive : ''}`}
@@ -134,7 +173,7 @@ export function FicheScanner({ compagnonId, onPointer, onClose }: Props) {
           </button>
           <button
             className={`${styles.tab} ${mode === 'scan' ? styles.tabActive : ''}`}
-            onClick={() => { setMode('scan'); if (!scanActive) startScan() }}
+            onClick={() => setMode('scan')}
           >
             <Barcode size={16} /> Scanner code-barres
           </button>
@@ -142,7 +181,6 @@ export function FicheScanner({ compagnonId, onPointer, onClose }: Props) {
 
         <div className={styles.body}>
 
-          {/* Mode recherche */}
           {mode === 'search' && (
             <div className={styles.searchSection}>
               <div className={styles.searchRow}>
@@ -163,17 +201,16 @@ export function FicheScanner({ compagnonId, onPointer, onClose }: Props) {
                   {searching ? '...' : <MagnifyingGlass weight="bold" size={18} />}
                 </button>
               </div>
-              <p className={styles.searchHint}>Tapez le numéro de fiche ou d'OR puis appuyez sur Entrée</p>
+              <p className={styles.searchHint}>Tapez le numero de fiche ou d'OR puis appuyez sur Entree</p>
             </div>
           )}
 
-          {/* Mode scan */}
           {mode === 'scan' && (
             <div className={styles.scanSection}>
               {scanError ? (
                 <div className={styles.scanError}>
                   <p>{scanError}</p>
-                  <button className={styles.scanRetry} onClick={startScan}>Réessayer</button>
+                  <button className={styles.scanRetry} onClick={startScan}>Reessayer</button>
                 </div>
               ) : (
                 <>
@@ -190,7 +227,7 @@ export function FicheScanner({ compagnonId, onPointer, onClose }: Props) {
                   </div>
                   {scanActive && (
                     <button className={styles.stopScanBtn} onClick={() => { stopScan(); setMode('search') }}>
-                      <X size={14} /> Arrêter le scan
+                      <X size={14} /> Arreter le scan
                     </button>
                   )}
                 </>
@@ -198,10 +235,9 @@ export function FicheScanner({ compagnonId, onPointer, onClose }: Props) {
             </div>
           )}
 
-          {/* Résultat */}
           {notFound && (
             <div className={styles.notFound}>
-              Aucune fiche trouvée pour « {query} »
+              Aucune fiche trouvee pour "{query}"
             </div>
           )}
 
@@ -218,7 +254,7 @@ export function FicheScanner({ compagnonId, onPointer, onClose }: Props) {
               </div>
               <div className={styles.ficheTravaux}>
                 {fiche.travaux.split('\n').filter(Boolean).slice(0, 3).map((t, i) => (
-                  <span key={i} className={styles.ficheTravailItem}>› {t}</span>
+                  <span key={i} className={styles.ficheTravailItem}>- {t}</span>
                 ))}
               </div>
               {fiche.pointagesActifs.length > 0 && (
@@ -231,7 +267,7 @@ export function FicheScanner({ compagnonId, onPointer, onClose }: Props) {
 
               {estDejaPointe ? (
                 <div className={styles.dejaPointe}>
-                  <Check weight="bold" size={14} /> Vous pointez déjà sur cette fiche
+                  <Check weight="bold" size={14} /> Vous pointez deja sur cette fiche
                 </div>
               ) : (
                 <button
