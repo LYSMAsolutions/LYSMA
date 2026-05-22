@@ -239,7 +239,7 @@ export function FicheScanner({ compagnonId, onPointer, onClose }: Props) {
             className={`${styles.tab} ${mode === 'scan' ? styles.tabActive : ''}`}
             onClick={() => setMode('scan')}
           >
-            <Barcode size={16} /> Scanner code-barres
+            <Barcode size={16} /> Scanner QR fiche
           </button>
         </div>
 
@@ -287,7 +287,7 @@ export function FicheScanner({ compagnonId, onPointer, onClose }: Props) {
                   />
                   <div className={styles.scanOverlay}>
                     <div className={styles.scanFrame} />
-                    <p className={styles.scanLabel}>Pointez vers le code-barres de la fiche</p>
+                    <p className={styles.scanLabel}>Cadrez le QR code SCAN ATELIER</p>
                   </div>
                   {scanActive && (
                     <button className={styles.stopScanBtn} onClick={() => { stopScan(); setMode('search') }}>

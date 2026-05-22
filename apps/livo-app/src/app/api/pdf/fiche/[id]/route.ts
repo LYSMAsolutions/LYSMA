@@ -3,7 +3,6 @@ import { prisma } from '@/lib/prisma'
 import { auth } from '@/lib/auth'
 import { renderToStream } from '@react-pdf/renderer'
 import { FichePDF } from '@/lib/pdf/FichePDF'
-import { barcodeSVGToDataURL } from '@/lib/barcode'
 import QRCode from 'qrcode'
 import React from 'react'
 import path from 'path'
@@ -59,7 +58,6 @@ export async function GET(
     ? `data:image/png;base64,${fs.readFileSync(logoPath).toString('base64')}`
     : undefined
 
-  const barcodeSrc = barcodeSVGToDataURL(fiche.numero, 56)
   const qrCodeSrc = await QRCode.toDataURL(fiche.numero, {
     errorCorrectionLevel: 'M',
     margin: 1,
@@ -98,7 +96,6 @@ export async function GET(
         siret: fiche.garage.siret,
       },
       logoSrc,
-      barcodeSrc,
       qrCodeSrc,
     }) as any
   )
