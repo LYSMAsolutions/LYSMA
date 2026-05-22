@@ -47,6 +47,8 @@ export type GarageDetail = GarageListItem & {
   compagnons: any[]
   ficheTravaux: any[]
   taux: any[]
+  vehicules?: any[]
+  joursOuverts?: any[]
 }
 
 export async function getLivoGarages(): Promise<GarageListItem[]> {
@@ -91,11 +93,7 @@ export async function getLivoGarage(id: string): Promise<GarageDetail | null> {
 
 export async function updateLivoGarage(
   id: string,
-  data: {
-    abonnementActif?: boolean
-    actif?: boolean
-    trialEndsAt?: string
-  }
+  data: Record<string, unknown>
 ) {
   const res = await fetch(`${LIVO_API_URL}/api/internal/garages/${id}`, {
     method: 'PATCH',

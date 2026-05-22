@@ -73,6 +73,26 @@ model Message {
   @@map("messages")
 }
 
+model AuditLog {
+  id         String   @id @default(cuid())
+  outil      String
+  cibleType  String
+  cibleId    String?
+  action     String
+  statut     String   @default("SUCCESS")
+  acteurId   String?
+  acteurEmail String?
+  resume     String?
+  avant      Json?
+  apres      Json?
+  erreur     String?
+  createdAt  DateTime @default(now())
+
+  @@index([outil, cibleType, cibleId])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
+
 enum ClientStatut {
   TRIAL
   ACTIF
