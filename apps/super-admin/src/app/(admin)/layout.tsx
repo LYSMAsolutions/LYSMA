@@ -11,14 +11,15 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   const session = await auth()
   if (!session) redirect('/connexion')
 
-  const [nbClients, nbMessages] = await Promise.all([
+  const [nbClients, nbMessages, nbErrors] = await Promise.all([
     prisma.client.count({ where: { statut: 'ACTIF' } }),
     prisma.message.count({ where: { statut: 'NOUVEAU' } }),
+    prisma.errorReport.count({ where: { statut: 'NOUVEAU' } }),
   ])
 
   return (
     <Shell
-      sidebar={<Sidebar messagesNonLus={nbMessages} />}
+      sidebar={<Sidebar messagesNonLus={nbMessages} erreursOuvertes={nbErrors} />}
       header={<Header path="~/admin" />}
       statusBar={<StatusBar nbClients={nbClients} nbMessagesNonLus={nbMessages} />}
     >

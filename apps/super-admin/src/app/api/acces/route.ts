@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma'
 import { auth } from '@/lib/auth'
 import { z } from 'zod'
 import { randomInt } from 'crypto'
+import { writeAuditLog } from '@/lib/audit'
 
 const schema = z.object({
   clientId: z.string().min(1),
@@ -71,6 +72,17 @@ export async function POST(req: NextRequest) {
       actif: true,
       premiereConnexion: true,
     },
+  })
+
+  await writeAuditLog({
+    outil: client.outil,
+    cibleType: 'acces',
+    cibleId: access.id,
+    action: 'access_create',
+    acteurId: session.user.id,
+    acteurEmail: session.user.email,
+    resume: `Creation acces ${email} pour ${client.nom}`,
+    apres: { ...access, motDePasseTemp: '***' },
   })
 
   return NextResponse.json({

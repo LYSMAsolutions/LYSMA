@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { auth } from '@/lib/auth'
 import { z } from 'zod'
+import { writeAuditLog } from '@/lib/audit'
 
 const schema = z.object({
   notes: z.string().optional(),
@@ -49,6 +50,18 @@ export async function PATCH(
       id,
     },
     data,
+  })
+
+  await writeAuditLog({
+    outil: client.outil,
+    cibleType: 'client',
+    cibleId: client.id,
+    action: 'client_update',
+    acteurId: session.user.id,
+    acteurEmail: session.user.email,
+    resume: `Mise a jour client ${client.nom}`,
+    avant: existingClient,
+    apres: client,
   })
 
   return NextResponse.json({ success: true, client })

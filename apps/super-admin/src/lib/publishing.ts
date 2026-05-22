@@ -52,6 +52,10 @@ export async function publishShowcaseFile(
   return { github, vercel }
 }
 
+export async function triggerShowcaseDeploy(siteId: string) {
+  return triggerDeployHook(siteId)
+}
+
 async function commitFileToGitHub(input: CommitFileInput): Promise<PublicationResult['github']> {
   if (!isGitHubConfigured()) {
     return { configured: false, committed: false, path: input.path }

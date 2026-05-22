@@ -1,6 +1,7 @@
 generator client {
-  provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
+  provider      = "prisma-client-js"
+  output        = "../src/generated/prisma"
+  binaryTargets = ["native", "rhel-openssl-3.0.x"]
 }
 
 datasource db {
@@ -70,6 +71,48 @@ model Message {
   updatedAt DateTime      @updatedAt
 
   @@map("messages")
+}
+
+model AuditLog {
+  id          String   @id @default(cuid())
+  outil       String
+  cibleType   String
+  cibleId     String?
+  action      String
+  statut      String   @default("SUCCESS")
+  acteurId    String?
+  acteurEmail String?
+  resume      String?
+  avant       Json?
+  apres       Json?
+  erreur      String?
+  createdAt   DateTime @default(now())
+
+  @@index([outil, cibleType, cibleId])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
+
+model ErrorReport {
+  id         String    @id @default(cuid())
+  outil      String
+  niveau     String    @default("ERROR")
+  message    String
+  stack      String?
+  url        String?
+  userAgent  String?
+  contexte   Json?
+  statut     String    @default("NOUVEAU")
+  notes      String?
+  resolution String?
+  resolvedAt DateTime?
+  resolvedBy String?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  @@index([outil, statut])
+  @@index([createdAt])
+  @@map("error_reports")
 }
 
 enum ClientStatut {

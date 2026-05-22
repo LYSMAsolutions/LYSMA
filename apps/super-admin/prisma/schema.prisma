@@ -93,6 +93,28 @@ model AuditLog {
   @@map("audit_logs")
 }
 
+model ErrorReport {
+  id          String   @id @default(cuid())
+  outil       String
+  niveau      String   @default("ERROR")
+  message     String
+  stack       String?
+  url         String?
+  userAgent   String?
+  contexte    Json?
+  statut      String   @default("NOUVEAU")
+  notes       String?
+  resolution  String?
+  resolvedAt  DateTime?
+  resolvedBy  String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([outil, statut])
+  @@index([createdAt])
+  @@map("error_reports")
+}
+
 enum ClientStatut {
   TRIAL
   ACTIF

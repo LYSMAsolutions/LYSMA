@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { z } from 'zod'
+import { writeAuditLog } from '@/lib/audit'
 
 const messageSchema = z.object({
   nom: z.string().min(1).max(120),
@@ -33,6 +34,15 @@ export async function POST(req: NextRequest) {
       ...parsed.data,
       statut: 'NOUVEAU',
     },
+  })
+
+  await writeAuditLog({
+    outil: parsed.data.outil,
+    cibleType: 'message',
+    cibleId: message.id,
+    action: 'message_inbound',
+    resume: `${message.nom} - ${message.email}`,
+    apres: message,
   })
 
   return NextResponse.json({ success: true, message }, { status: 201 })

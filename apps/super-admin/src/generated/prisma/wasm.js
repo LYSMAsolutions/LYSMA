@@ -144,9 +144,48 @@ exports.Prisma.MessageScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.AuditLogScalarFieldEnum = {
+  id: 'id',
+  outil: 'outil',
+  cibleType: 'cibleType',
+  cibleId: 'cibleId',
+  action: 'action',
+  statut: 'statut',
+  acteurId: 'acteurId',
+  acteurEmail: 'acteurEmail',
+  resume: 'resume',
+  avant: 'avant',
+  apres: 'apres',
+  erreur: 'erreur',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.ErrorReportScalarFieldEnum = {
+  id: 'id',
+  outil: 'outil',
+  niveau: 'niveau',
+  message: 'message',
+  stack: 'stack',
+  url: 'url',
+  userAgent: 'userAgent',
+  contexte: 'contexte',
+  statut: 'statut',
+  notes: 'notes',
+  resolution: 'resolution',
+  resolvedAt: 'resolvedAt',
+  resolvedBy: 'resolvedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
+};
+
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
 };
 
 exports.Prisma.QueryMode = {
@@ -157,6 +196,12 @@ exports.Prisma.QueryMode = {
 exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
+};
+
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
 };
 exports.ClientStatut = exports.$Enums.ClientStatut = {
   TRIAL: 'TRIAL',
@@ -175,7 +220,9 @@ exports.Prisma.ModelName = {
   AdminUser: 'AdminUser',
   Client: 'Client',
   Acces: 'Acces',
-  Message: 'Message'
+  Message: 'Message',
+  AuditLog: 'AuditLog',
+  ErrorReport: 'ErrorReport'
 };
 /**
  * Create the Client
@@ -199,6 +246,10 @@ const config = {
         "fromEnvVar": null,
         "value": "windows",
         "native": true
+      },
+      {
+        "fromEnvVar": null,
+        "value": "rhel-openssl-3.0.x"
       }
     ],
     "previewFeatures": [],
@@ -216,7 +267,6 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
-  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
@@ -225,13 +275,13 @@ const config = {
       }
     }
   },
-  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider  = \"postgresql\"\n  url       = env(\"DATABASE_URL\")\n  directUrl = env(\"DIRECT_URL\")\n}\n\nmodel AdminUser {\n  id           String   @id @default(cuid())\n  email        String   @unique\n  passwordHash String\n  nom          String\n  createdAt    DateTime @default(now())\n  updatedAt    DateTime @updatedAt\n\n  @@map(\"admin_users\")\n}\n\nmodel Client {\n  id              String       @id @default(cuid())\n  nom             String\n  email           String       @unique\n  telephone       String?\n  societe         String?\n  outil           String       @default(\"livo-app\")\n  statut          ClientStatut @default(TRIAL)\n  abonnement      String? // starter / pro / entreprise\n  trialDebutAt    DateTime?\n  trialFinAt      DateTime?\n  abonnementActif Boolean      @default(false)\n  notes           String?\n  createdAt       DateTime     @default(now())\n  updatedAt       DateTime     @updatedAt\n  acces           Acces[]\n  messages        Message[]\n\n  @@map(\"clients\")\n}\n\nmodel Acces {\n  id                String   @id @default(cuid())\n  clientId          String\n  client            Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)\n  email             String\n  motDePasseTemp    String?\n  actif             Boolean  @default(true)\n  premiereConnexion Boolean  @default(false)\n  createdAt         DateTime @default(now())\n\n  @@map(\"acces\")\n}\n\nmodel Message {\n  id        String        @id @default(cuid())\n  clientId  String?\n  client    Client?       @relation(fields: [clientId], references: [id])\n  nom       String\n  email     String\n  societe   String?\n  telephone String?\n  outil     String        @default(\"livo-app\")\n  message   String\n  statut    MessageStatut @default(NOUVEAU)\n  reponse   String?\n  createdAt DateTime      @default(now())\n  updatedAt DateTime      @updatedAt\n\n  @@map(\"messages\")\n}\n\nenum ClientStatut {\n  TRIAL\n  ACTIF\n  SUSPENDU\n  RESILIE\n}\n\nenum MessageStatut {\n  NOUVEAU\n  LU\n  TRAITE\n}\n",
-  "inlineSchemaHash": "f70a02427ada3de964c5bbeed31d8d8c4e3257a54a5df96886b90f1b452b6c91",
+  "inlineSchema": "generator client {\n  provider      = \"prisma-client-js\"\n  output        = \"../src/generated/prisma\"\n  binaryTargets = [\"native\", \"rhel-openssl-3.0.x\"]\n}\n\ndatasource db {\n  provider  = \"postgresql\"\n  url       = env(\"DATABASE_URL\")\n  directUrl = env(\"DIRECT_URL\")\n}\n\nmodel AdminUser {\n  id           String   @id @default(cuid())\n  email        String   @unique\n  passwordHash String\n  nom          String\n  createdAt    DateTime @default(now())\n  updatedAt    DateTime @updatedAt\n\n  @@map(\"admin_users\")\n}\n\nmodel Client {\n  id              String       @id @default(cuid())\n  nom             String\n  email           String       @unique\n  telephone       String?\n  societe         String?\n  outil           String       @default(\"livo-app\")\n  statut          ClientStatut @default(TRIAL)\n  abonnement      String? // starter / pro / entreprise\n  trialDebutAt    DateTime?\n  trialFinAt      DateTime?\n  abonnementActif Boolean      @default(false)\n  notes           String?\n  createdAt       DateTime     @default(now())\n  updatedAt       DateTime     @updatedAt\n  acces           Acces[]\n  messages        Message[]\n\n  @@map(\"clients\")\n}\n\nmodel Acces {\n  id                String   @id @default(cuid())\n  clientId          String\n  client            Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)\n  email             String\n  motDePasseTemp    String?\n  actif             Boolean  @default(true)\n  premiereConnexion Boolean  @default(false)\n  createdAt         DateTime @default(now())\n\n  @@map(\"acces\")\n}\n\nmodel Message {\n  id        String        @id @default(cuid())\n  clientId  String?\n  client    Client?       @relation(fields: [clientId], references: [id])\n  nom       String\n  email     String\n  societe   String?\n  telephone String?\n  outil     String        @default(\"livo-app\")\n  message   String\n  statut    MessageStatut @default(NOUVEAU)\n  reponse   String?\n  createdAt DateTime      @default(now())\n  updatedAt DateTime      @updatedAt\n\n  @@map(\"messages\")\n}\n\nmodel AuditLog {\n  id          String   @id @default(cuid())\n  outil       String\n  cibleType   String\n  cibleId     String?\n  action      String\n  statut      String   @default(\"SUCCESS\")\n  acteurId    String?\n  acteurEmail String?\n  resume      String?\n  avant       Json?\n  apres       Json?\n  erreur      String?\n  createdAt   DateTime @default(now())\n\n  @@index([outil, cibleType, cibleId])\n  @@index([createdAt])\n  @@map(\"audit_logs\")\n}\n\nmodel ErrorReport {\n  id         String    @id @default(cuid())\n  outil      String\n  niveau     String    @default(\"ERROR\")\n  message    String\n  stack      String?\n  url        String?\n  userAgent  String?\n  contexte   Json?\n  statut     String    @default(\"NOUVEAU\")\n  notes      String?\n  resolution String?\n  resolvedAt DateTime?\n  resolvedBy String?\n  createdAt  DateTime  @default(now())\n  updatedAt  DateTime  @updatedAt\n\n  @@index([outil, statut])\n  @@index([createdAt])\n  @@map(\"error_reports\")\n}\n\nenum ClientStatut {\n  TRIAL\n  ACTIF\n  SUSPENDU\n  RESILIE\n}\n\nenum MessageStatut {\n  NOUVEAU\n  LU\n  TRAITE\n}\n",
+  "inlineSchemaHash": "0a410f9b724125a390bbb1e0a67d58f301dd638281400ffe1b553c2436f98dba",
   "copyEngine": true
 }
 config.dirname = '/'
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"AdminUser\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"passwordHash\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"nom\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":\"admin_users\"},\"Client\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"nom\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"telephone\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"societe\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"outil\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"statut\",\"kind\":\"enum\",\"type\":\"ClientStatut\"},{\"name\":\"abonnement\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"trialDebutAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"trialFinAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"abonnementActif\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"notes\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"acces\",\"kind\":\"object\",\"type\":\"Acces\",\"relationName\":\"AccesToClient\"},{\"name\":\"messages\",\"kind\":\"object\",\"type\":\"Message\",\"relationName\":\"ClientToMessage\"}],\"dbName\":\"clients\"},\"Acces\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"clientId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"client\",\"kind\":\"object\",\"type\":\"Client\",\"relationName\":\"AccesToClient\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"motDePasseTemp\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"actif\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"premiereConnexion\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":\"acces\"},\"Message\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"clientId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"client\",\"kind\":\"object\",\"type\":\"Client\",\"relationName\":\"ClientToMessage\"},{\"name\":\"nom\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"societe\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"telephone\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"outil\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"message\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"statut\",\"kind\":\"enum\",\"type\":\"MessageStatut\"},{\"name\":\"reponse\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":\"messages\"}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"AdminUser\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"passwordHash\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"nom\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":\"admin_users\"},\"Client\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"nom\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"telephone\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"societe\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"outil\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"statut\",\"kind\":\"enum\",\"type\":\"ClientStatut\"},{\"name\":\"abonnement\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"trialDebutAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"trialFinAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"abonnementActif\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"notes\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"acces\",\"kind\":\"object\",\"type\":\"Acces\",\"relationName\":\"AccesToClient\"},{\"name\":\"messages\",\"kind\":\"object\",\"type\":\"Message\",\"relationName\":\"ClientToMessage\"}],\"dbName\":\"clients\"},\"Acces\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"clientId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"client\",\"kind\":\"object\",\"type\":\"Client\",\"relationName\":\"AccesToClient\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"motDePasseTemp\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"actif\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"premiereConnexion\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":\"acces\"},\"Message\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"clientId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"client\",\"kind\":\"object\",\"type\":\"Client\",\"relationName\":\"ClientToMessage\"},{\"name\":\"nom\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"societe\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"telephone\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"outil\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"message\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"statut\",\"kind\":\"enum\",\"type\":\"MessageStatut\"},{\"name\":\"reponse\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":\"messages\"},\"AuditLog\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"outil\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"cibleType\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"cibleId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"action\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"statut\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"acteurId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"acteurEmail\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"resume\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"avant\",\"kind\":\"scalar\",\"type\":\"Json\"},{\"name\":\"apres\",\"kind\":\"scalar\",\"type\":\"Json\"},{\"name\":\"erreur\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":\"audit_logs\"},\"ErrorReport\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"outil\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"niveau\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"message\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"stack\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"url\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userAgent\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"contexte\",\"kind\":\"scalar\",\"type\":\"Json\"},{\"name\":\"statut\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"notes\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"resolution\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"resolvedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"resolvedBy\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":\"error_reports\"}},\"enums\":{},\"types\":{}}")
 defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
 config.engineWasm = {
   getRuntime: async () => require('./query_engine_bg.js'),

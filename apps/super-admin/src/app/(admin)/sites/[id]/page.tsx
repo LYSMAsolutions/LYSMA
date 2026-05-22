@@ -2,6 +2,8 @@ import Link from 'next/link'
 import { notFound, redirect } from 'next/navigation'
 import { auth } from '@/lib/auth'
 import { getShowcaseSite, readShowcaseText } from '@/lib/site-vitrine'
+import { getPublishingStatus } from '@/lib/publishing'
+import { SiteDeployButton } from './SiteDeployButton'
 import styles from './page.module.css'
 
 type Props = {
@@ -15,6 +17,7 @@ export default async function SiteDetailPage({ params }: Props) {
   const { id } = await params
   const site = await getShowcaseSite(id)
   if (!site) notFound()
+  const publishing = getPublishingStatus(id)
 
   const [readme, packageJson, indexHtml] = await Promise.all([
     readShowcaseText(id, 'README.md'),
@@ -37,6 +40,7 @@ export default async function SiteDetailPage({ params }: Props) {
         </div>
         <div className={styles.heroActions}>
           <a href={`/sites/${site.id}/studio`} className={styles.studioBtn}>ouvrir_studio</a>
+          <SiteDeployButton siteId={site.id} />
           <span className={styles.status}>{site.kind}</span>
         </div>
       </section>
@@ -46,6 +50,8 @@ export default async function SiteDetailPage({ params }: Props) {
         <InfoCard label="package" value={site.packageName ?? '-'} />
         <InfoCard label="scripts" value={site.scripts.length ? site.scripts.join(', ') : '-'} />
         <InfoCard label="commande" value={site.entry} wide />
+        <InfoCard label="github" value={publishing.githubReady ? `${publishing.repository}/${publishing.branch}` : 'non configure'} wide />
+        <InfoCard label="vercel" value={publishing.vercelReady ? 'deploy hook pret' : 'hook manquant'} />
       </section>
 
       <section className={styles.panel}>

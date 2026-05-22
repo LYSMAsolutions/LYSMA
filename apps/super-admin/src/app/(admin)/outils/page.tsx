@@ -3,6 +3,8 @@ import { redirect } from 'next/navigation'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { getLysmaTools } from '@/lib/tools'
+import { getShowcaseOverviewSites } from '@/lib/site-vitrine-manifest'
+import { getPublishingStatus } from '@/lib/publishing'
 import styles from './page.module.css'
 
 export const dynamic = 'force-dynamic'
@@ -11,7 +13,7 @@ export default async function OutilsPage() {
   const session = await auth()
   if (!session) redirect('/connexion')
 
-  const [tools, clients, accesses] = await Promise.all([
+  const [tools, clients, accesses, showcaseSites] = await Promise.all([
     getLysmaTools(),
     prisma.client.groupBy({
       by: ['outil'],
@@ -22,9 +24,39 @@ export default async function OutilsPage() {
       orderBy: { createdAt: 'desc' },
       take: 20,
     }),
+    getShowcaseOverviewSites(),
   ])
 
   const clientsByTool = new Map(clients.map((item) => [item.outil, item._count.outil]))
+  const publishing = getPublishingStatus()
+  const sitesWithDeployHook = showcaseSites.filter((site) => getPublishingStatus(site.id).vercelReady).length
+  const health = [
+    {
+      label: 'github_publication',
+      status: publishing.githubReady ? 'ready' : 'missing',
+      detail: publishing.githubReady ? `${publishing.repository} / ${publishing.branch}` : 'GITHUB_TOKEN + repository manquants',
+    },
+    {
+      label: 'vercel_sites',
+      status: sitesWithDeployHook === showcaseSites.length && showcaseSites.length > 0 ? 'ready' : sitesWithDeployHook > 0 ? 'partial' : 'missing',
+      detail: `${sitesWithDeployHook}/${showcaseSites.length} deploy hook configure`,
+    },
+    {
+      label: 'livo_bridge',
+      status: process.env.LIVO_API_URL && process.env.INTERNAL_API_KEY ? 'ready' : 'missing',
+      detail: process.env.LIVO_API_URL ? process.env.LIVO_API_URL : 'LIVO_API_URL absent',
+    },
+    {
+      label: 'pma_bridge',
+      status: process.env.PMA_PORTAL_URL && process.env.INTERNAL_API_KEY ? 'ready' : 'missing',
+      detail: process.env.PMA_PORTAL_URL ? process.env.PMA_PORTAL_URL : 'PMA_PORTAL_URL absent',
+    },
+    {
+      label: 'super_admin_db',
+      status: process.env.DATABASE_URL ? 'ready' : 'missing',
+      detail: process.env.DATABASE_URL ? 'DATABASE_URL configure' : 'DATABASE_URL absent',
+    },
+  ]
 
   return (
     <main className={styles.page}>
@@ -80,6 +112,23 @@ export default async function OutilsPage() {
             </div>
           </article>
         ))}
+      </section>
+
+      <section className={styles.panel}>
+        <div className={styles.panelHeader}>
+          <span>// sante_publication</span>
+          <span>github / vercel / api internes</span>
+        </div>
+
+        <div className={styles.healthGrid}>
+          {health.map((item) => (
+            <article key={item.label} className={styles.healthCard} data-status={item.status}>
+              <span>{item.label}</span>
+              <strong>{item.status}</strong>
+              <small>{item.detail}</small>
+            </article>
+          ))}
+        </div>
       </section>
 
       <section className={styles.panel}>

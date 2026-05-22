@@ -172,9 +172,48 @@ exports.Prisma.MessageScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.AuditLogScalarFieldEnum = {
+  id: 'id',
+  outil: 'outil',
+  cibleType: 'cibleType',
+  cibleId: 'cibleId',
+  action: 'action',
+  statut: 'statut',
+  acteurId: 'acteurId',
+  acteurEmail: 'acteurEmail',
+  resume: 'resume',
+  avant: 'avant',
+  apres: 'apres',
+  erreur: 'erreur',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.ErrorReportScalarFieldEnum = {
+  id: 'id',
+  outil: 'outil',
+  niveau: 'niveau',
+  message: 'message',
+  stack: 'stack',
+  url: 'url',
+  userAgent: 'userAgent',
+  contexte: 'contexte',
+  statut: 'statut',
+  notes: 'notes',
+  resolution: 'resolution',
+  resolvedAt: 'resolvedAt',
+  resolvedBy: 'resolvedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
+};
+
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
 };
 
 exports.Prisma.QueryMode = {
@@ -185,6 +224,12 @@ exports.Prisma.QueryMode = {
 exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
+};
+
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
 };
 exports.ClientStatut = exports.$Enums.ClientStatut = {
   TRIAL: 'TRIAL',
@@ -203,7 +248,9 @@ exports.Prisma.ModelName = {
   AdminUser: 'AdminUser',
   Client: 'Client',
   Acces: 'Acces',
-  Message: 'Message'
+  Message: 'Message',
+  AuditLog: 'AuditLog',
+  ErrorReport: 'ErrorReport'
 };
 
 /**

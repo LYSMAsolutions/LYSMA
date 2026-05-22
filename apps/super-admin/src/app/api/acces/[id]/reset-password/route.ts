@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { randomInt } from 'crypto'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
+import { writeAuditLog } from '@/lib/audit'
 
 function generatePassword() {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789!@#$'
@@ -43,6 +44,15 @@ export async function POST(
   const { id } = await params
   const password = generatePassword()
 
+  const before = await prisma.acces.findUnique({
+    where: { id },
+    include: { client: true },
+  })
+
+  if (!before) {
+    return NextResponse.json({ error: 'Acces introuvable' }, { status: 404 })
+  }
+
   const access = await prisma.acces.update({
     where: { id },
     data: {
@@ -50,6 +60,18 @@ export async function POST(
       premiereConnexion: true,
       actif: true,
     },
+  })
+
+  await writeAuditLog({
+    outil: before.client.outil,
+    cibleType: 'acces',
+    cibleId: access.id,
+    action: 'access_reset_password',
+    acteurId: session.user.id,
+    acteurEmail: session.user.email,
+    resume: `Nouveau mot de passe temporaire pour ${access.email}`,
+    avant: { ...before, motDePasseTemp: '***' },
+    apres: { ...access, motDePasseTemp: '***' },
   })
 
   return NextResponse.json({

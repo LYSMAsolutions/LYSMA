@@ -9,6 +9,8 @@ const NAV = [
   { href: '/dashboard', label: 'dashboard', icon: '>' },
   { href: '/clients', label: 'clients', icon: 'C' },
   { href: '/messagerie', label: 'messagerie', icon: '@' },
+  { href: '/erreurs', label: 'erreurs', icon: '!' },
+  { href: '/journal', label: 'journal', icon: '~' },
   { href: '/acces', label: 'acces', icon: '#' },
   { href: '/outils', label: 'outils', icon: '*' },
   { href: '/pma', label: 'portail-pma', icon: 'P' },
@@ -18,9 +20,9 @@ const NAV = [
   { href: '/root', label: 'root', icon: '$' },
 ]
 
-type Props = { messagesNonLus?: number }
+type Props = { messagesNonLus?: number; erreursOuvertes?: number }
 
-export function Sidebar({ messagesNonLus = 0 }: Props) {
+export function Sidebar({ messagesNonLus = 0, erreursOuvertes = 0 }: Props) {
   const pathname = usePathname()
 
   return (
@@ -45,6 +47,9 @@ export function Sidebar({ messagesNonLus = 0 }: Props) {
                 <span className={styles.navLabel}>{label}</span>
                 {href === '/messagerie' && messagesNonLus > 0 && (
                   <span className={styles.badge}>{messagesNonLus}</span>
+                )}
+                {href === '/erreurs' && erreursOuvertes > 0 && (
+                  <span className={styles.badge}>{erreursOuvertes}</span>
                 )}
                 {isActive && <span className={styles.activeLine} />}
               </Link>
