@@ -4,6 +4,7 @@ import { auth } from '@/lib/auth'
 import { renderToStream } from '@react-pdf/renderer'
 import { FichePDF } from '@/lib/pdf/FichePDF'
 import { barcodeSVGToDataURL } from '@/lib/barcode'
+import QRCode from 'qrcode'
 import React from 'react'
 import path from 'path'
 import fs from 'fs'
@@ -59,6 +60,15 @@ export async function GET(
     : undefined
 
   const barcodeSrc = barcodeSVGToDataURL(fiche.numero, 56)
+  const qrCodeSrc = await QRCode.toDataURL(fiche.numero, {
+    errorCorrectionLevel: 'M',
+    margin: 1,
+    scale: 8,
+    color: {
+      dark: '#0b1f3a',
+      light: '#ffffff',
+    },
+  })
 
   const stream = await renderToStream(
     React.createElement(FichePDF as any, {
@@ -89,6 +99,7 @@ export async function GET(
       },
       logoSrc,
       barcodeSrc,
+      qrCodeSrc,
     }) as any
   )
 

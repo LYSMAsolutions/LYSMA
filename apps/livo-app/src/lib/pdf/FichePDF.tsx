@@ -40,6 +40,7 @@ type Props = {
   }
   logoSrc: string
   barcodeSrc?: string
+  qrCodeSrc?: string
 }
 
 function formatH(h: number) {
@@ -85,7 +86,7 @@ const s = StyleSheet.create({
     borderBottomColor: COLORS.blueElectric,
   },
   headerLeft: { flexDirection: 'column', flex: 1 },
-  headerCenter: { flexDirection: 'column', alignItems: 'center', flex: 1, paddingHorizontal: 8 },
+  headerCenter: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', flex: 1.15, paddingHorizontal: 8, gap: 8 },
   garageNom: { fontSize: 18, fontFamily: 'Helvetica-Bold', color: COLORS.blueDeep, marginBottom: 3 },
   garageInfo: { fontSize: 8, color: '#444444', marginBottom: 1 },
 
@@ -233,7 +234,7 @@ const s = StyleSheet.create({
 // Lignes vides pour le tableau manuel
 const EMPTY_ROWS = 8
 
-export function FichePDF({ fiche, garage, logoSrc, barcodeSrc }: Props) {
+export function FichePDF({ fiche, garage, logoSrc, barcodeSrc, qrCodeSrc }: Props) {
   const travailsLignes = fiche.travaux.split('\n').filter(Boolean)
   const tReel = fiche.tempsReel ?? 0
   const tFacture = fiche.tempsFacture ?? 0
@@ -265,7 +266,13 @@ export function FichePDF({ fiche, garage, logoSrc, barcodeSrc }: Props) {
           </View>
           <View style={s.headerCenter}>
             {barcodeSrc && (
-              <Image src={barcodeSrc} style={{ width: 220, height: 68 }} />
+              <Image src={barcodeSrc} style={{ width: 170, height: 54 }} />
+            )}
+            {qrCodeSrc && (
+              <View style={{ alignItems: 'center' }}>
+                <Image src={qrCodeSrc} style={{ width: 58, height: 58 }} />
+                <Text style={{ fontSize: 6, color: COLORS.textMuted, marginTop: 2 }}>SCAN ATELIER</Text>
+              </View>
             )}
           </View>
           <View style={s.headerRight}>

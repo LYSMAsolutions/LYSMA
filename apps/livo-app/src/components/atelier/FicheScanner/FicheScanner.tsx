@@ -164,6 +164,7 @@ export function FicheScanner({ compagnonId, onPointer, onClose }: Props) {
         delayBetweenScanAttempts: 160,
       })
       reader.possibleFormats = [
+        BarcodeFormat.QR_CODE,
         BarcodeFormat.CODE_128,
         BarcodeFormat.CODE_39,
         BarcodeFormat.CODE_93,
