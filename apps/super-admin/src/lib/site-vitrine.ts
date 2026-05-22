@@ -141,6 +141,15 @@ export async function writeShowcaseContent(id: string, content: unknown) {
   return content
 }
 
+export function getShowcaseRepoPath(id: string, relativeFilePath = '') {
+  const cleanPath = relativeFilePath.replace(/^[/\\]+/, '')
+  return path.posix.join('apps/site-vitrine', id, cleanPath).replace(/\\/g, '/')
+}
+
+export function shouldWriteLocalShowcaseFiles() {
+  return process.env.VERCEL !== '1'
+}
+
 export function resolveShowcaseFile(id: string, relativeFilePath = 'index.html') {
   if (!/^[a-zA-Z0-9-_]+$/.test(id)) return null
 

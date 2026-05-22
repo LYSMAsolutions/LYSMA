@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
+    "build": "node scripts/build-static-site.mjs",
     "dev": "node scripts/static-server.mjs --port 3022",
     "start": "node scripts/static-server.mjs --port 3022",
     "check": "node scripts/check-static-site.mjs"

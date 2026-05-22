@@ -55,15 +55,37 @@ type Props = {
   initialContent: SiteContent
   previewPages: { label: string; value: string }[]
   editable: boolean
+  publishing: {
+    githubReady: boolean
+    repository: string
+    branch: string
+    vercelReady: boolean
+  }
 }
 
-export function SiteStudioClient({ siteId, siteName, initialContent, previewPages, editable }: Props) {
+type PublicationResponse = {
+  github?: {
+    configured: boolean
+    committed: boolean
+    path?: string
+    commitUrl?: string
+    error?: string
+  }
+  vercel?: {
+    configured: boolean
+    triggered: boolean
+    error?: string
+  }
+}
+
+export function SiteStudioClient({ siteId, siteName, initialContent, previewPages, editable, publishing }: Props) {
   const iframeRef = useRef<HTMLIFrameElement>(null)
   const [content, setContent] = useState(initialContent)
   const [previewPage, setPreviewPage] = useState(previewPages[0]?.value ?? 'index.html')
   const [previewVersion, setPreviewVersion] = useState(0)
   const [saving, setSaving] = useState(false)
   const [savedAt, setSavedAt] = useState<string | null>(null)
+  const [publication, setPublication] = useState<PublicationResponse | null>(null)
 
   const previewUrl = useMemo(() => `/preview/sites/${siteId}/${previewPage}?studio=${previewVersion}`, [siteId, previewPage, previewVersion])
 
@@ -105,6 +127,8 @@ export function SiteStudioClient({ siteId, siteName, initialContent, previewPage
         return
       }
 
+      const data = await res.json()
+      setPublication(data.publication ?? null)
       setSavedAt(new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }))
       setPreviewVersion((version) => version + 1)
     } finally {
@@ -129,6 +153,7 @@ export function SiteStudioClient({ siteId, siteName, initialContent, previewPage
       return
     }
 
+    setPublication(data.publication ?? null)
     patch(path, data.path)
   }
 
@@ -141,11 +166,26 @@ export function SiteStudioClient({ siteId, siteName, initialContent, previewPage
             <strong>{siteName}</strong>
           </div>
           <button className={styles.saveBtn} onClick={save} disabled={!editable || saving}>
-            {!editable ? 'lecture_seule' : saving ? 'enregistrement...' : 'enregistrer'}
+            {!editable ? 'lecture_seule' : saving ? 'publication...' : 'enregistrer + publier'}
           </button>
         </div>
 
         <div className={styles.form}>
+          <div className={styles.publishBox}>
+            <div>
+              <span>GitHub</span>
+              <strong data-state={publishing.githubReady ? 'ready' : 'missing'}>
+                {publishing.githubReady ? `${publishing.repository} / ${publishing.branch}` : 'non configure'}
+              </strong>
+            </div>
+            <div>
+              <span>Vercel</span>
+              <strong data-state={publishing.vercelReady ? 'ready' : 'missing'}>
+                {publishing.vercelReady ? 'deploy hook pret' : 'deploy hook absent'}
+              </strong>
+            </div>
+          </div>
+
           <Group title="Apercu">
             <label className={styles.field}>
               <span>Page</span>
@@ -232,7 +272,21 @@ export function SiteStudioClient({ siteId, siteName, initialContent, previewPage
           )}
         </div>
 
-        {savedAt && <div className={styles.saved}>enregistre a {savedAt}</div>}
+        {savedAt && (
+          <div className={styles.saved}>
+            <span>enregistre a {savedAt}</span>
+            {publication?.github?.configured && (
+              <span>
+                GitHub : {publication.github.committed ? 'commit cree' : publication.github.error ?? 'non publie'}
+              </span>
+            )}
+            {publication?.vercel?.configured && (
+              <span>
+                Vercel : {publication.vercel.triggered ? 'deploiement lance' : publication.vercel.error ?? 'non lance'}
+              </span>
+            )}
+          </div>
+        )}
       </section>
 
       <section className={styles.preview}>

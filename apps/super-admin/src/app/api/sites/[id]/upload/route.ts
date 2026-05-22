@@ -2,7 +2,8 @@ import { mkdir, writeFile } from 'fs/promises'
 import path from 'path'
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
-import { getShowcaseSite } from '@/lib/site-vitrine'
+import { publishShowcaseFile } from '@/lib/publishing'
+import { getShowcaseRepoPath, getShowcaseSite, shouldWriteLocalShowcaseFiles } from '@/lib/site-vitrine'
 
 const ALLOWED_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp', 'image/svg+xml', 'image/x-icon'])
 
@@ -55,11 +56,32 @@ export async function POST(
     return NextResponse.json({ error: 'Chemin invalide' }, { status: 400 })
   }
 
-  await mkdir(uploadDir, { recursive: true })
-  await writeFile(absolutePath, Buffer.from(await file.arrayBuffer()))
+  const buffer = Buffer.from(await file.arrayBuffer())
+  const writeLocal = shouldWriteLocalShowcaseFiles()
+
+  if (writeLocal) {
+    await mkdir(uploadDir, { recursive: true })
+    await writeFile(absolutePath, buffer)
+  }
+
+  const relativePath = `assets/uploads/${fileName}`
+  const publication = await publishShowcaseFile(id, {
+    path: getShowcaseRepoPath(id, relativePath),
+    content: buffer.toString('base64'),
+    encoding: 'base64',
+    message: `chore(site-vitrine): upload ${fileName}`,
+  })
+
+  if (!writeLocal && !publication.github.committed) {
+    return NextResponse.json({
+      error: publication.github.error ?? 'Publication GitHub non configuree. Upload impossible sur Vercel.',
+      publication,
+    }, { status: 500 })
+  }
 
   return NextResponse.json({
     success: true,
-    path: `assets/uploads/${fileName}`,
+    path: relativePath,
+    publication,
   })
 }

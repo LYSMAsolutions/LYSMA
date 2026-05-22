@@ -1,5 +1,6 @@
 import { notFound, redirect } from 'next/navigation'
 import { auth } from '@/lib/auth'
+import { getPublishingStatus } from '@/lib/publishing'
 import { getShowcasePreviewPages, getShowcaseSite, hasShowcaseContent, readShowcaseContent } from '@/lib/site-vitrine'
 import { SiteStudioClient } from './SiteStudioClient'
 import styles from './page.module.css'
@@ -19,6 +20,7 @@ export default async function SiteStudioPage({ params }: { params: Promise<{ id:
 
   const previewPages = await getShowcasePreviewPages(id)
   const editable = await hasShowcaseContent(id)
+  const publishing = getPublishingStatus(site.id)
 
   return (
     <main className={styles.page}>
@@ -33,6 +35,7 @@ export default async function SiteStudioPage({ params }: { params: Promise<{ id:
         initialContent={content}
         previewPages={previewPages}
         editable={editable}
+        publishing={publishing}
       />
     </main>
   )
