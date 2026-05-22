@@ -5,6 +5,12 @@ import { MagnifyingGlass, Barcode, X, Check, Play } from '@phosphor-icons/react'
 import { Badge } from '@/components/ui'
 import styles from './FicheScanner.module.css'
 
+type NativeBarcodeDetector = {
+  detect: (source: HTMLVideoElement) => Promise<Array<{ rawValue?: string }>>
+}
+
+type BarcodeDetectorConstructor = new (options?: { formats?: string[] }) => NativeBarcodeDetector
+
 type FicheTrouvee = {
   id: string
   numero: string
@@ -41,6 +47,7 @@ export function FicheScanner({ compagnonId, onPointer, onClose }: Props) {
   const streamRef = useRef<MediaStream | null>(null)
   const scannerControlsRef = useRef<{ stop: () => void } | null>(null)
   const lastScanRef = useRef('')
+  const nativeScanActiveRef = useRef(false)
 
   const searchFiche = useCallback(async (q: string) => {
     if (!q || q.length < 2) return
@@ -61,6 +68,7 @@ export function FicheScanner({ compagnonId, onPointer, onClose }: Props) {
   }, [])
 
   const stopScan = useCallback(() => {
+    nativeScanActiveRef.current = false
     scannerControlsRef.current?.stop()
     scannerControlsRef.current = null
 
@@ -75,6 +83,17 @@ export function FicheScanner({ compagnonId, onPointer, onClose }: Props) {
 
     setScanActive(false)
   }, [])
+
+  const handleScanResult = useCallback((rawText: string) => {
+    const text = rawText.trim().toUpperCase()
+    if (!text || text === lastScanRef.current) return
+
+    lastScanRef.current = text
+    stopScan()
+    setMode('search')
+    setQuery(text)
+    searchFiche(text)
+  }, [searchFiche, stopScan])
 
   const startScan = useCallback(async () => {
     setScanError('')
@@ -97,6 +116,48 @@ export function FicheScanner({ compagnonId, onPointer, onClose }: Props) {
     try {
       stopScan()
       setScanActive(true)
+
+      const nativeDetectorClass = 'BarcodeDetector' in window
+        ? (window as Window & { BarcodeDetector?: BarcodeDetectorConstructor }).BarcodeDetector
+        : undefined
+
+      if (nativeDetectorClass) {
+        const detector = new nativeDetectorClass({
+          formats: ['code_128', 'code_39', 'code_93', 'qr_code'],
+        })
+        nativeScanActiveRef.current = true
+
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: {
+            facingMode: { ideal: 'environment' },
+            width: { ideal: 1920 },
+            height: { ideal: 1080 },
+          },
+          audio: false,
+        })
+
+        videoRef.current.srcObject = stream
+        streamRef.current = stream
+        await videoRef.current.play().catch(() => undefined)
+
+        const scanNativeFrame = async () => {
+          if (!nativeScanActiveRef.current || !videoRef.current) return
+          try {
+            const results = await detector.detect(videoRef.current)
+            const value = results.find((item) => item.rawValue)?.rawValue
+            if (value) {
+              handleScanResult(value)
+              return
+            }
+          } catch {
+            // Some browsers expose BarcodeDetector but fail on video frames.
+          }
+          window.setTimeout(scanNativeFrame, 180)
+        }
+
+        scanNativeFrame()
+        return
+      }
 
       const { BarcodeFormat, BrowserMultiFormatReader } = await import('@zxing/browser')
       const reader = new BrowserMultiFormatReader(undefined, {
@@ -121,13 +182,7 @@ export function FicheScanner({ compagnonId, onPointer, onClose }: Props) {
         (result) => {
           if (!result) return
 
-          const text = result.getText().trim().toUpperCase()
-          if (!text || text === lastScanRef.current) return
-          lastScanRef.current = text
-          stopScan()
-          setMode('search')
-          setQuery(text)
-          searchFiche(text)
+          handleScanResult(result.getText())
         },
       )
 
@@ -146,7 +201,7 @@ export function FicheScanner({ compagnonId, onPointer, onClose }: Props) {
         setScanError("Camera non disponible. Verifiez l'autorisation et le HTTPS.")
       }
     }
-  }, [searchFiche, stopScan])
+  }, [handleScanResult, stopScan])
 
   useEffect(() => () => stopScan(), [stopScan])
 
