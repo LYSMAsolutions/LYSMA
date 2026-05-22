@@ -89,7 +89,14 @@ export async function DELETE(
     if (bonCount > 0)
       return NextResponse.json({ success: false, message: `Impossible : ${bonCount} bon(s) actif(s) sur ce magasin.` }, { status: 400 });
 
-    await prisma.stores.delete({ where: { id } });
+    await prisma.stores.update({
+      where: { id },
+      data: {
+        is_active: false,
+        deleted_at: new Date(),
+        deleted_by: session.user.id,
+      },
+    });
     return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json({ success: false, message: "Erreur serveur." }, { status: 500 });

@@ -77,3 +77,47 @@ export async function fetchPmaCustomers() {
     }
   }
 }
+
+function internalHeaders(userId?: string) {
+  return {
+    'Content-Type': 'application/json',
+    'x-internal-api-key': process.env.INTERNAL_API_KEY ?? '',
+    ...(userId ? { 'x-super-admin-user-id': userId } : {}),
+  }
+}
+
+export async function fetchPmaTrash() {
+  try {
+    const res = await fetch(`${getPmaBaseUrl()}/api/internal/trash`, {
+      headers: internalHeaders(),
+      cache: 'no-store',
+    })
+
+    if (!res.ok) {
+      return { success: false as const, items: [] as unknown[], error: `PMA ${res.status}` }
+    }
+
+    const data = await res.json()
+    return {
+      success: true as const,
+      items: data.items || [],
+      error: null,
+    }
+  } catch (error) {
+    return {
+      success: false as const,
+      items: [] as unknown[],
+      error: error instanceof Error ? error.message : 'pma_unreachable',
+    }
+  }
+}
+
+export async function restorePmaTrashItem(type: string, id: string, userId?: string) {
+  const res = await fetch(`${getPmaBaseUrl()}/api/internal/trash/${type}/${id}/restore`, {
+    method: 'POST',
+    headers: internalHeaders(userId),
+  })
+
+  if (!res.ok) throw new Error(`Erreur restauration PMA ${res.status}`)
+  return res.json()
+}

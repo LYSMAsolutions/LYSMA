@@ -107,3 +107,32 @@ export async function updateLivoGarage(
 
   return res.json()
 }
+
+export async function getLivoTrash() {
+  try {
+    const res = await fetch(`${LIVO_API_URL}/api/internal/trash`, {
+      headers: headers(),
+      next: { revalidate: 0 },
+    })
+
+    if (!res.ok) throw new Error(`HTTP ${res.status}`)
+    const data = await res.json()
+    return data.items ?? []
+  } catch (err) {
+    console.error('LIVO trash API error:', err)
+    return []
+  }
+}
+
+export async function restoreLivoTrashItem(type: string, id: string, userId?: string) {
+  const res = await fetch(`${LIVO_API_URL}/api/internal/trash/${type}/${id}/restore`, {
+    method: 'POST',
+    headers: {
+      ...headers(),
+      ...(userId ? { 'x-super-admin-user-id': userId } : {}),
+    },
+  })
+
+  if (!res.ok) throw new Error(`Erreur restauration LIVO ${res.status}`)
+  return res.json()
+}

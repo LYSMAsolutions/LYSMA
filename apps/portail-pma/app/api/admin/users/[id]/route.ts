@@ -232,7 +232,14 @@ export async function DELETE(
       }
     }
 
-    await prisma.users.delete({ where: { id } });
+    await prisma.users.update({
+      where: { id },
+      data: {
+        is_active: false,
+        deleted_at: new Date(),
+        deleted_by: session.user.id,
+      },
+    });
     return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json({ success: false, message: "Erreur serveur.", error: error instanceof Error ? error.message : "unknown" }, { status: 500 });

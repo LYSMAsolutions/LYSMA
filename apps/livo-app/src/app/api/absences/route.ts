@@ -120,6 +120,7 @@ export async function PATCH(req: NextRequest) {
   const absence = await prisma.absence.findFirst({
     where: {
       id,
+      deletedAt: null,
       compagnon: {
         garage: {
           ownerId: session.user.id,
@@ -163,6 +164,7 @@ export async function DELETE(req: NextRequest) {
   const absence = await prisma.absence.findFirst({
     where: {
       id,
+      deletedAt: null,
       compagnon: {
         garage: {
           ownerId: session.user.id,
@@ -175,9 +177,13 @@ export async function DELETE(req: NextRequest) {
     return NextResponse.json({ error: 'Absence introuvable ou non autorisée' }, { status: 404 })
   }
 
-  await prisma.absence.delete({
+  await prisma.absence.update({
     where: {
       id: absence.id,
+    },
+    data: {
+      deletedAt: new Date(),
+      deletedBy: session.user.id,
     },
   })
 

@@ -46,7 +46,16 @@ type SiteContent = {
     email: string
     hours: string
   }
-  seo: { title: string; description: string }
+  seo: {
+    title: string
+    description: string
+    canonical: string
+    keywords: string
+    robots: string
+    ogTitle: string
+    ogDescription: string
+    ogImage: string
+  }
 }
 
 type Props = {
@@ -267,6 +276,13 @@ export function SiteStudioClient({ siteId, siteName, initialContent, previewPage
           <Group title="SEO">
             <Input label="Title" value={content.seo.title} onChange={(value) => patch('seo.title', value)} />
             <Textarea label="Description" value={content.seo.description} onChange={(value) => patch('seo.description', value)} />
+            <Input label="URL canonique" value={content.seo.canonical ?? ''} onChange={(value) => patch('seo.canonical', value)} />
+            <Input label="Mots cles" value={content.seo.keywords ?? ''} onChange={(value) => patch('seo.keywords', value)} />
+            <Input label="Robots" value={content.seo.robots ?? ''} onChange={(value) => patch('seo.robots', value)} />
+            <Input label="Open Graph title" value={content.seo.ogTitle ?? ''} onChange={(value) => patch('seo.ogTitle', value)} />
+            <Textarea label="Open Graph description" value={content.seo.ogDescription ?? ''} onChange={(value) => patch('seo.ogDescription', value)} />
+            <Input label="Image reseaux" value={content.seo.ogImage ?? ''} onChange={(value) => patch('seo.ogImage', value)} />
+            <Upload label="Importer image reseaux" onChange={(file) => uploadImage('seo.ogImage', file)} />
           </Group>
             </>
           )}

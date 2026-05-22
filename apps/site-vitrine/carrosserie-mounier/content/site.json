@@ -76,6 +76,12 @@
   },
   "seo": {
     "title": "Carrosserie Mounier",
-    "description": "Carrosserie Mounier : atelier nouvelle génération, cabine éco-énergétique, laboratoire peinture Novaverta, équipement premium et expertise toutes marques."
+    "description": "Carrosserie Mounier : atelier nouvelle génération, cabine éco-énergétique, laboratoire peinture Novaverta, équipement premium et expertise toutes marques.",
+    "canonical": "",
+    "keywords": "carrosserie, peinture automobile, carrosserie Mounier, atelier carrosserie, Trelissac",
+    "robots": "index, follow",
+    "ogTitle": "Carrosserie Mounier",
+    "ogDescription": "Atelier carrosserie nouvelle generation, equipements premium et finition haut de gamme.",
+    "ogImage": "assets/images/hero-atelier.jpg"
   }
 }

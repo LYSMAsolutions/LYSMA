@@ -92,8 +92,15 @@ export async function DELETE(
         where: { taken_by_staff_id: staffId },
         data:  { taken_by_staff_id: null },
       });
-      // Supprimer le magasinier
-      await tx.store_staff.delete({ where: { id: staffId } });
+      // Marquer comme supprime pour permettre une restauration super-admin.
+      await tx.store_staff.update({
+        where: { id: staffId },
+        data: {
+          is_active: false,
+          deleted_at: new Date(),
+          deleted_by: session.user.id,
+        },
+      });
     });
 
     return NextResponse.json({ success: true });

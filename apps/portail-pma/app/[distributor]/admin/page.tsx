@@ -380,7 +380,7 @@ export default async function AdminPage({
       </section>
 
       <section className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-5">
-        {kpis.map((item: any) => {
+        {kpis.map((item) => {
           const Icon = item.icon;
           const tone = toneClasses[item.tone];
 

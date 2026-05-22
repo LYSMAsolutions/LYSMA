@@ -13,6 +13,39 @@
     });
   }
 
+  function setMeta(name, value) {
+    if (!value) return;
+    var node = document.querySelector("meta[name='" + name + "']");
+    if (!node) {
+      node = document.createElement("meta");
+      node.setAttribute("name", name);
+      document.head.appendChild(node);
+    }
+    node.setAttribute("content", value);
+  }
+
+  function setProperty(property, value) {
+    if (!value) return;
+    var node = document.querySelector("meta[property='" + property + "']");
+    if (!node) {
+      node = document.createElement("meta");
+      node.setAttribute("property", property);
+      document.head.appendChild(node);
+    }
+    node.setAttribute("content", value);
+  }
+
+  function setCanonical(value) {
+    if (!value) return;
+    var node = document.querySelector("link[rel='canonical']");
+    if (!node) {
+      node = document.createElement("link");
+      node.setAttribute("rel", "canonical");
+      document.head.appendChild(node);
+    }
+    node.setAttribute("href", value);
+  }
+
   function setColor(name, value) {
     if (!value) return;
     document.documentElement.style.setProperty(name, value);
@@ -80,13 +113,16 @@
     setText("[data-cms='sections.ctaText']", sections.ctaText);
 
     var currentPage = (content.pages || {})[pageKey()];
+    var pageTitle = "";
+    var pageDescription = "";
     if (currentPage) {
       setText(".section-dark .kicker", currentPage.kicker);
       setText(".section-dark .section-title, .section-dark h1.section-title", currentPage.title);
       setText(".section-dark .section-desc", currentPage.description);
-      if (currentPage.seoTitle) document.title = currentPage.seoTitle;
-      var metaPage = document.querySelector("meta[name='description']");
-      if (metaPage && currentPage.seoDescription) metaPage.setAttribute("content", currentPage.seoDescription);
+      pageTitle = currentPage.seoTitle || "";
+      pageDescription = currentPage.seoDescription || "";
+      if (pageTitle) document.title = pageTitle;
+      setMeta("description", pageDescription);
     }
 
     var contact = content.contact || {};
@@ -97,10 +133,22 @@
 
     var seo = content.seo || {};
     if (pageKey() === "home" && seo.title) document.title = seo.title;
-    var description = document.querySelector("meta[name='description']");
-    if (pageKey() === "home" && description && seo.description) {
-      description.setAttribute("content", seo.description);
+    var effectiveTitle = pageTitle || seo.ogTitle || seo.title;
+    var effectiveDescription = pageDescription || seo.ogDescription || seo.description;
+    if (pageKey() === "home") {
+      setMeta("description", seo.description);
+      setCanonical(seo.canonical);
+      setMeta("keywords", seo.keywords);
+      setMeta("robots", seo.robots);
     }
+    setProperty("og:type", "website");
+    setProperty("og:title", effectiveTitle);
+    setProperty("og:description", effectiveDescription);
+    if (seo.ogImage) setProperty("og:image", root + seo.ogImage);
+    setMeta("twitter:card", "summary_large_image");
+    setMeta("twitter:title", effectiveTitle);
+    setMeta("twitter:description", effectiveDescription);
+    if (seo.ogImage) setMeta("twitter:image", root + seo.ogImage);
   }
 
   window.addEventListener("message", function (event) {

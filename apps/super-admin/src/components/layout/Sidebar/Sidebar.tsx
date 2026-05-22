@@ -14,6 +14,7 @@ const NAV = [
   { href: '/pma', label: 'portail-pma', icon: 'P' },
   { href: '/livo', label: 'livo-app', icon: 'L' },
   { href: '/sites', label: 'sites', icon: 'S' },
+  { href: '/corbeille', label: 'corbeille', icon: 'R' },
   { href: '/root', label: 'root', icon: '$' },
 ]
 

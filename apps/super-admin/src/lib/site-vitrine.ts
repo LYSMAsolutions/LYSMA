@@ -210,6 +210,12 @@ function defaultShowcaseContent(name: string) {
     seo: {
       title: name,
       description: '',
+      canonical: '',
+      keywords: '',
+      robots: 'index, follow',
+      ogTitle: name,
+      ogDescription: '',
+      ogImage: '',
     },
   }
 }
