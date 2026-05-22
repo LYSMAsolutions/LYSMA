@@ -24,6 +24,14 @@ const TAUX_DEFAUT = [
 ] as const
 
 export async function POST(req: NextRequest) {
+  const cookieConsent = req.cookies.get('livo_cookie_consent')?.value
+  if (cookieConsent !== 'accepted') {
+    return NextResponse.json(
+      { error: 'Vous devez accepter les cookies necessaires avant de creer un compte.' },
+      { status: 403 },
+    )
+  }
+
   const body = await req.json()
   const parsed = schema.safeParse(body)
 

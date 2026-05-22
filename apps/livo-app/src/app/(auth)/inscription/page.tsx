@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { signIn } from 'next-auth/react'
 import Link from 'next/link'
@@ -9,11 +9,31 @@ import { Input, Button } from '@/components/ui'
 import { Check, ArrowRight, Buildings, User } from '@phosphor-icons/react'
 import styles from './page.module.css'
 
+const CONSENT_KEY = 'livo-cookie-consent'
+const CONSENT_COOKIE = 'livo_cookie_consent'
+
+function hasAcceptedCookies() {
+  if (typeof document === 'undefined') return false
+  const cookie = document.cookie
+    .split('; ')
+    .find((item) => item.startsWith(`${CONSENT_COOKIE}=`))
+    ?.split('=')[1]
+
+  const stored = localStorage.getItem(CONSENT_KEY)
+  if (!cookie && stored === 'accepted') {
+    document.cookie = `${CONSENT_COOKIE}=accepted; Max-Age=31536000; Path=/; SameSite=Lax`
+  }
+
+  return cookie === 'accepted' || stored === 'accepted'
+}
+
 export default function InscriptionPage() {
   const router = useRouter()
   const [step, setStep] = useState<'compte' | 'garage'>('compte')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [cookiesAccepted, setCookiesAccepted] = useState(false)
+  const [consentReady, setConsentReady] = useState(false)
 
   // Étape 1 — Compte
   const [prenom, setPrenom] = useState('')
@@ -27,6 +47,17 @@ export default function InscriptionPage() {
   const [garageTel, setGarageTel] = useState('')
   const [garageVille, setGarageVille] = useState('')
 
+  useEffect(() => {
+    function syncConsent() {
+      setCookiesAccepted(hasAcceptedCookies())
+      setConsentReady(true)
+    }
+
+    syncConsent()
+    window.addEventListener('livo-cookie-consent-change', syncConsent)
+    return () => window.removeEventListener('livo-cookie-consent-change', syncConsent)
+  }, [])
+
   function validateEtape1() {
     if (!prenom || !nom || !email || !password) return 'Tous les champs sont requis'
     if (password.length < 8) return 'Le mot de passe doit contenir au moins 8 caractères'
@@ -36,6 +67,11 @@ export default function InscriptionPage() {
 
  async function handleSubmit() {
   setError('')
+
+  if (!cookiesAccepted) {
+    setError('Vous devez accepter les cookies necessaires avant de creer un compte.')
+    return
+  }
 
   if (step === 'compte') {
     const err = validateEtape1()
@@ -94,6 +130,17 @@ export default function InscriptionPage() {
           </div>
         </div>
 
+        {consentReady && !cookiesAccepted && (
+          <div className={styles.cookieGate}>
+            <strong>Cookies necessaires non acceptes</strong>
+            <p>
+              L ouverture de compte est bloquee tant que les cookies de session ne sont
+              pas acceptes. Ils servent a securiser la creation du compte et la connexion.
+            </p>
+            <Link href="/cookies">Voir la page cookies et accepter</Link>
+          </div>
+        )}
+
         {/* Steps */}
         <div className={styles.steps}>
           <div className={`${styles.stepItem} ${step === 'compte' ? styles.stepActive : styles.stepDone}`}>
@@ -148,6 +195,7 @@ export default function InscriptionPage() {
             loading={loading}
             icon={step === 'compte' ? <ArrowRight weight="bold" /> : undefined}
             onClick={handleSubmit}
+            disabled={!cookiesAccepted}
             fullWidth={step === 'compte'}
           >
             {step === 'compte' ? 'Continuer' : 'Créer mon compte'}

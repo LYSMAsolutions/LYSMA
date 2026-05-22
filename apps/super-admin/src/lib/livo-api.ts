@@ -1,4 +1,4 @@
-const LIVO_API_URL = process.env.LIVO_API_URL ?? 'https://livo-app-blond.vercel.app'
+const LIVO_API_URL = process.env.LIVO_API_URL ?? 'https://livo-app.com'
 const INTERNAL_API_KEY = process.env.INTERNAL_API_KEY ?? ''
 
 function headers() {
