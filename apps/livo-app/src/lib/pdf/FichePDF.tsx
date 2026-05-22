@@ -232,7 +232,7 @@ const s = StyleSheet.create({
 })
 
 // Lignes vides pour le tableau manuel
-const EMPTY_ROWS = 8
+const EMPTY_ROWS = 7
 
 export function FichePDF({ fiche, garage, logoSrc, barcodeSrc, qrCodeSrc }: Props) {
   const travailsLignes = fiche.travaux.split('\n').filter(Boolean)
