@@ -49,8 +49,9 @@ const PATTERNS = [
 
 const START_B = 104
 const STOP = 106
+const STOP_TERMINATION = '11'
 
-export function generateBarcodeSVG(text: string, height = 40): string {
+export function generateBarcodeSVG(text: string, height = 56): string {
   const chars = text.toUpperCase().split('')
   
   // Calculer checksum
@@ -69,13 +70,14 @@ export function generateBarcodeSVG(text: string, height = 40): string {
     bars.push(PATTERNS[val])
   })
   bars.push(PATTERNS[checksum]) // Checksum
-  bars.push(PATTERNS[STOP])     // Stop
+  bars.push(PATTERNS[STOP] + STOP_TERMINATION) // Stop + termination bars
 
   const barsStr = bars.join('')
-  const moduleWidth = 2
-  const totalWidth = barsStr.length * moduleWidth + 20 // padding
+  const moduleWidth = 3
+  const quietZone = moduleWidth * 12
+  const totalWidth = barsStr.length * moduleWidth + quietZone * 2
 
-  let x = 10
+  let x = quietZone
   let rects = ''
   for (const bit of barsStr) {
     if (bit === '1') {
@@ -84,14 +86,14 @@ export function generateBarcodeSVG(text: string, height = 40): string {
     x += moduleWidth
   }
 
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${totalWidth}" height="${height + 16}" viewBox="0 0 ${totalWidth} ${height + 16}">
-  <rect width="${totalWidth}" height="${height + 16}" fill="white"/>
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${totalWidth}" height="${height + 18}" viewBox="0 0 ${totalWidth} ${height + 18}">
+  <rect width="${totalWidth}" height="${height + 18}" fill="white"/>
   ${rects}
-  <text x="${totalWidth / 2}" y="${height + 12}" text-anchor="middle" font-family="Helvetica" font-size="10" fill="black">${text}</text>
+  <text x="${totalWidth / 2}" y="${height + 13}" text-anchor="middle" font-family="Helvetica" font-size="11" fill="black">${text}</text>
 </svg>`
 }
 
-export function barcodeSVGToDataURL(text: string, height = 40): string {
+export function barcodeSVGToDataURL(text: string, height = 56): string {
   const svg = generateBarcodeSVG(text, height)
   const base64 = Buffer.from(svg).toString('base64')
   return `data:image/svg+xml;base64,${base64}`

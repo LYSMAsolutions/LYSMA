@@ -58,7 +58,7 @@ export async function GET(
     ? `data:image/png;base64,${fs.readFileSync(logoPath).toString('base64')}`
     : undefined
 
-  const barcodeSrc = barcodeSVGToDataURL(fiche.numero, 40)
+  const barcodeSrc = barcodeSVGToDataURL(fiche.numero, 56)
 
   const stream = await renderToStream(
     React.createElement(FichePDF as any, {

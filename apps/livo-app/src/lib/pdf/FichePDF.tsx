@@ -265,7 +265,7 @@ export function FichePDF({ fiche, garage, logoSrc, barcodeSrc }: Props) {
           </View>
           <View style={s.headerCenter}>
             {barcodeSrc && (
-              <Image src={barcodeSrc} style={{ width: 160, height: 50 }} />
+              <Image src={barcodeSrc} style={{ width: 220, height: 68 }} />
             )}
           </View>
           <View style={s.headerRight}>

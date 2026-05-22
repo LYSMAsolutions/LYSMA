@@ -40,6 +40,7 @@ export function FicheScanner({ compagnonId, onPointer, onClose }: Props) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const streamRef = useRef<MediaStream | null>(null)
   const scannerControlsRef = useRef<{ stop: () => void } | null>(null)
+  const lastScanRef = useRef('')
 
   const searchFiche = useCallback(async (q: string) => {
     if (!q || q.length < 2) return
@@ -97,17 +98,22 @@ export function FicheScanner({ compagnonId, onPointer, onClose }: Props) {
       stopScan()
       setScanActive(true)
 
-      const { BrowserMultiFormatOneDReader } = await import('@zxing/browser')
-      const reader = new BrowserMultiFormatOneDReader(undefined, {
-        delayBetweenScanAttempts: 250,
+      const { BarcodeFormat, BrowserMultiFormatReader } = await import('@zxing/browser')
+      const reader = new BrowserMultiFormatReader(undefined, {
+        delayBetweenScanAttempts: 160,
       })
+      reader.possibleFormats = [
+        BarcodeFormat.CODE_128,
+        BarcodeFormat.CODE_39,
+        BarcodeFormat.CODE_93,
+      ]
 
       const controls = await reader.decodeFromConstraints(
         {
           video: {
             facingMode: { ideal: 'environment' },
-            width: { ideal: 1280 },
-            height: { ideal: 720 },
+            width: { ideal: 1920 },
+            height: { ideal: 1080 },
           },
           audio: false,
         },
@@ -115,7 +121,9 @@ export function FicheScanner({ compagnonId, onPointer, onClose }: Props) {
         (result) => {
           if (!result) return
 
-          const text = result.getText()
+          const text = result.getText().trim().toUpperCase()
+          if (!text || text === lastScanRef.current) return
+          lastScanRef.current = text
           stopScan()
           setMode('search')
           setQuery(text)
