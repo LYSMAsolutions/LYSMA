@@ -1,35 +1,36 @@
 import type { MetadataRoute } from 'next'
 
 const baseUrl = 'https://livo-app.com'
+const lastModified = new Date()
 
 const staticRoutes: MetadataRoute.Sitemap = [
   {
     url: baseUrl,
-    lastModified: new Date(),
+    lastModified,
     changeFrequency: 'weekly',
     priority: 1,
   },
   {
     url: `${baseUrl}/inscription`,
-    lastModified: new Date(),
+    lastModified,
     changeFrequency: 'monthly',
     priority: 0.8,
   },
   {
     url: `${baseUrl}/connexion`,
-    lastModified: new Date(),
+    lastModified,
     changeFrequency: 'monthly',
     priority: 0.4,
   },
   {
     url: `${baseUrl}/cookies`,
-    lastModified: new Date(),
+    lastModified,
     changeFrequency: 'yearly',
     priority: 0.2,
   },
   {
     url: `${baseUrl}/politique-confidentialite`,
-    lastModified: new Date(),
+    lastModified,
     changeFrequency: 'yearly',
     priority: 0.2,
   },

@@ -2,7 +2,17 @@ import NextAuth from 'next-auth'
 import authConfig from '@/auth.config'
 import { NextResponse } from 'next/server'
 
-const PUBLIC_ROUTES = ['/', '/connexion', '/inscription', '/atelier-login', '/abonnement-expire', '/politique-confidentialite', '/cookies']
+const PUBLIC_ROUTES = [
+  '/',
+  '/connexion',
+  '/inscription',
+  '/atelier-login',
+  '/abonnement-expire',
+  '/politique-confidentialite',
+  '/cookies',
+  '/sitemap.xml',
+  '/robots.txt',
+]
 const ATELIER_ROUTES = ['/atelier-dashboard']
 const { auth } = NextAuth(authConfig)
 
@@ -31,5 +41,5 @@ export default auth(async (req) => {
 })
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|logo|design).*)'],
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|logo|design).*)'],
 }

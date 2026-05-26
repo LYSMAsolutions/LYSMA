@@ -6,7 +6,7 @@ export default function robots(): MetadataRoute.Robots {
   return {
     rules: [
       {
-        userAgent: '*',
+        userAgent: 'Googlebot',
         allow: '/',
         disallow: [
           '/api/',
@@ -21,7 +21,7 @@ export default function robots(): MetadataRoute.Robots {
         ],
       },
       {
-        userAgent: 'Googlebot',
+        userAgent: '*',
         allow: '/',
         disallow: [
           '/api/',
