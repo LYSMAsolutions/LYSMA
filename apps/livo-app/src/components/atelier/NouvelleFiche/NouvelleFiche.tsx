@@ -89,10 +89,10 @@ export function NouvelleFiche({ garageId, onClose, onCreated }: Props) {
         setFicheCreee(data.fiche)
       } else {
         const data = await res.json().catch(() => null)
-        setSubmitError(data?.error ?? 'Impossible de creer la fiche')
+        setSubmitError(data?.error ?? 'Impossible de créer la fiche')
       }
     } catch {
-      setSubmitError('Impossible de creer la fiche')
+      setSubmitError('Impossible de créer la fiche')
     } finally { setSubmitting(false) }
   }
 

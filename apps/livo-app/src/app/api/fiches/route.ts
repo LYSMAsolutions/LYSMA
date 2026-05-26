@@ -41,7 +41,7 @@ async function generateFicheNumero(garageId: string) {
 
 export async function POST(req: NextRequest) {
   const session = await auth()
-  if (!session?.user?.id) return NextResponse.json({ error: 'Non autorise' }, { status: 401 })
+  if (!session?.user?.id) return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
 
   const parsed = schema.safeParse(await req.json())
   if (!parsed.success) return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 })
@@ -90,17 +90,17 @@ export async function POST(req: NextRequest) {
         error.code === 'P2002'
 
       if (!numeroCollision || attempt === 2) {
-        return NextResponse.json({ error: 'Impossible de creer la fiche travaux' }, { status: 500 })
+        return NextResponse.json({ error: 'Impossible de créer la fiche travaux' }, { status: 500 })
       }
     }
   }
 
-  return NextResponse.json({ error: 'Impossible de creer la fiche travaux' }, { status: 500 })
+  return NextResponse.json({ error: 'Impossible de créer la fiche travaux' }, { status: 500 })
 }
 
 export async function GET(req: NextRequest) {
   const session = await auth()
-  if (!session?.user?.id) return NextResponse.json({ error: 'Non autorise' }, { status: 401 })
+  if (!session?.user?.id) return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
 
   const { searchParams } = new URL(req.url)
   const garageId = searchParams.get('garageId')

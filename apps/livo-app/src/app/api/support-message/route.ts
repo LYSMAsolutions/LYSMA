@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
   const session = await auth()
 
   if (!session?.user?.id) {
-    return NextResponse.json({ error: 'Non autorise' }, { status: 401 })
+    return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
   }
 
   const body = await req.json().catch(() => null)
@@ -51,7 +51,7 @@ export async function POST(req: NextRequest) {
   })
 
   if (!res.ok) {
-    return NextResponse.json({ error: 'Message non envoye au super-admin' }, { status: 502 })
+    return NextResponse.json({ error: 'Message non envoyé au super-admin' }, { status: 502 })
   }
 
   return NextResponse.json({ success: true })

@@ -56,13 +56,13 @@ export function CookieBanner() {
     <div className={styles.banner} role="dialog" aria-label="Consentement cookies">
       <div className={styles.content}>
         <div className={styles.text}>
-          <strong className={styles.title}>Cookies & confidentialite</strong>
+          <strong className={styles.title}>Cookies et confidentialité</strong>
           <p className={styles.desc}>
-            LIVO-APP utilise des cookies strictement necessaires au fonctionnement de
-            l application : creation de compte, authentification et session securisee.
-            Ces cookies ne sont pas utilises a des fins publicitaires.{' '}
+            LIVO-APP utilise des cookies strictement nécessaires au fonctionnement de
+            l’application : création de compte, authentification et session sécurisée.
+            Ces cookies ne sont pas utilisés à des fins publicitaires.{' '}
             <Link href="/cookies" className={styles.link}>
-              Gerer mes choix
+              Gérer mes choix
             </Link>
           </p>
         </div>

@@ -22,7 +22,7 @@ async function recalculateFicheTempsReel(ficheId: string) {
 
 export async function POST(req: NextRequest) {
   const access = await getPointageAccess()
-  if (!access) return NextResponse.json({ error: 'Non autorise' }, { status: 401 })
+  if (!access) return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
 
   const parsed = schema.safeParse(await req.json())
   if (!parsed.success) return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 })
@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
   })
 
   if (!compagnon || (access.mode === 'atelier' && access.compagnonId !== compagnon.id)) {
-    return NextResponse.json({ error: 'Compagnon introuvable ou non autorise' }, { status: 404 })
+    return NextResponse.json({ error: 'Compagnon introuvable ou non autorisé' }, { status: 404 })
   }
 
   const fiche = await prisma.ficheTravaux.findFirst({
@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
     },
   })
 
-  if (!fiche) return NextResponse.json({ error: 'Fiche introuvable ou non autorisee' }, { status: 404 })
+  if (!fiche) return NextResponse.json({ error: 'Fiche introuvable ou non autorisée' }, { status: 404 })
 
   if (action === 'POINTER') {
     const pointageFiche = await prisma.$transaction(async (tx) => {
@@ -71,7 +71,7 @@ export async function POST(req: NextRequest) {
     })
 
     if (!pointageFiche) {
-      return NextResponse.json({ error: 'Deja pointe sur cette fiche' }, { status: 400 })
+      return NextResponse.json({ error: 'Déjà pointé sur cette fiche' }, { status: 400 })
     }
 
     return NextResponse.json({ success: true, pointageFiche })

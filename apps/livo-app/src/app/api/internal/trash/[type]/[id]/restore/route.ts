@@ -11,7 +11,7 @@ export async function POST(
   { params }: { params: Promise<{ type: string; id: string }> },
 ) {
   if (!isAuthorized(req)) {
-    return NextResponse.json({ error: 'Non autorise' }, { status: 401 })
+    return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
   }
 
   const { type, id } = await params

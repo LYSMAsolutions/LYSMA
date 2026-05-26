@@ -6,7 +6,7 @@ import { prisma } from '@/lib/prisma'
 export async function GET(req: NextRequest) {
   const session = await auth()
   if (!session?.user?.id) {
-    return NextResponse.json({ error: 'Non autorise' }, { status: 401 })
+    return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
   }
 
   const garage = await getPrimaryGarageForUser(session.user.id)
@@ -67,12 +67,12 @@ export async function GET(req: NextRequest) {
   ])
 
   const pages = [
-    { id: 'dashboard', title: 'Tableau de bord', subtitle: 'Vue generale', href: '/dashboard' },
+    { id: 'dashboard', title: 'Tableau de bord', subtitle: 'Vue générale', href: '/dashboard' },
     { id: 'atelier', title: 'Atelier', subtitle: 'Pointages et fiches actives', href: '/atelier' },
-    { id: 'compagnons', title: 'Compagnons', subtitle: 'Equipe', href: '/compagnons' },
-    { id: 'vehicules', title: 'Vehicules', subtitle: 'Parc clients', href: '/vehicules' },
-    { id: 'rh', title: 'RH', subtitle: 'Absences et conges', href: '/rapports' },
-    { id: 'parametres', title: 'Parametres', subtitle: 'Configuration', href: '/parametres' },
+    { id: 'compagnons', title: 'Compagnons', subtitle: 'Équipe', href: '/compagnons' },
+    { id: 'vehicules', title: 'Véhicules', subtitle: 'Parc clients', href: '/vehicules' },
+    { id: 'rh', title: 'RH', subtitle: 'Absences et congés', href: '/rapports' },
+    { id: 'parametres', title: 'Paramètres', subtitle: 'Configuration', href: '/parametres' },
   ].filter((page) =>
     `${page.title} ${page.subtitle}`.toLowerCase().includes(q.toLowerCase())
   )

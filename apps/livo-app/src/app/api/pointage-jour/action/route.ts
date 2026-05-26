@@ -52,7 +52,7 @@ async function recalculateFicheTempsReel(ficheId: string) {
 
 export async function POST(req: NextRequest) {
   const access = await getPointageAccess()
-  if (!access) return NextResponse.json({ error: 'Non autorise' }, { status: 401 })
+  if (!access) return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
 
   const parsed = schema.safeParse(await req.json())
   if (!parsed.success) return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 })
@@ -69,7 +69,7 @@ export async function POST(req: NextRequest) {
   })
 
   if (!compagnon || (access.mode === 'atelier' && access.compagnonId !== compagnon.id)) {
-    return NextResponse.json({ error: 'Compagnon introuvable ou non autorise' }, { status: 404 })
+    return NextResponse.json({ error: 'Compagnon introuvable ou non autorisé' }, { status: 404 })
   }
 
   const pointage = await prisma.$transaction(async (tx) => {
@@ -100,7 +100,7 @@ export async function POST(req: NextRequest) {
     }
 
     if (pointage.statutActuel !== 'ABSENT') {
-      return NextResponse.json({ error: 'Le compagnon est deja arrive' }, { status: 400 })
+      return NextResponse.json({ error: 'Le compagnon est déjà arrivé' }, { status: 400 })
     }
     update.statutActuel = 'EN_TRAVAIL'
     update.heureArrivee = now
@@ -108,7 +108,7 @@ export async function POST(req: NextRequest) {
 
   if (action === 'PAUSE_CAFE_DEBUT') {
     if (pointage.statutActuel !== 'EN_TRAVAIL') {
-      return NextResponse.json({ error: 'Impossible de demarrer une pause cafe maintenant' }, { status: 400 })
+      return NextResponse.json({ error: 'Impossible de démarrer une pause café maintenant' }, { status: 400 })
     }
     update.statutActuel = 'PAUSE_CAFE'
     update.pauseCafeDebut = now
@@ -117,7 +117,7 @@ export async function POST(req: NextRequest) {
 
   if (action === 'PAUSE_CAFE_FIN') {
     if (pointage.statutActuel !== 'PAUSE_CAFE') {
-      return NextResponse.json({ error: 'Aucune pause cafe en cours' }, { status: 400 })
+      return NextResponse.json({ error: 'Aucune pause café en cours' }, { status: 400 })
     }
     update.statutActuel = 'EN_TRAVAIL'
     update.pauseCafeFin = now
@@ -126,7 +126,7 @@ export async function POST(req: NextRequest) {
 
   if (action === 'PAUSE_DEJ_DEBUT') {
     if (pointage.statutActuel !== 'EN_TRAVAIL') {
-      return NextResponse.json({ error: 'Impossible de demarrer une pause dejeuner maintenant' }, { status: 400 })
+      return NextResponse.json({ error: 'Impossible de démarrer une pause déjeuner maintenant' }, { status: 400 })
     }
     update.statutActuel = 'PAUSE_DEJEUNER'
     update.pauseDejDebut = now
@@ -135,7 +135,7 @@ export async function POST(req: NextRequest) {
 
   if (action === 'PAUSE_DEJ_FIN') {
     if (pointage.statutActuel !== 'PAUSE_DEJEUNER') {
-      return NextResponse.json({ error: 'Aucune pause dejeuner en cours' }, { status: 400 })
+      return NextResponse.json({ error: 'Aucune pause déjeuner en cours' }, { status: 400 })
     }
     update.statutActuel = 'EN_TRAVAIL'
     update.pauseDejFin = now
@@ -150,7 +150,7 @@ export async function POST(req: NextRequest) {
     }
 
     if (pointage.statutActuel === 'ABSENT' || pointage.statutActuel === 'PARTI' || !pointage.heureArrivee) {
-      return NextResponse.json({ error: 'Impossible de pointer le depart maintenant' }, { status: 400 })
+      return NextResponse.json({ error: 'Impossible de pointer le départ maintenant' }, { status: 400 })
     }
 
     update.statutActuel = 'PARTI'

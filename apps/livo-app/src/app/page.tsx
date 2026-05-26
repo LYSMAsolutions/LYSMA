@@ -84,6 +84,7 @@ export default function HomePage() {
           <a href="#fonctionnalites">Fonctionnalités</a>
           <a href="#pointage">Pointage</a>
           <a href="#rentabilite">Rentabilité</a>
+          <Link href="/demo">Démo</Link>
           <Link href="/connexion">Connexion</Link>
           <Link href="/inscription" className={styles.navCta}>
             Essayer 30 jours
@@ -104,8 +105,8 @@ export default function HomePage() {
             <Link href="/inscription" className={styles.primaryCta}>
               Essayer Livo 30 jours gratuitement
             </Link>
-            <Link href="/connexion" className={styles.secondaryCta}>
-              Accéder à mon atelier
+            <Link href="/demo" className={styles.secondaryCta}>
+              Voir la démo publique
             </Link>
           </div>
           <p className={styles.reassurance}>

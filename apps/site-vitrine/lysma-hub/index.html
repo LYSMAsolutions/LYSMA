@@ -523,6 +523,100 @@
       font-size: .8rem;
       font-weight: 800;
     }
+    .livo-preview {
+      height: 340px;
+      display: block;
+      padding: 22px;
+      background:
+        radial-gradient(circle at 80% 12%, rgba(245, 197, 66, .18), transparent 16rem),
+        linear-gradient(145deg, #f8fafc, #dfefff);
+      color: #0a2540;
+      border-bottom: 1px solid rgba(255,255,255,.12);
+      position: relative;
+      overflow: hidden;
+    }
+    .livo-window {
+      height: 100%;
+      border-radius: 22px;
+      background: #ffffff;
+      box-shadow: 0 24px 60px rgba(6, 24, 45, .26);
+      overflow: hidden;
+      border: 1px solid rgba(10, 37, 64, .12);
+    }
+    .livo-bar {
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 18px;
+      background: #0a2540;
+      color: #f8fafc;
+      font-weight: 850;
+      font-size: .86rem;
+    }
+    .livo-body {
+      padding: 20px;
+      display: grid;
+      gap: 14px;
+    }
+    .livo-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .livo-title strong {
+      font-family: Manrope, Inter, sans-serif;
+      font-size: 1.45rem;
+      letter-spacing: -.04em;
+    }
+    .livo-pill {
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: #e8f2ff;
+      color: #0a4d9b;
+      font-size: .74rem;
+      font-weight: 850;
+    }
+    .livo-kpis {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .livo-kpi,
+    .livo-line {
+      border-radius: 16px;
+      background: #f1f6fc;
+      border: 1px solid #d8e7f6;
+    }
+    .livo-kpi {
+      min-height: 74px;
+      padding: 12px;
+    }
+    .livo-kpi span,
+    .livo-line span {
+      display: block;
+      color: #64748b;
+      font-size: .72rem;
+      font-weight: 700;
+    }
+    .livo-kpi strong {
+      display: block;
+      margin-top: 8px;
+      font-size: 1rem;
+    }
+    .livo-lines {
+      display: grid;
+      gap: 9px;
+    }
+    .livo-line {
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 14px;
+      font-weight: 800;
+    }
 
     .stack-row { display: flex; flex-wrap: wrap; gap: 10px; }
     .stack-row span {
@@ -582,6 +676,9 @@
       .section { padding: 66px 0; }
       .preview-frame { height: 250px; }
       .preview-frame iframe { transform: scale(.3); }
+      .livo-preview { height: 250px; padding: 14px; }
+      .livo-kpis { grid-template-columns: 1fr; }
+      .livo-kpi:nth-child(3), .livo-lines { display: none; }
       .final-cta { padding: 34px 18px; }
       .footer-inner { flex-direction: column; text-align: center; }
     }
@@ -800,8 +897,28 @@
             <small>Application metier en ligne</small>
             <h3>LIVO-APP</h3>
           </div>
-          <a class="preview-frame" href="https://livo-app.com/" target="_blank" rel="noreferrer" aria-label="Ouvrir LIVO">
-            <iframe src="https://livo-app.com/" title="Apercu LIVO" loading="lazy"></iframe>
+          <a class="livo-preview" href="https://livo-app.com/" target="_blank" rel="noreferrer" aria-label="Ouvrir LIVO">
+            <div class="livo-window">
+              <div class="livo-bar">
+                <span>LIVO</span>
+                <span>Atelier</span>
+              </div>
+              <div class="livo-body">
+                <div class="livo-title">
+                  <strong>Pilotage atelier</strong>
+                  <span class="livo-pill">Temps reel</span>
+                </div>
+                <div class="livo-kpis">
+                  <div class="livo-kpi"><span>Pointage</span><strong>Compagnons</strong></div>
+                  <div class="livo-kpi"><span>Vehicules</span><strong>Suivi atelier</strong></div>
+                  <div class="livo-kpi"><span>Rentabilite</span><strong>Analyse claire</strong></div>
+                </div>
+                <div class="livo-lines">
+                  <div class="livo-line"><span>Fiches de travaux</span><strong>En cours</strong></div>
+                  <div class="livo-line"><span>Heures reelles</span><strong>Controlees</strong></div>
+                </div>
+              </div>
+            </div>
           </a>
           <div class="preview-info">
             <p>Logiciel de pointage et de pilotage atelier pour suivre l'activite reelle, les fiches et la rentabilite.</p>

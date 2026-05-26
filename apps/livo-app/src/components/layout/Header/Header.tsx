@@ -151,7 +151,7 @@ export function Header({ title, description, action }: HeaderProps) {
           </div>
 
           <div className={styles.panelList}>
-            {query.trim().length < 2 && <p className={styles.empty}>Tape au moins 2 caracteres.</p>}
+            {query.trim().length < 2 && <p className={styles.empty}>Tape au moins 2 caractères.</p>}
             {query.trim().length >= 2 && results.length === 0 && (
               <p className={styles.empty}>Aucun resultat.</p>
             )}
@@ -220,7 +220,7 @@ export function Header({ title, description, action }: HeaderProps) {
             />
             <div className={styles.supportFooter}>
               <span className={styles.supportState}>
-                {supportStatus === 'sent' && 'Message envoye.'}
+                {supportStatus === 'sent' && 'Message envoyé.'}
                 {supportStatus === 'error' && 'Envoi impossible pour le moment.'}
               </span>
               <button

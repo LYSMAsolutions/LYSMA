@@ -23,17 +23,17 @@ export const metadata: Metadata = {
   keywords: ['garage', 'atelier', 'mécanique', 'pointage', 'gestion RH'],
   authors: [{ name: 'LYSMA Solutions' }],
   creator: 'LYSMA Solutions',
-  metadataBase: new URL('https://livo-app.fr'),
+  metadataBase: new URL('https://livo-app.com'),
   openGraph: {
     type: 'website',
     locale: 'fr_FR',
-    url: 'https://livo-app.fr',
+    url: 'https://livo-app.com',
     siteName: 'Livo-app',
     title: 'Livo-app — Gestion d\'atelier automobile',
     description: "Pointage, ordres de réparation, rentabilité. Fait pour le garage.",
   },
   robots: {
-    index: false, // SaaS privé — pas d'indexation
+    index: false, // SaaS privé — pas d'indexation des espaces connectés.
     follow: false,
   },
 }
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  maximumScale: 1, // Désactive le zoom — UI tablette/touch
+  maximumScale: 1, // Désactive le zoom pour une interface tablette/tactile stable.
   themeColor: '#04060f',
 }
 

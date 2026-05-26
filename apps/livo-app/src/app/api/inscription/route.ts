@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
   const cookieConsent = req.cookies.get('livo_cookie_consent')?.value
   if (cookieConsent !== 'accepted') {
     return NextResponse.json(
-      { error: 'Vous devez accepter les cookies necessaires avant de creer un compte.' },
+      { error: 'Vous devez accepter les cookies nécessaires avant de créer un compte.' },
       { status: 403 },
     )
   }

@@ -14,7 +14,7 @@ function companionName(compagnon: {
 export async function GET() {
   const session = await auth()
   if (!session?.user?.id) {
-    return NextResponse.json({ error: 'Non autorise' }, { status: 401 })
+    return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
   }
 
   const garage = await getPrimaryGarageForUser(session.user.id)
@@ -74,7 +74,7 @@ export async function GET() {
       if (pointage.heureArrivee) {
         items.push({
           id: `jour-arrivee-${pointage.id}`,
-          title: `${nom} a pointe son arrivee`,
+          title: `${nom} a pointé son arrivée`,
           createdAt: pointage.heureArrivee.toISOString(),
           href: `/compagnons/${pointage.compagnonId}`,
         })
@@ -83,7 +83,7 @@ export async function GET() {
       if (pointage.heureDepart) {
         items.push({
           id: `jour-depart-${pointage.id}`,
-          title: `${nom} a pointe son depart`,
+          title: `${nom} a pointé son départ`,
           createdAt: pointage.heureDepart.toISOString(),
           href: `/compagnons/${pointage.compagnonId}`,
         })
@@ -95,20 +95,20 @@ export async function GET() {
       id: `fiche-${pointage.id}-${pointage.statut}`,
       title:
         pointage.statut === 'TERMINE'
-          ? `${companionName(pointage.compagnon)} a depointe de ${pointage.fiche.numero}`
-          : `${companionName(pointage.compagnon)} a pointe sur ${pointage.fiche.numero}`,
+          ? `${companionName(pointage.compagnon)} a dépointé de ${pointage.fiche.numero}`
+          : `${companionName(pointage.compagnon)} a pointé sur ${pointage.fiche.numero}`,
       createdAt: pointage.updatedAt.toISOString(),
       href: `/fiches/${pointage.ficheId}`,
     })),
     ...fichesTerminees.map((fiche) => ({
       id: `terminee-${fiche.id}`,
-      title: `${fiche.numero} est terminee`,
+      title: `${fiche.numero} est terminée`,
       createdAt: fiche.updatedAt.toISOString(),
       href: `/fiches/${fiche.id}`,
     })),
     ...absences.map((absence) => ({
       id: `absence-${absence.id}`,
-      title: `Absence a valider pour ${companionName(absence.compagnon)}`,
+      title: `Absence à valider pour ${companionName(absence.compagnon)}`,
       createdAt: absence.createdAt.toISOString(),
       href: '/rapports',
     })),

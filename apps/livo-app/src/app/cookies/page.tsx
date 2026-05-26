@@ -52,29 +52,29 @@ export default function CookiesPage() {
         <span className={styles.kicker}>Cookies</span>
         <h1>Gestion du consentement cookies</h1>
         <p>
-          LIVO-APP utilise des cookies necessaires pour creer un compte, securiser
-          la session, rester connecte et proteger l acces a votre espace garage.
-          Aucun cookie publicitaire n est utilise.
+          LIVO-APP utilise des cookies nécessaires pour créer un compte, sécuriser
+          la session, rester connecté et protéger l’accès à votre espace garage.
+          Aucun cookie publicitaire n’est utilisé.
         </p>
 
         <div className={styles.status} data-state={consent === 'accepted' ? 'accepted' : 'blocked'}>
           <span>Statut actuel</span>
-          <strong>{consent === 'accepted' ? 'Cookies acceptes' : 'Cookies non acceptes'}</strong>
+          <strong>{consent === 'accepted' ? 'Cookies acceptés' : 'Cookies non acceptés'}</strong>
         </div>
 
         <div className={styles.grid}>
           <article>
-            <h2>Cookies necessaires</h2>
+            <h2>Cookies nécessaires</h2>
             <p>
-              Ils permettent l authentification, la creation du compte, la securite
-              de session et le fonctionnement normal de l application.
+              Ils permettent l’authentification, la création du compte, la sécurité
+              de session et le fonctionnement normal de l’application.
             </p>
           </article>
           <article>
             <h2>Cookies marketing</h2>
             <p>
-              LIVO-APP n utilise pas de cookies publicitaires pour suivre vos
-              visiteurs ou revendre des donnees.
+              LIVO-APP n’utilise pas de cookies publicitaires pour suivre vos
+              visiteurs ou revendre des données.
             </p>
           </article>
         </div>
@@ -87,13 +87,13 @@ export default function CookiesPage() {
             Refuser
           </button>
           <Link href="/inscription" className={styles.try}>
-            Aller a l inscription
+            Aller à l’inscription
           </Link>
         </div>
 
         <p className={styles.note}>
-          Si vous refusez les cookies, l ouverture de compte est bloquee car LIVO-APP
-          ne peut pas creer et maintenir une session securisee.
+          Si vous refusez les cookies, l’ouverture de compte est bloquée car LIVO-APP
+          ne peut pas créer et maintenir une session sécurisée.
         </p>
       </section>
     </main>

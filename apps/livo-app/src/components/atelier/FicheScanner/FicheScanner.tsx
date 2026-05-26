@@ -32,7 +32,7 @@ const STATUT_BADGE: Record<string, { label: string; variant: 'blue'|'warning'|'s
   EN_ATTENTE: { label: 'En attente', variant: 'warning' },
   EN_COURS:   { label: 'En cours',   variant: 'blue' },
   EN_PAUSE:   { label: 'En pause',   variant: 'warning' },
-  TERMINEE:   { label: 'Terminee',   variant: 'success' },
+  TERMINEE:   { label: 'Terminée',   variant: 'success' },
 }
 
 export function FicheScanner({ compagnonId, onPointer, onClose }: Props) {
@@ -99,17 +99,17 @@ export function FicheScanner({ compagnonId, onPointer, onClose }: Props) {
     setScanError('')
 
     if (!window.isSecureContext && window.location.hostname !== 'localhost') {
-      setScanError('La camera necessite une connexion HTTPS securisee.')
+      setScanError('La caméra nécessite une connexion HTTPS sécurisée.')
       return
     }
 
     if (!navigator.mediaDevices?.getUserMedia) {
-      setScanError("La camera n'est pas disponible sur ce navigateur.")
+      setScanError("La caméra n’est pas disponible sur ce navigateur.")
       return
     }
 
     if (!videoRef.current) {
-      setScanError('Initialisation camera en cours. Reessayez dans une seconde.')
+      setScanError('Initialisation de la caméra en cours. Réessayez dans une seconde.')
       return
     }
 
@@ -193,13 +193,13 @@ export function FicheScanner({ compagnonId, onPointer, onClose }: Props) {
       stopScan()
       const name = err instanceof DOMException ? err.name : ''
       if (name === 'NotAllowedError' || name === 'PermissionDeniedError') {
-        setScanError('Acces camera refuse. Autorisez la camera dans le navigateur.')
+        setScanError('Accès caméra refusé. Autorisez la caméra dans le navigateur.')
       } else if (name === 'NotFoundError' || name === 'DevicesNotFoundError') {
-        setScanError('Aucune camera detectee sur cet appareil.')
+        setScanError('Aucune caméra détectée sur cet appareil.')
       } else if (name === 'NotReadableError' || name === 'TrackStartError') {
-        setScanError('Camera deja utilisee par une autre application.')
+        setScanError('Caméra déjà utilisée par une autre application.')
       } else {
-        setScanError("Camera non disponible. Verifiez l'autorisation et le HTTPS.")
+        setScanError("Caméra non disponible. Vérifiez l’autorisation et le HTTPS.")
       }
     }
   }, [handleScanResult, stopScan])
@@ -265,7 +265,7 @@ export function FicheScanner({ compagnonId, onPointer, onClose }: Props) {
                   {searching ? '...' : <MagnifyingGlass weight="bold" size={18} />}
                 </button>
               </div>
-              <p className={styles.searchHint}>Tapez le numero de fiche ou d'OR puis appuyez sur Entree</p>
+              <p className={styles.searchHint}>Tapez le numéro de fiche ou d’OR puis appuyez sur Entrée</p>
             </div>
           )}
 
@@ -274,7 +274,7 @@ export function FicheScanner({ compagnonId, onPointer, onClose }: Props) {
               {scanError ? (
                 <div className={styles.scanError}>
                   <p>{scanError}</p>
-                  <button className={styles.scanRetry} onClick={startScan}>Reessayer</button>
+                  <button className={styles.scanRetry} onClick={startScan}>Réessayer</button>
                 </div>
               ) : (
                 <>
@@ -291,7 +291,7 @@ export function FicheScanner({ compagnonId, onPointer, onClose }: Props) {
                   </div>
                   {scanActive && (
                     <button className={styles.stopScanBtn} onClick={() => { stopScan(); setMode('search') }}>
-                      <X size={14} /> Arreter le scan
+                      <X size={14} /> Arrêter le scan
                     </button>
                   )}
                 </>
@@ -301,7 +301,7 @@ export function FicheScanner({ compagnonId, onPointer, onClose }: Props) {
 
           {notFound && (
             <div className={styles.notFound}>
-              Aucune fiche trouvee pour "{query}"
+              Aucune fiche trouvée pour "{query}"
             </div>
           )}
 
@@ -331,7 +331,7 @@ export function FicheScanner({ compagnonId, onPointer, onClose }: Props) {
 
               {estDejaPointe ? (
                 <div className={styles.dejaPointe}>
-                  <Check weight="bold" size={14} /> Vous pointez deja sur cette fiche
+                  <Check weight="bold" size={14} /> Vous pointez déjà sur cette fiche
                 </div>
               ) : (
                 <button

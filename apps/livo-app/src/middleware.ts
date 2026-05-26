@@ -7,6 +7,7 @@ const PUBLIC_ROUTES = [
   '/connexion',
   '/inscription',
   '/atelier-login',
+  '/demo',
   '/abonnement-expire',
   '/politique-confidentialite',
   '/cookies',
