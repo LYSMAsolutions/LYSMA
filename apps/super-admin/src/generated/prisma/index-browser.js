@@ -216,6 +216,32 @@ exports.Prisma.FinanceSettingsScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.ShowcaseSiteFinanceScalarFieldEnum = {
+  id: 'id',
+  siteName: 'siteName',
+  clientName: 'clientName',
+  clientCompany: 'clientCompany',
+  publicLabel: 'publicLabel',
+  creationStandardPriceHT: 'creationStandardPriceHT',
+  creationSoldHT: 'creationSoldHT',
+  creationStatus: 'creationStatus',
+  maintenanceMonthlyHT: 'maintenanceMonthlyHT',
+  maintenanceStatus: 'maintenanceStatus',
+  domainCostHT: 'domainCostHT',
+  workspaceCostHT: 'workspaceCostHT',
+  otherMonthlyCostsHT: 'otherMonthlyCostsHT',
+  internalNotes: 'internalNotes',
+  sageCustomerId: 'sageCustomerId',
+  officialInvoiceNumber: 'officialInvoiceNumber',
+  officialPdfUrl: 'officialPdfUrl',
+  electronicInvoiceStatus: 'electronicInvoiceStatus',
+  platformProvider: 'platformProvider',
+  platformInvoiceId: 'platformInvoiceId',
+  paymentStatus: 'paymentStatus',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.LysmaExpenseScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -345,52 +371,15 @@ exports.FinanceDeclarationFrequency = exports.$Enums.FinanceDeclarationFrequency
   TRIMESTRIELLE: 'TRIMESTRIELLE'
 };
 
-exports.ExpenseCategory = exports.$Enums.ExpenseCategory = {
-  HEBERGEMENT: 'HEBERGEMENT',
-  DOMAINE: 'DOMAINE',
-  IA: 'IA',
-  COMPTABILITE: 'COMPTABILITE',
-  PAIEMENT: 'PAIEMENT',
-  LOGICIEL: 'LOGICIEL',
-  API: 'API',
-  MATERIEL: 'MATERIEL',
-  AUTRE: 'AUTRE'
+exports.ShowcaseCreationStatus = exports.$Enums.ShowcaseCreationStatus = {
+  CREATION_FACTUREE: 'CREATION_FACTUREE',
+  CREATION_OFFERTE: 'CREATION_OFFERTE'
 };
 
-exports.FinanceTool = exports.$Enums.FinanceTool = {
-  GLOBAL: 'GLOBAL',
-  LIVO: 'LIVO',
-  PMA: 'PMA',
-  TRANSPORT: 'TRANSPORT',
-  AUTRE: 'AUTRE'
-};
-
-exports.FinanceFrequency = exports.$Enums.FinanceFrequency = {
-  MENSUEL: 'MENSUEL',
-  ANNUEL: 'ANNUEL',
-  PONCTUEL: 'PONCTUEL'
-};
-
-exports.ExpenseStatus = exports.$Enums.ExpenseStatus = {
-  ACTIF: 'ACTIF',
-  ARRETE: 'ARRETE',
-  A_VERIFIER: 'A_VERIFIER'
-};
-
-exports.RevenueStatus = exports.$Enums.RevenueStatus = {
-  ACTIF: 'ACTIF',
-  ESSAI: 'ESSAI',
-  SUSPENDU: 'SUSPENDU',
-  IMPAYE: 'IMPAYE',
-  RESILIE: 'RESILIE'
-};
-
-exports.FinanceInvoiceStatus = exports.$Enums.FinanceInvoiceStatus = {
-  BROUILLON: 'BROUILLON',
-  EMISE: 'EMISE',
-  PAYEE: 'PAYEE',
-  EN_RETARD: 'EN_RETARD',
-  ANNULEE: 'ANNULEE'
+exports.ShowcaseMaintenanceStatus = exports.$Enums.ShowcaseMaintenanceStatus = {
+  ABONNEMENT_ACTIF: 'ABONNEMENT_ACTIF',
+  MAINTENANCE_OFFERTE: 'MAINTENANCE_OFFERTE',
+  MAINTENANCE_PAYANTE: 'MAINTENANCE_PAYANTE'
 };
 
 exports.ElectronicInvoiceStatus = exports.$Enums.ElectronicInvoiceStatus = {
@@ -410,6 +399,57 @@ exports.FinancePaymentStatus = exports.$Enums.FinancePaymentStatus = {
   ANNULE: 'ANNULE'
 };
 
+exports.ExpenseCategory = exports.$Enums.ExpenseCategory = {
+  HEBERGEMENT: 'HEBERGEMENT',
+  DOMAINE: 'DOMAINE',
+  IA: 'IA',
+  COMPTABILITE: 'COMPTABILITE',
+  PAIEMENT: 'PAIEMENT',
+  LOGICIEL: 'LOGICIEL',
+  API: 'API',
+  MATERIEL: 'MATERIEL',
+  AUTRE: 'AUTRE'
+};
+
+exports.FinanceTool = exports.$Enums.FinanceTool = {
+  GLOBAL: 'GLOBAL',
+  LIVO: 'LIVO',
+  PMA: 'PMA',
+  TRANSPORT: 'TRANSPORT',
+  SITE_VITRINE: 'SITE_VITRINE',
+  AUTRE: 'AUTRE'
+};
+
+exports.FinanceFrequency = exports.$Enums.FinanceFrequency = {
+  MENSUEL: 'MENSUEL',
+  ANNUEL: 'ANNUEL',
+  PONCTUEL: 'PONCTUEL'
+};
+
+exports.ExpenseStatus = exports.$Enums.ExpenseStatus = {
+  ACTIF: 'ACTIF',
+  ARRETE: 'ARRETE',
+  A_VERIFIER: 'A_VERIFIER'
+};
+
+exports.RevenueStatus = exports.$Enums.RevenueStatus = {
+  ACTIF_PAYANT: 'ACTIF_PAYANT',
+  ACTIF: 'ACTIF',
+  ESSAI: 'ESSAI',
+  OFFERT: 'OFFERT',
+  SUSPENDU: 'SUSPENDU',
+  IMPAYE: 'IMPAYE',
+  RESILIE: 'RESILIE'
+};
+
+exports.FinanceInvoiceStatus = exports.$Enums.FinanceInvoiceStatus = {
+  BROUILLON: 'BROUILLON',
+  EMISE: 'EMISE',
+  PAYEE: 'PAYEE',
+  EN_RETARD: 'EN_RETARD',
+  ANNULEE: 'ANNULEE'
+};
+
 exports.Prisma.ModelName = {
   AdminUser: 'AdminUser',
   Client: 'Client',
@@ -418,6 +458,7 @@ exports.Prisma.ModelName = {
   AuditLog: 'AuditLog',
   ErrorReport: 'ErrorReport',
   FinanceSettings: 'FinanceSettings',
+  ShowcaseSiteFinance: 'ShowcaseSiteFinance',
   LysmaExpense: 'LysmaExpense',
   RevenueSubscription: 'RevenueSubscription',
   FinanceInvoice: 'FinanceInvoice',

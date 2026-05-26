@@ -16,7 +16,7 @@ export default async function UrssafPage() {
     <div className={styles.page}>
       <section className={styles.hero}>
         <div>
-          <div className={styles.termHeader}><span className={styles.prompt}>finance@lysma</span><span className={styles.cmd}> $ urssaf --simulation</span></div>
+          <div className={styles.termHeader}><span className={styles.prompt}>lysmasolutions@gmail.com</span><span className={styles.cmd}>simulation URSSAF</span></div>
           <h1>Simulation URSSAF</h1>
           <p>Estimation du montant a mettre de cote selon le CA encaisse, le taux URSSAF et le regime TVA.</p>
         </div>
@@ -36,7 +36,7 @@ export default async function UrssafPage() {
         <div className={styles.panelHeader}>
           <div>
             <span className={styles.panelTitle}>// parametres_fiscaux</span>
-            <p>Ces champs preparent le pilotage comptable sans remplacer le conseil de l'expert-comptable.</p>
+          <p>Les essais gratuits et les offres sont exclus de l'estimation URSSAF.</p>
           </div>
         </div>
         <SettingsForm settings={data.settings} />
@@ -53,3 +53,4 @@ function Stat({ label, value, tone }: { label: string; value: string; tone: stri
     </div>
   )
 }
+

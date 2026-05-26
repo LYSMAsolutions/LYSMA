@@ -7,7 +7,7 @@ const expenseSchema = z.object({
   name: z.string().min(1),
   provider: z.string().min(1),
   category: z.enum(['HEBERGEMENT', 'DOMAINE', 'IA', 'COMPTABILITE', 'PAIEMENT', 'LOGICIEL', 'API', 'MATERIEL', 'AUTRE']),
-  relatedTool: z.enum(['GLOBAL', 'LIVO', 'PMA', 'TRANSPORT', 'AUTRE']),
+  relatedTool: z.enum(['GLOBAL', 'LIVO', 'PMA', 'TRANSPORT', 'SITE_VITRINE', 'AUTRE']),
   amountHT: z.coerce.number().min(0),
   vatAmount: z.coerce.number().min(0),
   amountTTC: z.coerce.number().min(0),

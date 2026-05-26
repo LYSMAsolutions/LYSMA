@@ -15,7 +15,7 @@ export default async function RentabilitePage() {
     <div className={styles.page}>
       <section className={styles.hero}>
         <div>
-          <div className={styles.termHeader}><span className={styles.prompt}>finance@lysma</span><span className={styles.cmd}> $ rentabilite</span></div>
+          <div className={styles.termHeader}><span className={styles.prompt}>lysmasolutions@gmail.com</span><span className={styles.cmd}>rentabilite</span></div>
           <h1>Rentabilite detaillee</h1>
           <p>Lecture par produit : chiffre d'affaires, charges rattachees, marge, cout moyen client et revenu moyen client.</p>
         </div>
@@ -54,3 +54,4 @@ function Mini({ label, value, tone }: { label: string; value: string; tone: stri
     </div>
   )
 }
+

@@ -5,6 +5,7 @@ const links = [
   { href: '/finance', label: 'Dashboard' },
   { href: '/finance/revenus', label: 'Revenus' },
   { href: '/finance/charges', label: 'Charges' },
+  { href: '/finance/sites', label: 'Sites vitrines' },
   { href: '/finance/urssaf', label: 'URSSAF' },
   { href: '/finance/rentabilite', label: 'Rentabilite' },
   { href: '/finance/exports', label: 'Exports' },
@@ -19,3 +20,4 @@ export function FinanceNav() {
     </nav>
   )
 }
+

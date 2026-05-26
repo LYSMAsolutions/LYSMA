@@ -127,6 +127,35 @@ model FinanceSettings {
   @@map("finance_settings")
 }
 
+model ShowcaseSiteFinance {
+  id                       String                    @id @default(cuid())
+  siteName                 String
+  clientName               String
+  clientCompany            String?
+  publicLabel              String                    @default("Abonnement LYSMA - maintenance site vitrine")
+  creationStandardPriceHT  Decimal                   @default(349.00) @db.Decimal(12, 2)
+  creationSoldHT           Decimal                   @default(0) @db.Decimal(12, 2)
+  creationStatus           ShowcaseCreationStatus    @default(CREATION_OFFERTE)
+  maintenanceMonthlyHT     Decimal                   @default(19.00) @db.Decimal(12, 2)
+  maintenanceStatus        ShowcaseMaintenanceStatus @default(MAINTENANCE_PAYANTE)
+  domainCostHT             Decimal                   @default(0) @db.Decimal(12, 2)
+  workspaceCostHT          Decimal                   @default(0) @db.Decimal(12, 2)
+  otherMonthlyCostsHT      Decimal                   @default(0) @db.Decimal(12, 2)
+  internalNotes            String?
+  sageCustomerId           String?
+  officialInvoiceNumber    String?
+  officialPdfUrl           String?
+  electronicInvoiceStatus  ElectronicInvoiceStatus   @default(A_PREPARER)
+  platformProvider         String?
+  platformInvoiceId        String?
+  paymentStatus            FinancePaymentStatus      @default(EN_ATTENTE)
+  createdAt                DateTime                  @default(now())
+  updatedAt                DateTime                  @updatedAt
+
+  @@index([creationStatus, maintenanceStatus])
+  @@map("showcase_site_finances")
+}
+
 model LysmaExpense {
   id            String           @id @default(cuid())
   name          String
@@ -246,6 +275,7 @@ enum FinanceTool {
   LIVO
   PMA
   TRANSPORT
+  SITE_VITRINE
   AUTRE
 }
 
@@ -256,11 +286,24 @@ enum FinanceFrequency {
 }
 
 enum RevenueStatus {
+  ACTIF_PAYANT
   ACTIF
   ESSAI
+  OFFERT
   SUSPENDU
   IMPAYE
   RESILIE
+}
+
+enum ShowcaseCreationStatus {
+  CREATION_FACTUREE
+  CREATION_OFFERTE
+}
+
+enum ShowcaseMaintenanceStatus {
+  ABONNEMENT_ACTIF
+  MAINTENANCE_OFFERTE
+  MAINTENANCE_PAYANTE
 }
 
 enum ExpenseCategory {

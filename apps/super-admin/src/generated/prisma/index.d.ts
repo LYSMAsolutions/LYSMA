@@ -49,6 +49,11 @@ export type ErrorReport = $Result.DefaultSelection<Prisma.$ErrorReportPayload>
  */
 export type FinanceSettings = $Result.DefaultSelection<Prisma.$FinanceSettingsPayload>
 /**
+ * Model ShowcaseSiteFinance
+ * 
+ */
+export type ShowcaseSiteFinance = $Result.DefaultSelection<Prisma.$ShowcaseSiteFinancePayload>
+/**
  * Model LysmaExpense
  * 
  */
@@ -97,6 +102,7 @@ export const FinanceTool: {
   LIVO: 'LIVO',
   PMA: 'PMA',
   TRANSPORT: 'TRANSPORT',
+  SITE_VITRINE: 'SITE_VITRINE',
   AUTRE: 'AUTRE'
 };
 
@@ -113,14 +119,33 @@ export type FinanceFrequency = (typeof FinanceFrequency)[keyof typeof FinanceFre
 
 
 export const RevenueStatus: {
+  ACTIF_PAYANT: 'ACTIF_PAYANT',
   ACTIF: 'ACTIF',
   ESSAI: 'ESSAI',
+  OFFERT: 'OFFERT',
   SUSPENDU: 'SUSPENDU',
   IMPAYE: 'IMPAYE',
   RESILIE: 'RESILIE'
 };
 
 export type RevenueStatus = (typeof RevenueStatus)[keyof typeof RevenueStatus]
+
+
+export const ShowcaseCreationStatus: {
+  CREATION_FACTUREE: 'CREATION_FACTUREE',
+  CREATION_OFFERTE: 'CREATION_OFFERTE'
+};
+
+export type ShowcaseCreationStatus = (typeof ShowcaseCreationStatus)[keyof typeof ShowcaseCreationStatus]
+
+
+export const ShowcaseMaintenanceStatus: {
+  ABONNEMENT_ACTIF: 'ABONNEMENT_ACTIF',
+  MAINTENANCE_OFFERTE: 'MAINTENANCE_OFFERTE',
+  MAINTENANCE_PAYANTE: 'MAINTENANCE_PAYANTE'
+};
+
+export type ShowcaseMaintenanceStatus = (typeof ShowcaseMaintenanceStatus)[keyof typeof ShowcaseMaintenanceStatus]
 
 
 export const ExpenseCategory: {
@@ -217,6 +242,14 @@ export const FinanceFrequency: typeof $Enums.FinanceFrequency
 export type RevenueStatus = $Enums.RevenueStatus
 
 export const RevenueStatus: typeof $Enums.RevenueStatus
+
+export type ShowcaseCreationStatus = $Enums.ShowcaseCreationStatus
+
+export const ShowcaseCreationStatus: typeof $Enums.ShowcaseCreationStatus
+
+export type ShowcaseMaintenanceStatus = $Enums.ShowcaseMaintenanceStatus
+
+export const ShowcaseMaintenanceStatus: typeof $Enums.ShowcaseMaintenanceStatus
 
 export type ExpenseCategory = $Enums.ExpenseCategory
 
@@ -433,6 +466,16 @@ export class PrismaClient<
     * ```
     */
   get financeSettings(): Prisma.FinanceSettingsDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.showcaseSiteFinance`: Exposes CRUD operations for the **ShowcaseSiteFinance** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ShowcaseSiteFinances
+    * const showcaseSiteFinances = await prisma.showcaseSiteFinance.findMany()
+    * ```
+    */
+  get showcaseSiteFinance(): Prisma.ShowcaseSiteFinanceDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.lysmaExpense`: Exposes CRUD operations for the **LysmaExpense** model.
@@ -921,6 +964,7 @@ export namespace Prisma {
     AuditLog: 'AuditLog',
     ErrorReport: 'ErrorReport',
     FinanceSettings: 'FinanceSettings',
+    ShowcaseSiteFinance: 'ShowcaseSiteFinance',
     LysmaExpense: 'LysmaExpense',
     RevenueSubscription: 'RevenueSubscription',
     FinanceInvoice: 'FinanceInvoice',
@@ -943,7 +987,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "adminUser" | "client" | "acces" | "message" | "auditLog" | "errorReport" | "financeSettings" | "lysmaExpense" | "revenueSubscription" | "financeInvoice" | "financePayment"
+      modelProps: "adminUser" | "client" | "acces" | "message" | "auditLog" | "errorReport" | "financeSettings" | "showcaseSiteFinance" | "lysmaExpense" | "revenueSubscription" | "financeInvoice" | "financePayment"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1465,6 +1509,80 @@ export namespace Prisma {
           }
         }
       }
+      ShowcaseSiteFinance: {
+        payload: Prisma.$ShowcaseSiteFinancePayload<ExtArgs>
+        fields: Prisma.ShowcaseSiteFinanceFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ShowcaseSiteFinanceFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShowcaseSiteFinancePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ShowcaseSiteFinanceFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShowcaseSiteFinancePayload>
+          }
+          findFirst: {
+            args: Prisma.ShowcaseSiteFinanceFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShowcaseSiteFinancePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ShowcaseSiteFinanceFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShowcaseSiteFinancePayload>
+          }
+          findMany: {
+            args: Prisma.ShowcaseSiteFinanceFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShowcaseSiteFinancePayload>[]
+          }
+          create: {
+            args: Prisma.ShowcaseSiteFinanceCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShowcaseSiteFinancePayload>
+          }
+          createMany: {
+            args: Prisma.ShowcaseSiteFinanceCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ShowcaseSiteFinanceCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShowcaseSiteFinancePayload>[]
+          }
+          delete: {
+            args: Prisma.ShowcaseSiteFinanceDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShowcaseSiteFinancePayload>
+          }
+          update: {
+            args: Prisma.ShowcaseSiteFinanceUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShowcaseSiteFinancePayload>
+          }
+          deleteMany: {
+            args: Prisma.ShowcaseSiteFinanceDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ShowcaseSiteFinanceUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ShowcaseSiteFinanceUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShowcaseSiteFinancePayload>[]
+          }
+          upsert: {
+            args: Prisma.ShowcaseSiteFinanceUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShowcaseSiteFinancePayload>
+          }
+          aggregate: {
+            args: Prisma.ShowcaseSiteFinanceAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateShowcaseSiteFinance>
+          }
+          groupBy: {
+            args: Prisma.ShowcaseSiteFinanceGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ShowcaseSiteFinanceGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ShowcaseSiteFinanceCountArgs<ExtArgs>
+            result: $Utils.Optional<ShowcaseSiteFinanceCountAggregateOutputType> | number
+          }
+        }
+      }
       LysmaExpense: {
         payload: Prisma.$LysmaExpensePayload<ExtArgs>
         fields: Prisma.LysmaExpenseFieldRefs
@@ -1864,6 +1982,7 @@ export namespace Prisma {
     auditLog?: AuditLogOmit
     errorReport?: ErrorReportOmit
     financeSettings?: FinanceSettingsOmit
+    showcaseSiteFinance?: ShowcaseSiteFinanceOmit
     lysmaExpense?: LysmaExpenseOmit
     revenueSubscription?: RevenueSubscriptionOmit
     financeInvoice?: FinanceInvoiceOmit
@@ -9796,6 +9915,1289 @@ export namespace Prisma {
 
 
   /**
+   * Model ShowcaseSiteFinance
+   */
+
+  export type AggregateShowcaseSiteFinance = {
+    _count: ShowcaseSiteFinanceCountAggregateOutputType | null
+    _avg: ShowcaseSiteFinanceAvgAggregateOutputType | null
+    _sum: ShowcaseSiteFinanceSumAggregateOutputType | null
+    _min: ShowcaseSiteFinanceMinAggregateOutputType | null
+    _max: ShowcaseSiteFinanceMaxAggregateOutputType | null
+  }
+
+  export type ShowcaseSiteFinanceAvgAggregateOutputType = {
+    creationStandardPriceHT: Decimal | null
+    creationSoldHT: Decimal | null
+    maintenanceMonthlyHT: Decimal | null
+    domainCostHT: Decimal | null
+    workspaceCostHT: Decimal | null
+    otherMonthlyCostsHT: Decimal | null
+  }
+
+  export type ShowcaseSiteFinanceSumAggregateOutputType = {
+    creationStandardPriceHT: Decimal | null
+    creationSoldHT: Decimal | null
+    maintenanceMonthlyHT: Decimal | null
+    domainCostHT: Decimal | null
+    workspaceCostHT: Decimal | null
+    otherMonthlyCostsHT: Decimal | null
+  }
+
+  export type ShowcaseSiteFinanceMinAggregateOutputType = {
+    id: string | null
+    siteName: string | null
+    clientName: string | null
+    clientCompany: string | null
+    publicLabel: string | null
+    creationStandardPriceHT: Decimal | null
+    creationSoldHT: Decimal | null
+    creationStatus: $Enums.ShowcaseCreationStatus | null
+    maintenanceMonthlyHT: Decimal | null
+    maintenanceStatus: $Enums.ShowcaseMaintenanceStatus | null
+    domainCostHT: Decimal | null
+    workspaceCostHT: Decimal | null
+    otherMonthlyCostsHT: Decimal | null
+    internalNotes: string | null
+    sageCustomerId: string | null
+    officialInvoiceNumber: string | null
+    officialPdfUrl: string | null
+    electronicInvoiceStatus: $Enums.ElectronicInvoiceStatus | null
+    platformProvider: string | null
+    platformInvoiceId: string | null
+    paymentStatus: $Enums.FinancePaymentStatus | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ShowcaseSiteFinanceMaxAggregateOutputType = {
+    id: string | null
+    siteName: string | null
+    clientName: string | null
+    clientCompany: string | null
+    publicLabel: string | null
+    creationStandardPriceHT: Decimal | null
+    creationSoldHT: Decimal | null
+    creationStatus: $Enums.ShowcaseCreationStatus | null
+    maintenanceMonthlyHT: Decimal | null
+    maintenanceStatus: $Enums.ShowcaseMaintenanceStatus | null
+    domainCostHT: Decimal | null
+    workspaceCostHT: Decimal | null
+    otherMonthlyCostsHT: Decimal | null
+    internalNotes: string | null
+    sageCustomerId: string | null
+    officialInvoiceNumber: string | null
+    officialPdfUrl: string | null
+    electronicInvoiceStatus: $Enums.ElectronicInvoiceStatus | null
+    platformProvider: string | null
+    platformInvoiceId: string | null
+    paymentStatus: $Enums.FinancePaymentStatus | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ShowcaseSiteFinanceCountAggregateOutputType = {
+    id: number
+    siteName: number
+    clientName: number
+    clientCompany: number
+    publicLabel: number
+    creationStandardPriceHT: number
+    creationSoldHT: number
+    creationStatus: number
+    maintenanceMonthlyHT: number
+    maintenanceStatus: number
+    domainCostHT: number
+    workspaceCostHT: number
+    otherMonthlyCostsHT: number
+    internalNotes: number
+    sageCustomerId: number
+    officialInvoiceNumber: number
+    officialPdfUrl: number
+    electronicInvoiceStatus: number
+    platformProvider: number
+    platformInvoiceId: number
+    paymentStatus: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type ShowcaseSiteFinanceAvgAggregateInputType = {
+    creationStandardPriceHT?: true
+    creationSoldHT?: true
+    maintenanceMonthlyHT?: true
+    domainCostHT?: true
+    workspaceCostHT?: true
+    otherMonthlyCostsHT?: true
+  }
+
+  export type ShowcaseSiteFinanceSumAggregateInputType = {
+    creationStandardPriceHT?: true
+    creationSoldHT?: true
+    maintenanceMonthlyHT?: true
+    domainCostHT?: true
+    workspaceCostHT?: true
+    otherMonthlyCostsHT?: true
+  }
+
+  export type ShowcaseSiteFinanceMinAggregateInputType = {
+    id?: true
+    siteName?: true
+    clientName?: true
+    clientCompany?: true
+    publicLabel?: true
+    creationStandardPriceHT?: true
+    creationSoldHT?: true
+    creationStatus?: true
+    maintenanceMonthlyHT?: true
+    maintenanceStatus?: true
+    domainCostHT?: true
+    workspaceCostHT?: true
+    otherMonthlyCostsHT?: true
+    internalNotes?: true
+    sageCustomerId?: true
+    officialInvoiceNumber?: true
+    officialPdfUrl?: true
+    electronicInvoiceStatus?: true
+    platformProvider?: true
+    platformInvoiceId?: true
+    paymentStatus?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ShowcaseSiteFinanceMaxAggregateInputType = {
+    id?: true
+    siteName?: true
+    clientName?: true
+    clientCompany?: true
+    publicLabel?: true
+    creationStandardPriceHT?: true
+    creationSoldHT?: true
+    creationStatus?: true
+    maintenanceMonthlyHT?: true
+    maintenanceStatus?: true
+    domainCostHT?: true
+    workspaceCostHT?: true
+    otherMonthlyCostsHT?: true
+    internalNotes?: true
+    sageCustomerId?: true
+    officialInvoiceNumber?: true
+    officialPdfUrl?: true
+    electronicInvoiceStatus?: true
+    platformProvider?: true
+    platformInvoiceId?: true
+    paymentStatus?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ShowcaseSiteFinanceCountAggregateInputType = {
+    id?: true
+    siteName?: true
+    clientName?: true
+    clientCompany?: true
+    publicLabel?: true
+    creationStandardPriceHT?: true
+    creationSoldHT?: true
+    creationStatus?: true
+    maintenanceMonthlyHT?: true
+    maintenanceStatus?: true
+    domainCostHT?: true
+    workspaceCostHT?: true
+    otherMonthlyCostsHT?: true
+    internalNotes?: true
+    sageCustomerId?: true
+    officialInvoiceNumber?: true
+    officialPdfUrl?: true
+    electronicInvoiceStatus?: true
+    platformProvider?: true
+    platformInvoiceId?: true
+    paymentStatus?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ShowcaseSiteFinanceAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ShowcaseSiteFinance to aggregate.
+     */
+    where?: ShowcaseSiteFinanceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ShowcaseSiteFinances to fetch.
+     */
+    orderBy?: ShowcaseSiteFinanceOrderByWithRelationInput | ShowcaseSiteFinanceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ShowcaseSiteFinanceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ShowcaseSiteFinances from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ShowcaseSiteFinances.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ShowcaseSiteFinances
+    **/
+    _count?: true | ShowcaseSiteFinanceCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ShowcaseSiteFinanceAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ShowcaseSiteFinanceSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ShowcaseSiteFinanceMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ShowcaseSiteFinanceMaxAggregateInputType
+  }
+
+  export type GetShowcaseSiteFinanceAggregateType<T extends ShowcaseSiteFinanceAggregateArgs> = {
+        [P in keyof T & keyof AggregateShowcaseSiteFinance]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateShowcaseSiteFinance[P]>
+      : GetScalarType<T[P], AggregateShowcaseSiteFinance[P]>
+  }
+
+
+
+
+  export type ShowcaseSiteFinanceGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ShowcaseSiteFinanceWhereInput
+    orderBy?: ShowcaseSiteFinanceOrderByWithAggregationInput | ShowcaseSiteFinanceOrderByWithAggregationInput[]
+    by: ShowcaseSiteFinanceScalarFieldEnum[] | ShowcaseSiteFinanceScalarFieldEnum
+    having?: ShowcaseSiteFinanceScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ShowcaseSiteFinanceCountAggregateInputType | true
+    _avg?: ShowcaseSiteFinanceAvgAggregateInputType
+    _sum?: ShowcaseSiteFinanceSumAggregateInputType
+    _min?: ShowcaseSiteFinanceMinAggregateInputType
+    _max?: ShowcaseSiteFinanceMaxAggregateInputType
+  }
+
+  export type ShowcaseSiteFinanceGroupByOutputType = {
+    id: string
+    siteName: string
+    clientName: string
+    clientCompany: string | null
+    publicLabel: string
+    creationStandardPriceHT: Decimal
+    creationSoldHT: Decimal
+    creationStatus: $Enums.ShowcaseCreationStatus
+    maintenanceMonthlyHT: Decimal
+    maintenanceStatus: $Enums.ShowcaseMaintenanceStatus
+    domainCostHT: Decimal
+    workspaceCostHT: Decimal
+    otherMonthlyCostsHT: Decimal
+    internalNotes: string | null
+    sageCustomerId: string | null
+    officialInvoiceNumber: string | null
+    officialPdfUrl: string | null
+    electronicInvoiceStatus: $Enums.ElectronicInvoiceStatus
+    platformProvider: string | null
+    platformInvoiceId: string | null
+    paymentStatus: $Enums.FinancePaymentStatus
+    createdAt: Date
+    updatedAt: Date
+    _count: ShowcaseSiteFinanceCountAggregateOutputType | null
+    _avg: ShowcaseSiteFinanceAvgAggregateOutputType | null
+    _sum: ShowcaseSiteFinanceSumAggregateOutputType | null
+    _min: ShowcaseSiteFinanceMinAggregateOutputType | null
+    _max: ShowcaseSiteFinanceMaxAggregateOutputType | null
+  }
+
+  type GetShowcaseSiteFinanceGroupByPayload<T extends ShowcaseSiteFinanceGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ShowcaseSiteFinanceGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ShowcaseSiteFinanceGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ShowcaseSiteFinanceGroupByOutputType[P]>
+            : GetScalarType<T[P], ShowcaseSiteFinanceGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ShowcaseSiteFinanceSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    siteName?: boolean
+    clientName?: boolean
+    clientCompany?: boolean
+    publicLabel?: boolean
+    creationStandardPriceHT?: boolean
+    creationSoldHT?: boolean
+    creationStatus?: boolean
+    maintenanceMonthlyHT?: boolean
+    maintenanceStatus?: boolean
+    domainCostHT?: boolean
+    workspaceCostHT?: boolean
+    otherMonthlyCostsHT?: boolean
+    internalNotes?: boolean
+    sageCustomerId?: boolean
+    officialInvoiceNumber?: boolean
+    officialPdfUrl?: boolean
+    electronicInvoiceStatus?: boolean
+    platformProvider?: boolean
+    platformInvoiceId?: boolean
+    paymentStatus?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["showcaseSiteFinance"]>
+
+  export type ShowcaseSiteFinanceSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    siteName?: boolean
+    clientName?: boolean
+    clientCompany?: boolean
+    publicLabel?: boolean
+    creationStandardPriceHT?: boolean
+    creationSoldHT?: boolean
+    creationStatus?: boolean
+    maintenanceMonthlyHT?: boolean
+    maintenanceStatus?: boolean
+    domainCostHT?: boolean
+    workspaceCostHT?: boolean
+    otherMonthlyCostsHT?: boolean
+    internalNotes?: boolean
+    sageCustomerId?: boolean
+    officialInvoiceNumber?: boolean
+    officialPdfUrl?: boolean
+    electronicInvoiceStatus?: boolean
+    platformProvider?: boolean
+    platformInvoiceId?: boolean
+    paymentStatus?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["showcaseSiteFinance"]>
+
+  export type ShowcaseSiteFinanceSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    siteName?: boolean
+    clientName?: boolean
+    clientCompany?: boolean
+    publicLabel?: boolean
+    creationStandardPriceHT?: boolean
+    creationSoldHT?: boolean
+    creationStatus?: boolean
+    maintenanceMonthlyHT?: boolean
+    maintenanceStatus?: boolean
+    domainCostHT?: boolean
+    workspaceCostHT?: boolean
+    otherMonthlyCostsHT?: boolean
+    internalNotes?: boolean
+    sageCustomerId?: boolean
+    officialInvoiceNumber?: boolean
+    officialPdfUrl?: boolean
+    electronicInvoiceStatus?: boolean
+    platformProvider?: boolean
+    platformInvoiceId?: boolean
+    paymentStatus?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["showcaseSiteFinance"]>
+
+  export type ShowcaseSiteFinanceSelectScalar = {
+    id?: boolean
+    siteName?: boolean
+    clientName?: boolean
+    clientCompany?: boolean
+    publicLabel?: boolean
+    creationStandardPriceHT?: boolean
+    creationSoldHT?: boolean
+    creationStatus?: boolean
+    maintenanceMonthlyHT?: boolean
+    maintenanceStatus?: boolean
+    domainCostHT?: boolean
+    workspaceCostHT?: boolean
+    otherMonthlyCostsHT?: boolean
+    internalNotes?: boolean
+    sageCustomerId?: boolean
+    officialInvoiceNumber?: boolean
+    officialPdfUrl?: boolean
+    electronicInvoiceStatus?: boolean
+    platformProvider?: boolean
+    platformInvoiceId?: boolean
+    paymentStatus?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type ShowcaseSiteFinanceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "siteName" | "clientName" | "clientCompany" | "publicLabel" | "creationStandardPriceHT" | "creationSoldHT" | "creationStatus" | "maintenanceMonthlyHT" | "maintenanceStatus" | "domainCostHT" | "workspaceCostHT" | "otherMonthlyCostsHT" | "internalNotes" | "sageCustomerId" | "officialInvoiceNumber" | "officialPdfUrl" | "electronicInvoiceStatus" | "platformProvider" | "platformInvoiceId" | "paymentStatus" | "createdAt" | "updatedAt", ExtArgs["result"]["showcaseSiteFinance"]>
+
+  export type $ShowcaseSiteFinancePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ShowcaseSiteFinance"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      siteName: string
+      clientName: string
+      clientCompany: string | null
+      publicLabel: string
+      creationStandardPriceHT: Prisma.Decimal
+      creationSoldHT: Prisma.Decimal
+      creationStatus: $Enums.ShowcaseCreationStatus
+      maintenanceMonthlyHT: Prisma.Decimal
+      maintenanceStatus: $Enums.ShowcaseMaintenanceStatus
+      domainCostHT: Prisma.Decimal
+      workspaceCostHT: Prisma.Decimal
+      otherMonthlyCostsHT: Prisma.Decimal
+      internalNotes: string | null
+      sageCustomerId: string | null
+      officialInvoiceNumber: string | null
+      officialPdfUrl: string | null
+      electronicInvoiceStatus: $Enums.ElectronicInvoiceStatus
+      platformProvider: string | null
+      platformInvoiceId: string | null
+      paymentStatus: $Enums.FinancePaymentStatus
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["showcaseSiteFinance"]>
+    composites: {}
+  }
+
+  type ShowcaseSiteFinanceGetPayload<S extends boolean | null | undefined | ShowcaseSiteFinanceDefaultArgs> = $Result.GetResult<Prisma.$ShowcaseSiteFinancePayload, S>
+
+  type ShowcaseSiteFinanceCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ShowcaseSiteFinanceFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ShowcaseSiteFinanceCountAggregateInputType | true
+    }
+
+  export interface ShowcaseSiteFinanceDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ShowcaseSiteFinance'], meta: { name: 'ShowcaseSiteFinance' } }
+    /**
+     * Find zero or one ShowcaseSiteFinance that matches the filter.
+     * @param {ShowcaseSiteFinanceFindUniqueArgs} args - Arguments to find a ShowcaseSiteFinance
+     * @example
+     * // Get one ShowcaseSiteFinance
+     * const showcaseSiteFinance = await prisma.showcaseSiteFinance.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ShowcaseSiteFinanceFindUniqueArgs>(args: SelectSubset<T, ShowcaseSiteFinanceFindUniqueArgs<ExtArgs>>): Prisma__ShowcaseSiteFinanceClient<$Result.GetResult<Prisma.$ShowcaseSiteFinancePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ShowcaseSiteFinance that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ShowcaseSiteFinanceFindUniqueOrThrowArgs} args - Arguments to find a ShowcaseSiteFinance
+     * @example
+     * // Get one ShowcaseSiteFinance
+     * const showcaseSiteFinance = await prisma.showcaseSiteFinance.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ShowcaseSiteFinanceFindUniqueOrThrowArgs>(args: SelectSubset<T, ShowcaseSiteFinanceFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ShowcaseSiteFinanceClient<$Result.GetResult<Prisma.$ShowcaseSiteFinancePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ShowcaseSiteFinance that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShowcaseSiteFinanceFindFirstArgs} args - Arguments to find a ShowcaseSiteFinance
+     * @example
+     * // Get one ShowcaseSiteFinance
+     * const showcaseSiteFinance = await prisma.showcaseSiteFinance.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ShowcaseSiteFinanceFindFirstArgs>(args?: SelectSubset<T, ShowcaseSiteFinanceFindFirstArgs<ExtArgs>>): Prisma__ShowcaseSiteFinanceClient<$Result.GetResult<Prisma.$ShowcaseSiteFinancePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ShowcaseSiteFinance that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShowcaseSiteFinanceFindFirstOrThrowArgs} args - Arguments to find a ShowcaseSiteFinance
+     * @example
+     * // Get one ShowcaseSiteFinance
+     * const showcaseSiteFinance = await prisma.showcaseSiteFinance.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ShowcaseSiteFinanceFindFirstOrThrowArgs>(args?: SelectSubset<T, ShowcaseSiteFinanceFindFirstOrThrowArgs<ExtArgs>>): Prisma__ShowcaseSiteFinanceClient<$Result.GetResult<Prisma.$ShowcaseSiteFinancePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ShowcaseSiteFinances that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShowcaseSiteFinanceFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ShowcaseSiteFinances
+     * const showcaseSiteFinances = await prisma.showcaseSiteFinance.findMany()
+     * 
+     * // Get first 10 ShowcaseSiteFinances
+     * const showcaseSiteFinances = await prisma.showcaseSiteFinance.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const showcaseSiteFinanceWithIdOnly = await prisma.showcaseSiteFinance.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ShowcaseSiteFinanceFindManyArgs>(args?: SelectSubset<T, ShowcaseSiteFinanceFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShowcaseSiteFinancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ShowcaseSiteFinance.
+     * @param {ShowcaseSiteFinanceCreateArgs} args - Arguments to create a ShowcaseSiteFinance.
+     * @example
+     * // Create one ShowcaseSiteFinance
+     * const ShowcaseSiteFinance = await prisma.showcaseSiteFinance.create({
+     *   data: {
+     *     // ... data to create a ShowcaseSiteFinance
+     *   }
+     * })
+     * 
+     */
+    create<T extends ShowcaseSiteFinanceCreateArgs>(args: SelectSubset<T, ShowcaseSiteFinanceCreateArgs<ExtArgs>>): Prisma__ShowcaseSiteFinanceClient<$Result.GetResult<Prisma.$ShowcaseSiteFinancePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ShowcaseSiteFinances.
+     * @param {ShowcaseSiteFinanceCreateManyArgs} args - Arguments to create many ShowcaseSiteFinances.
+     * @example
+     * // Create many ShowcaseSiteFinances
+     * const showcaseSiteFinance = await prisma.showcaseSiteFinance.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ShowcaseSiteFinanceCreateManyArgs>(args?: SelectSubset<T, ShowcaseSiteFinanceCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ShowcaseSiteFinances and returns the data saved in the database.
+     * @param {ShowcaseSiteFinanceCreateManyAndReturnArgs} args - Arguments to create many ShowcaseSiteFinances.
+     * @example
+     * // Create many ShowcaseSiteFinances
+     * const showcaseSiteFinance = await prisma.showcaseSiteFinance.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ShowcaseSiteFinances and only return the `id`
+     * const showcaseSiteFinanceWithIdOnly = await prisma.showcaseSiteFinance.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ShowcaseSiteFinanceCreateManyAndReturnArgs>(args?: SelectSubset<T, ShowcaseSiteFinanceCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShowcaseSiteFinancePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ShowcaseSiteFinance.
+     * @param {ShowcaseSiteFinanceDeleteArgs} args - Arguments to delete one ShowcaseSiteFinance.
+     * @example
+     * // Delete one ShowcaseSiteFinance
+     * const ShowcaseSiteFinance = await prisma.showcaseSiteFinance.delete({
+     *   where: {
+     *     // ... filter to delete one ShowcaseSiteFinance
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ShowcaseSiteFinanceDeleteArgs>(args: SelectSubset<T, ShowcaseSiteFinanceDeleteArgs<ExtArgs>>): Prisma__ShowcaseSiteFinanceClient<$Result.GetResult<Prisma.$ShowcaseSiteFinancePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ShowcaseSiteFinance.
+     * @param {ShowcaseSiteFinanceUpdateArgs} args - Arguments to update one ShowcaseSiteFinance.
+     * @example
+     * // Update one ShowcaseSiteFinance
+     * const showcaseSiteFinance = await prisma.showcaseSiteFinance.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ShowcaseSiteFinanceUpdateArgs>(args: SelectSubset<T, ShowcaseSiteFinanceUpdateArgs<ExtArgs>>): Prisma__ShowcaseSiteFinanceClient<$Result.GetResult<Prisma.$ShowcaseSiteFinancePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ShowcaseSiteFinances.
+     * @param {ShowcaseSiteFinanceDeleteManyArgs} args - Arguments to filter ShowcaseSiteFinances to delete.
+     * @example
+     * // Delete a few ShowcaseSiteFinances
+     * const { count } = await prisma.showcaseSiteFinance.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ShowcaseSiteFinanceDeleteManyArgs>(args?: SelectSubset<T, ShowcaseSiteFinanceDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ShowcaseSiteFinances.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShowcaseSiteFinanceUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ShowcaseSiteFinances
+     * const showcaseSiteFinance = await prisma.showcaseSiteFinance.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ShowcaseSiteFinanceUpdateManyArgs>(args: SelectSubset<T, ShowcaseSiteFinanceUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ShowcaseSiteFinances and returns the data updated in the database.
+     * @param {ShowcaseSiteFinanceUpdateManyAndReturnArgs} args - Arguments to update many ShowcaseSiteFinances.
+     * @example
+     * // Update many ShowcaseSiteFinances
+     * const showcaseSiteFinance = await prisma.showcaseSiteFinance.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ShowcaseSiteFinances and only return the `id`
+     * const showcaseSiteFinanceWithIdOnly = await prisma.showcaseSiteFinance.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ShowcaseSiteFinanceUpdateManyAndReturnArgs>(args: SelectSubset<T, ShowcaseSiteFinanceUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShowcaseSiteFinancePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ShowcaseSiteFinance.
+     * @param {ShowcaseSiteFinanceUpsertArgs} args - Arguments to update or create a ShowcaseSiteFinance.
+     * @example
+     * // Update or create a ShowcaseSiteFinance
+     * const showcaseSiteFinance = await prisma.showcaseSiteFinance.upsert({
+     *   create: {
+     *     // ... data to create a ShowcaseSiteFinance
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ShowcaseSiteFinance we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ShowcaseSiteFinanceUpsertArgs>(args: SelectSubset<T, ShowcaseSiteFinanceUpsertArgs<ExtArgs>>): Prisma__ShowcaseSiteFinanceClient<$Result.GetResult<Prisma.$ShowcaseSiteFinancePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ShowcaseSiteFinances.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShowcaseSiteFinanceCountArgs} args - Arguments to filter ShowcaseSiteFinances to count.
+     * @example
+     * // Count the number of ShowcaseSiteFinances
+     * const count = await prisma.showcaseSiteFinance.count({
+     *   where: {
+     *     // ... the filter for the ShowcaseSiteFinances we want to count
+     *   }
+     * })
+    **/
+    count<T extends ShowcaseSiteFinanceCountArgs>(
+      args?: Subset<T, ShowcaseSiteFinanceCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ShowcaseSiteFinanceCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ShowcaseSiteFinance.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShowcaseSiteFinanceAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ShowcaseSiteFinanceAggregateArgs>(args: Subset<T, ShowcaseSiteFinanceAggregateArgs>): Prisma.PrismaPromise<GetShowcaseSiteFinanceAggregateType<T>>
+
+    /**
+     * Group by ShowcaseSiteFinance.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShowcaseSiteFinanceGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ShowcaseSiteFinanceGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ShowcaseSiteFinanceGroupByArgs['orderBy'] }
+        : { orderBy?: ShowcaseSiteFinanceGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ShowcaseSiteFinanceGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetShowcaseSiteFinanceGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ShowcaseSiteFinance model
+   */
+  readonly fields: ShowcaseSiteFinanceFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ShowcaseSiteFinance.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ShowcaseSiteFinanceClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ShowcaseSiteFinance model
+   */
+  interface ShowcaseSiteFinanceFieldRefs {
+    readonly id: FieldRef<"ShowcaseSiteFinance", 'String'>
+    readonly siteName: FieldRef<"ShowcaseSiteFinance", 'String'>
+    readonly clientName: FieldRef<"ShowcaseSiteFinance", 'String'>
+    readonly clientCompany: FieldRef<"ShowcaseSiteFinance", 'String'>
+    readonly publicLabel: FieldRef<"ShowcaseSiteFinance", 'String'>
+    readonly creationStandardPriceHT: FieldRef<"ShowcaseSiteFinance", 'Decimal'>
+    readonly creationSoldHT: FieldRef<"ShowcaseSiteFinance", 'Decimal'>
+    readonly creationStatus: FieldRef<"ShowcaseSiteFinance", 'ShowcaseCreationStatus'>
+    readonly maintenanceMonthlyHT: FieldRef<"ShowcaseSiteFinance", 'Decimal'>
+    readonly maintenanceStatus: FieldRef<"ShowcaseSiteFinance", 'ShowcaseMaintenanceStatus'>
+    readonly domainCostHT: FieldRef<"ShowcaseSiteFinance", 'Decimal'>
+    readonly workspaceCostHT: FieldRef<"ShowcaseSiteFinance", 'Decimal'>
+    readonly otherMonthlyCostsHT: FieldRef<"ShowcaseSiteFinance", 'Decimal'>
+    readonly internalNotes: FieldRef<"ShowcaseSiteFinance", 'String'>
+    readonly sageCustomerId: FieldRef<"ShowcaseSiteFinance", 'String'>
+    readonly officialInvoiceNumber: FieldRef<"ShowcaseSiteFinance", 'String'>
+    readonly officialPdfUrl: FieldRef<"ShowcaseSiteFinance", 'String'>
+    readonly electronicInvoiceStatus: FieldRef<"ShowcaseSiteFinance", 'ElectronicInvoiceStatus'>
+    readonly platformProvider: FieldRef<"ShowcaseSiteFinance", 'String'>
+    readonly platformInvoiceId: FieldRef<"ShowcaseSiteFinance", 'String'>
+    readonly paymentStatus: FieldRef<"ShowcaseSiteFinance", 'FinancePaymentStatus'>
+    readonly createdAt: FieldRef<"ShowcaseSiteFinance", 'DateTime'>
+    readonly updatedAt: FieldRef<"ShowcaseSiteFinance", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ShowcaseSiteFinance findUnique
+   */
+  export type ShowcaseSiteFinanceFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShowcaseSiteFinance
+     */
+    select?: ShowcaseSiteFinanceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ShowcaseSiteFinance
+     */
+    omit?: ShowcaseSiteFinanceOmit<ExtArgs> | null
+    /**
+     * Filter, which ShowcaseSiteFinance to fetch.
+     */
+    where: ShowcaseSiteFinanceWhereUniqueInput
+  }
+
+  /**
+   * ShowcaseSiteFinance findUniqueOrThrow
+   */
+  export type ShowcaseSiteFinanceFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShowcaseSiteFinance
+     */
+    select?: ShowcaseSiteFinanceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ShowcaseSiteFinance
+     */
+    omit?: ShowcaseSiteFinanceOmit<ExtArgs> | null
+    /**
+     * Filter, which ShowcaseSiteFinance to fetch.
+     */
+    where: ShowcaseSiteFinanceWhereUniqueInput
+  }
+
+  /**
+   * ShowcaseSiteFinance findFirst
+   */
+  export type ShowcaseSiteFinanceFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShowcaseSiteFinance
+     */
+    select?: ShowcaseSiteFinanceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ShowcaseSiteFinance
+     */
+    omit?: ShowcaseSiteFinanceOmit<ExtArgs> | null
+    /**
+     * Filter, which ShowcaseSiteFinance to fetch.
+     */
+    where?: ShowcaseSiteFinanceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ShowcaseSiteFinances to fetch.
+     */
+    orderBy?: ShowcaseSiteFinanceOrderByWithRelationInput | ShowcaseSiteFinanceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ShowcaseSiteFinances.
+     */
+    cursor?: ShowcaseSiteFinanceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ShowcaseSiteFinances from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ShowcaseSiteFinances.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ShowcaseSiteFinances.
+     */
+    distinct?: ShowcaseSiteFinanceScalarFieldEnum | ShowcaseSiteFinanceScalarFieldEnum[]
+  }
+
+  /**
+   * ShowcaseSiteFinance findFirstOrThrow
+   */
+  export type ShowcaseSiteFinanceFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShowcaseSiteFinance
+     */
+    select?: ShowcaseSiteFinanceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ShowcaseSiteFinance
+     */
+    omit?: ShowcaseSiteFinanceOmit<ExtArgs> | null
+    /**
+     * Filter, which ShowcaseSiteFinance to fetch.
+     */
+    where?: ShowcaseSiteFinanceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ShowcaseSiteFinances to fetch.
+     */
+    orderBy?: ShowcaseSiteFinanceOrderByWithRelationInput | ShowcaseSiteFinanceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ShowcaseSiteFinances.
+     */
+    cursor?: ShowcaseSiteFinanceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ShowcaseSiteFinances from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ShowcaseSiteFinances.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ShowcaseSiteFinances.
+     */
+    distinct?: ShowcaseSiteFinanceScalarFieldEnum | ShowcaseSiteFinanceScalarFieldEnum[]
+  }
+
+  /**
+   * ShowcaseSiteFinance findMany
+   */
+  export type ShowcaseSiteFinanceFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShowcaseSiteFinance
+     */
+    select?: ShowcaseSiteFinanceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ShowcaseSiteFinance
+     */
+    omit?: ShowcaseSiteFinanceOmit<ExtArgs> | null
+    /**
+     * Filter, which ShowcaseSiteFinances to fetch.
+     */
+    where?: ShowcaseSiteFinanceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ShowcaseSiteFinances to fetch.
+     */
+    orderBy?: ShowcaseSiteFinanceOrderByWithRelationInput | ShowcaseSiteFinanceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ShowcaseSiteFinances.
+     */
+    cursor?: ShowcaseSiteFinanceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ShowcaseSiteFinances from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ShowcaseSiteFinances.
+     */
+    skip?: number
+    distinct?: ShowcaseSiteFinanceScalarFieldEnum | ShowcaseSiteFinanceScalarFieldEnum[]
+  }
+
+  /**
+   * ShowcaseSiteFinance create
+   */
+  export type ShowcaseSiteFinanceCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShowcaseSiteFinance
+     */
+    select?: ShowcaseSiteFinanceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ShowcaseSiteFinance
+     */
+    omit?: ShowcaseSiteFinanceOmit<ExtArgs> | null
+    /**
+     * The data needed to create a ShowcaseSiteFinance.
+     */
+    data: XOR<ShowcaseSiteFinanceCreateInput, ShowcaseSiteFinanceUncheckedCreateInput>
+  }
+
+  /**
+   * ShowcaseSiteFinance createMany
+   */
+  export type ShowcaseSiteFinanceCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ShowcaseSiteFinances.
+     */
+    data: ShowcaseSiteFinanceCreateManyInput | ShowcaseSiteFinanceCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ShowcaseSiteFinance createManyAndReturn
+   */
+  export type ShowcaseSiteFinanceCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShowcaseSiteFinance
+     */
+    select?: ShowcaseSiteFinanceSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ShowcaseSiteFinance
+     */
+    omit?: ShowcaseSiteFinanceOmit<ExtArgs> | null
+    /**
+     * The data used to create many ShowcaseSiteFinances.
+     */
+    data: ShowcaseSiteFinanceCreateManyInput | ShowcaseSiteFinanceCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ShowcaseSiteFinance update
+   */
+  export type ShowcaseSiteFinanceUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShowcaseSiteFinance
+     */
+    select?: ShowcaseSiteFinanceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ShowcaseSiteFinance
+     */
+    omit?: ShowcaseSiteFinanceOmit<ExtArgs> | null
+    /**
+     * The data needed to update a ShowcaseSiteFinance.
+     */
+    data: XOR<ShowcaseSiteFinanceUpdateInput, ShowcaseSiteFinanceUncheckedUpdateInput>
+    /**
+     * Choose, which ShowcaseSiteFinance to update.
+     */
+    where: ShowcaseSiteFinanceWhereUniqueInput
+  }
+
+  /**
+   * ShowcaseSiteFinance updateMany
+   */
+  export type ShowcaseSiteFinanceUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ShowcaseSiteFinances.
+     */
+    data: XOR<ShowcaseSiteFinanceUpdateManyMutationInput, ShowcaseSiteFinanceUncheckedUpdateManyInput>
+    /**
+     * Filter which ShowcaseSiteFinances to update
+     */
+    where?: ShowcaseSiteFinanceWhereInput
+    /**
+     * Limit how many ShowcaseSiteFinances to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ShowcaseSiteFinance updateManyAndReturn
+   */
+  export type ShowcaseSiteFinanceUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShowcaseSiteFinance
+     */
+    select?: ShowcaseSiteFinanceSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ShowcaseSiteFinance
+     */
+    omit?: ShowcaseSiteFinanceOmit<ExtArgs> | null
+    /**
+     * The data used to update ShowcaseSiteFinances.
+     */
+    data: XOR<ShowcaseSiteFinanceUpdateManyMutationInput, ShowcaseSiteFinanceUncheckedUpdateManyInput>
+    /**
+     * Filter which ShowcaseSiteFinances to update
+     */
+    where?: ShowcaseSiteFinanceWhereInput
+    /**
+     * Limit how many ShowcaseSiteFinances to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ShowcaseSiteFinance upsert
+   */
+  export type ShowcaseSiteFinanceUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShowcaseSiteFinance
+     */
+    select?: ShowcaseSiteFinanceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ShowcaseSiteFinance
+     */
+    omit?: ShowcaseSiteFinanceOmit<ExtArgs> | null
+    /**
+     * The filter to search for the ShowcaseSiteFinance to update in case it exists.
+     */
+    where: ShowcaseSiteFinanceWhereUniqueInput
+    /**
+     * In case the ShowcaseSiteFinance found by the `where` argument doesn't exist, create a new ShowcaseSiteFinance with this data.
+     */
+    create: XOR<ShowcaseSiteFinanceCreateInput, ShowcaseSiteFinanceUncheckedCreateInput>
+    /**
+     * In case the ShowcaseSiteFinance was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ShowcaseSiteFinanceUpdateInput, ShowcaseSiteFinanceUncheckedUpdateInput>
+  }
+
+  /**
+   * ShowcaseSiteFinance delete
+   */
+  export type ShowcaseSiteFinanceDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShowcaseSiteFinance
+     */
+    select?: ShowcaseSiteFinanceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ShowcaseSiteFinance
+     */
+    omit?: ShowcaseSiteFinanceOmit<ExtArgs> | null
+    /**
+     * Filter which ShowcaseSiteFinance to delete.
+     */
+    where: ShowcaseSiteFinanceWhereUniqueInput
+  }
+
+  /**
+   * ShowcaseSiteFinance deleteMany
+   */
+  export type ShowcaseSiteFinanceDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ShowcaseSiteFinances to delete
+     */
+    where?: ShowcaseSiteFinanceWhereInput
+    /**
+     * Limit how many ShowcaseSiteFinances to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ShowcaseSiteFinance without action
+   */
+  export type ShowcaseSiteFinanceDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShowcaseSiteFinance
+     */
+    select?: ShowcaseSiteFinanceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ShowcaseSiteFinance
+     */
+    omit?: ShowcaseSiteFinanceOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Model LysmaExpense
    */
 
@@ -14961,6 +16363,35 @@ export namespace Prisma {
   export type FinanceSettingsScalarFieldEnum = (typeof FinanceSettingsScalarFieldEnum)[keyof typeof FinanceSettingsScalarFieldEnum]
 
 
+  export const ShowcaseSiteFinanceScalarFieldEnum: {
+    id: 'id',
+    siteName: 'siteName',
+    clientName: 'clientName',
+    clientCompany: 'clientCompany',
+    publicLabel: 'publicLabel',
+    creationStandardPriceHT: 'creationStandardPriceHT',
+    creationSoldHT: 'creationSoldHT',
+    creationStatus: 'creationStatus',
+    maintenanceMonthlyHT: 'maintenanceMonthlyHT',
+    maintenanceStatus: 'maintenanceStatus',
+    domainCostHT: 'domainCostHT',
+    workspaceCostHT: 'workspaceCostHT',
+    otherMonthlyCostsHT: 'otherMonthlyCostsHT',
+    internalNotes: 'internalNotes',
+    sageCustomerId: 'sageCustomerId',
+    officialInvoiceNumber: 'officialInvoiceNumber',
+    officialPdfUrl: 'officialPdfUrl',
+    electronicInvoiceStatus: 'electronicInvoiceStatus',
+    platformProvider: 'platformProvider',
+    platformInvoiceId: 'platformInvoiceId',
+    paymentStatus: 'paymentStatus',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type ShowcaseSiteFinanceScalarFieldEnum = (typeof ShowcaseSiteFinanceScalarFieldEnum)[keyof typeof ShowcaseSiteFinanceScalarFieldEnum]
+
+
   export const LysmaExpenseScalarFieldEnum: {
     id: 'id',
     name: 'name',
@@ -15220,6 +16651,62 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'ShowcaseCreationStatus'
+   */
+  export type EnumShowcaseCreationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ShowcaseCreationStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'ShowcaseCreationStatus[]'
+   */
+  export type ListEnumShowcaseCreationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ShowcaseCreationStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'ShowcaseMaintenanceStatus'
+   */
+  export type EnumShowcaseMaintenanceStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ShowcaseMaintenanceStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'ShowcaseMaintenanceStatus[]'
+   */
+  export type ListEnumShowcaseMaintenanceStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ShowcaseMaintenanceStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'ElectronicInvoiceStatus'
+   */
+  export type EnumElectronicInvoiceStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ElectronicInvoiceStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'ElectronicInvoiceStatus[]'
+   */
+  export type ListEnumElectronicInvoiceStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ElectronicInvoiceStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'FinancePaymentStatus'
+   */
+  export type EnumFinancePaymentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FinancePaymentStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'FinancePaymentStatus[]'
+   */
+  export type ListEnumFinancePaymentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FinancePaymentStatus[]'>
+    
+
+
+  /**
    * Reference to a field of type 'ExpenseCategory'
    */
   export type EnumExpenseCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ExpenseCategory'>
@@ -15300,34 +16787,6 @@ export namespace Prisma {
    * Reference to a field of type 'FinanceInvoiceStatus[]'
    */
   export type ListEnumFinanceInvoiceStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FinanceInvoiceStatus[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'ElectronicInvoiceStatus'
-   */
-  export type EnumElectronicInvoiceStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ElectronicInvoiceStatus'>
-    
-
-
-  /**
-   * Reference to a field of type 'ElectronicInvoiceStatus[]'
-   */
-  export type ListEnumElectronicInvoiceStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ElectronicInvoiceStatus[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'FinancePaymentStatus'
-   */
-  export type EnumFinancePaymentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FinancePaymentStatus'>
-    
-
-
-  /**
-   * Reference to a field of type 'FinancePaymentStatus[]'
-   */
-  export type ListEnumFinancePaymentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FinancePaymentStatus[]'>
     
 
 
@@ -15919,6 +17378,150 @@ export namespace Prisma {
     declarationFrequency?: EnumFinanceDeclarationFrequencyWithAggregatesFilter<"FinanceSettings"> | $Enums.FinanceDeclarationFrequency
     createdAt?: DateTimeWithAggregatesFilter<"FinanceSettings"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"FinanceSettings"> | Date | string
+  }
+
+  export type ShowcaseSiteFinanceWhereInput = {
+    AND?: ShowcaseSiteFinanceWhereInput | ShowcaseSiteFinanceWhereInput[]
+    OR?: ShowcaseSiteFinanceWhereInput[]
+    NOT?: ShowcaseSiteFinanceWhereInput | ShowcaseSiteFinanceWhereInput[]
+    id?: StringFilter<"ShowcaseSiteFinance"> | string
+    siteName?: StringFilter<"ShowcaseSiteFinance"> | string
+    clientName?: StringFilter<"ShowcaseSiteFinance"> | string
+    clientCompany?: StringNullableFilter<"ShowcaseSiteFinance"> | string | null
+    publicLabel?: StringFilter<"ShowcaseSiteFinance"> | string
+    creationStandardPriceHT?: DecimalFilter<"ShowcaseSiteFinance"> | Decimal | DecimalJsLike | number | string
+    creationSoldHT?: DecimalFilter<"ShowcaseSiteFinance"> | Decimal | DecimalJsLike | number | string
+    creationStatus?: EnumShowcaseCreationStatusFilter<"ShowcaseSiteFinance"> | $Enums.ShowcaseCreationStatus
+    maintenanceMonthlyHT?: DecimalFilter<"ShowcaseSiteFinance"> | Decimal | DecimalJsLike | number | string
+    maintenanceStatus?: EnumShowcaseMaintenanceStatusFilter<"ShowcaseSiteFinance"> | $Enums.ShowcaseMaintenanceStatus
+    domainCostHT?: DecimalFilter<"ShowcaseSiteFinance"> | Decimal | DecimalJsLike | number | string
+    workspaceCostHT?: DecimalFilter<"ShowcaseSiteFinance"> | Decimal | DecimalJsLike | number | string
+    otherMonthlyCostsHT?: DecimalFilter<"ShowcaseSiteFinance"> | Decimal | DecimalJsLike | number | string
+    internalNotes?: StringNullableFilter<"ShowcaseSiteFinance"> | string | null
+    sageCustomerId?: StringNullableFilter<"ShowcaseSiteFinance"> | string | null
+    officialInvoiceNumber?: StringNullableFilter<"ShowcaseSiteFinance"> | string | null
+    officialPdfUrl?: StringNullableFilter<"ShowcaseSiteFinance"> | string | null
+    electronicInvoiceStatus?: EnumElectronicInvoiceStatusFilter<"ShowcaseSiteFinance"> | $Enums.ElectronicInvoiceStatus
+    platformProvider?: StringNullableFilter<"ShowcaseSiteFinance"> | string | null
+    platformInvoiceId?: StringNullableFilter<"ShowcaseSiteFinance"> | string | null
+    paymentStatus?: EnumFinancePaymentStatusFilter<"ShowcaseSiteFinance"> | $Enums.FinancePaymentStatus
+    createdAt?: DateTimeFilter<"ShowcaseSiteFinance"> | Date | string
+    updatedAt?: DateTimeFilter<"ShowcaseSiteFinance"> | Date | string
+  }
+
+  export type ShowcaseSiteFinanceOrderByWithRelationInput = {
+    id?: SortOrder
+    siteName?: SortOrder
+    clientName?: SortOrder
+    clientCompany?: SortOrderInput | SortOrder
+    publicLabel?: SortOrder
+    creationStandardPriceHT?: SortOrder
+    creationSoldHT?: SortOrder
+    creationStatus?: SortOrder
+    maintenanceMonthlyHT?: SortOrder
+    maintenanceStatus?: SortOrder
+    domainCostHT?: SortOrder
+    workspaceCostHT?: SortOrder
+    otherMonthlyCostsHT?: SortOrder
+    internalNotes?: SortOrderInput | SortOrder
+    sageCustomerId?: SortOrderInput | SortOrder
+    officialInvoiceNumber?: SortOrderInput | SortOrder
+    officialPdfUrl?: SortOrderInput | SortOrder
+    electronicInvoiceStatus?: SortOrder
+    platformProvider?: SortOrderInput | SortOrder
+    platformInvoiceId?: SortOrderInput | SortOrder
+    paymentStatus?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ShowcaseSiteFinanceWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ShowcaseSiteFinanceWhereInput | ShowcaseSiteFinanceWhereInput[]
+    OR?: ShowcaseSiteFinanceWhereInput[]
+    NOT?: ShowcaseSiteFinanceWhereInput | ShowcaseSiteFinanceWhereInput[]
+    siteName?: StringFilter<"ShowcaseSiteFinance"> | string
+    clientName?: StringFilter<"ShowcaseSiteFinance"> | string
+    clientCompany?: StringNullableFilter<"ShowcaseSiteFinance"> | string | null
+    publicLabel?: StringFilter<"ShowcaseSiteFinance"> | string
+    creationStandardPriceHT?: DecimalFilter<"ShowcaseSiteFinance"> | Decimal | DecimalJsLike | number | string
+    creationSoldHT?: DecimalFilter<"ShowcaseSiteFinance"> | Decimal | DecimalJsLike | number | string
+    creationStatus?: EnumShowcaseCreationStatusFilter<"ShowcaseSiteFinance"> | $Enums.ShowcaseCreationStatus
+    maintenanceMonthlyHT?: DecimalFilter<"ShowcaseSiteFinance"> | Decimal | DecimalJsLike | number | string
+    maintenanceStatus?: EnumShowcaseMaintenanceStatusFilter<"ShowcaseSiteFinance"> | $Enums.ShowcaseMaintenanceStatus
+    domainCostHT?: DecimalFilter<"ShowcaseSiteFinance"> | Decimal | DecimalJsLike | number | string
+    workspaceCostHT?: DecimalFilter<"ShowcaseSiteFinance"> | Decimal | DecimalJsLike | number | string
+    otherMonthlyCostsHT?: DecimalFilter<"ShowcaseSiteFinance"> | Decimal | DecimalJsLike | number | string
+    internalNotes?: StringNullableFilter<"ShowcaseSiteFinance"> | string | null
+    sageCustomerId?: StringNullableFilter<"ShowcaseSiteFinance"> | string | null
+    officialInvoiceNumber?: StringNullableFilter<"ShowcaseSiteFinance"> | string | null
+    officialPdfUrl?: StringNullableFilter<"ShowcaseSiteFinance"> | string | null
+    electronicInvoiceStatus?: EnumElectronicInvoiceStatusFilter<"ShowcaseSiteFinance"> | $Enums.ElectronicInvoiceStatus
+    platformProvider?: StringNullableFilter<"ShowcaseSiteFinance"> | string | null
+    platformInvoiceId?: StringNullableFilter<"ShowcaseSiteFinance"> | string | null
+    paymentStatus?: EnumFinancePaymentStatusFilter<"ShowcaseSiteFinance"> | $Enums.FinancePaymentStatus
+    createdAt?: DateTimeFilter<"ShowcaseSiteFinance"> | Date | string
+    updatedAt?: DateTimeFilter<"ShowcaseSiteFinance"> | Date | string
+  }, "id">
+
+  export type ShowcaseSiteFinanceOrderByWithAggregationInput = {
+    id?: SortOrder
+    siteName?: SortOrder
+    clientName?: SortOrder
+    clientCompany?: SortOrderInput | SortOrder
+    publicLabel?: SortOrder
+    creationStandardPriceHT?: SortOrder
+    creationSoldHT?: SortOrder
+    creationStatus?: SortOrder
+    maintenanceMonthlyHT?: SortOrder
+    maintenanceStatus?: SortOrder
+    domainCostHT?: SortOrder
+    workspaceCostHT?: SortOrder
+    otherMonthlyCostsHT?: SortOrder
+    internalNotes?: SortOrderInput | SortOrder
+    sageCustomerId?: SortOrderInput | SortOrder
+    officialInvoiceNumber?: SortOrderInput | SortOrder
+    officialPdfUrl?: SortOrderInput | SortOrder
+    electronicInvoiceStatus?: SortOrder
+    platformProvider?: SortOrderInput | SortOrder
+    platformInvoiceId?: SortOrderInput | SortOrder
+    paymentStatus?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: ShowcaseSiteFinanceCountOrderByAggregateInput
+    _avg?: ShowcaseSiteFinanceAvgOrderByAggregateInput
+    _max?: ShowcaseSiteFinanceMaxOrderByAggregateInput
+    _min?: ShowcaseSiteFinanceMinOrderByAggregateInput
+    _sum?: ShowcaseSiteFinanceSumOrderByAggregateInput
+  }
+
+  export type ShowcaseSiteFinanceScalarWhereWithAggregatesInput = {
+    AND?: ShowcaseSiteFinanceScalarWhereWithAggregatesInput | ShowcaseSiteFinanceScalarWhereWithAggregatesInput[]
+    OR?: ShowcaseSiteFinanceScalarWhereWithAggregatesInput[]
+    NOT?: ShowcaseSiteFinanceScalarWhereWithAggregatesInput | ShowcaseSiteFinanceScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ShowcaseSiteFinance"> | string
+    siteName?: StringWithAggregatesFilter<"ShowcaseSiteFinance"> | string
+    clientName?: StringWithAggregatesFilter<"ShowcaseSiteFinance"> | string
+    clientCompany?: StringNullableWithAggregatesFilter<"ShowcaseSiteFinance"> | string | null
+    publicLabel?: StringWithAggregatesFilter<"ShowcaseSiteFinance"> | string
+    creationStandardPriceHT?: DecimalWithAggregatesFilter<"ShowcaseSiteFinance"> | Decimal | DecimalJsLike | number | string
+    creationSoldHT?: DecimalWithAggregatesFilter<"ShowcaseSiteFinance"> | Decimal | DecimalJsLike | number | string
+    creationStatus?: EnumShowcaseCreationStatusWithAggregatesFilter<"ShowcaseSiteFinance"> | $Enums.ShowcaseCreationStatus
+    maintenanceMonthlyHT?: DecimalWithAggregatesFilter<"ShowcaseSiteFinance"> | Decimal | DecimalJsLike | number | string
+    maintenanceStatus?: EnumShowcaseMaintenanceStatusWithAggregatesFilter<"ShowcaseSiteFinance"> | $Enums.ShowcaseMaintenanceStatus
+    domainCostHT?: DecimalWithAggregatesFilter<"ShowcaseSiteFinance"> | Decimal | DecimalJsLike | number | string
+    workspaceCostHT?: DecimalWithAggregatesFilter<"ShowcaseSiteFinance"> | Decimal | DecimalJsLike | number | string
+    otherMonthlyCostsHT?: DecimalWithAggregatesFilter<"ShowcaseSiteFinance"> | Decimal | DecimalJsLike | number | string
+    internalNotes?: StringNullableWithAggregatesFilter<"ShowcaseSiteFinance"> | string | null
+    sageCustomerId?: StringNullableWithAggregatesFilter<"ShowcaseSiteFinance"> | string | null
+    officialInvoiceNumber?: StringNullableWithAggregatesFilter<"ShowcaseSiteFinance"> | string | null
+    officialPdfUrl?: StringNullableWithAggregatesFilter<"ShowcaseSiteFinance"> | string | null
+    electronicInvoiceStatus?: EnumElectronicInvoiceStatusWithAggregatesFilter<"ShowcaseSiteFinance"> | $Enums.ElectronicInvoiceStatus
+    platformProvider?: StringNullableWithAggregatesFilter<"ShowcaseSiteFinance"> | string | null
+    platformInvoiceId?: StringNullableWithAggregatesFilter<"ShowcaseSiteFinance"> | string | null
+    paymentStatus?: EnumFinancePaymentStatusWithAggregatesFilter<"ShowcaseSiteFinance"> | $Enums.FinancePaymentStatus
+    createdAt?: DateTimeWithAggregatesFilter<"ShowcaseSiteFinance"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ShowcaseSiteFinance"> | Date | string
   }
 
   export type LysmaExpenseWhereInput = {
@@ -17061,6 +18664,188 @@ export namespace Prisma {
     vatRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     vatStatus?: EnumFinanceVatStatusFieldUpdateOperationsInput | $Enums.FinanceVatStatus
     declarationFrequency?: EnumFinanceDeclarationFrequencyFieldUpdateOperationsInput | $Enums.FinanceDeclarationFrequency
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ShowcaseSiteFinanceCreateInput = {
+    id?: string
+    siteName: string
+    clientName: string
+    clientCompany?: string | null
+    publicLabel?: string
+    creationStandardPriceHT?: Decimal | DecimalJsLike | number | string
+    creationSoldHT?: Decimal | DecimalJsLike | number | string
+    creationStatus?: $Enums.ShowcaseCreationStatus
+    maintenanceMonthlyHT?: Decimal | DecimalJsLike | number | string
+    maintenanceStatus?: $Enums.ShowcaseMaintenanceStatus
+    domainCostHT?: Decimal | DecimalJsLike | number | string
+    workspaceCostHT?: Decimal | DecimalJsLike | number | string
+    otherMonthlyCostsHT?: Decimal | DecimalJsLike | number | string
+    internalNotes?: string | null
+    sageCustomerId?: string | null
+    officialInvoiceNumber?: string | null
+    officialPdfUrl?: string | null
+    electronicInvoiceStatus?: $Enums.ElectronicInvoiceStatus
+    platformProvider?: string | null
+    platformInvoiceId?: string | null
+    paymentStatus?: $Enums.FinancePaymentStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ShowcaseSiteFinanceUncheckedCreateInput = {
+    id?: string
+    siteName: string
+    clientName: string
+    clientCompany?: string | null
+    publicLabel?: string
+    creationStandardPriceHT?: Decimal | DecimalJsLike | number | string
+    creationSoldHT?: Decimal | DecimalJsLike | number | string
+    creationStatus?: $Enums.ShowcaseCreationStatus
+    maintenanceMonthlyHT?: Decimal | DecimalJsLike | number | string
+    maintenanceStatus?: $Enums.ShowcaseMaintenanceStatus
+    domainCostHT?: Decimal | DecimalJsLike | number | string
+    workspaceCostHT?: Decimal | DecimalJsLike | number | string
+    otherMonthlyCostsHT?: Decimal | DecimalJsLike | number | string
+    internalNotes?: string | null
+    sageCustomerId?: string | null
+    officialInvoiceNumber?: string | null
+    officialPdfUrl?: string | null
+    electronicInvoiceStatus?: $Enums.ElectronicInvoiceStatus
+    platformProvider?: string | null
+    platformInvoiceId?: string | null
+    paymentStatus?: $Enums.FinancePaymentStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ShowcaseSiteFinanceUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteName?: StringFieldUpdateOperationsInput | string
+    clientName?: StringFieldUpdateOperationsInput | string
+    clientCompany?: NullableStringFieldUpdateOperationsInput | string | null
+    publicLabel?: StringFieldUpdateOperationsInput | string
+    creationStandardPriceHT?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    creationSoldHT?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    creationStatus?: EnumShowcaseCreationStatusFieldUpdateOperationsInput | $Enums.ShowcaseCreationStatus
+    maintenanceMonthlyHT?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    maintenanceStatus?: EnumShowcaseMaintenanceStatusFieldUpdateOperationsInput | $Enums.ShowcaseMaintenanceStatus
+    domainCostHT?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    workspaceCostHT?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    otherMonthlyCostsHT?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    internalNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    sageCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
+    officialInvoiceNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    officialPdfUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    electronicInvoiceStatus?: EnumElectronicInvoiceStatusFieldUpdateOperationsInput | $Enums.ElectronicInvoiceStatus
+    platformProvider?: NullableStringFieldUpdateOperationsInput | string | null
+    platformInvoiceId?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentStatus?: EnumFinancePaymentStatusFieldUpdateOperationsInput | $Enums.FinancePaymentStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ShowcaseSiteFinanceUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteName?: StringFieldUpdateOperationsInput | string
+    clientName?: StringFieldUpdateOperationsInput | string
+    clientCompany?: NullableStringFieldUpdateOperationsInput | string | null
+    publicLabel?: StringFieldUpdateOperationsInput | string
+    creationStandardPriceHT?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    creationSoldHT?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    creationStatus?: EnumShowcaseCreationStatusFieldUpdateOperationsInput | $Enums.ShowcaseCreationStatus
+    maintenanceMonthlyHT?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    maintenanceStatus?: EnumShowcaseMaintenanceStatusFieldUpdateOperationsInput | $Enums.ShowcaseMaintenanceStatus
+    domainCostHT?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    workspaceCostHT?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    otherMonthlyCostsHT?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    internalNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    sageCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
+    officialInvoiceNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    officialPdfUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    electronicInvoiceStatus?: EnumElectronicInvoiceStatusFieldUpdateOperationsInput | $Enums.ElectronicInvoiceStatus
+    platformProvider?: NullableStringFieldUpdateOperationsInput | string | null
+    platformInvoiceId?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentStatus?: EnumFinancePaymentStatusFieldUpdateOperationsInput | $Enums.FinancePaymentStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ShowcaseSiteFinanceCreateManyInput = {
+    id?: string
+    siteName: string
+    clientName: string
+    clientCompany?: string | null
+    publicLabel?: string
+    creationStandardPriceHT?: Decimal | DecimalJsLike | number | string
+    creationSoldHT?: Decimal | DecimalJsLike | number | string
+    creationStatus?: $Enums.ShowcaseCreationStatus
+    maintenanceMonthlyHT?: Decimal | DecimalJsLike | number | string
+    maintenanceStatus?: $Enums.ShowcaseMaintenanceStatus
+    domainCostHT?: Decimal | DecimalJsLike | number | string
+    workspaceCostHT?: Decimal | DecimalJsLike | number | string
+    otherMonthlyCostsHT?: Decimal | DecimalJsLike | number | string
+    internalNotes?: string | null
+    sageCustomerId?: string | null
+    officialInvoiceNumber?: string | null
+    officialPdfUrl?: string | null
+    electronicInvoiceStatus?: $Enums.ElectronicInvoiceStatus
+    platformProvider?: string | null
+    platformInvoiceId?: string | null
+    paymentStatus?: $Enums.FinancePaymentStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ShowcaseSiteFinanceUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteName?: StringFieldUpdateOperationsInput | string
+    clientName?: StringFieldUpdateOperationsInput | string
+    clientCompany?: NullableStringFieldUpdateOperationsInput | string | null
+    publicLabel?: StringFieldUpdateOperationsInput | string
+    creationStandardPriceHT?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    creationSoldHT?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    creationStatus?: EnumShowcaseCreationStatusFieldUpdateOperationsInput | $Enums.ShowcaseCreationStatus
+    maintenanceMonthlyHT?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    maintenanceStatus?: EnumShowcaseMaintenanceStatusFieldUpdateOperationsInput | $Enums.ShowcaseMaintenanceStatus
+    domainCostHT?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    workspaceCostHT?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    otherMonthlyCostsHT?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    internalNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    sageCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
+    officialInvoiceNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    officialPdfUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    electronicInvoiceStatus?: EnumElectronicInvoiceStatusFieldUpdateOperationsInput | $Enums.ElectronicInvoiceStatus
+    platformProvider?: NullableStringFieldUpdateOperationsInput | string | null
+    platformInvoiceId?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentStatus?: EnumFinancePaymentStatusFieldUpdateOperationsInput | $Enums.FinancePaymentStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ShowcaseSiteFinanceUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteName?: StringFieldUpdateOperationsInput | string
+    clientName?: StringFieldUpdateOperationsInput | string
+    clientCompany?: NullableStringFieldUpdateOperationsInput | string | null
+    publicLabel?: StringFieldUpdateOperationsInput | string
+    creationStandardPriceHT?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    creationSoldHT?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    creationStatus?: EnumShowcaseCreationStatusFieldUpdateOperationsInput | $Enums.ShowcaseCreationStatus
+    maintenanceMonthlyHT?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    maintenanceStatus?: EnumShowcaseMaintenanceStatusFieldUpdateOperationsInput | $Enums.ShowcaseMaintenanceStatus
+    domainCostHT?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    workspaceCostHT?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    otherMonthlyCostsHT?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    internalNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    sageCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
+    officialInvoiceNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    officialPdfUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    electronicInvoiceStatus?: EnumElectronicInvoiceStatusFieldUpdateOperationsInput | $Enums.ElectronicInvoiceStatus
+    platformProvider?: NullableStringFieldUpdateOperationsInput | string | null
+    platformInvoiceId?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentStatus?: EnumFinancePaymentStatusFieldUpdateOperationsInput | $Enums.FinancePaymentStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -18235,6 +20020,170 @@ export namespace Prisma {
     _max?: NestedEnumFinanceDeclarationFrequencyFilter<$PrismaModel>
   }
 
+  export type EnumShowcaseCreationStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ShowcaseCreationStatus | EnumShowcaseCreationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ShowcaseCreationStatus[] | ListEnumShowcaseCreationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ShowcaseCreationStatus[] | ListEnumShowcaseCreationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumShowcaseCreationStatusFilter<$PrismaModel> | $Enums.ShowcaseCreationStatus
+  }
+
+  export type EnumShowcaseMaintenanceStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ShowcaseMaintenanceStatus | EnumShowcaseMaintenanceStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ShowcaseMaintenanceStatus[] | ListEnumShowcaseMaintenanceStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ShowcaseMaintenanceStatus[] | ListEnumShowcaseMaintenanceStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumShowcaseMaintenanceStatusFilter<$PrismaModel> | $Enums.ShowcaseMaintenanceStatus
+  }
+
+  export type EnumElectronicInvoiceStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ElectronicInvoiceStatus | EnumElectronicInvoiceStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ElectronicInvoiceStatus[] | ListEnumElectronicInvoiceStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ElectronicInvoiceStatus[] | ListEnumElectronicInvoiceStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumElectronicInvoiceStatusFilter<$PrismaModel> | $Enums.ElectronicInvoiceStatus
+  }
+
+  export type EnumFinancePaymentStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.FinancePaymentStatus | EnumFinancePaymentStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.FinancePaymentStatus[] | ListEnumFinancePaymentStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.FinancePaymentStatus[] | ListEnumFinancePaymentStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumFinancePaymentStatusFilter<$PrismaModel> | $Enums.FinancePaymentStatus
+  }
+
+  export type ShowcaseSiteFinanceCountOrderByAggregateInput = {
+    id?: SortOrder
+    siteName?: SortOrder
+    clientName?: SortOrder
+    clientCompany?: SortOrder
+    publicLabel?: SortOrder
+    creationStandardPriceHT?: SortOrder
+    creationSoldHT?: SortOrder
+    creationStatus?: SortOrder
+    maintenanceMonthlyHT?: SortOrder
+    maintenanceStatus?: SortOrder
+    domainCostHT?: SortOrder
+    workspaceCostHT?: SortOrder
+    otherMonthlyCostsHT?: SortOrder
+    internalNotes?: SortOrder
+    sageCustomerId?: SortOrder
+    officialInvoiceNumber?: SortOrder
+    officialPdfUrl?: SortOrder
+    electronicInvoiceStatus?: SortOrder
+    platformProvider?: SortOrder
+    platformInvoiceId?: SortOrder
+    paymentStatus?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ShowcaseSiteFinanceAvgOrderByAggregateInput = {
+    creationStandardPriceHT?: SortOrder
+    creationSoldHT?: SortOrder
+    maintenanceMonthlyHT?: SortOrder
+    domainCostHT?: SortOrder
+    workspaceCostHT?: SortOrder
+    otherMonthlyCostsHT?: SortOrder
+  }
+
+  export type ShowcaseSiteFinanceMaxOrderByAggregateInput = {
+    id?: SortOrder
+    siteName?: SortOrder
+    clientName?: SortOrder
+    clientCompany?: SortOrder
+    publicLabel?: SortOrder
+    creationStandardPriceHT?: SortOrder
+    creationSoldHT?: SortOrder
+    creationStatus?: SortOrder
+    maintenanceMonthlyHT?: SortOrder
+    maintenanceStatus?: SortOrder
+    domainCostHT?: SortOrder
+    workspaceCostHT?: SortOrder
+    otherMonthlyCostsHT?: SortOrder
+    internalNotes?: SortOrder
+    sageCustomerId?: SortOrder
+    officialInvoiceNumber?: SortOrder
+    officialPdfUrl?: SortOrder
+    electronicInvoiceStatus?: SortOrder
+    platformProvider?: SortOrder
+    platformInvoiceId?: SortOrder
+    paymentStatus?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ShowcaseSiteFinanceMinOrderByAggregateInput = {
+    id?: SortOrder
+    siteName?: SortOrder
+    clientName?: SortOrder
+    clientCompany?: SortOrder
+    publicLabel?: SortOrder
+    creationStandardPriceHT?: SortOrder
+    creationSoldHT?: SortOrder
+    creationStatus?: SortOrder
+    maintenanceMonthlyHT?: SortOrder
+    maintenanceStatus?: SortOrder
+    domainCostHT?: SortOrder
+    workspaceCostHT?: SortOrder
+    otherMonthlyCostsHT?: SortOrder
+    internalNotes?: SortOrder
+    sageCustomerId?: SortOrder
+    officialInvoiceNumber?: SortOrder
+    officialPdfUrl?: SortOrder
+    electronicInvoiceStatus?: SortOrder
+    platformProvider?: SortOrder
+    platformInvoiceId?: SortOrder
+    paymentStatus?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ShowcaseSiteFinanceSumOrderByAggregateInput = {
+    creationStandardPriceHT?: SortOrder
+    creationSoldHT?: SortOrder
+    maintenanceMonthlyHT?: SortOrder
+    domainCostHT?: SortOrder
+    workspaceCostHT?: SortOrder
+    otherMonthlyCostsHT?: SortOrder
+  }
+
+  export type EnumShowcaseCreationStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ShowcaseCreationStatus | EnumShowcaseCreationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ShowcaseCreationStatus[] | ListEnumShowcaseCreationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ShowcaseCreationStatus[] | ListEnumShowcaseCreationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumShowcaseCreationStatusWithAggregatesFilter<$PrismaModel> | $Enums.ShowcaseCreationStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumShowcaseCreationStatusFilter<$PrismaModel>
+    _max?: NestedEnumShowcaseCreationStatusFilter<$PrismaModel>
+  }
+
+  export type EnumShowcaseMaintenanceStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ShowcaseMaintenanceStatus | EnumShowcaseMaintenanceStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ShowcaseMaintenanceStatus[] | ListEnumShowcaseMaintenanceStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ShowcaseMaintenanceStatus[] | ListEnumShowcaseMaintenanceStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumShowcaseMaintenanceStatusWithAggregatesFilter<$PrismaModel> | $Enums.ShowcaseMaintenanceStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumShowcaseMaintenanceStatusFilter<$PrismaModel>
+    _max?: NestedEnumShowcaseMaintenanceStatusFilter<$PrismaModel>
+  }
+
+  export type EnumElectronicInvoiceStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ElectronicInvoiceStatus | EnumElectronicInvoiceStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ElectronicInvoiceStatus[] | ListEnumElectronicInvoiceStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ElectronicInvoiceStatus[] | ListEnumElectronicInvoiceStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumElectronicInvoiceStatusWithAggregatesFilter<$PrismaModel> | $Enums.ElectronicInvoiceStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumElectronicInvoiceStatusFilter<$PrismaModel>
+    _max?: NestedEnumElectronicInvoiceStatusFilter<$PrismaModel>
+  }
+
+  export type EnumFinancePaymentStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.FinancePaymentStatus | EnumFinancePaymentStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.FinancePaymentStatus[] | ListEnumFinancePaymentStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.FinancePaymentStatus[] | ListEnumFinancePaymentStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumFinancePaymentStatusWithAggregatesFilter<$PrismaModel> | $Enums.FinancePaymentStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumFinancePaymentStatusFilter<$PrismaModel>
+    _max?: NestedEnumFinancePaymentStatusFilter<$PrismaModel>
+  }
+
   export type EnumExpenseCategoryFilter<$PrismaModel = never> = {
     equals?: $Enums.ExpenseCategory | EnumExpenseCategoryFieldRefInput<$PrismaModel>
     in?: $Enums.ExpenseCategory[] | ListEnumExpenseCategoryFieldRefInput<$PrismaModel>
@@ -18490,13 +20439,6 @@ export namespace Prisma {
     not?: NestedEnumFinanceInvoiceStatusFilter<$PrismaModel> | $Enums.FinanceInvoiceStatus
   }
 
-  export type EnumElectronicInvoiceStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.ElectronicInvoiceStatus | EnumElectronicInvoiceStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.ElectronicInvoiceStatus[] | ListEnumElectronicInvoiceStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.ElectronicInvoiceStatus[] | ListEnumElectronicInvoiceStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumElectronicInvoiceStatusFilter<$PrismaModel> | $Enums.ElectronicInvoiceStatus
-  }
-
   export type FinanceInvoiceCountOrderByAggregateInput = {
     id?: SortOrder
     invoiceNumber?: SortOrder
@@ -18588,23 +20530,6 @@ export namespace Prisma {
     _max?: NestedEnumFinanceInvoiceStatusFilter<$PrismaModel>
   }
 
-  export type EnumElectronicInvoiceStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.ElectronicInvoiceStatus | EnumElectronicInvoiceStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.ElectronicInvoiceStatus[] | ListEnumElectronicInvoiceStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.ElectronicInvoiceStatus[] | ListEnumElectronicInvoiceStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumElectronicInvoiceStatusWithAggregatesFilter<$PrismaModel> | $Enums.ElectronicInvoiceStatus
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumElectronicInvoiceStatusFilter<$PrismaModel>
-    _max?: NestedEnumElectronicInvoiceStatusFilter<$PrismaModel>
-  }
-
-  export type EnumFinancePaymentStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.FinancePaymentStatus | EnumFinancePaymentStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.FinancePaymentStatus[] | ListEnumFinancePaymentStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.FinancePaymentStatus[] | ListEnumFinancePaymentStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumFinancePaymentStatusFilter<$PrismaModel> | $Enums.FinancePaymentStatus
-  }
-
   export type FinanceInvoiceNullableScalarRelationFilter = {
     is?: FinanceInvoiceWhereInput | null
     isNot?: FinanceInvoiceWhereInput | null
@@ -18666,16 +20591,6 @@ export namespace Prisma {
 
   export type FinancePaymentSumOrderByAggregateInput = {
     amount?: SortOrder
-  }
-
-  export type EnumFinancePaymentStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.FinancePaymentStatus | EnumFinancePaymentStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.FinancePaymentStatus[] | ListEnumFinancePaymentStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.FinancePaymentStatus[] | ListEnumFinancePaymentStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumFinancePaymentStatusWithAggregatesFilter<$PrismaModel> | $Enums.FinancePaymentStatus
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumFinancePaymentStatusFilter<$PrismaModel>
-    _max?: NestedEnumFinancePaymentStatusFilter<$PrismaModel>
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -18836,6 +20751,22 @@ export namespace Prisma {
     set?: $Enums.FinanceDeclarationFrequency
   }
 
+  export type EnumShowcaseCreationStatusFieldUpdateOperationsInput = {
+    set?: $Enums.ShowcaseCreationStatus
+  }
+
+  export type EnumShowcaseMaintenanceStatusFieldUpdateOperationsInput = {
+    set?: $Enums.ShowcaseMaintenanceStatus
+  }
+
+  export type EnumElectronicInvoiceStatusFieldUpdateOperationsInput = {
+    set?: $Enums.ElectronicInvoiceStatus
+  }
+
+  export type EnumFinancePaymentStatusFieldUpdateOperationsInput = {
+    set?: $Enums.FinancePaymentStatus
+  }
+
   export type EnumExpenseCategoryFieldUpdateOperationsInput = {
     set?: $Enums.ExpenseCategory
   }
@@ -18916,10 +20847,6 @@ export namespace Prisma {
     set?: $Enums.FinanceInvoiceStatus
   }
 
-  export type EnumElectronicInvoiceStatusFieldUpdateOperationsInput = {
-    set?: $Enums.ElectronicInvoiceStatus
-  }
-
   export type FinancePaymentUpdateManyWithoutInvoiceNestedInput = {
     create?: XOR<FinancePaymentCreateWithoutInvoiceInput, FinancePaymentUncheckedCreateWithoutInvoiceInput> | FinancePaymentCreateWithoutInvoiceInput[] | FinancePaymentUncheckedCreateWithoutInvoiceInput[]
     connectOrCreate?: FinancePaymentCreateOrConnectWithoutInvoiceInput | FinancePaymentCreateOrConnectWithoutInvoiceInput[]
@@ -18958,10 +20885,6 @@ export namespace Prisma {
     create?: XOR<RevenueSubscriptionCreateWithoutPaymentsInput, RevenueSubscriptionUncheckedCreateWithoutPaymentsInput>
     connectOrCreate?: RevenueSubscriptionCreateOrConnectWithoutPaymentsInput
     connect?: RevenueSubscriptionWhereUniqueInput
-  }
-
-  export type EnumFinancePaymentStatusFieldUpdateOperationsInput = {
-    set?: $Enums.FinancePaymentStatus
   }
 
   export type FinanceInvoiceUpdateOneWithoutPaymentsNestedInput = {
@@ -19249,6 +21172,74 @@ export namespace Prisma {
     _max?: NestedEnumFinanceDeclarationFrequencyFilter<$PrismaModel>
   }
 
+  export type NestedEnumShowcaseCreationStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ShowcaseCreationStatus | EnumShowcaseCreationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ShowcaseCreationStatus[] | ListEnumShowcaseCreationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ShowcaseCreationStatus[] | ListEnumShowcaseCreationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumShowcaseCreationStatusFilter<$PrismaModel> | $Enums.ShowcaseCreationStatus
+  }
+
+  export type NestedEnumShowcaseMaintenanceStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ShowcaseMaintenanceStatus | EnumShowcaseMaintenanceStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ShowcaseMaintenanceStatus[] | ListEnumShowcaseMaintenanceStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ShowcaseMaintenanceStatus[] | ListEnumShowcaseMaintenanceStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumShowcaseMaintenanceStatusFilter<$PrismaModel> | $Enums.ShowcaseMaintenanceStatus
+  }
+
+  export type NestedEnumElectronicInvoiceStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ElectronicInvoiceStatus | EnumElectronicInvoiceStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ElectronicInvoiceStatus[] | ListEnumElectronicInvoiceStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ElectronicInvoiceStatus[] | ListEnumElectronicInvoiceStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumElectronicInvoiceStatusFilter<$PrismaModel> | $Enums.ElectronicInvoiceStatus
+  }
+
+  export type NestedEnumFinancePaymentStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.FinancePaymentStatus | EnumFinancePaymentStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.FinancePaymentStatus[] | ListEnumFinancePaymentStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.FinancePaymentStatus[] | ListEnumFinancePaymentStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumFinancePaymentStatusFilter<$PrismaModel> | $Enums.FinancePaymentStatus
+  }
+
+  export type NestedEnumShowcaseCreationStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ShowcaseCreationStatus | EnumShowcaseCreationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ShowcaseCreationStatus[] | ListEnumShowcaseCreationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ShowcaseCreationStatus[] | ListEnumShowcaseCreationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumShowcaseCreationStatusWithAggregatesFilter<$PrismaModel> | $Enums.ShowcaseCreationStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumShowcaseCreationStatusFilter<$PrismaModel>
+    _max?: NestedEnumShowcaseCreationStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumShowcaseMaintenanceStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ShowcaseMaintenanceStatus | EnumShowcaseMaintenanceStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ShowcaseMaintenanceStatus[] | ListEnumShowcaseMaintenanceStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ShowcaseMaintenanceStatus[] | ListEnumShowcaseMaintenanceStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumShowcaseMaintenanceStatusWithAggregatesFilter<$PrismaModel> | $Enums.ShowcaseMaintenanceStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumShowcaseMaintenanceStatusFilter<$PrismaModel>
+    _max?: NestedEnumShowcaseMaintenanceStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumElectronicInvoiceStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ElectronicInvoiceStatus | EnumElectronicInvoiceStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ElectronicInvoiceStatus[] | ListEnumElectronicInvoiceStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ElectronicInvoiceStatus[] | ListEnumElectronicInvoiceStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumElectronicInvoiceStatusWithAggregatesFilter<$PrismaModel> | $Enums.ElectronicInvoiceStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumElectronicInvoiceStatusFilter<$PrismaModel>
+    _max?: NestedEnumElectronicInvoiceStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumFinancePaymentStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.FinancePaymentStatus | EnumFinancePaymentStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.FinancePaymentStatus[] | ListEnumFinancePaymentStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.FinancePaymentStatus[] | ListEnumFinancePaymentStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumFinancePaymentStatusWithAggregatesFilter<$PrismaModel> | $Enums.FinancePaymentStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumFinancePaymentStatusFilter<$PrismaModel>
+    _max?: NestedEnumFinancePaymentStatusFilter<$PrismaModel>
+  }
+
   export type NestedEnumExpenseCategoryFilter<$PrismaModel = never> = {
     equals?: $Enums.ExpenseCategory | EnumExpenseCategoryFieldRefInput<$PrismaModel>
     in?: $Enums.ExpenseCategory[] | ListEnumExpenseCategoryFieldRefInput<$PrismaModel>
@@ -19341,13 +21332,6 @@ export namespace Prisma {
     not?: NestedEnumFinanceInvoiceStatusFilter<$PrismaModel> | $Enums.FinanceInvoiceStatus
   }
 
-  export type NestedEnumElectronicInvoiceStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.ElectronicInvoiceStatus | EnumElectronicInvoiceStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.ElectronicInvoiceStatus[] | ListEnumElectronicInvoiceStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.ElectronicInvoiceStatus[] | ListEnumElectronicInvoiceStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumElectronicInvoiceStatusFilter<$PrismaModel> | $Enums.ElectronicInvoiceStatus
-  }
-
   export type NestedEnumFinanceInvoiceStatusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.FinanceInvoiceStatus | EnumFinanceInvoiceStatusFieldRefInput<$PrismaModel>
     in?: $Enums.FinanceInvoiceStatus[] | ListEnumFinanceInvoiceStatusFieldRefInput<$PrismaModel>
@@ -19356,33 +21340,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumFinanceInvoiceStatusFilter<$PrismaModel>
     _max?: NestedEnumFinanceInvoiceStatusFilter<$PrismaModel>
-  }
-
-  export type NestedEnumElectronicInvoiceStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.ElectronicInvoiceStatus | EnumElectronicInvoiceStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.ElectronicInvoiceStatus[] | ListEnumElectronicInvoiceStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.ElectronicInvoiceStatus[] | ListEnumElectronicInvoiceStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumElectronicInvoiceStatusWithAggregatesFilter<$PrismaModel> | $Enums.ElectronicInvoiceStatus
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumElectronicInvoiceStatusFilter<$PrismaModel>
-    _max?: NestedEnumElectronicInvoiceStatusFilter<$PrismaModel>
-  }
-
-  export type NestedEnumFinancePaymentStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.FinancePaymentStatus | EnumFinancePaymentStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.FinancePaymentStatus[] | ListEnumFinancePaymentStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.FinancePaymentStatus[] | ListEnumFinancePaymentStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumFinancePaymentStatusFilter<$PrismaModel> | $Enums.FinancePaymentStatus
-  }
-
-  export type NestedEnumFinancePaymentStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.FinancePaymentStatus | EnumFinancePaymentStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.FinancePaymentStatus[] | ListEnumFinancePaymentStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.FinancePaymentStatus[] | ListEnumFinancePaymentStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumFinancePaymentStatusWithAggregatesFilter<$PrismaModel> | $Enums.FinancePaymentStatus
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumFinancePaymentStatusFilter<$PrismaModel>
-    _max?: NestedEnumFinancePaymentStatusFilter<$PrismaModel>
   }
 
   export type AccesCreateWithoutClientInput = {

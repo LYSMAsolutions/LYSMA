@@ -15,7 +15,7 @@ export default async function RevenusPage() {
     <div className={styles.page}>
       <section className={styles.hero}>
         <div>
-          <div className={styles.termHeader}><span className={styles.prompt}>finance@lysma</span><span className={styles.cmd}> $ revenus</span></div>
+          <div className={styles.termHeader}><span className={styles.prompt}>lysmasolutions@gmail.com</span><span className={styles.cmd}>revenus</span></div>
           <h1>Revenus entrants</h1>
           <p>Abonnements vendus, essais, impayes, prochaines facturations et champs prets pour GoCardless et Sage.</p>
         </div>
@@ -46,7 +46,7 @@ export default async function RevenusPage() {
             </tr>
           </thead>
           <tbody>
-            {data.revenues.map((item) => (
+              {data.revenues.map((item) => (
               <tr key={item.id}>
                 <td><span className={styles.mainText}>{item.clientCompany ?? item.clientName}</span><span className={styles.muted}>{item.clientName}</span></td>
                 <td><span className={styles.tag}>{item.tool}</span></td>
@@ -62,6 +62,7 @@ export default async function RevenusPage() {
                 <td>{item.status === 'IMPAYE' ? 'a relancer' : 'suivi'}</td>
               </tr>
             ))}
+            {data.revenues.length === 0 && <tr><td colSpan={12} className={styles.empty}>Aucun revenu enregistre</td></tr>}
           </tbody>
         </table>
       </section>
@@ -69,9 +70,11 @@ export default async function RevenusPage() {
   )
 
   function statusClass(status: string) {
-    if (status === 'ACTIF') return styles.green
+    if (status === 'ACTIF' || status === 'ACTIF_PAYANT') return styles.green
     if (status === 'ESSAI') return styles.yellow
     if (status === 'IMPAYE') return styles.red
+    if (status === 'OFFERT') return styles.muted
     return styles.muted
   }
 }
+

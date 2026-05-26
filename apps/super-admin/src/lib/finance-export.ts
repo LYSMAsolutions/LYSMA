@@ -2,6 +2,7 @@ import type { FinanceData } from '@/lib/finance'
 import { formatDate, formatEuro, formatPercent } from '@/lib/finance'
 
 export function buildFinanceSpreadsheet(data: FinanceData, period: string) {
+  const accountingRevenues = data.revenues.filter((item) => item.status === 'ACTIF' || item.status === 'ACTIF_PAYANT')
   const worksheets = [
     sheet('Resume', [
       ['Periode', period],
@@ -16,7 +17,7 @@ export function buildFinanceSpreadsheet(data: FinanceData, period: string) {
     ]),
     sheet('Revenus', [
       ['Client', 'Societe', 'Outil', 'Formule', 'HT', 'TVA', 'TTC', 'Frequence', 'Statut', 'Prochaine facture', 'Prochain paiement'],
-      ...data.revenues.map((item) => [
+      ...accountingRevenues.map((item) => [
         item.clientName,
         item.clientCompany ?? '',
         item.tool,
@@ -44,6 +45,25 @@ export function buildFinanceSpreadsheet(data: FinanceData, period: string) {
         item.status,
         formatDate(item.renewalDate),
       ]),
+    ]),
+    sheet('Sites vitrines', [
+      ['Site', 'Client', 'Ligne client', 'Creation standard HT', 'Creation vendue HT', 'Statut creation', 'Maintenance HT/mois', 'Statut maintenance', 'Couts internes mensuels HT', 'Marge mensuelle HT'],
+      ...data.showcaseSites.map((site) => {
+        const costs = site.domainCostHT / 12 + site.workspaceCostHT + site.otherMonthlyCostsHT
+        const revenue = site.maintenanceStatus === 'MAINTENANCE_PAYANTE' || site.maintenanceStatus === 'ABONNEMENT_ACTIF' ? site.maintenanceMonthlyHT : 0
+        return [
+          site.siteName,
+          site.clientCompany ?? site.clientName,
+          site.publicLabel,
+          money(site.creationStandardPriceHT),
+          money(site.creationSoldHT),
+          site.creationStatus,
+          money(site.maintenanceMonthlyHT),
+          site.maintenanceStatus,
+          money(costs),
+          money(revenue - costs),
+        ]
+      }),
     ]),
     sheet('URSSAF', [
       ['CA encaisse mensuel estime', money(data.kpis.monthRevenue)],
@@ -110,10 +130,13 @@ export function buildFinanceSpreadsheet(data: FinanceData, period: string) {
 }
 
 export function buildFinancePdf(data: FinanceData, period: string) {
+  const accountingRevenues = data.revenues.filter((item) => item.status === 'ACTIF' || item.status === 'ACTIF_PAYANT')
   const lines = [
-    'LYSMA Solutions - Rapport financier',
+    'LYSMA Solutions - Synthese pre-comptable',
     `Periode analysee : ${period}`,
-    'Document de pilotage interne, a transmettre a l expert-comptable.',
+    `Contact LYSMA : lysmasolutions@gmail.com`,
+    'Document de synthese pre-comptable genere par LYSMA Solutions.',
+    'Donnees a verifier et valider par l expert-comptable.',
     '',
     `CA du mois : ${formatEuro(data.kpis.monthRevenue)}`,
     `CA annuel : ${formatEuro(data.kpis.yearRevenue)}`,
@@ -124,9 +147,19 @@ export function buildFinancePdf(data: FinanceData, period: string) {
     `Resultat net estime : ${formatEuro(data.kpis.netResult)}`,
     `Rentabilite globale : ${formatPercent(data.kpis.profitabilityRate)}`,
     '',
-    'Revenus principaux',
-    ...data.revenues.slice(0, 12).map((item) => (
+    'Revenus comptables retenus',
+    ...accountingRevenues.slice(0, 12).map((item) => (
       `- ${item.clientCompany ?? item.clientName} / ${item.tool} / ${item.planName} : ${formatEuro(item.amountHT)} HT (${item.status})`
+    )),
+    '',
+    'Essais et offres exclus du CA',
+    ...data.revenues.filter((item) => item.status === 'ESSAI' || item.status === 'OFFERT').slice(0, 8).map((item) => (
+      `- ${item.clientCompany ?? item.clientName} / ${item.tool} : ${item.status}`
+    )),
+    '',
+    'Sites vitrines',
+    ...data.showcaseSites.slice(0, 10).map((site) => (
+      `- ${site.siteName} / ${site.publicLabel} : maintenance ${formatEuro(site.maintenanceMonthlyHT)} HT/mois (${site.maintenanceStatus})`
     )),
     '',
     'Charges principales',
@@ -160,7 +193,7 @@ function xml(value: string) {
 }
 
 function money(value: number) {
-  return value.toFixed(2).replace('.', ',')
+  return `${value.toFixed(2).replace('.', ',')} EUR`
 }
 
 function percent(value: number) {

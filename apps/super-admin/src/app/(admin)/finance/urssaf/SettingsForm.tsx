@@ -61,3 +61,4 @@ export function SettingsForm({ settings }: { settings: FinanceSettingsView }) {
     </form>
   )
 }
+

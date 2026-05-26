@@ -18,8 +18,8 @@ export default async function FinancePage() {
       <section className={styles.hero}>
         <div>
           <div className={styles.termHeader}>
-            <span className={styles.prompt}>finance@lysma</span>
-            <span className={styles.cmd}> $ cockpit --expert-comptable</span>
+            <span className={styles.prompt}>lysmasolutions@gmail.com</span>
+            <span className={styles.cmd}>cockpit expert-comptable</span>
           </div>
           <h1>Finance / Expert-comptable</h1>
           <p>
@@ -35,30 +35,21 @@ export default async function FinancePage() {
 
       <FinanceNav />
 
-      {data.usesMockData && (
-        <section className={styles.panel}>
-          <div className={styles.panelBody}>
-            <span className={styles.yellow}>Donnees de demonstration</span>
-            <p className={styles.muted}>
-              Aucune donnee finance n'existe encore. Le cockpit affiche une base de lecture pour valider les calculs.
-            </p>
-          </div>
-        </section>
-      )}
-
       <section className={styles.statsGrid}>
         <Stat label="CA mois" value={formatEuro(data.kpis.monthRevenue)} tone="cyan" />
         <Stat label="CA annuel" value={formatEuro(data.kpis.yearRevenue)} tone="green" />
         <Stat label="MRR" value={formatEuro(data.kpis.mrr)} tone="purple" />
         <Stat label="ARR" value={formatEuro(data.kpis.arr)} tone="purple" />
         <Stat label="Clients actifs" value={data.kpis.activeSubscriptions.toString()} tone="green" />
-        <Stat label="Essais" value={data.kpis.trialSubscriptions.toString()} tone="yellow" />
+        <Stat label="Essais en cours" value={data.kpis.trialSubscriptions.toString()} tone="yellow" />
         <Stat label="Impayes" value={data.kpis.unpaidSubscriptions.toString()} tone={data.kpis.unpaidSubscriptions > 0 ? 'red' : 'muted'} />
         <Stat label="Charges mensuelles" value={formatEuro(data.kpis.monthlyExpenses)} tone="yellow" />
         <Stat label="Charges annuelles" value={formatEuro(data.kpis.annualExpenses)} tone="yellow" />
         <Stat label="URSSAF estimee" value={formatEuro(data.kpis.urssafEstimate)} tone="red" />
         <Stat label="Net estime" value={formatEuro(data.kpis.netResult)} tone={data.kpis.netResult >= 0 ? 'green' : 'red'} />
         <Stat label="Rentabilite" value={formatPercent(data.kpis.profitabilityRate)} tone={data.kpis.profitabilityRate >= 0 ? 'green' : 'red'} />
+        <Stat label="Offert" value={formatEuro(data.kpis.offeredRevenue)} tone="muted" />
+        <Stat label="Potentiel essais" value={`${formatEuro(data.kpis.trialPotentialMrr)} / mois`} tone="yellow" />
       </section>
 
       <section className={styles.grid}>
@@ -75,7 +66,7 @@ export default async function FinancePage() {
               </tr>
             </thead>
             <tbody>
-              {data.revenues.slice(0, 6).map((item) => (
+              {data.revenues.filter((item) => item.status === 'ACTIF' || item.status === 'ACTIF_PAYANT').slice(0, 6).map((item) => (
                 <tr key={item.id}>
                   <td><span className={styles.mainText}>{item.clientCompany ?? item.clientName}</span><span className={styles.muted}>{item.clientName}</span></td>
                   <td><span className={styles.tag}>{item.tool}</span></td>
@@ -85,6 +76,9 @@ export default async function FinancePage() {
                   <td>{formatDate(item.nextInvoiceAt)}</td>
                 </tr>
               ))}
+              {data.revenues.filter((item) => item.status === 'ACTIF' || item.status === 'ACTIF_PAYANT').length === 0 && (
+                <tr><td colSpan={6} className={styles.empty}>Aucun revenu actif payant enregistre</td></tr>
+              )}
             </tbody>
           </table>
         </Panel>
@@ -98,6 +92,34 @@ export default async function FinancePage() {
           </div>
         </Panel>
       </section>
+
+      <Panel title="// essais_en_cours" subtitle="Ces montants ne sont pas comptes dans le CA, l'URSSAF, la rentabilite ou les exports comptables.">
+        <table className={styles.table}>
+          <thead>
+            <tr>
+              <th>client</th>
+              <th>outil</th>
+              <th>formule</th>
+              <th>potentiel</th>
+              <th>fin essai</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.revenues.filter((item) => item.status === 'ESSAI').map((item) => (
+              <tr key={item.id}>
+                <td><span className={styles.mainText}>{item.clientCompany ?? item.clientName}</span><span className={styles.muted}>{item.clientName}</span></td>
+                <td><span className={styles.tag}>{item.tool}</span></td>
+                <td>{item.planName}</td>
+                <td>{formatEuro(item.amountHT)} / mois</td>
+                <td>{formatDate(item.trialEndAt)}</td>
+              </tr>
+            ))}
+            {data.revenues.filter((item) => item.status === 'ESSAI').length === 0 && (
+              <tr><td colSpan={5} className={styles.empty}>Aucun essai en cours</td></tr>
+            )}
+          </tbody>
+        </table>
+      </Panel>
 
       <Panel title="// marge_par_outil" subtitle="Vue produit : ce qui rapporte, ce qui consomme.">
         <table className={styles.table}>
@@ -153,6 +175,7 @@ function Panel({ title, subtitle, children }: { title: string; subtitle?: string
 }
 
 function Status({ value }: { value: string }) {
-  const tone = value === 'ACTIF' ? 'green' : value === 'ESSAI' ? 'yellow' : value === 'IMPAYE' ? 'red' : 'muted'
+  const tone = value === 'ACTIF' || value === 'ACTIF_PAYANT' ? 'green' : value === 'ESSAI' ? 'yellow' : value === 'IMPAYE' ? 'red' : 'muted'
   return <span className={styles[tone] ?? styles.muted}>{value.toLowerCase()}</span>
 }
+

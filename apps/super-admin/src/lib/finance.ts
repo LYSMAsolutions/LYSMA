@@ -1,8 +1,8 @@
 import { prisma } from '@/lib/prisma'
 
-export type FinanceToolKey = 'GLOBAL' | 'LIVO' | 'PMA' | 'TRANSPORT' | 'AUTRE'
+export type FinanceToolKey = 'GLOBAL' | 'LIVO' | 'PMA' | 'TRANSPORT' | 'SITE_VITRINE' | 'AUTRE'
 export type FinanceFrequencyKey = 'MENSUEL' | 'ANNUEL' | 'PONCTUEL'
-export type RevenueStatusKey = 'ACTIF' | 'ESSAI' | 'SUSPENDU' | 'IMPAYE' | 'RESILIE'
+export type RevenueStatusKey = 'ACTIF_PAYANT' | 'ACTIF' | 'ESSAI' | 'OFFERT' | 'SUSPENDU' | 'IMPAYE' | 'RESILIE'
 export type ExpenseStatusKey = 'ACTIF' | 'ARRETE' | 'A_VERIFIER'
 
 export type FinanceSettingsView = {
@@ -81,6 +81,30 @@ export type PaymentView = {
   failureReason: string | null
 }
 
+export type ShowcaseSiteFinanceView = {
+  id: string
+  siteName: string
+  clientName: string
+  clientCompany: string | null
+  publicLabel: string
+  creationStandardPriceHT: number
+  creationSoldHT: number
+  creationStatus: 'CREATION_FACTUREE' | 'CREATION_OFFERTE'
+  maintenanceMonthlyHT: number
+  maintenanceStatus: 'ABONNEMENT_ACTIF' | 'MAINTENANCE_OFFERTE' | 'MAINTENANCE_PAYANTE'
+  domainCostHT: number
+  workspaceCostHT: number
+  otherMonthlyCostsHT: number
+  internalNotes: string | null
+  sageCustomerId: string | null
+  officialInvoiceNumber: string | null
+  officialPdfUrl: string | null
+  electronicInvoiceStatus: string
+  platformProvider: string | null
+  platformInvoiceId: string | null
+  paymentStatus: string
+}
+
 export type ToolMargin = {
   tool: FinanceToolKey
   revenue: number
@@ -107,6 +131,8 @@ export type FinanceKpis = {
   profitabilityRate: number
   nextMonthForecast: number
   vatEstimate: number
+  offeredRevenue: number
+  trialPotentialMrr: number
 }
 
 export type FinanceData = {
@@ -115,29 +141,28 @@ export type FinanceData = {
   expenses: ExpenseView[]
   invoices: InvoiceView[]
   payments: PaymentView[]
+  showcaseSites: ShowcaseSiteFinanceView[]
   kpis: FinanceKpis
   margins: ToolMargin[]
-  usesMockData: boolean
 }
 
-const now = () => new Date()
-const addDays = (date: Date, days: number) => new Date(date.getTime() + days * 86400000)
-
 export async function getFinanceData(): Promise<FinanceData> {
-  const [settings, revenuesRaw, expensesRaw, invoicesRaw, paymentsRaw] = await Promise.all([
+  const [settings, revenuesRaw, expensesRaw, invoicesRaw, paymentsRaw, showcaseSitesRaw] = await Promise.all([
     getFinanceSettings(),
     prisma.revenueSubscription.findMany({ orderBy: { createdAt: 'desc' }, take: 500 }),
     prisma.lysmaExpense.findMany({ orderBy: [{ status: 'asc' }, { renewalDate: 'asc' }], take: 500 }),
     prisma.financeInvoice.findMany({ orderBy: { issueDate: 'desc' }, take: 500 }),
     prisma.financePayment.findMany({ orderBy: { createdAt: 'desc' }, take: 500 }),
+    prisma.showcaseSiteFinance.findMany({ orderBy: { createdAt: 'desc' }, take: 500 }),
   ])
 
-  const revenues = revenuesRaw.length > 0 ? revenuesRaw.map(mapRevenue) : mockRevenues()
-  const expenses = expensesRaw.length > 0 ? expensesRaw.map(mapExpense) : mockExpenses()
+  const revenues = revenuesRaw.map(mapRevenue)
+  const expenses = expensesRaw.map(mapExpense)
   const invoices = invoicesRaw.map(mapInvoice)
   const payments = paymentsRaw.map(mapPayment)
-  const kpis = computeKpis(revenues, expenses, payments, settings)
-  const margins = computeMargins(revenues, expenses)
+  const showcaseSites = showcaseSitesRaw.map(mapShowcaseSite)
+  const kpis = computeKpis(revenues, expenses, payments, settings, showcaseSites)
+  const margins = computeMargins(revenues, expenses, showcaseSites)
 
   return {
     settings,
@@ -145,9 +170,9 @@ export async function getFinanceData(): Promise<FinanceData> {
     expenses,
     invoices,
     payments,
+    showcaseSites,
     kpis,
     margins,
-    usesMockData: revenuesRaw.length === 0 && expensesRaw.length === 0,
   }
 }
 
@@ -169,24 +194,30 @@ export function computeKpis(
   expenses: ExpenseView[],
   payments: PaymentView[],
   settings: FinanceSettingsView,
+  showcaseSites: ShowcaseSiteFinanceView[] = [],
 ): FinanceKpis {
-  const activeOrTrial = revenues.filter((revenue) => revenue.status === 'ACTIF' || revenue.status === 'ESSAI')
-  const mrr = activeOrTrial.reduce((sum, revenue) => sum + normalizeMonthly(revenue.amountHT, revenue.frequency), 0)
+  const paidRevenues = revenues.filter(isPaidRevenue)
+  const paidShowcaseMrr = showcaseSites.reduce((sum, site) => {
+    return sum + (site.maintenanceStatus === 'MAINTENANCE_PAYANTE' || site.maintenanceStatus === 'ABONNEMENT_ACTIF' ? site.maintenanceMonthlyHT : 0)
+  }, 0)
+  const mrr = paidRevenues.reduce((sum, revenue) => sum + normalizeMonthly(revenue.amountHT, revenue.frequency), 0) + paidShowcaseMrr
   const monthRevenue = mrr
-  const yearRevenue = activeOrTrial.reduce((sum, revenue) => sum + normalizeAnnual(revenue.amountHT, revenue.frequency), 0)
+  const yearRevenue = paidRevenues.reduce((sum, revenue) => sum + normalizeAnnual(revenue.amountHT, revenue.frequency), 0) + paidShowcaseMrr * 12
   const monthlyExpenses = expenses
     .filter((expense) => expense.status !== 'ARRETE')
     .reduce((sum, expense) => sum + normalizeMonthly(expense.amountHT, expense.frequency), 0)
+    + showcaseSites.reduce((sum, site) => sum + site.domainCostHT / 12 + site.workspaceCostHT + site.otherMonthlyCostsHT, 0)
   const annualExpenses = expenses
     .filter((expense) => expense.status !== 'ARRETE')
     .reduce((sum, expense) => sum + normalizeAnnual(expense.amountHT, expense.frequency), 0)
+    + showcaseSites.reduce((sum, site) => sum + site.domainCostHT + site.workspaceCostHT * 12 + site.otherMonthlyCostsHT * 12, 0)
   const paidThisYear = payments
     .filter((payment) => payment.status === 'PAYE' && isCurrentYear(payment.paidAt))
     .reduce((sum, payment) => sum + payment.amount, 0)
   const urssafBase = paidThisYear > 0 ? paidThisYear / 12 : monthRevenue
   const urssafEstimate = urssafBase * (settings.urssafRate / 100)
   const vatEstimate = settings.vatStatus === 'ASSUJETTI'
-    ? activeOrTrial.reduce((sum, revenue) => sum + normalizeMonthly(revenue.vatAmount, revenue.frequency), 0)
+    ? paidRevenues.reduce((sum, revenue) => sum + normalizeMonthly(revenue.vatAmount, revenue.frequency), 0)
     : 0
   const netResult = monthRevenue - monthlyExpenses - urssafEstimate
   const profitabilityRate = monthRevenue > 0 ? (netResult / monthRevenue) * 100 : 0
@@ -196,7 +227,7 @@ export function computeKpis(
     yearRevenue,
     mrr,
     arr: mrr * 12,
-    activeSubscriptions: revenues.filter((revenue) => revenue.status === 'ACTIF').length,
+    activeSubscriptions: revenues.filter(isPaidRevenue).length + showcaseSites.filter((site) => site.maintenanceStatus === 'MAINTENANCE_PAYANTE' || site.maintenanceStatus === 'ABONNEMENT_ACTIF').length,
     trialSubscriptions: revenues.filter((revenue) => revenue.status === 'ESSAI').length,
     unpaidSubscriptions: revenues.filter((revenue) => revenue.status === 'IMPAYE').length,
     monthlyExpenses,
@@ -206,18 +237,34 @@ export function computeKpis(
     profitabilityRate,
     nextMonthForecast: mrr - monthlyExpenses - urssafEstimate,
     vatEstimate,
+    offeredRevenue: revenues.filter((revenue) => revenue.status === 'OFFERT').reduce((sum, revenue) => sum + normalizeMonthly(revenue.amountHT, revenue.frequency), 0)
+      + showcaseSites.filter((site) => site.creationStatus === 'CREATION_OFFERTE').reduce((sum, site) => sum + site.creationStandardPriceHT, 0),
+    trialPotentialMrr: revenues.filter((revenue) => revenue.status === 'ESSAI').reduce((sum, revenue) => sum + normalizeMonthly(revenue.amountHT, revenue.frequency), 0),
   }
 }
 
-export function computeMargins(revenues: RevenueSubscriptionView[], expenses: ExpenseView[]): ToolMargin[] {
-  const tools: FinanceToolKey[] = ['LIVO', 'PMA', 'TRANSPORT', 'AUTRE']
+export function computeMargins(
+  revenues: RevenueSubscriptionView[],
+  expenses: ExpenseView[],
+  showcaseSites: ShowcaseSiteFinanceView[] = [],
+): ToolMargin[] {
+  const tools: FinanceToolKey[] = ['LIVO', 'PMA', 'TRANSPORT', 'SITE_VITRINE', 'AUTRE']
 
   return tools.map((tool) => {
-    const toolRevenues = revenues.filter((revenue) => revenue.tool === tool && revenue.status !== 'RESILIE')
+    const toolRevenues = revenues.filter((revenue) => revenue.tool === tool && isPaidRevenue(revenue))
     const toolExpenses = expenses.filter((expense) => expense.relatedTool === tool && expense.status !== 'ARRETE')
-    const revenue = toolRevenues.reduce((sum, item) => sum + normalizeMonthly(item.amountHT, item.frequency), 0)
-    const expense = toolExpenses.reduce((sum, item) => sum + normalizeMonthly(item.amountHT, item.frequency), 0)
-    const customers = new Set(toolRevenues.map((item) => `${item.clientCompany ?? ''}:${item.clientName}`)).size
+    const showcaseRevenue = tool === 'SITE_VITRINE'
+      ? showcaseSites.reduce((sum, site) => sum + (site.maintenanceStatus === 'MAINTENANCE_PAYANTE' || site.maintenanceStatus === 'ABONNEMENT_ACTIF' ? site.maintenanceMonthlyHT : 0), 0)
+      : 0
+    const showcaseExpense = tool === 'SITE_VITRINE'
+      ? showcaseSites.reduce((sum, site) => sum + site.domainCostHT / 12 + site.workspaceCostHT + site.otherMonthlyCostsHT, 0)
+      : 0
+    const revenue = toolRevenues.reduce((sum, item) => sum + normalizeMonthly(item.amountHT, item.frequency), 0) + showcaseRevenue
+    const expense = toolExpenses.reduce((sum, item) => sum + normalizeMonthly(item.amountHT, item.frequency), 0) + showcaseExpense
+    const customers = new Set([
+      ...toolRevenues.map((item) => `${item.clientCompany ?? ''}:${item.clientName}`),
+      ...(tool === 'SITE_VITRINE' ? showcaseSites.map((site) => `${site.clientCompany ?? ''}:${site.clientName}`) : []),
+    ]).size
 
     return {
       tool,
@@ -248,7 +295,8 @@ export function formatEuro(value: number) {
   return new Intl.NumberFormat('fr-FR', {
     style: 'currency',
     currency: 'EUR',
-    maximumFractionDigits: 0,
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
   }).format(value)
 }
 
@@ -274,7 +322,11 @@ function toNumber(value: unknown) {
 
 function isCurrentYear(date: Date | null) {
   if (!date) return false
-  return date.getFullYear() === now().getFullYear()
+  return date.getFullYear() === new Date().getFullYear()
+}
+
+function isPaidRevenue(revenue: RevenueSubscriptionView) {
+  return revenue.status === 'ACTIF' || revenue.status === 'ACTIF_PAYANT'
 }
 
 function mapRevenue(revenue: any): RevenueSubscriptionView {
@@ -318,106 +370,14 @@ function mapPayment(payment: any): PaymentView {
   }
 }
 
-function mockRevenues(): RevenueSubscriptionView[] {
-  const today = now()
-
-  return [
-    {
-      id: 'mock-livo-carmath',
-      clientName: 'Mathieu Joseph',
-      clientCompany: 'CAR MATH',
-      tool: 'LIVO',
-      planName: 'Livo Atelier',
-      amountHT: 89,
-      vatAmount: 17.8,
-      amountTTC: 106.8,
-      frequency: 'MENSUEL',
-      status: 'ACTIF',
-      trialStartAt: null,
-      trialEndAt: null,
-      startDate: today,
-      nextInvoiceAt: addDays(today, 28),
-      nextPaymentAt: addDays(today, 30),
-      gocardlessCustomerId: null,
-      gocardlessMandateId: null,
-      gocardlessSubscriptionId: null,
-      sageCustomerId: null,
-    },
-    {
-      id: 'mock-pma-demo',
-      clientName: 'Jean Dupont',
-      clientCompany: 'PMA Demo',
-      tool: 'PMA',
-      planName: 'Portail distributeur',
-      amountHT: 149,
-      vatAmount: 29.8,
-      amountTTC: 178.8,
-      frequency: 'MENSUEL',
-      status: 'ESSAI',
-      trialStartAt: addDays(today, -8),
-      trialEndAt: addDays(today, 22),
-      startDate: today,
-      nextInvoiceAt: addDays(today, 22),
-      nextPaymentAt: addDays(today, 23),
-      gocardlessCustomerId: null,
-      gocardlessMandateId: null,
-      gocardlessSubscriptionId: null,
-      sageCustomerId: null,
-    },
-  ]
-}
-
-function mockExpenses(): ExpenseView[] {
-  const today = now()
-
-  return [
-    {
-      id: 'mock-vercel',
-      name: 'Vercel Pro',
-      provider: 'Vercel',
-      category: 'HEBERGEMENT',
-      relatedTool: 'GLOBAL',
-      amountHT: 20,
-      vatAmount: 4,
-      amountTTC: 24,
-      frequency: 'MENSUEL',
-      startDate: today,
-      renewalDate: addDays(today, 30),
-      paymentMethod: 'Carte bancaire',
-      status: 'ACTIF',
-      notes: 'Hebergement projets LYSMA',
-    },
-    {
-      id: 'mock-openai',
-      name: 'API IA',
-      provider: 'OpenAI',
-      category: 'IA',
-      relatedTool: 'GLOBAL',
-      amountHT: 60,
-      vatAmount: 12,
-      amountTTC: 72,
-      frequency: 'MENSUEL',
-      startDate: today,
-      renewalDate: addDays(today, 30),
-      paymentMethod: 'Carte bancaire',
-      status: 'A_VERIFIER',
-      notes: 'Budget variable selon usage',
-    },
-    {
-      id: 'mock-ovh',
-      name: 'Domaines et DNS',
-      provider: 'OVH',
-      category: 'DOMAINE',
-      relatedTool: 'GLOBAL',
-      amountHT: 72,
-      vatAmount: 14.4,
-      amountTTC: 86.4,
-      frequency: 'ANNUEL',
-      startDate: today,
-      renewalDate: addDays(today, 300),
-      paymentMethod: 'Carte bancaire',
-      status: 'ACTIF',
-      notes: 'Domaines LYSMA et clients',
-    },
-  ]
+function mapShowcaseSite(site: any): ShowcaseSiteFinanceView {
+  return {
+    ...site,
+    creationStandardPriceHT: toNumber(site.creationStandardPriceHT),
+    creationSoldHT: toNumber(site.creationSoldHT),
+    maintenanceMonthlyHT: toNumber(site.maintenanceMonthlyHT),
+    domainCostHT: toNumber(site.domainCostHT),
+    workspaceCostHT: toNumber(site.workspaceCostHT),
+    otherMonthlyCostsHT: toNumber(site.otherMonthlyCostsHT),
+  }
 }

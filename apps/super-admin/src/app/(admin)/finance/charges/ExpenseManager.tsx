@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { useMemo, useState } from 'react'
 import styles from '../page.module.css'
-import type { ExpenseView } from '@/lib/finance'
+import { formatEuro, type ExpenseView } from '@/lib/finance'
 
 const emptyForm = {
   name: '',
@@ -103,7 +103,7 @@ export function ExpenseManager({ expenses }: { expenses: ExpenseView[] }) {
           <Field label="Nom" value={form.name} onChange={(value) => update('name', value)} />
           <Field label="Fournisseur" value={form.provider} onChange={(value) => update('provider', value)} />
           <Select label="Categorie" value={form.category} onChange={(value) => update('category', value)} options={['HEBERGEMENT', 'DOMAINE', 'IA', 'COMPTABILITE', 'PAIEMENT', 'LOGICIEL', 'API', 'MATERIEL', 'AUTRE']} />
-          <Select label="Outil lie" value={form.relatedTool} onChange={(value) => update('relatedTool', value)} options={['GLOBAL', 'LIVO', 'PMA', 'TRANSPORT', 'AUTRE']} />
+          <Select label="Outil lie" value={form.relatedTool} onChange={(value) => update('relatedTool', value)} options={['GLOBAL', 'LIVO', 'PMA', 'TRANSPORT', 'SITE_VITRINE', 'AUTRE']} />
           <Field label="Montant HT" value={form.amountHT} onChange={(value) => update('amountHT', value)} type="number" />
           <Field label="TVA" value={form.vatAmount} onChange={(value) => update('vatAmount', value)} type="number" />
           <Field label="Montant TTC" value={form.amountTTC} onChange={(value) => update('amountTTC', value)} type="number" />
@@ -150,8 +150,8 @@ export function ExpenseManager({ expenses }: { expenses: ExpenseView[] }) {
                 <td><span className={styles.mainText}>{expense.name}</span><span className={styles.muted}>{expense.provider}</span></td>
                 <td>{expense.category}</td>
                 <td><span className={styles.tag}>{expense.relatedTool}</span></td>
-                <td>{expense.amountHT.toFixed(2)} EUR</td>
-                <td>{expense.amountTTC.toFixed(2)} EUR</td>
+                <td>{formatEuro(expense.amountHT)}</td>
+                <td>{formatEuro(expense.amountTTC)}</td>
                 <td>{expense.frequency.toLowerCase()}</td>
                 <td>{expense.renewalDate ? expense.renewalDate.toLocaleDateString('fr-FR') : '-'}</td>
                 <td>{expense.status.toLowerCase()}</td>
@@ -163,7 +163,7 @@ export function ExpenseManager({ expenses }: { expenses: ExpenseView[] }) {
                 </td>
               </tr>
             ))}
-            {expenses.length === 0 && <tr><td colSpan={9} className={styles.empty}>// aucune charge enregistree</td></tr>}
+            {expenses.length === 0 && <tr><td colSpan={9} className={styles.empty}>Aucune charge enregistree</td></tr>}
           </tbody>
         </table>
       </section>
@@ -190,3 +190,4 @@ function Select({ label, value, onChange, options }: { label: string; value: str
     </label>
   )
 }
+
