@@ -119,6 +119,8 @@ export function AtelierDashboardClient({ garage, compagnons: compagnonsInit, fic
   const [fiches, setFiches] = useState(fichesInit)
   const [loadingAction, setLoadingAction] = useState<string | null>(null)
   const [scannerOpen, setScannerOpen] = useState(false)
+  const [confirmDepartOpen, setConfirmDepartOpen] = useState(false)
+  const [pointageError, setPointageError] = useState('')
   const [now, setNow] = useState(new Date())
 
   // Horloge temps réel
@@ -134,14 +136,15 @@ export function AtelierDashboardClient({ garage, compagnons: compagnonsInit, fic
     setPinTarget(null)
   }
 
-  async function actionPointage(action: string) {
-    if (!compagnonConnecteId) return
+  async function actionPointage(action: string, options?: { confirmerFinJournee?: boolean }) {
+    if (!compagnonConnecteId) return false
     setLoadingAction(action)
+    setPointageError('')
     try {
       const res = await fetch('/api/pointage-jour/action', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ compagnonId: compagnonConnecteId, action }),
+        body: JSON.stringify({ compagnonId: compagnonConnecteId, action, ...options }),
       })
       const data = await res.json()
       if (data.success) {
@@ -149,8 +152,19 @@ export function AtelierDashboardClient({ garage, compagnons: compagnonsInit, fic
           ? { ...c, statut: data.pointage.statutActuel, heureArrivee: data.pointage.heureArrivee }
           : c
         ))
+        return true
       }
+      setPointageError(data.error ?? 'Action impossible pour le moment.')
+      return false
+    } catch {
+      setPointageError('Connexion impossible. Réessayez dans un instant.')
+      return false
     } finally { setLoadingAction(null) }
+  }
+
+  async function confirmerFinJournee() {
+    const success = await actionPointage('DEPART', { confirmerFinJournee: true })
+    if (success) setConfirmDepartOpen(false)
   }
 
   async function actionFiche(ficheId: string, action: 'POINTER' | 'DEPOINTER') {
@@ -287,7 +301,7 @@ export function AtelierDashboardClient({ garage, compagnons: compagnonsInit, fic
                     <ForkKnife weight="fill" size={18} /> Pause déjeuner
                   </button>
                   <button className={`${styles.actionBtn} ${styles.actionDepart}`}
-                    onClick={() => actionPointage('DEPART')} disabled={!!loadingAction}>
+                    onClick={() => setConfirmDepartOpen(true)} disabled={!!loadingAction}>
                     <SignOut weight="bold" size={18} /> Fin de journée
                   </button>
                 </>
@@ -303,6 +317,7 @@ export function AtelierDashboardClient({ garage, compagnons: compagnonsInit, fic
                 <div className={styles.partiMsg}>Bonne journée !</div>
               )}
             </div>
+            {pointageError && <p className={styles.pointageError}>{pointageError}</p>}
           </div>
 
           {/* Fiches du jour */}
@@ -391,6 +406,25 @@ export function AtelierDashboardClient({ garage, compagnons: compagnonsInit, fic
       {/* PIN Modal */}
       {pinTarget && (
         <PinModal compagnon={pinTarget} onSuccess={handlePinSuccess} onClose={() => setPinTarget(null)} />
+      )}
+
+      {confirmDepartOpen && (
+        <div className={styles.confirmOverlay} onClick={e => e.target === e.currentTarget && setConfirmDepartOpen(false)}>
+          <div className={styles.confirmModal} role="dialog" aria-modal="true" aria-labelledby="confirm-fin-journee-title">
+            <h2 id="confirm-fin-journee-title">Confirmer la fin de journée ?</h2>
+            <p>
+              Cette action clôture votre journée de pointage. Vous ne pourrez plus revenir à l’état Arrivé atelier aujourd’hui.
+            </p>
+            <div className={styles.confirmActions}>
+              <button className={styles.confirmCancel} onClick={() => setConfirmDepartOpen(false)} disabled={!!loadingAction}>
+                Annuler
+              </button>
+              <button className={styles.confirmDanger} onClick={confirmerFinJournee} disabled={!!loadingAction}>
+                {loadingAction === 'DEPART' ? 'Clôture...' : 'Confirmer la fin de journée'}
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   )

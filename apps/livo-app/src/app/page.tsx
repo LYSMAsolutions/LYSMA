@@ -4,51 +4,86 @@ import Link from 'next/link'
 import styles from './page.module.css'
 
 export const metadata: Metadata = {
-  title: 'LIVO-APP - Gestion atelier garage et carrosserie',
+  title: 'Logiciel de pointage atelier mécanique | Livo',
   description:
-    'LIVO-APP aide les garages et carrosseries a suivre les fiches de travaux, les pointages, les vehicules, la rentabilite et les absences atelier.',
+    'Livo est un logiciel de gestion atelier pour garages et carrosseries : pointage des compagnons, suivi véhicules, fiches de travail et rentabilité atelier.',
   robots: {
     index: true,
     follow: true,
+  },
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    title: 'Logiciel de pointage atelier mécanique | Livo',
+    description:
+      'Logiciel de gestion atelier pour garages et carrosseries : pointage compagnon, suivi véhicules, fiches de travail et rentabilité atelier.',
+    type: 'website',
+    siteName: 'Livo',
+  },
+}
+
+const softwareJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'Livo',
+  applicationCategory: 'BusinessApplication',
+  operatingSystem: 'Web',
+  description:
+    'Livo est un logiciel de pointage atelier mécanique et carrosserie pour suivre les compagnons, les véhicules, les fiches de travail, les ordres de réparation et la rentabilité atelier.',
+  offers: {
+    '@type': 'Offer',
+    price: '89',
+    priceCurrency: 'EUR',
+    availability: 'https://schema.org/InStock',
   },
 }
 
 const features = [
   {
-    title: 'Fiches de travaux claires',
-    text: 'Creation, suivi et cloture des interventions avec vehicule, client, temps passe et rentabilite.',
+    title: 'Pointage atelier',
+    text: 'Les compagnons pointent leur arrivée, leurs pauses, leurs interventions et leur fin de journée depuis une interface simple, pensée pour l’atelier.',
   },
   {
-    title: 'Pointage atelier en direct',
-    text: 'Les compagnons pointent et depointent depuis une interface simple, lisible et adaptee au terrain.',
+    title: 'Fiches de travail et OR',
+    text: 'Chaque fiche de travail atelier centralise le véhicule, le client, les opérations prévues, les temps passés et l’état d’avancement.',
   },
   {
-    title: 'Rentabilite visible',
-    text: 'CA, temps facture, temps reel et ecarts deviennent lisibles sans tableur a refaire le soir.',
+    title: 'Suivi véhicules atelier',
+    text: 'Le chef d’atelier visualise les véhicules présents, les travaux en cours et les interventions à clôturer, sans courir après les informations.',
   },
   {
-    title: 'RH integre',
-    text: 'Absences, activite compagnon et releves utiles pour garder une vision propre de l equipe.',
+    title: 'Rentabilité atelier',
+    text: 'Livo rapproche les heures réelles, les heures facturées et les montants pour mieux piloter la productivité atelier.',
   },
 ]
 
-const steps = [
-  'Creation du garage en quelques minutes',
-  'Essai gratuit pendant 30 jours',
-  'Puis 89 € par mois, sans engagement',
+const benefits = [
+  'Moins d’oublis au pointage compagnon.',
+  'Une vision fiable du temps réel atelier.',
+  'Des fiches de travail plus propres et plus faciles à suivre.',
+  'Une lecture immédiate de la rentabilité atelier.',
+  'Une organisation plus fluide entre le bureau et l’atelier.',
+  'Un suivi clair des pauses, absences et formations.',
 ]
 
 export default function HomePage() {
   return (
     <main className={styles.page}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareJsonLd) }}
+      />
+
       <header className={styles.header}>
-        <Link href="/" className={styles.brand} aria-label="Accueil LIVO-APP">
+        <Link href="/" className={styles.brand} aria-label="Accueil Livo">
           <Image src="/logo/livo-app-logo.png" alt="" width={44} height={44} priority />
-          <span>LIVO-APP</span>
+          <span>Livo</span>
         </Link>
         <nav className={styles.nav} aria-label="Navigation principale">
           <a href="#fonctionnalites">Fonctionnalités</a>
-          <a href="#tarif">Tarif</a>
+          <a href="#pointage">Pointage</a>
+          <a href="#rentabilite">Rentabilité</a>
           <Link href="/connexion">Connexion</Link>
           <Link href="/inscription" className={styles.navCta}>
             Essayer 30 jours
@@ -58,27 +93,27 @@ export default function HomePage() {
 
       <section className={styles.hero}>
         <div className={styles.heroText}>
-          <span className={styles.eyebrow}>Gestion atelier automobile</span>
-          <h1>Gardez le controle de votre garage, sans complexite.</h1>
+          <span className={styles.eyebrow}>Logiciel atelier pour garages et carrosseries</span>
+          <h1>Logiciel de pointage atelier mécanique et carrosserie</h1>
           <p className={styles.lead}>
-            LIVO-APP centralise les fiches de travaux, les véhicules, les clients,
-            les pointages atelier, les absences et la rentabilité. Un outil pensé
-            pour les garages et carrosseries qui veulent du clair, du rapide, du fiable.
+            Livo aide les garages, ateliers mécaniques et carrosseries à suivre le pointage des compagnons,
+            les véhicules présents à l’atelier, les fiches de travail, les ordres de réparation et la
+            rentabilité atelier en temps réel.
           </p>
           <div className={styles.heroActions}>
             <Link href="/inscription" className={styles.primaryCta}>
-              Essayer le produit 30 jours gratuitement
+              Essayer Livo 30 jours gratuitement
             </Link>
             <Link href="/connexion" className={styles.secondaryCta}>
-              J ai deja un compte
+              Accéder à mon atelier
             </Link>
           </div>
           <p className={styles.reassurance}>
-            Sans carte bancaire au demarrage. Puis 89 € par mois, sans engagement.
+            Essai gratuit de 30 jours, puis 89 € par mois, sans engagement.
           </p>
         </div>
 
-        <div className={styles.preview} aria-label="Apercu de LIVO-APP">
+        <div className={styles.preview} aria-label="Aperçu du tableau de bord Livo">
           <div className={styles.previewTop}>
             <span />
             <span />
@@ -86,40 +121,46 @@ export default function HomePage() {
           </div>
           <div className={styles.previewHeader}>
             <div>
-              <strong>Tableau de bord atelier</strong>
-              <small>Aujourd'hui</small>
+              <strong>Atelier en temps réel</strong>
+              <small>Pointage, véhicules et fiches de travail</small>
             </div>
-            <span className={styles.liveBadge}>temps réel</span>
+            <span className={styles.liveBadge}>en direct</span>
           </div>
           <div className={styles.previewStats}>
-            <div><span>Fiches</span><strong>12</strong></div>
-            <div><span>CA mois</span><strong>18 420 €</strong></div>
-            <div><span>Compagnons</span><strong>6</strong></div>
+            <div><span>Compagnons</span><strong>6 actifs</strong></div>
+            <div><span>Véhicules</span><strong>14 suivis</strong></div>
+            <div><span>Rentabilité</span><strong>+18 %</strong></div>
           </div>
           <div className={styles.previewList}>
-            <div><span>Renault Kangoo</span><strong>En cours</strong></div>
+            <div><span>Renault Kangoo</span><strong>OR en cours</strong></div>
             <div><span>Peugeot 208</span><strong>Pointage actif</strong></div>
-            <div><span>BMW Serie 3</span><strong>A cloturer</strong></div>
+            <div><span>BMW Série 3</span><strong>À clôturer</strong></div>
           </div>
         </div>
       </section>
 
       <section className={styles.problem}>
         <div>
-          <span className={styles.sectionKicker}>Pourquoi LIVO</span>
-          <h2>Le temps invisible coute cher à l'atelier.</h2>
+          <span className={styles.sectionKicker}>Problème terrain</span>
+          <h2>Quand le temps atelier n’est pas suivi, la rentabilité devient floue.</h2>
         </div>
         <p>
-          Quand les fiches papier, les pointages approximatifs et les suivis clients
-          sont dispersés, il devient difficile de savoir ce qui est rentable, ce qui
-          bloque et ce qui doit etre facture.
+          Dans un garage ou une carrosserie, quelques minutes oubliées sur chaque intervention finissent
+          par peser lourd. Les fiches papier se dispersent, les heures réelles sont estimées trop tard,
+          les véhicules restent parfois en attente sans visibilité, et le chef d’atelier manque de données
+          fiables pour piloter la productivité atelier.
         </p>
       </section>
 
       <section id="fonctionnalites" className={styles.features}>
         <div className={styles.sectionIntro}>
-          <span className={styles.sectionKicker}>Fonctionnalités</span>
-          <h2>Tout ce qu'il faut pour piloter l'atelier.</h2>
+          <span className={styles.sectionKicker}>Fonctionnalités principales</span>
+          <h2>Un logiciel atelier mécanique conçu pour le quotidien.</h2>
+          <p>
+            Livo rassemble les outils essentiels de gestion atelier dans une interface claire :
+            pointage atelier, suivi véhicules, fiche de travail atelier, ordre de réparation,
+            pauses, absences, formations et indicateurs de rentabilité.
+          </p>
         </div>
         <div className={styles.featureGrid}>
           {features.map((feature) => (
@@ -131,72 +172,87 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className={styles.workflow}>
-        <div className={styles.sectionIntro}>
-          <span className={styles.sectionKicker}>Mise en route</span>
-          <h2>Simple à demarrer, simple à garder.</h2>
+      <section id="pointage" className={styles.split}>
+        <div className={styles.glassPanel}>
+          <span className={styles.sectionKicker}>Pointage compagnons</span>
+          <h2>Un pointage compagnon simple, fiable et adapté à l’atelier.</h2>
+          <p>
+            Chaque compagnon peut pointer son arrivée atelier, démarrer une intervention, se mettre en
+            pause, reprendre le travail et clôturer sa journée. Le responsable garde une vision claire
+            des présences, des travaux en cours et du temps réellement passé sur chaque fiche.
+          </p>
         </div>
-        <div className={styles.steps}>
-          {steps.map((step, index) => (
-            <div key={step} className={styles.step}>
-              <span>{index + 1}</span>
-              <p>{step}</p>
+        <div className={styles.benefitList}>
+          {benefits.map((benefit) => (
+            <div key={benefit} className={styles.benefit}>
+              <span />
+              <p>{benefit}</p>
             </div>
           ))}
         </div>
       </section>
 
-      <section id="tarif" className={styles.pricing}>
-        <div className={styles.priceCopy}>
-          <span className={styles.sectionKicker}>Tarif</span>
-          <h2>Une offre claire pour votre atelier.</h2>
+      <section className={styles.vehicleSection}>
+        <div className={styles.sectionIntro}>
+          <span className={styles.sectionKicker}>Suivi véhicules atelier</span>
+          <h2>Les véhicules, les fiches et les OR restent sous contrôle.</h2>
           <p>
-            Pas de module caché, pas de contrat long. Vous testez LIVO-APP pendant
-            30 jours, puis vous continuez uniquement si l outil vous convient.
+            Livo permet de suivre les véhicules présents à l’atelier, leurs fiches de travail,
+            leur ordre de réparation et leur avancement. Le bureau sait ce qui est en attente,
+            ce qui est en cours, ce qui doit être clôturé et ce qui peut être facturé.
+          </p>
+        </div>
+      </section>
+
+      <section id="rentabilite" className={styles.pricing}>
+        <div className={styles.priceCopy}>
+          <span className={styles.sectionKicker}>Rentabilité et productivité</span>
+          <h2>Des chiffres lisibles pour prendre de meilleures décisions.</h2>
+          <p>
+            Le suivi des heures réelles, des heures facturées et des écarts aide à comprendre où l’atelier
+            gagne du temps, où il en perd, et quelles interventions méritent une attention particulière.
+            Livo transforme le temps réel atelier en données utiles pour la gestion atelier.
           </p>
         </div>
         <div className={styles.priceCard}>
-          <span className={styles.trial}>30 jours gratuits</span>
+          <span className={styles.trial}>Essai gratuit 30 jours</span>
           <div className={styles.price}>
             <strong>89 €</strong>
             <span>/ mois</span>
           </div>
-          <p>Sans engagement. Support LYSMA inclus.</p>
+          <p>Un logiciel carrosserie et mécanique clair, sans engagement.</p>
           <ul>
-            <li>Fiches de travaux illimitées</li>
-            <li>Vehicules, clients et compagnons</li>
-            <li>Pointage atelier et suivi RH</li>
-            <li>Rapports et rentabilité</li>
+            <li>Pointage atelier et pointage compagnon</li>
+            <li>Suivi véhicules atelier</li>
+            <li>Fiches de travail et ordres de réparation</li>
+            <li>Rentabilité et productivité atelier</li>
           </ul>
           <Link href="/inscription" className={styles.primaryCta}>
-            Demarrer l'essai gratuit
+            Demander l’essai gratuit
           </Link>
         </div>
       </section>
 
-      <section className={styles.faq}>
-        <h2>Questions rapides</h2>
+      <section className={styles.target}>
         <div>
-          <article>
-            <h3>Est-ce installe sur un ordinateur ?</h3>
-            <p>Non. LIVO-APP est accessible en ligne depuis navigateur, ordinateur pour le responsable atelier et sur tablette ou mobile pour l'atelier.</p>
-          </article>
-          <article>
-            <h3>Pourquoi accepter les cookies ?</h3>
-            <p>Les cookies de session sont necessaires pour creer un compte, rester connecte et sécuriser l'accés.</p>
-          </article>
-          <article>
-            <h3>Puis-je arréter apres l'essai ?</h3>
-            <p>Oui. L'essai dure 30 jours et l'abonnement est ensuite sans engagement.</p>
-          </article>
+          <span className={styles.sectionKicker}>Garages et carrosseries</span>
+          <h2>Pour les ateliers qui veulent travailler avec plus de précision.</h2>
+          <p>
+            Livo s’adresse aux garages, ateliers mécaniques, carrosseries et structures automobiles
+            qui veulent mieux suivre leurs équipes, leurs véhicules et leurs temps de production,
+            sans ajouter de complexité au quotidien.
+          </p>
         </div>
+        <Link href="/inscription" className={styles.largeCta}>
+          Démarrer 30 jours d’essai
+        </Link>
       </section>
 
       <footer className={styles.footer}>
-        <span>LIVO-APP par LYSMA Solutions</span>
+        <span>Livo par LYSMA Solutions</span>
         <div>
           <Link href="/cookies">Cookies</Link>
-          <Link href="/politique-confidentialite">Confidentialite</Link>
+          <Link href="/politique-confidentialite">Confidentialité</Link>
           <Link href="/connexion">Connexion</Link>
         </div>
       </footer>

@@ -30,14 +30,17 @@ export function CompagnonCard({ compagnonId, nom, prenom, poste, statutInitial, 
   const [statut, setStatut] = useState<Statut>(statutInitial)
   const [loading, setLoading] = useState<string | null>(null)
   const [heure, setHeure] = useState(heureArrivee)
+  const [confirmDepartOpen, setConfirmDepartOpen] = useState(false)
+  const [error, setError] = useState('')
 
-  async function action(act: string) {
+  async function action(act: string, options?: { confirmerFinJournee?: boolean }) {
     setLoading(act)
+    setError('')
     try {
       const res = await fetch('/api/pointage-jour/action', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ compagnonId, action: act }),
+        body: JSON.stringify({ compagnonId, action: act, ...options }),
       })
       const data = await res.json()
       if (data.success) {
@@ -45,10 +48,21 @@ export function CompagnonCard({ compagnonId, nom, prenom, poste, statutInitial, 
         if (data.pointage.heureArrivee && !heure) {
           setHeure(new Date(data.pointage.heureArrivee).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }))
         }
+        return true
       }
+      setError(data.error ?? 'Action impossible pour le moment.')
+      return false
+    } catch {
+      setError('Connexion impossible. Réessayez dans un instant.')
+      return false
     } finally {
       setLoading(null)
     }
+  }
+
+  async function confirmerFinJournee() {
+    const success = await action('DEPART', { confirmerFinJournee: true })
+    if (success) setConfirmDepartOpen(false)
   }
 
   const initials = `${prenom[0]}${nom[0]}`.toUpperCase()
@@ -93,7 +107,7 @@ export function CompagnonCard({ compagnonId, nom, prenom, poste, statutInitial, 
               {loading === 'PAUSE_DEJ_DEBUT' ? <span className={styles.spinner} /> : <ForkKnife weight="fill" size={16} />}
               Pause déjeuner
             </button>
-            <button className={cn(styles.btn, styles.btnMuted)} onClick={() => action('DEPART')} disabled={!!loading}>
+            <button className={cn(styles.btn, styles.btnMuted)} onClick={() => setConfirmDepartOpen(true)} disabled={!!loading}>
               {loading === 'DEPART' ? <span className={styles.spinner} /> : <SignOut weight="bold" size={16} />}
               Fin de journée
             </button>
@@ -115,6 +129,26 @@ export function CompagnonCard({ compagnonId, nom, prenom, poste, statutInitial, 
           <p className={styles.partiMsg}>Journée terminée</p>
         )}
       </div>
+      {error && <p className={styles.error}>{error}</p>}
+
+      {confirmDepartOpen && (
+        <div className={styles.confirmOverlay} onClick={e => e.target === e.currentTarget && setConfirmDepartOpen(false)}>
+          <div className={styles.confirmModal} role="dialog" aria-modal="true" aria-labelledby={`confirm-fin-journee-${compagnonId}`}>
+            <h2 id={`confirm-fin-journee-${compagnonId}`}>Confirmer la fin de journée ?</h2>
+            <p>
+              Cette action clôture votre journée de pointage. Vous ne pourrez plus revenir à l’état Arrivé atelier aujourd’hui.
+            </p>
+            <div className={styles.confirmActions}>
+              <button className={styles.confirmCancel} onClick={() => setConfirmDepartOpen(false)} disabled={!!loading}>
+                Annuler
+              </button>
+              <button className={styles.confirmDanger} onClick={confirmerFinJournee} disabled={!!loading}>
+                {loading === 'DEPART' ? 'Clôture...' : 'Confirmer la fin de journée'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

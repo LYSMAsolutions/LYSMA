@@ -13,6 +13,7 @@ const schema = z.object({
     'PAUSE_DEJ_FIN',
     'DEPART',
   ]),
+  confirmerFinJournee: z.boolean().optional(),
 })
 
 type StatutJour = 'ABSENT' | 'ARRIVE' | 'EN_TRAVAIL' | 'PAUSE_CAFE' | 'PAUSE_DEJEUNER' | 'PARTI'
@@ -56,7 +57,7 @@ export async function POST(req: NextRequest) {
   const parsed = schema.safeParse(await req.json())
   if (!parsed.success) return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 })
 
-  const { compagnonId, action } = parsed.data
+  const { compagnonId, action, confirmerFinJournee } = parsed.data
   const now = new Date()
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
 
@@ -92,7 +93,13 @@ export async function POST(req: NextRequest) {
   } = { statutActuel: pointage.statutActuel }
 
   if (action === 'ARRIVEE') {
-    if (pointage.statutActuel !== 'ABSENT' && pointage.statutActuel !== 'PARTI') {
+    if (pointage.heureDepart || pointage.statutActuel === 'PARTI') {
+      return NextResponse.json({
+        error: 'Votre journée a déjà été clôturée. Vous ne pouvez plus repointer en arrivée atelier aujourd’hui.',
+      }, { status: 400 })
+    }
+
+    if (pointage.statutActuel !== 'ABSENT') {
       return NextResponse.json({ error: 'Le compagnon est deja arrive' }, { status: 400 })
     }
     update.statutActuel = 'EN_TRAVAIL'
@@ -136,6 +143,12 @@ export async function POST(req: NextRequest) {
   }
 
   if (action === 'DEPART') {
+    if (!confirmerFinJournee) {
+      return NextResponse.json({
+        error: 'Confirmation obligatoire avant de clôturer la journée de pointage.',
+      }, { status: 400 })
+    }
+
     if (pointage.statutActuel === 'ABSENT' || pointage.statutActuel === 'PARTI' || !pointage.heureArrivee) {
       return NextResponse.json({ error: 'Impossible de pointer le depart maintenant' }, { status: 400 })
     }

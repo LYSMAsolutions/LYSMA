@@ -1,9 +1,9 @@
 .page {
   min-height: 100dvh;
   background:
-    radial-gradient(circle at 18% 8%, rgba(26, 111, 255, 0.24), transparent 28rem),
-    radial-gradient(circle at 80% 0%, rgba(64, 192, 255, 0.14), transparent 24rem),
-    var(--color-bg-base);
+    radial-gradient(circle at 14% 10%, rgba(26, 111, 255, 0.28), transparent 30rem),
+    radial-gradient(circle at 82% 4%, rgba(64, 192, 255, 0.16), transparent 26rem),
+    linear-gradient(180deg, rgba(4, 6, 15, 0.96), var(--color-bg-base) 42rem);
   color: var(--color-text-primary);
 }
 
@@ -32,16 +32,12 @@
   letter-spacing: 0.06em;
 }
 
-.brand:hover {
-  color: var(--color-text-primary);
-}
-
 .nav {
   display: flex;
   align-items: center;
   gap: var(--space-5);
-  font-size: var(--text-sm);
   color: var(--color-text-secondary);
+  font-size: var(--text-sm);
 }
 
 .nav a {
@@ -54,7 +50,8 @@
 
 .navCta,
 .primaryCta,
-.secondaryCta {
+.secondaryCta,
+.largeCta {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -66,7 +63,8 @@
 }
 
 .navCta,
-.primaryCta {
+.primaryCta,
+.largeCta {
   color: white !important;
   background: linear-gradient(135deg, var(--color-blue-electric), var(--color-cyan));
   box-shadow: var(--shadow-glow-blue);
@@ -80,16 +78,18 @@
 
 .navCta:hover,
 .primaryCta:hover,
-.secondaryCta:hover {
+.secondaryCta:hover,
+.largeCta:hover {
   transform: translateY(-1px);
 }
 
 .hero,
 .problem,
 .features,
-.workflow,
+.split,
+.vehicleSection,
 .pricing,
-.faq,
+.target,
 .footer {
   max-width: 1180px;
   margin: 0 auto;
@@ -98,7 +98,7 @@
 
 .hero {
   display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(360px, 0.95fr);
+  grid-template-columns: minmax(0, 1.08fr) minmax(360px, 0.92fr);
   align-items: center;
   gap: var(--space-12);
   min-height: calc(100dvh - 76px);
@@ -124,14 +124,14 @@
 }
 
 .hero h1 {
-  max-width: 780px;
-  font-size: clamp(2.75rem, 7vw, 5.8rem);
-  line-height: 0.96;
+  max-width: 860px;
+  font-size: clamp(2.75rem, 6.8vw, 5.7rem);
+  line-height: 0.98;
   letter-spacing: 0;
 }
 
 .lead {
-  max-width: 700px;
+  max-width: 760px;
   color: var(--color-ice);
   font-size: var(--text-xl);
   line-height: var(--leading-normal);
@@ -149,11 +149,19 @@
   font-size: var(--text-sm);
 }
 
-.preview {
+.preview,
+.glassPanel,
+.feature,
+.priceCard,
+.target {
   border: 1px solid var(--color-border-default);
-  border-radius: var(--radius-2xl);
-  background: linear-gradient(180deg, rgba(13, 21, 48, 0.96), rgba(8, 14, 30, 0.92));
+  background: linear-gradient(180deg, rgba(13, 21, 48, 0.78), rgba(8, 14, 30, 0.72));
   box-shadow: var(--shadow-xl);
+  backdrop-filter: blur(18px);
+}
+
+.preview {
+  border-radius: var(--radius-2xl);
   overflow: hidden;
 }
 
@@ -213,17 +221,20 @@
   padding-top: 0;
 }
 
+.previewStats div,
+.previewList div {
+  border: 1px solid var(--color-border-subtle);
+  background: rgba(4, 6, 15, 0.42);
+  border-radius: var(--radius-lg);
+}
+
 .previewStats div {
   display: grid;
   gap: var(--space-2);
   padding: var(--space-4);
-  border-radius: var(--radius-lg);
-  background: rgba(15, 26, 56, 0.88);
-  border: 1px solid var(--color-border-subtle);
 }
 
 .previewStats strong {
-  color: var(--color-text-primary);
   font-size: var(--text-lg);
 }
 
@@ -238,9 +249,6 @@
   justify-content: space-between;
   gap: var(--space-4);
   padding: var(--space-4);
-  border-radius: var(--radius-lg);
-  background: rgba(4, 6, 15, 0.42);
-  border: 1px solid var(--color-border-subtle);
 }
 
 .previewList strong {
@@ -248,19 +256,27 @@
   font-size: var(--text-sm);
 }
 
-.problem {
+.problem,
+.split,
+.pricing,
+.target {
   display: grid;
-  grid-template-columns: 0.9fr 1.1fr;
+  grid-template-columns: 0.95fr 1.05fr;
   gap: var(--space-10);
+  align-items: center;
   padding-top: var(--space-16);
   padding-bottom: var(--space-16);
+}
+
+.problem {
   border-top: 1px solid var(--color-border-subtle);
 }
 
 .problem h2,
 .sectionIntro h2,
+.glassPanel h2,
 .priceCopy h2,
-.faq h2 {
+.target h2 {
   margin-top: var(--space-3);
   font-size: clamp(2rem, 4vw, 3.5rem);
   line-height: var(--leading-tight);
@@ -268,17 +284,20 @@
 }
 
 .problem p,
+.sectionIntro p,
+.glassPanel p,
 .priceCopy p,
+.target p,
 .feature p,
-.faq p {
+.priceCard p,
+.priceCard li,
+.benefit p {
   color: var(--color-text-secondary);
   line-height: var(--leading-normal);
 }
 
 .features,
-.workflow,
-.pricing,
-.faq {
+.vehicleSection {
   padding-top: var(--space-16);
   padding-bottom: var(--space-16);
 }
@@ -286,7 +305,7 @@
 .sectionIntro {
   display: grid;
   gap: var(--space-3);
-  max-width: 720px;
+  max-width: 780px;
   margin-bottom: var(--space-10);
 }
 
@@ -297,11 +316,9 @@
 }
 
 .feature {
-  min-height: 220px;
+  min-height: 240px;
   padding: var(--space-6);
-  border: 1px solid var(--color-border-default);
   border-radius: var(--radius-xl);
-  background: rgba(13, 21, 48, 0.66);
 }
 
 .feature h3 {
@@ -309,54 +326,46 @@
   font-size: var(--text-xl);
 }
 
-.steps {
+.glassPanel {
+  padding: var(--space-8);
+  border-radius: var(--radius-2xl);
+}
+
+.benefitList {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: var(--space-4);
 }
 
-.step {
+.benefit {
   display: flex;
-  align-items: center;
-  gap: var(--space-4);
-  padding: var(--space-6);
-  border-radius: var(--radius-xl);
-  background: rgba(8, 14, 30, 0.84);
-  border: 1px solid var(--color-border-default);
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-lg);
+  background: rgba(4, 6, 15, 0.38);
 }
 
-.step span {
-  display: grid;
-  place-items: center;
-  width: 42px;
-  height: 42px;
-  flex: 0 0 42px;
+.benefit span {
+  width: 10px;
+  height: 10px;
+  flex: 0 0 10px;
+  margin-top: 7px;
   border-radius: var(--radius-full);
-  color: white;
-  background: var(--color-blue-electric);
-  font-weight: var(--font-bold);
+  background: var(--color-cyan);
+  box-shadow: 0 0 14px rgba(64, 192, 255, 0.45);
 }
 
-.step p {
-  color: var(--color-ice);
-  font-weight: var(--font-semibold);
-}
-
-.pricing {
-  display: grid;
-  grid-template-columns: 1fr 420px;
-  gap: var(--space-10);
-  align-items: center;
+.vehicleSection {
+  border-top: 1px solid var(--color-border-subtle);
+  border-bottom: 1px solid var(--color-border-subtle);
 }
 
 .priceCard {
   display: grid;
   gap: var(--space-5);
   padding: var(--space-8);
-  border: 1px solid var(--color-border-strong);
   border-radius: var(--radius-2xl);
-  background: linear-gradient(180deg, rgba(13, 21, 48, 0.98), rgba(8, 14, 30, 0.98));
-  box-shadow: var(--shadow-xl);
 }
 
 .trial {
@@ -381,9 +390,7 @@
   line-height: 1;
 }
 
-.price span,
-.priceCard p,
-.priceCard li {
+.price span {
   color: var(--color-text-secondary);
 }
 
@@ -394,28 +401,21 @@
 }
 
 .priceCard li::before {
-  content: '+';
+  content: '✓';
   margin-right: var(--space-2);
   color: var(--color-success);
   font-weight: var(--font-bold);
 }
 
-.faq > div {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--space-4);
-  margin-top: var(--space-8);
+.target {
+  grid-template-columns: 1fr auto;
+  margin-bottom: var(--space-16);
+  padding: var(--space-8);
+  border-radius: var(--radius-2xl);
 }
 
-.faq article {
-  padding: var(--space-6);
-  border-radius: var(--radius-xl);
-  border: 1px solid var(--color-border-subtle);
-  background: rgba(13, 21, 48, 0.5);
-}
-
-.faq h3 {
-  margin-bottom: var(--space-3);
+.largeCta {
+  min-width: 240px;
 }
 
 .footer {
@@ -448,7 +448,9 @@
 
   .hero,
   .problem,
-  .pricing {
+  .split,
+  .pricing,
+  .target {
     grid-template-columns: 1fr;
   }
 
@@ -456,9 +458,12 @@
     min-height: auto;
   }
 
-  .featureGrid,
-  .faq > div {
+  .featureGrid {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .target {
+    align-items: stretch;
   }
 }
 
@@ -476,27 +481,34 @@
   .hero,
   .problem,
   .features,
-  .workflow,
+  .split,
+  .vehicleSection,
   .pricing,
-  .faq,
+  .target,
   .footer {
     padding-inline: var(--space-4);
   }
 
   .heroActions,
   .primaryCta,
-  .secondaryCta {
+  .secondaryCta,
+  .largeCta {
     width: 100%;
   }
 
   .previewStats,
   .featureGrid,
-  .steps,
-  .faq > div {
+  .benefitList {
     grid-template-columns: 1fr;
   }
 
-  .priceCard {
+  .preview {
+    min-width: 0;
+  }
+
+  .priceCard,
+  .glassPanel,
+  .target {
     padding: var(--space-6);
   }
 
