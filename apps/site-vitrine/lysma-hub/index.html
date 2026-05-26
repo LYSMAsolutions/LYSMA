@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>LYSMA Solutions — Applications métier et sites vitrines premium</title>
-  <meta name="description" content="LYSMA Solutions conçoit des applications web, portails métier et sites vitrines premium pour les garages, ateliers, distributeurs et petites entreprises.">
+  <title>LYSMA Solutions - Applications metier et sites vitrines premium</title>
+  <meta name="description" content="LYSMA Solutions cree des applications web, portails metier et sites vitrines premium pour les garages, ateliers, distributeurs et petites entreprises.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
@@ -21,18 +21,13 @@
       --muted: #94a3b8;
       --soft: rgba(248, 250, 252, .74);
       --gold: #f5c542;
-      --glass: rgba(255, 255, 255, .08);
-      --glass-strong: rgba(255, 255, 255, .12);
       --border: rgba(255, 255, 255, .14);
       --shadow: 0 28px 90px rgba(0, 0, 0, .36);
       --radius: 24px;
       --max: 1180px;
     }
 
-    html {
-      scroll-behavior: smooth;
-      background: var(--navy);
-    }
+    html { scroll-behavior: smooth; background: var(--navy); }
 
     body {
       min-height: 100vh;
@@ -50,22 +45,17 @@
       position: fixed;
       inset: 0;
       pointer-events: none;
-      opacity: .18;
+      opacity: .16;
       background-image:
-        linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px);
+        linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
       background-size: 68px 68px;
       mask-image: linear-gradient(to bottom, black, transparent 78%);
       z-index: -1;
     }
 
     a { color: inherit; text-decoration: none; }
-    button, a { -webkit-tap-highlight-color: transparent; }
-
-    .shell {
-      width: min(var(--max), calc(100% - 40px));
-      margin: 0 auto;
-    }
+    .shell { width: min(var(--max), calc(100% - 40px)); margin: 0 auto; }
 
     .nav {
       position: fixed;
@@ -148,7 +138,6 @@
       color: #cfe7ff;
       font-size: .78rem;
       font-weight: 800;
-      letter-spacing: .02em;
     }
 
     .badge::before {
@@ -160,10 +149,7 @@
       box-shadow: 0 0 18px rgba(245, 197, 66, .8);
     }
 
-    h1, h2, h3 {
-      font-family: Manrope, Inter, sans-serif;
-      letter-spacing: -.04em;
-    }
+    h1, h2, h3 { font-family: Manrope, Inter, sans-serif; letter-spacing: -.04em; }
 
     h1 {
       max-width: 760px;
@@ -181,12 +167,7 @@
       line-height: 1.7;
     }
 
-    .actions {
-      display: flex;
-      gap: 14px;
-      flex-wrap: wrap;
-      margin-top: 34px;
-    }
+    .actions { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 34px; }
 
     .btn-primary,
     .btn-secondary,
@@ -194,7 +175,6 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
       min-height: 50px;
       padding: 0 22px;
       border-radius: 999px;
@@ -216,14 +196,9 @@
 
     .btn-primary:hover,
     .btn-secondary:hover,
-    .card-link:hover {
-      transform: translateY(-2px);
-    }
+    .card-link:hover { transform: translateY(-2px); }
 
-    .hero-visual {
-      position: relative;
-      min-height: 580px;
-    }
+    .hero-visual { position: relative; min-height: 560px; }
 
     .dashboard {
       position: relative;
@@ -248,10 +223,7 @@
     .dash-top,
     .dash-grid,
     .dash-table,
-    .dash-side {
-      position: relative;
-      z-index: 1;
-    }
+    .dash-side { position: relative; z-index: 1; }
 
     .dash-top {
       display: flex;
@@ -261,19 +233,8 @@
       padding: 8px 6px 18px;
     }
 
-    .dash-title strong {
-      display: block;
-      font-family: Manrope, sans-serif;
-      font-size: 1rem;
-    }
-
-    .dash-title span,
-    .muted {
-      display: block;
-      color: var(--muted);
-      font-size: .82rem;
-      line-height: 1.55;
-    }
+    .dash-title strong { display: block; font-family: Manrope, sans-serif; font-size: 1rem; }
+    .dash-title span, .muted { display: block; color: var(--muted); font-size: .82rem; line-height: 1.55; }
 
     .status-pill {
       padding: 8px 10px;
@@ -304,15 +265,11 @@
 
     .kpi { padding: 16px; }
     .kpi span { color: var(--muted); font-size: .74rem; }
-    .kpi strong { display: block; margin-top: 8px; font-size: 1.35rem; }
+    .kpi strong { display: block; margin-top: 8px; font-size: 1rem; }
 
-    .dash-body {
-      display: grid;
-      grid-template-columns: 1.35fr .8fr;
-      gap: 12px;
-    }
-
+    .dash-body { display: grid; grid-template-columns: 1.35fr .8fr; gap: 12px; }
     .dash-table { padding: 16px; }
+
     .row {
       display: grid;
       grid-template-columns: 1fr auto;
@@ -334,7 +291,7 @@
     }
     .progress span {
       display: block;
-      width: 72%;
+      width: 70%;
       height: 100%;
       border-radius: inherit;
       background: linear-gradient(90deg, var(--blue-2), var(--gold));
@@ -346,20 +303,13 @@
       padding: 16px 18px;
       backdrop-filter: blur(18px);
     }
-    .float-card strong { display: block; font-size: 1.25rem; }
+    .float-card strong { display: block; font-size: 1.1rem; }
     .float-card span { color: var(--muted); font-size: .78rem; }
     .float-card.one { left: -28px; bottom: 64px; animation: drift 6s ease-in-out infinite; }
     .float-card.two { right: -22px; top: 74px; animation: drift 7s ease-in-out infinite reverse; }
 
-    .section {
-      padding: 96px 0;
-      position: relative;
-    }
-
-    .section-head {
-      max-width: 760px;
-      margin-bottom: 34px;
-    }
+    .section { padding: 96px 0; position: relative; }
+    .section-head { max-width: 760px; margin-bottom: 34px; }
 
     .eyebrow {
       margin-bottom: 12px;
@@ -370,25 +320,12 @@
       letter-spacing: .16em;
     }
 
-    h2 {
-      font-size: clamp(2.15rem, 4vw, 3.6rem);
-      line-height: 1.06;
-      font-weight: 900;
-    }
-
-    .lead {
-      margin-top: 16px;
-      color: var(--soft);
-      font-size: 1.05rem;
-      line-height: 1.7;
-    }
+    h2 { font-size: clamp(2.15rem, 4vw, 3.6rem); line-height: 1.06; font-weight: 900; }
+    .lead { margin-top: 16px; color: var(--soft); font-size: 1.05rem; line-height: 1.7; }
 
     .grid-4,
     .grid-3,
-    .solution-grid {
-      display: grid;
-      gap: 16px;
-    }
+    .solution-grid { display: grid; gap: 16px; }
 
     .grid-4 { grid-template-columns: repeat(4, 1fr); }
     .grid-3 { grid-template-columns: repeat(3, 1fr); }
@@ -397,7 +334,8 @@
     .card,
     .solution-card,
     .method-step,
-    .site-panel {
+    .site-panel,
+    .preview-card {
       border: 1px solid var(--border);
       border-radius: var(--radius);
       background: linear-gradient(145deg, rgba(255,255,255,.105), rgba(255,255,255,.045));
@@ -409,33 +347,15 @@
     .card h3 { margin-bottom: 10px; font-size: 1.15rem; }
     .card p { color: var(--soft); line-height: 1.65; font-size: .94rem; }
 
-    .promise {
-      display: grid;
-      grid-template-columns: .9fr 1.1fr;
-      gap: 20px;
-      align-items: stretch;
-    }
-
+    .promise { display: grid; grid-template-columns: .9fr 1.1fr; gap: 20px; align-items: stretch; }
     .promise-panel {
       padding: 34px;
       border-radius: 30px;
       background: linear-gradient(135deg, rgba(30,115,216,.24), rgba(255,255,255,.07));
       border: 1px solid rgba(119,183,255,.22);
     }
-
-    .promise-list {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 14px;
-    }
-
-    .mini {
-      padding: 18px;
-      border-radius: 20px;
-      background: rgba(255,255,255,.07);
-      border: 1px solid rgba(255,255,255,.11);
-    }
-
+    .promise-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    .mini { padding: 18px; border-radius: 20px; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.11); }
     .mini strong { display: block; margin-bottom: 6px; }
     .mini span { color: var(--muted); font-size: .9rem; line-height: 1.5; }
 
@@ -477,13 +397,7 @@
       font-size: .86rem;
     }
 
-    .proof {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      align-items: center;
-    }
-
+    .proof { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: center; }
     .proof-visual {
       min-height: 360px;
       border: 1px solid var(--border);
@@ -521,12 +435,7 @@
       align-items: center;
     }
 
-    .site-list {
-      display: grid;
-      gap: 10px;
-      margin-top: 22px;
-      color: var(--soft);
-    }
+    .site-list { display: grid; gap: 10px; margin-top: 22px; color: var(--soft); }
     .site-list li {
       list-style: none;
       padding: 12px 14px;
@@ -544,20 +453,8 @@
       box-shadow: 0 28px 70px rgba(0,0,0,.38);
       transform: rotate(1deg);
     }
-    .browser {
-      height: 34px;
-      display: flex;
-      gap: 6px;
-      align-items: center;
-      border-bottom: 1px solid #d7e1ef;
-      margin-bottom: 18px;
-    }
-    .browser span {
-      width: 9px;
-      height: 9px;
-      border-radius: 999px;
-      background: #bfd0e5;
-    }
+    .browser { height: 34px; display: flex; gap: 6px; align-items: center; border-bottom: 1px solid #d7e1ef; margin-bottom: 18px; }
+    .browser span { width: 9px; height: 9px; border-radius: 999px; background: #bfd0e5; }
     .site-preview h3 { font-size: 1.7rem; margin-bottom: 10px; }
     .site-preview p { color: #475569; line-height: 1.55; }
     .site-preview .strip {
@@ -567,52 +464,47 @@
       background: linear-gradient(135deg, #0a4d9b, #1e73d8);
     }
 
-    .method {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 14px;
-    }
-
+    .method { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
     .method-step { padding: 24px; }
-    .method-step span {
-      display: inline-flex;
-      margin-bottom: 20px;
-      color: var(--gold);
-      font-weight: 900;
-    }
+    .method-step span { display: inline-flex; margin-bottom: 20px; color: var(--gold); font-weight: 900; }
     .method-step h3 { margin-bottom: 10px; }
     .method-step p { color: var(--soft); line-height: 1.6; }
 
-    .projects {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 16px;
+    .previews { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+    .preview-card { overflow: hidden; transition: transform .22s ease, border-color .22s ease; }
+    .preview-card:hover { transform: translateY(-4px); border-color: rgba(119,183,255,.34); }
+    .preview-frame {
+      height: 300px;
+      background: #0b1f38;
+      border-bottom: 1px solid rgba(255,255,255,.12);
+      position: relative;
+      overflow: hidden;
+    }
+    .preview-frame iframe {
+      width: 1440px;
+      height: 920px;
+      border: 0;
+      transform: scale(.36);
+      transform-origin: 0 0;
+      pointer-events: none;
+      background: #fff;
+    }
+    .preview-info { padding: 22px; }
+    .preview-info small { color: var(--cyan); font-weight: 850; text-transform: uppercase; letter-spacing: .08em; }
+    .preview-info h3 { margin: 10px 0 8px; font-size: 1.45rem; }
+    .preview-info p { color: var(--soft); line-height: 1.6; margin-bottom: 16px; }
+    .preview-note {
+      display: inline-flex;
+      padding: 8px 10px;
+      border-radius: 999px;
+      color: #d8ecff;
+      background: rgba(119,183,255,.09);
+      border: 1px solid rgba(119,183,255,.26);
+      font-size: .8rem;
+      font-weight: 800;
     }
 
-    .project {
-      min-height: 260px;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      padding: 24px;
-      border-radius: 28px;
-      border: 1px solid var(--border);
-      background:
-        linear-gradient(180deg, transparent 0%, rgba(6,24,45,.94) 76%),
-        radial-gradient(circle at 20% 10%, rgba(119,183,255,.22), transparent 24rem),
-        rgba(255,255,255,.06);
-      transition: transform .22s ease, border-color .22s ease;
-    }
-    .project:hover { transform: translateY(-4px); border-color: rgba(119,183,255,.34); }
-    .project small { color: var(--cyan); font-weight: 850; text-transform: uppercase; letter-spacing: .08em; }
-    .project h3 { margin: 10px 0 8px; font-size: 1.45rem; }
-    .project p { color: var(--soft); line-height: 1.6; }
-
-    .stack-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
+    .stack-row { display: flex; flex-wrap: wrap; gap: 10px; }
     .stack-row span {
       padding: 10px 14px;
       border-radius: 999px;
@@ -641,51 +533,19 @@
       font-size: 1.05rem;
     }
 
-    footer {
-      padding: 34px 0 44px;
-      border-top: 1px solid rgba(255,255,255,.1);
-      color: var(--muted);
-    }
-    .footer-inner {
-      display: flex;
-      justify-content: space-between;
-      gap: 20px;
-      align-items: center;
-      font-size: .9rem;
-    }
+    footer { padding: 34px 0 44px; border-top: 1px solid rgba(255,255,255,.1); color: var(--muted); }
+    .footer-inner { display: flex; justify-content: space-between; gap: 20px; align-items: center; font-size: .9rem; }
 
-    .reveal {
-      opacity: 0;
-      transform: translateY(22px);
-      transition: opacity .7s ease, transform .7s cubic-bezier(.16,1,.3,1);
-    }
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    .reveal { opacity: 0; transform: translateY(22px); transition: opacity .7s ease, transform .7s cubic-bezier(.16,1,.3,1); }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
 
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-12px); }
-    }
-    @keyframes drift {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-    }
+    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+    @keyframes drift { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
     @media (max-width: 1040px) {
-      .hero,
-      .promise,
-      .proof,
-      .site-panel {
-        grid-template-columns: 1fr;
-      }
+      .hero, .promise, .proof, .site-panel { grid-template-columns: 1fr; }
       .hero-visual { min-height: auto; }
-      .solution-grid,
-      .grid-4,
-      .method {
-        grid-template-columns: repeat(2, 1fr);
-      }
+      .solution-grid, .grid-4, .method, .previews { grid-template-columns: repeat(2, 1fr); }
     }
 
     @media (max-width: 760px) {
@@ -694,31 +554,20 @@
       .nav-links { display: none; }
       .nav-cta { padding: 10px 13px; font-size: .78rem; }
       .brand span:last-child { display: none; }
-      .hero { padding: 118px 0 56px; }
+      .hero { grid-template-columns: 1fr; padding: 118px 0 56px; }
       h1 { font-size: clamp(2.65rem, 13vw, 4.2rem); }
-      .dash-grid,
-      .dash-body,
-      .grid-3,
-      .grid-4,
-      .solution-grid,
-      .promise-list,
-      .method,
-      .projects {
-        grid-template-columns: 1fr;
-      }
+      .dash-grid, .dash-body, .grid-3, .grid-4, .solution-grid, .promise-list, .method, .previews { grid-template-columns: 1fr; }
       .dashboard { padding: 14px; border-radius: 24px; }
       .float-card { display: none; }
       .section { padding: 66px 0; }
+      .preview-frame { height: 230px; }
+      .preview-frame iframe { transform: scale(.28); }
       .final-cta { padding: 34px 18px; }
       .footer-inner { flex-direction: column; text-align: center; }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        animation-duration: .01ms !important;
-        animation-iteration-count: 1 !important;
-        scroll-behavior: auto !important;
-      }
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }
       .reveal { opacity: 1; transform: none; }
     }
   </style>
@@ -732,7 +581,7 @@
     <nav class="nav-links" aria-label="Sections du site">
       <a href="#solutions">Solutions</a>
       <a href="#sites-vitrines">Sites vitrines</a>
-      <a href="#realisations">Réalisations</a>
+      <a href="#realisations">Realisations</a>
       <a href="#contact">Contact</a>
     </nav>
     <a href="#contact" class="nav-cta">Discuter de mon projet</a>
@@ -741,62 +590,62 @@
   <main>
     <section class="hero shell">
       <div>
-        <p class="badge reveal">Solutions digitales métier pour entreprises de terrain</p>
-        <h1 class="reveal">Des outils simples pour piloter votre activité sans perdre de temps.</h1>
+        <p class="badge reveal">Solutions digitales metier pour entreprises de terrain</p>
+        <h1 class="reveal">Des outils simples pour piloter votre activite sans perdre de temps.</h1>
         <p class="hero-text reveal">
-          LYSMA Solutions conçoit des applications web sur mesure pour les garages, ateliers,
-          distributeurs et petites entreprises qui veulent gagner en clarté, en temps et en efficacité.
+          LYSMA Solutions cree des applications web sur mesure pour les garages, ateliers,
+          distributeurs et petites entreprises qui veulent gagner en clarte, en temps et en efficacite.
         </p>
         <div class="actions reveal">
-          <a href="#solutions" class="btn-primary">Découvrir les solutions</a>
+          <a href="#solutions" class="btn-primary">Decouvrir les solutions</a>
           <a href="#contact" class="btn-secondary">Discuter de mon projet</a>
         </div>
       </div>
 
-      <div class="hero-visual" aria-label="Aperçu d'un tableau de bord LYSMA">
+      <div class="hero-visual" aria-label="Apercu d'un tableau de bord LYSMA">
         <div class="dashboard">
           <div class="dash-top">
             <div class="dash-title">
-              <strong>Tableau de bord métier</strong>
-              <span>Vue claire, actions rapides, données utiles.</span>
+              <strong>Tableau de bord metier</strong>
+              <span>Vue claire, actions rapides, donnees utiles.</span>
             </div>
-            <span class="status-pill">En direct</span>
+            <span class="status-pill">Exemple d'interface</span>
           </div>
           <div class="dash-grid">
-            <div class="kpi"><span>Clients suivis</span><strong>128</strong></div>
-            <div class="kpi"><span>Bons traités</span><strong>342</strong></div>
-            <div class="kpi"><span>Temps gagné</span><strong>+ clair</strong></div>
+            <div class="kpi"><span>Clients</span><strong>A suivre</strong></div>
+            <div class="kpi"><span>Bons</span><strong>A traiter</strong></div>
+            <div class="kpi"><span>Activite</span><strong>A piloter</strong></div>
           </div>
           <div class="dash-body">
             <div class="dash-table">
               <div class="row"><span>Atelier</span><strong>Planning propre</strong></div>
               <div class="row"><span>Bons et demandes</span><strong>Suivis</strong></div>
-              <div class="row"><span>Paiements</span><strong>À contrôler</strong></div>
-              <div class="row"><span>Équipe</span><strong>Activité visible</strong></div>
+              <div class="row"><span>Paiements</span><strong>A controler</strong></div>
+              <div class="row"><span>Equipe</span><strong>Activite visible</strong></div>
             </div>
             <div class="dash-side">
-              <span class="muted">Avancement</span>
+              <span class="muted">Objectif</span>
               <div class="progress"><span></span></div>
-              <strong>Une seule vue pour décider plus vite.</strong>
+              <strong>Une seule vue pour decider plus vite.</strong>
             </div>
           </div>
         </div>
         <div class="float-card one"><strong>PDF / Excel</strong><span>exports propres</span></div>
-        <div class="float-card two"><strong>Portail client</strong><span>demandes centralisées</span></div>
+        <div class="float-card two"><strong>Portail client</strong><span>demandes centralisees</span></div>
       </div>
     </section>
 
     <section class="section shell" id="problemes">
       <div class="section-head reveal">
-        <p class="eyebrow">Problèmes terrain</p>
-        <h2>Quand l’activité grandit, les outils bricolés ne suffisent plus.</h2>
-        <p class="lead">Un bon outil doit simplifier le quotidien. Pas ajouter une couche de complexité.</p>
+        <p class="eyebrow">Problemes terrain</p>
+        <h2>Quand l'activite grandit, les outils bricoles ne suffisent plus.</h2>
+        <p class="lead">Un bon outil doit simplifier le quotidien. Pas ajouter une couche de complexite.</p>
       </div>
       <div class="grid-4">
-        <article class="card reveal"><h3>Trop d’informations dispersées</h3><p>Les données se retrouvent dans des messages, fichiers, carnets ou conversations impossibles à suivre correctement.</p></article>
-        <article class="card reveal"><h3>Trop d’allers-retours</h3><p>Les équipes perdent du temps à demander, relancer, confirmer et recopier les mêmes informations.</p></article>
-        <article class="card reveal"><h3>Peu de visibilité</h3><p>Les bons, demandes, paiements et dossiers avancent, mais il devient difficile de savoir où regarder.</p></article>
-        <article class="card reveal"><h3>Tâches répétitives</h3><p>Ce qui pourrait être automatisé finit souvent fait à la main, avec plus de fatigue et plus d’erreurs.</p></article>
+        <article class="card reveal"><h3>Trop d'informations dispersees</h3><p>Les donnees se retrouvent dans des messages, fichiers, carnets ou conversations impossibles a suivre correctement.</p></article>
+        <article class="card reveal"><h3>Trop d'allers-retours</h3><p>Les equipes perdent du temps a demander, relancer, confirmer et recopier les memes informations.</p></article>
+        <article class="card reveal"><h3>Peu de visibilite</h3><p>Les bons, demandes, paiements et dossiers avancent, mais il devient difficile de savoir ou regarder.</p></article>
+        <article class="card reveal"><h3>Taches repetitives</h3><p>Ce qui pourrait etre automatise finit souvent fait a la main, avec plus de fatigue et plus d'erreurs.</p></article>
       </div>
     </section>
 
@@ -804,17 +653,17 @@
       <div class="promise">
         <div class="section-head reveal">
           <p class="eyebrow">Promesse LYSMA</p>
-          <h2>LYSMA transforme vos méthodes de travail en outils clairs et efficaces.</h2>
-          <p class="lead">Je pars de votre façon de travailler, puis je construis une interface simple, fiable et agréable à utiliser.</p>
+          <h2>LYSMA transforme vos methodes de travail en outils clairs et efficaces.</h2>
+          <p class="lead">Je pars de votre facon de travailler, puis je construis une interface simple, fiable et agreable a utiliser.</p>
         </div>
         <div class="promise-panel reveal">
           <div class="promise-list">
-            <div class="mini"><strong>Outils métier sur mesure</strong><span>Adaptés à vos process, pas l’inverse.</span></div>
-            <div class="mini"><strong>Portails clients</strong><span>Demandes et échanges centralisés.</span></div>
-            <div class="mini"><strong>Tableaux de bord</strong><span>Des indicateurs lisibles pour décider.</span></div>
-            <div class="mini"><strong>Automatisations</strong><span>Moins de saisie, moins d’oublis.</span></div>
+            <div class="mini"><strong>Outils metier sur mesure</strong><span>Adaptes a vos process, pas l'inverse.</span></div>
+            <div class="mini"><strong>Portails clients</strong><span>Demandes et echanges centralises.</span></div>
+            <div class="mini"><strong>Tableaux de bord</strong><span>Des indicateurs lisibles pour decider.</span></div>
+            <div class="mini"><strong>Automatisations</strong><span>Moins de saisie, moins d'oublis.</span></div>
             <div class="mini"><strong>Formulaires intelligents</strong><span>Les bonnes informations au bon endroit.</span></div>
-            <div class="mini"><strong>Exports PDF / Excel</strong><span>Des documents propres à partager.</span></div>
+            <div class="mini"><strong>Exports PDF / Excel</strong><span>Des documents propres a partager.</span></div>
           </div>
         </div>
       </div>
@@ -823,31 +672,31 @@
     <section class="section shell" id="solutions">
       <div class="section-head reveal">
         <p class="eyebrow">Solutions</p>
-        <h2>Des produits pensés pour les métiers qui avancent vite.</h2>
+        <h2>Des produits penses pour les metiers qui avancent vite.</h2>
       </div>
       <div class="solution-grid">
         <article class="solution-card reveal">
           <div class="icon">LI</div>
           <h3>LIVO</h3>
-          <p>Pilotage atelier, pointage, rentabilité et suivi des compagnons pour garages et carrosseries.</p>
+          <p>Pilotage atelier, pointage, rentabilite et suivi des compagnons pour garages et carrosseries.</p>
           <a href="#contact" class="card-link">Voir la solution</a>
         </article>
         <article class="solution-card reveal">
           <div class="icon">PD</div>
           <h3>Portail distributeur</h3>
-          <p>Centralisation des demandes, bons, clients, magasins et équipes commerciales.</p>
+          <p>Centralisation des demandes, bons, clients, magasins et equipes commerciales.</p>
           <a href="#contact" class="card-link">En savoir plus</a>
         </article>
         <article class="solution-card reveal">
           <div class="icon">SV</div>
           <h3>Sites vitrines premium</h3>
-          <p>Des sites modernes, rapides et professionnels pour inspirer confiance dès le premier contact.</p>
-          <a href="#sites-vitrines" class="card-link">Découvrir</a>
+          <p>Des sites modernes, rapides et professionnels pour inspirer confiance des le premier contact.</p>
+          <a href="#sites-vitrines" class="card-link">Decouvrir</a>
         </article>
         <article class="solution-card reveal">
           <div class="icon">OS</div>
           <h3>Outils sur mesure</h3>
-          <p>Des applications adaptées à vos process, sans complexité inutile ni jargon technique.</p>
+          <p>Des applications adaptees a vos process, sans complexite inutile ni jargon technique.</p>
           <a href="#contact" class="card-link">Parler de mon besoin</a>
         </article>
       </div>
@@ -856,18 +705,18 @@
     <section class="section shell">
       <div class="proof">
         <div class="section-head reveal">
-          <p class="eyebrow">Pensé pour le terrain</p>
+          <p class="eyebrow">Pense pour le terrain</p>
           <h2>Des solutions qui aident vraiment au quotidien.</h2>
           <div class="grid-3" style="margin-top: 26px;">
-            <article class="card"><h3>Gagner du temps</h3><p>Moins de recherche, moins de ressaisie, plus d’actions utiles.</p></article>
-            <article class="card"><h3>Réduire les erreurs</h3><p>Les informations sont mieux structurées, donc plus simples à contrôler.</p></article>
-            <article class="card"><h3>Piloter clairement</h3><p>Vos chiffres, demandes et priorités deviennent visibles au même endroit.</p></article>
+            <article class="card"><h3>Gagner du temps</h3><p>Moins de recherche, moins de ressaisie, plus d'actions utiles.</p></article>
+            <article class="card"><h3>Reduire les erreurs</h3><p>Les informations sont mieux structurees, donc plus simples a controler.</p></article>
+            <article class="card"><h3>Piloter clairement</h3><p>Vos chiffres, demandes et priorites deviennent visibles au meme endroit.</p></article>
           </div>
         </div>
         <div class="proof-visual reveal" aria-hidden="true">
-          <div class="proof-line"><span>Demande client</span><strong>Reçue</strong></div>
+          <div class="proof-line"><span>Demande client</span><strong>Recue</strong></div>
           <div class="proof-line"><span>Traitement atelier</span><strong>En cours</strong></div>
-          <div class="proof-line"><span>Export document</span><strong>Prêt</strong></div>
+          <div class="proof-line"><span>Export document</span><strong>Pret</strong></div>
         </div>
       </div>
     </section>
@@ -876,22 +725,22 @@
       <div class="site-panel reveal">
         <div>
           <p class="eyebrow">Sites vitrines LYSMA</p>
-          <h2>Votre site internet doit donner confiance avant même le premier contact.</h2>
+          <h2>Votre site internet doit donner confiance avant meme le premier contact.</h2>
           <p class="lead">
-            Un site vitrine n’est pas seulement une présence en ligne. C’est souvent la première impression que votre futur client aura de vous.
+            Un site vitrine n'est pas seulement une presence en ligne. C'est souvent la premiere impression que votre futur client aura de vous.
           </p>
           <ul class="site-list">
-            <li>Design moderne et cohérent avec votre activité.</li>
-            <li>Mobile first, rapide et agréable à consulter.</li>
-            <li>Référencement de base propre pour être compris par Google.</li>
-            <li>Mises à jour et maintenance mensuelle possibles.</li>
+            <li>Design moderne et coherent avec votre activite.</li>
+            <li>Mobile first, rapide et agreable a consulter.</li>
+            <li>Referencement de base propre pour etre compris par Google.</li>
+            <li>Mises a jour et maintenance mensuelle possibles.</li>
             <li>Accompagnement simple, sans vocabulaire inutile.</li>
           </ul>
         </div>
-        <div class="site-preview" aria-label="Aperçu de site vitrine premium">
+        <div class="site-preview" aria-label="Apercu de site vitrine premium">
           <div class="browser"><span></span><span></span><span></span></div>
-          <h3>Votre savoir-faire, présenté avec sérieux.</h3>
-          <p>Une page claire, des messages rassurants, des appels à l’action visibles et une expérience fluide sur téléphone.</p>
+          <h3>Votre savoir-faire, presente avec serieux.</h3>
+          <p>Une page claire, des messages rassurants, des appels a l'action visibles et une experience fluide sur telephone.</p>
           <div class="strip"></div>
         </div>
       </div>
@@ -899,35 +748,47 @@
 
     <section class="section shell">
       <div class="section-head reveal">
-        <p class="eyebrow">Méthode</p>
-        <h2>Une méthode simple.</h2>
+        <p class="eyebrow">Methode</p>
+        <h2>Une methode simple.</h2>
       </div>
       <div class="method">
-        <article class="method-step reveal"><span>01</span><h3>On échange</h3><p>Vous m’expliquez votre besoin, vos contraintes et votre façon de travailler.</p></article>
-        <article class="method-step reveal"><span>02</span><h3>On structure</h3><p>Je transforme vos idées en parcours clairs, écrans utiles et priorités concrètes.</p></article>
-        <article class="method-step reveal"><span>03</span><h3>Je crée</h3><p>Je développe l’outil ou le site avec un rendu moderne, propre et utilisable.</p></article>
-        <article class="method-step reveal"><span>04</span><h3>On améliore</h3><p>Vous l’utilisez, je l’ajuste avec vous pour qu’il colle au terrain.</p></article>
+        <article class="method-step reveal"><span>01</span><h3>On echange</h3><p>Vous m'expliquez votre besoin, vos contraintes et votre facon de travailler.</p></article>
+        <article class="method-step reveal"><span>02</span><h3>On structure</h3><p>Je transforme vos idees en parcours clairs, ecrans utiles et priorites concretes.</p></article>
+        <article class="method-step reveal"><span>03</span><h3>Je cree</h3><p>Je developpe l'outil ou le site avec un rendu moderne, propre et utilisable.</p></article>
+        <article class="method-step reveal"><span>04</span><h3>On ameliore</h3><p>Vous l'utilisez, je l'ajuste avec vous pour qu'il colle au terrain.</p></article>
       </div>
     </section>
 
     <section class="section shell" id="realisations">
       <div class="section-head reveal">
-        <p class="eyebrow">Réalisations</p>
-        <h2>Des projets concrets, avec une logique métier.</h2>
+        <p class="eyebrow">Realisations</p>
+        <h2>Apercu des projets deja crees.</h2>
+        <p class="lead">Je montre uniquement des projets existants ou accessibles. Le calculateur e-liquide n'est pas presente ici car il n'est pas deploye comme vitrine finale.</p>
       </div>
-      <div class="projects">
-        <a class="project reveal" href="https://carrosserie-mounier.vercel.app/" target="_blank" rel="noreferrer">
-          <small>Site vitrine</small>
-          <h3>Carrosserie Mounier</h3>
-          <p>Site moderne pour un carrossier indépendant : présentation claire, pages métier et contact simplifié.</p>
-        </a>
-        <a class="project reveal" href="https://livo-app.com/" target="_blank" rel="noreferrer">
-          <small>Outil métier</small>
-          <h3>LIVO-APP</h3>
-          <p>Logiciel de pointage et de pilotage atelier pour suivre l’activité réelle, les fiches et la rentabilité.</p>
-        </a>
-        <article class="project reveal">
-          <small>SaaS B2B</small>
+      <div class="previews">
+        <article class="preview-card reveal">
+          <a class="preview-frame" href="https://carrosserie-mounier.vercel.app/" target="_blank" rel="noreferrer" aria-label="Ouvrir le site Carrosserie Mounier">
+            <iframe src="https://carrosserie-mounier.vercel.app/" title="Apercu Carrosserie Mounier" loading="lazy"></iframe>
+          </a>
+          <div class="preview-info">
+            <small>Site vitrine en ligne</small>
+            <h3>Carrosserie Mounier</h3>
+            <p>Site moderne pour un carrossier independant : presentation claire, pages metier et contact simplifie.</p>
+            <a href="https://carrosserie-mounier.vercel.app/" target="_blank" rel="noreferrer" class="preview-note">Voir le site</a>
+          </div>
+        </article>
+
+        <article class="preview-card reveal">
+          <a class="preview-frame" href="https://livo-app.com/" target="_blank" rel="noreferrer" aria-label="Ouvrir LIVO">
+            <iframe src="https://livo-app.com/" title="Apercu LIVO" loading="lazy"></iframe>
+          </a>
+          <div class="preview-info">
+            <small>Application metier en ligne</small>
+            <h3>LIVO</h3>
+            <p>Logiciel de pointage et de pilotage atelier pour suivre l'activite reelle, les fiches et la rentabilite.</p>
+            <a href="https://livo-app.com/" target="_blank" rel="noreferrer" class="preview-note">Voir l'outil</a>
+          </div>
+        </article>
       </div>
     </section>
 
@@ -935,26 +796,26 @@
       <div class="section-head reveal">
         <p class="eyebrow">Base technique</p>
         <h2>Une base moderne, au service de votre usage.</h2>
-        <p class="lead">La technique reste discrète. Elle sert surtout à rendre votre outil rapide, fiable et évolutif.</p>
+        <p class="lead">La technique reste discrete. Elle sert surtout a rendre votre outil rapide, fiable et evolutif.</p>
       </div>
       <div class="stack-row reveal">
         <span>Applications web</span>
-        <span>Interfaces métier</span>
+        <span>Interfaces metier</span>
         <span>Tableaux de bord</span>
         <span>PDF / Excel</span>
         <span>Automatisations</span>
         <span>Sites vitrines</span>
-        <span>Hébergement moderne</span>
+        <span>Hebergement moderne</span>
       </div>
     </section>
 
     <section class="section shell" id="contact">
       <div class="final-cta reveal">
         <p class="eyebrow">Contact</p>
-        <h2>Vous avez une idée ou un besoin concret ?</h2>
+        <h2>Vous avez une idee ou un besoin concret ?</h2>
         <p>
-          Parlons-en simplement. L’objectif n’est pas de vous vendre une usine à gaz,
-          mais de créer l’outil qui vous fera réellement gagner du temps.
+          Parlons-en simplement. L'objectif n'est pas de vous vendre une usine a gaz,
+          mais de creer l'outil qui vous fera reellement gagner du temps.
         </p>
         <a href="mailto:lysmasolutions@gmail.com" class="btn-primary">Me contacter</a>
       </div>
@@ -965,7 +826,7 @@
     <div class="shell footer-inner">
       <strong>LYSMA Solutions</strong>
       <span>lysmasolutions@gmail.com</span>
-      <span>© 2026 — Périgord, France</span>
+      <span>2026 - Perigord, France</span>
     </div>
   </footer>
 
