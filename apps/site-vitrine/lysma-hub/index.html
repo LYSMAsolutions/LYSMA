@@ -471,10 +471,32 @@
     .method-step p { color: var(--soft); line-height: 1.6; }
 
     .previews { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
-    .preview-card { overflow: hidden; transition: transform .22s ease, border-color .22s ease; }
+    .preview-card {
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform .22s ease, border-color .22s ease;
+    }
     .preview-card:hover { transform: translateY(-4px); border-color: rgba(119,183,255,.34); }
+    .preview-heading {
+      padding: 22px 22px 16px;
+      border-bottom: 1px solid rgba(255,255,255,.1);
+      background: rgba(6, 24, 45, .46);
+    }
+    .preview-heading small {
+      color: var(--cyan);
+      font-weight: 850;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+    .preview-heading h3 {
+      margin-top: 8px;
+      font-size: clamp(1.45rem, 2.4vw, 2.1rem);
+      line-height: 1.05;
+    }
     .preview-frame {
-      height: 300px;
+      height: 340px;
+      display: block;
       background: #0b1f38;
       border-bottom: 1px solid rgba(255,255,255,.12);
       position: relative;
@@ -484,14 +506,12 @@
       width: 1440px;
       height: 920px;
       border: 0;
-      transform: scale(.36);
+      transform: scale(.38);
       transform-origin: 0 0;
       pointer-events: none;
       background: #fff;
     }
     .preview-info { padding: 22px; }
-    .preview-info small { color: var(--cyan); font-weight: 850; text-transform: uppercase; letter-spacing: .08em; }
-    .preview-info h3 { margin: 10px 0 8px; font-size: 1.45rem; }
     .preview-info p { color: var(--soft); line-height: 1.6; margin-bottom: 16px; }
     .preview-note {
       display: inline-flex;
@@ -560,8 +580,8 @@
       .dashboard { padding: 14px; border-radius: 24px; }
       .float-card { display: none; }
       .section { padding: 66px 0; }
-      .preview-frame { height: 230px; }
-      .preview-frame iframe { transform: scale(.28); }
+      .preview-frame { height: 250px; }
+      .preview-frame iframe { transform: scale(.3); }
       .final-cta { padding: 34px 18px; }
       .footer-inner { flex-direction: column; text-align: center; }
     }
@@ -757,29 +777,33 @@
     <section class="section shell" id="realisations">
       <div class="section-head reveal">
         <p class="eyebrow">Realisations</p>
-        <h2>Apercu des projets deja crees.</h2>
-        <p class="lead">Je montre uniquement des projets existants ou accessibles. Le calculateur e-liquide n'est pas presente ici car il n'est pas deploye comme vitrine finale.</p>
+        <h2>Apercu des projets deja crées.</h2>
+        <p class="lead">Voici un apercu de quelques-uns de mes travaux. </p>
       </div>
       <div class="previews">
         <article class="preview-card reveal">
+          <div class="preview-heading">
+            <small>Site vitrine en ligne</small>
+            <h3>CARROSSERIE MOUNIER</h3>
+          </div>
           <a class="preview-frame" href="https://carrosserie-mounier.vercel.app/" target="_blank" rel="noreferrer" aria-label="Ouvrir le site Carrosserie Mounier">
             <iframe src="https://carrosserie-mounier.vercel.app/" title="Apercu Carrosserie Mounier" loading="lazy"></iframe>
           </a>
           <div class="preview-info">
-            <small>Site vitrine en ligne</small>
-            <h3>Carrosserie Mounier</h3>
             <p>Site moderne pour un carrossier independant : presentation claire, pages metier et contact simplifie.</p>
             <a href="https://carrosserie-mounier.vercel.app/" target="_blank" rel="noreferrer" class="preview-note">Voir le site</a>
           </div>
         </article>
 
         <article class="preview-card reveal">
+          <div class="preview-heading">
+            <small>Application metier en ligne</small>
+            <h3>LIVO-APP</h3>
+          </div>
           <a class="preview-frame" href="https://livo-app.com/" target="_blank" rel="noreferrer" aria-label="Ouvrir LIVO">
             <iframe src="https://livo-app.com/" title="Apercu LIVO" loading="lazy"></iframe>
           </a>
           <div class="preview-info">
-            <small>Application metier en ligne</small>
-            <h3>LIVO</h3>
             <p>Logiciel de pointage et de pilotage atelier pour suivre l'activite reelle, les fiches et la rentabilite.</p>
             <a href="https://livo-app.com/" target="_blank" rel="noreferrer" class="preview-note">Voir l'outil</a>
           </div>
