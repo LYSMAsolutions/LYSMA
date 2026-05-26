@@ -206,6 +206,97 @@ exports.Prisma.ErrorReportScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.FinanceSettingsScalarFieldEnum = {
+  id: 'id',
+  urssafRate: 'urssafRate',
+  vatRate: 'vatRate',
+  vatStatus: 'vatStatus',
+  declarationFrequency: 'declarationFrequency',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.LysmaExpenseScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  provider: 'provider',
+  category: 'category',
+  relatedTool: 'relatedTool',
+  amountHT: 'amountHT',
+  vatAmount: 'vatAmount',
+  amountTTC: 'amountTTC',
+  frequency: 'frequency',
+  startDate: 'startDate',
+  renewalDate: 'renewalDate',
+  paymentMethod: 'paymentMethod',
+  status: 'status',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.RevenueSubscriptionScalarFieldEnum = {
+  id: 'id',
+  clientName: 'clientName',
+  clientCompany: 'clientCompany',
+  tool: 'tool',
+  planName: 'planName',
+  amountHT: 'amountHT',
+  vatAmount: 'vatAmount',
+  amountTTC: 'amountTTC',
+  frequency: 'frequency',
+  status: 'status',
+  trialStartAt: 'trialStartAt',
+  trialEndAt: 'trialEndAt',
+  startDate: 'startDate',
+  nextInvoiceAt: 'nextInvoiceAt',
+  nextPaymentAt: 'nextPaymentAt',
+  gocardlessCustomerId: 'gocardlessCustomerId',
+  gocardlessMandateId: 'gocardlessMandateId',
+  gocardlessSubscriptionId: 'gocardlessSubscriptionId',
+  sageCustomerId: 'sageCustomerId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.FinanceInvoiceScalarFieldEnum = {
+  id: 'id',
+  invoiceNumber: 'invoiceNumber',
+  clientName: 'clientName',
+  clientCompany: 'clientCompany',
+  tool: 'tool',
+  amountHT: 'amountHT',
+  vatAmount: 'vatAmount',
+  amountTTC: 'amountTTC',
+  status: 'status',
+  issueDate: 'issueDate',
+  dueDate: 'dueDate',
+  paidAt: 'paidAt',
+  pdfUrl: 'pdfUrl',
+  sageInvoiceId: 'sageInvoiceId',
+  sageInvoiceStatus: 'sageInvoiceStatus',
+  electronicInvoiceStatus: 'electronicInvoiceStatus',
+  platformProvider: 'platformProvider',
+  platformInvoiceId: 'platformInvoiceId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.FinancePaymentScalarFieldEnum = {
+  id: 'id',
+  invoiceId: 'invoiceId',
+  subscriptionId: 'subscriptionId',
+  amount: 'amount',
+  status: 'status',
+  method: 'method',
+  gocardlessPaymentId: 'gocardlessPaymentId',
+  paidAt: 'paidAt',
+  failedAt: 'failedAt',
+  failureReason: 'failureReason',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -244,13 +335,93 @@ exports.MessageStatut = exports.$Enums.MessageStatut = {
   TRAITE: 'TRAITE'
 };
 
+exports.FinanceVatStatus = exports.$Enums.FinanceVatStatus = {
+  FRANCHISE: 'FRANCHISE',
+  ASSUJETTI: 'ASSUJETTI'
+};
+
+exports.FinanceDeclarationFrequency = exports.$Enums.FinanceDeclarationFrequency = {
+  MENSUELLE: 'MENSUELLE',
+  TRIMESTRIELLE: 'TRIMESTRIELLE'
+};
+
+exports.ExpenseCategory = exports.$Enums.ExpenseCategory = {
+  HEBERGEMENT: 'HEBERGEMENT',
+  DOMAINE: 'DOMAINE',
+  IA: 'IA',
+  COMPTABILITE: 'COMPTABILITE',
+  PAIEMENT: 'PAIEMENT',
+  LOGICIEL: 'LOGICIEL',
+  API: 'API',
+  MATERIEL: 'MATERIEL',
+  AUTRE: 'AUTRE'
+};
+
+exports.FinanceTool = exports.$Enums.FinanceTool = {
+  GLOBAL: 'GLOBAL',
+  LIVO: 'LIVO',
+  PMA: 'PMA',
+  TRANSPORT: 'TRANSPORT',
+  AUTRE: 'AUTRE'
+};
+
+exports.FinanceFrequency = exports.$Enums.FinanceFrequency = {
+  MENSUEL: 'MENSUEL',
+  ANNUEL: 'ANNUEL',
+  PONCTUEL: 'PONCTUEL'
+};
+
+exports.ExpenseStatus = exports.$Enums.ExpenseStatus = {
+  ACTIF: 'ACTIF',
+  ARRETE: 'ARRETE',
+  A_VERIFIER: 'A_VERIFIER'
+};
+
+exports.RevenueStatus = exports.$Enums.RevenueStatus = {
+  ACTIF: 'ACTIF',
+  ESSAI: 'ESSAI',
+  SUSPENDU: 'SUSPENDU',
+  IMPAYE: 'IMPAYE',
+  RESILIE: 'RESILIE'
+};
+
+exports.FinanceInvoiceStatus = exports.$Enums.FinanceInvoiceStatus = {
+  BROUILLON: 'BROUILLON',
+  EMISE: 'EMISE',
+  PAYEE: 'PAYEE',
+  EN_RETARD: 'EN_RETARD',
+  ANNULEE: 'ANNULEE'
+};
+
+exports.ElectronicInvoiceStatus = exports.$Enums.ElectronicInvoiceStatus = {
+  NON_CONCERNE: 'NON_CONCERNE',
+  A_PREPARER: 'A_PREPARER',
+  EN_ATTENTE: 'EN_ATTENTE',
+  TRANSMISE: 'TRANSMISE',
+  REJETEE: 'REJETEE',
+  ACCEPTEE: 'ACCEPTEE'
+};
+
+exports.FinancePaymentStatus = exports.$Enums.FinancePaymentStatus = {
+  EN_ATTENTE: 'EN_ATTENTE',
+  PAYE: 'PAYE',
+  ECHOUE: 'ECHOUE',
+  REMBOURSE: 'REMBOURSE',
+  ANNULE: 'ANNULE'
+};
+
 exports.Prisma.ModelName = {
   AdminUser: 'AdminUser',
   Client: 'Client',
   Acces: 'Acces',
   Message: 'Message',
   AuditLog: 'AuditLog',
-  ErrorReport: 'ErrorReport'
+  ErrorReport: 'ErrorReport',
+  FinanceSettings: 'FinanceSettings',
+  LysmaExpense: 'LysmaExpense',
+  RevenueSubscription: 'RevenueSubscription',
+  FinanceInvoice: 'FinanceInvoice',
+  FinancePayment: 'FinancePayment'
 };
 
 /**

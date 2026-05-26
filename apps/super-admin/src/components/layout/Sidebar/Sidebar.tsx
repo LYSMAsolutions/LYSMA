@@ -12,6 +12,7 @@ const NAV = [
   { href: '/erreurs', label: 'erreurs', icon: '!' },
   { href: '/journal', label: 'journal', icon: '~' },
   { href: '/acces', label: 'acces', icon: '#' },
+  { href: '/finance', label: 'finance', icon: 'F' },
   { href: '/outils', label: 'outils', icon: '*' },
   { href: '/pma', label: 'portail-pma', icon: 'P' },
   { href: '/livo', label: 'livo-app', icon: 'L' },

@@ -178,6 +178,97 @@ exports.Prisma.ErrorReportScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.FinanceSettingsScalarFieldEnum = {
+  id: 'id',
+  urssafRate: 'urssafRate',
+  vatRate: 'vatRate',
+  vatStatus: 'vatStatus',
+  declarationFrequency: 'declarationFrequency',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.LysmaExpenseScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  provider: 'provider',
+  category: 'category',
+  relatedTool: 'relatedTool',
+  amountHT: 'amountHT',
+  vatAmount: 'vatAmount',
+  amountTTC: 'amountTTC',
+  frequency: 'frequency',
+  startDate: 'startDate',
+  renewalDate: 'renewalDate',
+  paymentMethod: 'paymentMethod',
+  status: 'status',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.RevenueSubscriptionScalarFieldEnum = {
+  id: 'id',
+  clientName: 'clientName',
+  clientCompany: 'clientCompany',
+  tool: 'tool',
+  planName: 'planName',
+  amountHT: 'amountHT',
+  vatAmount: 'vatAmount',
+  amountTTC: 'amountTTC',
+  frequency: 'frequency',
+  status: 'status',
+  trialStartAt: 'trialStartAt',
+  trialEndAt: 'trialEndAt',
+  startDate: 'startDate',
+  nextInvoiceAt: 'nextInvoiceAt',
+  nextPaymentAt: 'nextPaymentAt',
+  gocardlessCustomerId: 'gocardlessCustomerId',
+  gocardlessMandateId: 'gocardlessMandateId',
+  gocardlessSubscriptionId: 'gocardlessSubscriptionId',
+  sageCustomerId: 'sageCustomerId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.FinanceInvoiceScalarFieldEnum = {
+  id: 'id',
+  invoiceNumber: 'invoiceNumber',
+  clientName: 'clientName',
+  clientCompany: 'clientCompany',
+  tool: 'tool',
+  amountHT: 'amountHT',
+  vatAmount: 'vatAmount',
+  amountTTC: 'amountTTC',
+  status: 'status',
+  issueDate: 'issueDate',
+  dueDate: 'dueDate',
+  paidAt: 'paidAt',
+  pdfUrl: 'pdfUrl',
+  sageInvoiceId: 'sageInvoiceId',
+  sageInvoiceStatus: 'sageInvoiceStatus',
+  electronicInvoiceStatus: 'electronicInvoiceStatus',
+  platformProvider: 'platformProvider',
+  platformInvoiceId: 'platformInvoiceId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.FinancePaymentScalarFieldEnum = {
+  id: 'id',
+  invoiceId: 'invoiceId',
+  subscriptionId: 'subscriptionId',
+  amount: 'amount',
+  status: 'status',
+  method: 'method',
+  gocardlessPaymentId: 'gocardlessPaymentId',
+  paidAt: 'paidAt',
+  failedAt: 'failedAt',
+  failureReason: 'failureReason',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -216,13 +307,93 @@ exports.MessageStatut = exports.$Enums.MessageStatut = {
   TRAITE: 'TRAITE'
 };
 
+exports.FinanceTool = exports.$Enums.FinanceTool = {
+  GLOBAL: 'GLOBAL',
+  LIVO: 'LIVO',
+  PMA: 'PMA',
+  TRANSPORT: 'TRANSPORT',
+  AUTRE: 'AUTRE'
+};
+
+exports.FinanceFrequency = exports.$Enums.FinanceFrequency = {
+  MENSUEL: 'MENSUEL',
+  ANNUEL: 'ANNUEL',
+  PONCTUEL: 'PONCTUEL'
+};
+
+exports.RevenueStatus = exports.$Enums.RevenueStatus = {
+  ACTIF: 'ACTIF',
+  ESSAI: 'ESSAI',
+  SUSPENDU: 'SUSPENDU',
+  IMPAYE: 'IMPAYE',
+  RESILIE: 'RESILIE'
+};
+
+exports.ExpenseCategory = exports.$Enums.ExpenseCategory = {
+  HEBERGEMENT: 'HEBERGEMENT',
+  DOMAINE: 'DOMAINE',
+  IA: 'IA',
+  COMPTABILITE: 'COMPTABILITE',
+  PAIEMENT: 'PAIEMENT',
+  LOGICIEL: 'LOGICIEL',
+  API: 'API',
+  MATERIEL: 'MATERIEL',
+  AUTRE: 'AUTRE'
+};
+
+exports.ExpenseStatus = exports.$Enums.ExpenseStatus = {
+  ACTIF: 'ACTIF',
+  ARRETE: 'ARRETE',
+  A_VERIFIER: 'A_VERIFIER'
+};
+
+exports.FinanceVatStatus = exports.$Enums.FinanceVatStatus = {
+  FRANCHISE: 'FRANCHISE',
+  ASSUJETTI: 'ASSUJETTI'
+};
+
+exports.FinanceDeclarationFrequency = exports.$Enums.FinanceDeclarationFrequency = {
+  MENSUELLE: 'MENSUELLE',
+  TRIMESTRIELLE: 'TRIMESTRIELLE'
+};
+
+exports.FinanceInvoiceStatus = exports.$Enums.FinanceInvoiceStatus = {
+  BROUILLON: 'BROUILLON',
+  EMISE: 'EMISE',
+  PAYEE: 'PAYEE',
+  EN_RETARD: 'EN_RETARD',
+  ANNULEE: 'ANNULEE'
+};
+
+exports.FinancePaymentStatus = exports.$Enums.FinancePaymentStatus = {
+  EN_ATTENTE: 'EN_ATTENTE',
+  PAYE: 'PAYE',
+  ECHOUE: 'ECHOUE',
+  REMBOURSE: 'REMBOURSE',
+  ANNULE: 'ANNULE'
+};
+
+exports.ElectronicInvoiceStatus = exports.$Enums.ElectronicInvoiceStatus = {
+  NON_CONCERNE: 'NON_CONCERNE',
+  A_PREPARER: 'A_PREPARER',
+  EN_ATTENTE: 'EN_ATTENTE',
+  TRANSMISE: 'TRANSMISE',
+  REJETEE: 'REJETEE',
+  ACCEPTEE: 'ACCEPTEE'
+};
+
 exports.Prisma.ModelName = {
   AdminUser: 'AdminUser',
   Client: 'Client',
   Acces: 'Acces',
   Message: 'Message',
   AuditLog: 'AuditLog',
-  ErrorReport: 'ErrorReport'
+  ErrorReport: 'ErrorReport',
+  FinanceSettings: 'FinanceSettings',
+  LysmaExpense: 'LysmaExpense',
+  RevenueSubscription: 'RevenueSubscription',
+  FinanceInvoice: 'FinanceInvoice',
+  FinancePayment: 'FinancePayment'
 };
 /**
  * Create the Client
@@ -275,13 +446,13 @@ const config = {
       }
     }
   },
-  "inlineSchema": "generator client {\n  provider      = \"prisma-client-js\"\n  output        = \"../src/generated/prisma\"\n  binaryTargets = [\"native\", \"rhel-openssl-3.0.x\"]\n}\n\ndatasource db {\n  provider  = \"postgresql\"\n  url       = env(\"DATABASE_URL\")\n  directUrl = env(\"DIRECT_URL\")\n}\n\nmodel AdminUser {\n  id           String   @id @default(cuid())\n  email        String   @unique\n  passwordHash String\n  nom          String\n  createdAt    DateTime @default(now())\n  updatedAt    DateTime @updatedAt\n\n  @@map(\"admin_users\")\n}\n\nmodel Client {\n  id              String       @id @default(cuid())\n  nom             String\n  email           String       @unique\n  telephone       String?\n  societe         String?\n  outil           String       @default(\"livo-app\")\n  statut          ClientStatut @default(TRIAL)\n  abonnement      String? // starter / pro / entreprise\n  trialDebutAt    DateTime?\n  trialFinAt      DateTime?\n  abonnementActif Boolean      @default(false)\n  notes           String?\n  createdAt       DateTime     @default(now())\n  updatedAt       DateTime     @updatedAt\n  acces           Acces[]\n  messages        Message[]\n\n  @@map(\"clients\")\n}\n\nmodel Acces {\n  id                String   @id @default(cuid())\n  clientId          String\n  client            Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)\n  email             String\n  motDePasseTemp    String?\n  actif             Boolean  @default(true)\n  premiereConnexion Boolean  @default(false)\n  createdAt         DateTime @default(now())\n\n  @@map(\"acces\")\n}\n\nmodel Message {\n  id        String        @id @default(cuid())\n  clientId  String?\n  client    Client?       @relation(fields: [clientId], references: [id])\n  nom       String\n  email     String\n  societe   String?\n  telephone String?\n  outil     String        @default(\"livo-app\")\n  message   String\n  statut    MessageStatut @default(NOUVEAU)\n  reponse   String?\n  createdAt DateTime      @default(now())\n  updatedAt DateTime      @updatedAt\n\n  @@map(\"messages\")\n}\n\nmodel AuditLog {\n  id          String   @id @default(cuid())\n  outil       String\n  cibleType   String\n  cibleId     String?\n  action      String\n  statut      String   @default(\"SUCCESS\")\n  acteurId    String?\n  acteurEmail String?\n  resume      String?\n  avant       Json?\n  apres       Json?\n  erreur      String?\n  createdAt   DateTime @default(now())\n\n  @@index([outil, cibleType, cibleId])\n  @@index([createdAt])\n  @@map(\"audit_logs\")\n}\n\nmodel ErrorReport {\n  id         String    @id @default(cuid())\n  outil      String\n  niveau     String    @default(\"ERROR\")\n  message    String\n  stack      String?\n  url        String?\n  userAgent  String?\n  contexte   Json?\n  statut     String    @default(\"NOUVEAU\")\n  notes      String?\n  resolution String?\n  resolvedAt DateTime?\n  resolvedBy String?\n  createdAt  DateTime  @default(now())\n  updatedAt  DateTime  @updatedAt\n\n  @@index([outil, statut])\n  @@index([createdAt])\n  @@map(\"error_reports\")\n}\n\nenum ClientStatut {\n  TRIAL\n  ACTIF\n  SUSPENDU\n  RESILIE\n}\n\nenum MessageStatut {\n  NOUVEAU\n  LU\n  TRAITE\n}\n",
-  "inlineSchemaHash": "0a410f9b724125a390bbb1e0a67d58f301dd638281400ffe1b553c2436f98dba",
+  "inlineSchema": "generator client {\n  provider      = \"prisma-client-js\"\n  output        = \"../src/generated/prisma\"\n  binaryTargets = [\"native\", \"rhel-openssl-3.0.x\"]\n}\n\ndatasource db {\n  provider  = \"postgresql\"\n  url       = env(\"DATABASE_URL\")\n  directUrl = env(\"DIRECT_URL\")\n}\n\nmodel AdminUser {\n  id           String   @id @default(cuid())\n  email        String   @unique\n  passwordHash String\n  nom          String\n  createdAt    DateTime @default(now())\n  updatedAt    DateTime @updatedAt\n\n  @@map(\"admin_users\")\n}\n\nmodel Client {\n  id              String       @id @default(cuid())\n  nom             String\n  email           String       @unique\n  telephone       String?\n  societe         String?\n  outil           String       @default(\"livo-app\")\n  statut          ClientStatut @default(TRIAL)\n  abonnement      String? // starter / pro / entreprise\n  trialDebutAt    DateTime?\n  trialFinAt      DateTime?\n  abonnementActif Boolean      @default(false)\n  notes           String?\n  createdAt       DateTime     @default(now())\n  updatedAt       DateTime     @updatedAt\n  acces           Acces[]\n  messages        Message[]\n\n  @@map(\"clients\")\n}\n\nmodel Acces {\n  id                String   @id @default(cuid())\n  clientId          String\n  client            Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)\n  email             String\n  motDePasseTemp    String?\n  actif             Boolean  @default(true)\n  premiereConnexion Boolean  @default(false)\n  createdAt         DateTime @default(now())\n\n  @@map(\"acces\")\n}\n\nmodel Message {\n  id        String        @id @default(cuid())\n  clientId  String?\n  client    Client?       @relation(fields: [clientId], references: [id])\n  nom       String\n  email     String\n  societe   String?\n  telephone String?\n  outil     String        @default(\"livo-app\")\n  message   String\n  statut    MessageStatut @default(NOUVEAU)\n  reponse   String?\n  createdAt DateTime      @default(now())\n  updatedAt DateTime      @updatedAt\n\n  @@map(\"messages\")\n}\n\nmodel AuditLog {\n  id          String   @id @default(cuid())\n  outil       String\n  cibleType   String\n  cibleId     String?\n  action      String\n  statut      String   @default(\"SUCCESS\")\n  acteurId    String?\n  acteurEmail String?\n  resume      String?\n  avant       Json?\n  apres       Json?\n  erreur      String?\n  createdAt   DateTime @default(now())\n\n  @@index([outil, cibleType, cibleId])\n  @@index([createdAt])\n  @@map(\"audit_logs\")\n}\n\nmodel ErrorReport {\n  id         String    @id @default(cuid())\n  outil      String\n  niveau     String    @default(\"ERROR\")\n  message    String\n  stack      String?\n  url        String?\n  userAgent  String?\n  contexte   Json?\n  statut     String    @default(\"NOUVEAU\")\n  notes      String?\n  resolution String?\n  resolvedAt DateTime?\n  resolvedBy String?\n  createdAt  DateTime  @default(now())\n  updatedAt  DateTime  @updatedAt\n\n  @@index([outil, statut])\n  @@index([createdAt])\n  @@map(\"error_reports\")\n}\n\nmodel FinanceSettings {\n  id                   String                      @id @default(cuid())\n  urssafRate           Decimal                     @default(21.20) @db.Decimal(5, 2)\n  vatRate              Decimal                     @default(20.00) @db.Decimal(5, 2)\n  vatStatus            FinanceVatStatus            @default(ASSUJETTI)\n  declarationFrequency FinanceDeclarationFrequency @default(MENSUELLE)\n  createdAt            DateTime                    @default(now())\n  updatedAt            DateTime                    @updatedAt\n\n  @@map(\"finance_settings\")\n}\n\nmodel LysmaExpense {\n  id            String           @id @default(cuid())\n  name          String\n  provider      String\n  category      ExpenseCategory  @default(AUTRE)\n  relatedTool   FinanceTool      @default(GLOBAL)\n  amountHT      Decimal          @db.Decimal(12, 2)\n  vatAmount     Decimal          @default(0) @db.Decimal(12, 2)\n  amountTTC     Decimal          @db.Decimal(12, 2)\n  frequency     FinanceFrequency @default(MENSUEL)\n  startDate     DateTime\n  renewalDate   DateTime?\n  paymentMethod String?\n  status        ExpenseStatus    @default(ACTIF)\n  notes         String?\n  createdAt     DateTime         @default(now())\n  updatedAt     DateTime         @updatedAt\n\n  @@index([relatedTool, status])\n  @@index([renewalDate])\n  @@map(\"lysma_expenses\")\n}\n\nmodel RevenueSubscription {\n  id                       String           @id @default(cuid())\n  clientName               String\n  clientCompany            String?\n  tool                     FinanceTool\n  planName                 String\n  amountHT                 Decimal          @db.Decimal(12, 2)\n  vatAmount                Decimal          @default(0) @db.Decimal(12, 2)\n  amountTTC                Decimal          @db.Decimal(12, 2)\n  frequency                FinanceFrequency @default(MENSUEL)\n  status                   RevenueStatus    @default(ACTIF)\n  trialStartAt             DateTime?\n  trialEndAt               DateTime?\n  startDate                DateTime\n  nextInvoiceAt            DateTime?\n  nextPaymentAt            DateTime?\n  gocardlessCustomerId     String?\n  gocardlessMandateId      String?\n  gocardlessSubscriptionId String?\n  sageCustomerId           String?\n  createdAt                DateTime         @default(now())\n  updatedAt                DateTime         @updatedAt\n  payments                 FinancePayment[]\n\n  @@index([tool, status])\n  @@index([nextInvoiceAt])\n  @@map(\"revenue_subscriptions\")\n}\n\nmodel FinanceInvoice {\n  id                      String                  @id @default(cuid())\n  invoiceNumber           String                  @unique\n  clientName              String\n  clientCompany           String?\n  tool                    FinanceTool\n  amountHT                Decimal                 @db.Decimal(12, 2)\n  vatAmount               Decimal                 @default(0) @db.Decimal(12, 2)\n  amountTTC               Decimal                 @db.Decimal(12, 2)\n  status                  FinanceInvoiceStatus    @default(BROUILLON)\n  issueDate               DateTime\n  dueDate                 DateTime?\n  paidAt                  DateTime?\n  pdfUrl                  String?\n  sageInvoiceId           String?\n  sageInvoiceStatus       String?\n  electronicInvoiceStatus ElectronicInvoiceStatus @default(A_PREPARER)\n  platformProvider        String?\n  platformInvoiceId       String?\n  createdAt               DateTime                @default(now())\n  updatedAt               DateTime                @updatedAt\n  payments                FinancePayment[]\n\n  @@index([tool, status])\n  @@index([issueDate])\n  @@map(\"finance_invoices\")\n}\n\nmodel FinancePayment {\n  id                  String               @id @default(cuid())\n  invoiceId           String?\n  invoice             FinanceInvoice?      @relation(fields: [invoiceId], references: [id], onDelete: SetNull)\n  subscriptionId      String?\n  subscription        RevenueSubscription? @relation(fields: [subscriptionId], references: [id], onDelete: SetNull)\n  amount              Decimal              @db.Decimal(12, 2)\n  status              FinancePaymentStatus @default(EN_ATTENTE)\n  method              String?\n  gocardlessPaymentId String?\n  paidAt              DateTime?\n  failedAt            DateTime?\n  failureReason       String?\n  createdAt           DateTime             @default(now())\n  updatedAt           DateTime             @updatedAt\n\n  @@index([status])\n  @@index([paidAt])\n  @@map(\"finance_payments\")\n}\n\nenum ClientStatut {\n  TRIAL\n  ACTIF\n  SUSPENDU\n  RESILIE\n}\n\nenum MessageStatut {\n  NOUVEAU\n  LU\n  TRAITE\n}\n\nenum FinanceTool {\n  GLOBAL\n  LIVO\n  PMA\n  TRANSPORT\n  AUTRE\n}\n\nenum FinanceFrequency {\n  MENSUEL\n  ANNUEL\n  PONCTUEL\n}\n\nenum RevenueStatus {\n  ACTIF\n  ESSAI\n  SUSPENDU\n  IMPAYE\n  RESILIE\n}\n\nenum ExpenseCategory {\n  HEBERGEMENT\n  DOMAINE\n  IA\n  COMPTABILITE\n  PAIEMENT\n  LOGICIEL\n  API\n  MATERIEL\n  AUTRE\n}\n\nenum ExpenseStatus {\n  ACTIF\n  ARRETE\n  A_VERIFIER\n}\n\nenum FinanceVatStatus {\n  FRANCHISE\n  ASSUJETTI\n}\n\nenum FinanceDeclarationFrequency {\n  MENSUELLE\n  TRIMESTRIELLE\n}\n\nenum FinanceInvoiceStatus {\n  BROUILLON\n  EMISE\n  PAYEE\n  EN_RETARD\n  ANNULEE\n}\n\nenum FinancePaymentStatus {\n  EN_ATTENTE\n  PAYE\n  ECHOUE\n  REMBOURSE\n  ANNULE\n}\n\nenum ElectronicInvoiceStatus {\n  NON_CONCERNE\n  A_PREPARER\n  EN_ATTENTE\n  TRANSMISE\n  REJETEE\n  ACCEPTEE\n}\n",
+  "inlineSchemaHash": "2d6cc77c6529dfe67f98c22313599948db59e4150013136639d87bfb73fa4a5e",
   "copyEngine": true
 }
 config.dirname = '/'
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"AdminUser\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"passwordHash\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"nom\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":\"admin_users\"},\"Client\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"nom\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"telephone\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"societe\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"outil\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"statut\",\"kind\":\"enum\",\"type\":\"ClientStatut\"},{\"name\":\"abonnement\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"trialDebutAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"trialFinAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"abonnementActif\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"notes\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"acces\",\"kind\":\"object\",\"type\":\"Acces\",\"relationName\":\"AccesToClient\"},{\"name\":\"messages\",\"kind\":\"object\",\"type\":\"Message\",\"relationName\":\"ClientToMessage\"}],\"dbName\":\"clients\"},\"Acces\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"clientId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"client\",\"kind\":\"object\",\"type\":\"Client\",\"relationName\":\"AccesToClient\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"motDePasseTemp\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"actif\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"premiereConnexion\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":\"acces\"},\"Message\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"clientId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"client\",\"kind\":\"object\",\"type\":\"Client\",\"relationName\":\"ClientToMessage\"},{\"name\":\"nom\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"societe\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"telephone\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"outil\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"message\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"statut\",\"kind\":\"enum\",\"type\":\"MessageStatut\"},{\"name\":\"reponse\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":\"messages\"},\"AuditLog\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"outil\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"cibleType\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"cibleId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"action\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"statut\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"acteurId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"acteurEmail\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"resume\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"avant\",\"kind\":\"scalar\",\"type\":\"Json\"},{\"name\":\"apres\",\"kind\":\"scalar\",\"type\":\"Json\"},{\"name\":\"erreur\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":\"audit_logs\"},\"ErrorReport\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"outil\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"niveau\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"message\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"stack\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"url\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userAgent\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"contexte\",\"kind\":\"scalar\",\"type\":\"Json\"},{\"name\":\"statut\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"notes\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"resolution\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"resolvedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"resolvedBy\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":\"error_reports\"}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"AdminUser\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"passwordHash\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"nom\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":\"admin_users\"},\"Client\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"nom\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"telephone\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"societe\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"outil\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"statut\",\"kind\":\"enum\",\"type\":\"ClientStatut\"},{\"name\":\"abonnement\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"trialDebutAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"trialFinAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"abonnementActif\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"notes\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"acces\",\"kind\":\"object\",\"type\":\"Acces\",\"relationName\":\"AccesToClient\"},{\"name\":\"messages\",\"kind\":\"object\",\"type\":\"Message\",\"relationName\":\"ClientToMessage\"}],\"dbName\":\"clients\"},\"Acces\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"clientId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"client\",\"kind\":\"object\",\"type\":\"Client\",\"relationName\":\"AccesToClient\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"motDePasseTemp\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"actif\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"premiereConnexion\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":\"acces\"},\"Message\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"clientId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"client\",\"kind\":\"object\",\"type\":\"Client\",\"relationName\":\"ClientToMessage\"},{\"name\":\"nom\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"societe\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"telephone\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"outil\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"message\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"statut\",\"kind\":\"enum\",\"type\":\"MessageStatut\"},{\"name\":\"reponse\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":\"messages\"},\"AuditLog\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"outil\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"cibleType\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"cibleId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"action\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"statut\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"acteurId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"acteurEmail\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"resume\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"avant\",\"kind\":\"scalar\",\"type\":\"Json\"},{\"name\":\"apres\",\"kind\":\"scalar\",\"type\":\"Json\"},{\"name\":\"erreur\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":\"audit_logs\"},\"ErrorReport\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"outil\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"niveau\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"message\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"stack\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"url\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userAgent\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"contexte\",\"kind\":\"scalar\",\"type\":\"Json\"},{\"name\":\"statut\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"notes\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"resolution\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"resolvedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"resolvedBy\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":\"error_reports\"},\"FinanceSettings\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"urssafRate\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"vatRate\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"vatStatus\",\"kind\":\"enum\",\"type\":\"FinanceVatStatus\"},{\"name\":\"declarationFrequency\",\"kind\":\"enum\",\"type\":\"FinanceDeclarationFrequency\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":\"finance_settings\"},\"LysmaExpense\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"provider\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"category\",\"kind\":\"enum\",\"type\":\"ExpenseCategory\"},{\"name\":\"relatedTool\",\"kind\":\"enum\",\"type\":\"FinanceTool\"},{\"name\":\"amountHT\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"vatAmount\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"amountTTC\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"frequency\",\"kind\":\"enum\",\"type\":\"FinanceFrequency\"},{\"name\":\"startDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"renewalDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"paymentMethod\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"status\",\"kind\":\"enum\",\"type\":\"ExpenseStatus\"},{\"name\":\"notes\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":\"lysma_expenses\"},\"RevenueSubscription\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"clientName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"clientCompany\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tool\",\"kind\":\"enum\",\"type\":\"FinanceTool\"},{\"name\":\"planName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"amountHT\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"vatAmount\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"amountTTC\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"frequency\",\"kind\":\"enum\",\"type\":\"FinanceFrequency\"},{\"name\":\"status\",\"kind\":\"enum\",\"type\":\"RevenueStatus\"},{\"name\":\"trialStartAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"trialEndAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"startDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"nextInvoiceAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"nextPaymentAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"gocardlessCustomerId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"gocardlessMandateId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"gocardlessSubscriptionId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"sageCustomerId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"payments\",\"kind\":\"object\",\"type\":\"FinancePayment\",\"relationName\":\"FinancePaymentToRevenueSubscription\"}],\"dbName\":\"revenue_subscriptions\"},\"FinanceInvoice\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"invoiceNumber\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"clientName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"clientCompany\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tool\",\"kind\":\"enum\",\"type\":\"FinanceTool\"},{\"name\":\"amountHT\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"vatAmount\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"amountTTC\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"status\",\"kind\":\"enum\",\"type\":\"FinanceInvoiceStatus\"},{\"name\":\"issueDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"dueDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"paidAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"pdfUrl\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"sageInvoiceId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"sageInvoiceStatus\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"electronicInvoiceStatus\",\"kind\":\"enum\",\"type\":\"ElectronicInvoiceStatus\"},{\"name\":\"platformProvider\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"platformInvoiceId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"payments\",\"kind\":\"object\",\"type\":\"FinancePayment\",\"relationName\":\"FinanceInvoiceToFinancePayment\"}],\"dbName\":\"finance_invoices\"},\"FinancePayment\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"invoiceId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"invoice\",\"kind\":\"object\",\"type\":\"FinanceInvoice\",\"relationName\":\"FinanceInvoiceToFinancePayment\"},{\"name\":\"subscriptionId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"subscription\",\"kind\":\"object\",\"type\":\"RevenueSubscription\",\"relationName\":\"FinancePaymentToRevenueSubscription\"},{\"name\":\"amount\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"status\",\"kind\":\"enum\",\"type\":\"FinancePaymentStatus\"},{\"name\":\"method\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"gocardlessPaymentId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"paidAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"failedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"failureReason\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":\"finance_payments\"}},\"enums\":{},\"types\":{}}")
 defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
 config.engineWasm = {
   getRuntime: async () => require('./query_engine_bg.js'),

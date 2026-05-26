@@ -115,6 +115,119 @@ model ErrorReport {
   @@map("error_reports")
 }
 
+model FinanceSettings {
+  id                   String                       @id @default(cuid())
+  urssafRate           Decimal                      @default(21.20) @db.Decimal(5, 2)
+  vatRate              Decimal                      @default(20.00) @db.Decimal(5, 2)
+  vatStatus            FinanceVatStatus             @default(ASSUJETTI)
+  declarationFrequency FinanceDeclarationFrequency  @default(MENSUELLE)
+  createdAt            DateTime                     @default(now())
+  updatedAt            DateTime                     @updatedAt
+
+  @@map("finance_settings")
+}
+
+model LysmaExpense {
+  id            String           @id @default(cuid())
+  name          String
+  provider      String
+  category      ExpenseCategory  @default(AUTRE)
+  relatedTool   FinanceTool      @default(GLOBAL)
+  amountHT      Decimal          @db.Decimal(12, 2)
+  vatAmount     Decimal          @default(0) @db.Decimal(12, 2)
+  amountTTC     Decimal          @db.Decimal(12, 2)
+  frequency     FinanceFrequency @default(MENSUEL)
+  startDate     DateTime
+  renewalDate   DateTime?
+  paymentMethod String?
+  status        ExpenseStatus    @default(ACTIF)
+  notes         String?
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+
+  @@index([relatedTool, status])
+  @@index([renewalDate])
+  @@map("lysma_expenses")
+}
+
+model RevenueSubscription {
+  id                         String           @id @default(cuid())
+  clientName                 String
+  clientCompany              String?
+  tool                       FinanceTool
+  planName                   String
+  amountHT                   Decimal          @db.Decimal(12, 2)
+  vatAmount                  Decimal          @default(0) @db.Decimal(12, 2)
+  amountTTC                  Decimal          @db.Decimal(12, 2)
+  frequency                  FinanceFrequency @default(MENSUEL)
+  status                     RevenueStatus    @default(ACTIF)
+  trialStartAt               DateTime?
+  trialEndAt                 DateTime?
+  startDate                  DateTime
+  nextInvoiceAt              DateTime?
+  nextPaymentAt              DateTime?
+  gocardlessCustomerId       String?
+  gocardlessMandateId        String?
+  gocardlessSubscriptionId   String?
+  sageCustomerId             String?
+  createdAt                  DateTime         @default(now())
+  updatedAt                  DateTime         @updatedAt
+  payments                   FinancePayment[]
+
+  @@index([tool, status])
+  @@index([nextInvoiceAt])
+  @@map("revenue_subscriptions")
+}
+
+model FinanceInvoice {
+  id                      String                  @id @default(cuid())
+  invoiceNumber           String                  @unique
+  clientName              String
+  clientCompany           String?
+  tool                    FinanceTool
+  amountHT                Decimal                 @db.Decimal(12, 2)
+  vatAmount               Decimal                 @default(0) @db.Decimal(12, 2)
+  amountTTC               Decimal                 @db.Decimal(12, 2)
+  status                  FinanceInvoiceStatus    @default(BROUILLON)
+  issueDate               DateTime
+  dueDate                 DateTime?
+  paidAt                  DateTime?
+  pdfUrl                  String?
+  sageInvoiceId           String?
+  sageInvoiceStatus       String?
+  electronicInvoiceStatus ElectronicInvoiceStatus @default(A_PREPARER)
+  platformProvider        String?
+  platformInvoiceId       String?
+  createdAt               DateTime                @default(now())
+  updatedAt               DateTime                @updatedAt
+  payments                FinancePayment[]
+
+  @@index([tool, status])
+  @@index([issueDate])
+  @@map("finance_invoices")
+}
+
+model FinancePayment {
+  id                   String               @id @default(cuid())
+  invoiceId            String?
+  invoice              FinanceInvoice?      @relation(fields: [invoiceId], references: [id], onDelete: SetNull)
+  subscriptionId       String?
+  subscription         RevenueSubscription? @relation(fields: [subscriptionId], references: [id], onDelete: SetNull)
+  amount               Decimal              @db.Decimal(12, 2)
+  status               FinancePaymentStatus @default(EN_ATTENTE)
+  method               String?
+  gocardlessPaymentId  String?
+  paidAt               DateTime?
+  failedAt             DateTime?
+  failureReason        String?
+  createdAt            DateTime             @default(now())
+  updatedAt            DateTime             @updatedAt
+
+  @@index([status])
+  @@index([paidAt])
+  @@map("finance_payments")
+}
+
 enum ClientStatut {
   TRIAL
   ACTIF
@@ -126,4 +239,79 @@ enum MessageStatut {
   NOUVEAU
   LU
   TRAITE
+}
+
+enum FinanceTool {
+  GLOBAL
+  LIVO
+  PMA
+  TRANSPORT
+  AUTRE
+}
+
+enum FinanceFrequency {
+  MENSUEL
+  ANNUEL
+  PONCTUEL
+}
+
+enum RevenueStatus {
+  ACTIF
+  ESSAI
+  SUSPENDU
+  IMPAYE
+  RESILIE
+}
+
+enum ExpenseCategory {
+  HEBERGEMENT
+  DOMAINE
+  IA
+  COMPTABILITE
+  PAIEMENT
+  LOGICIEL
+  API
+  MATERIEL
+  AUTRE
+}
+
+enum ExpenseStatus {
+  ACTIF
+  ARRETE
+  A_VERIFIER
+}
+
+enum FinanceVatStatus {
+  FRANCHISE
+  ASSUJETTI
+}
+
+enum FinanceDeclarationFrequency {
+  MENSUELLE
+  TRIMESTRIELLE
+}
+
+enum FinanceInvoiceStatus {
+  BROUILLON
+  EMISE
+  PAYEE
+  EN_RETARD
+  ANNULEE
+}
+
+enum FinancePaymentStatus {
+  EN_ATTENTE
+  PAYE
+  ECHOUE
+  REMBOURSE
+  ANNULE
+}
+
+enum ElectronicInvoiceStatus {
+  NON_CONCERNE
+  A_PREPARER
+  EN_ATTENTE
+  TRANSMISE
+  REJETEE
+  ACCEPTEE
 }
