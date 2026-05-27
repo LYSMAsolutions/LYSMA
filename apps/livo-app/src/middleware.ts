@@ -13,6 +13,7 @@ const PUBLIC_ROUTES = [
   '/abonnement-expire',
   '/politique-confidentialite',
   '/cookies',
+  '/verification-email',
   '/sitemap.xml',
   '/robots.txt',
 ]

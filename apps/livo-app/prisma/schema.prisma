@@ -16,6 +16,28 @@ enum Role {
   COMPAGNON
 }
 
+enum SecurityTokenType {
+  EMAIL_VERIFICATION
+  PASSWORD_RESET
+  TWO_FACTOR_LOGIN
+}
+
+enum SecurityAuditEvent {
+  SIGNUP_CREATED
+  EMAIL_VERIFICATION_SENT
+  EMAIL_VERIFIED
+  EMAIL_VERIFICATION_FAILED
+  LOGIN_SUCCESS
+  LOGIN_FAILED
+  LOGIN_BLOCKED_EMAIL_UNVERIFIED
+  PASSWORD_RESET_REQUESTED
+  PASSWORD_RESET_COMPLETED
+  TWO_FACTOR_ENABLED
+  TWO_FACTOR_DISABLED
+  TWO_FACTOR_FAILED
+  SESSION_REVOKED
+}
+
 enum TauxType {
   T1
   T2
@@ -69,11 +91,20 @@ model User {
   id            String    @id @default(cuid())
   email         String    @unique
   emailVerified DateTime?
+  emailVerifiedAt DateTime?
   nom           String
   prenom        String
   telephone     String?
   role          Role      @default(OWNER)
   passwordHash  String?
+  passwordChangedAt DateTime?
+  twoFactorEnabled Boolean @default(false)
+  twoFactorSecretEncrypted String?
+  twoFactorConfirmedAt DateTime?
+  recoveryCodesHash String?
+  failedLoginCount Int @default(0)
+  lockedUntil DateTime?
+  sessionVersion Int @default(1)
   avatarUrl     String?
   actif         Boolean   @default(true)
   createdAt     DateTime  @default(now())
@@ -83,6 +114,8 @@ model User {
   sessions   Session[]
   garages    Garage[]
   compagnons Compagnon[]
+  securityTokens SecurityToken[]
+  securityAuditLogs SecurityAuditLog[]
 
   @@map("users")
 }
@@ -123,6 +156,47 @@ model VerificationToken {
 
   @@unique([identifier, token])
   @@map("verification_tokens")
+}
+
+model SecurityToken {
+  id        String            @id @default(cuid())
+  type      SecurityTokenType
+  tokenHash String            @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime          @default(now())
+  userId    String
+  user      User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, type, expiresAt])
+  @@map("security_tokens")
+}
+
+model SecurityAuditLog {
+  id        String             @id @default(cuid())
+  event     SecurityAuditEvent
+  ip        String?
+  userAgent String?            @db.Text
+  metadata  Json?
+  createdAt DateTime           @default(now())
+  userId    String?
+  user      User?              @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId, createdAt])
+  @@index([event, createdAt])
+  @@map("security_audit_logs")
+}
+
+model RateLimitBucket {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  count     Int      @default(0)
+  resetAt   DateTime
+  blockedUntil DateTime?
+  updatedAt DateTime @updatedAt
+
+  @@index([resetAt])
+  @@map("rate_limit_buckets")
 }
 
 model Garage {

@@ -6,15 +6,18 @@ export default {
   },
   session: {
     strategy: 'jwt',
+    maxAge: 60 * 60 * 8,
+    updateAge: 60 * 15,
   },
   cookies: {
     sessionToken: {
       name: 'livo-app.session-token',
       options: {
         httpOnly: true,
-        sameSite: 'lax',
+        sameSite: 'strict',
         path: '/',
         secure: process.env.NODE_ENV === 'production',
+        maxAge: 60 * 60 * 8,
       },
     },
   },

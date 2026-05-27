@@ -2,12 +2,17 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { z } from 'zod'
 import bcrypt from 'bcryptjs'
+import { SecurityAuditEvent } from '@prisma/client'
+import { sendEmailVerification } from '@/lib/security/email-verification'
+import { validateStrongPassword } from '@/lib/security/password'
+import { checkRateLimit } from '@/lib/security/rate-limit'
+import { requestIp, requestUserAgent, writeSecurityAuditLog } from '@/lib/security/audit'
 
 const schema = z.object({
   prenom: z.string().trim().min(1),
   nom: z.string().trim().min(1),
   email: z.string().trim().toLowerCase().email(),
-  password: z.string().min(8, 'Minimum 8 caractères'),
+  password: z.string().min(12, 'Minimum 12 caractères'),
   garageNom: z.string().trim().min(1),
   garageTel: z.string().trim().optional(),
   garageVille: z.string().trim().optional(),
@@ -24,6 +29,21 @@ const TAUX_DEFAUT = [
 ] as const
 
 export async function POST(req: NextRequest) {
+  const ip = requestIp(req.headers)
+  const userAgent = requestUserAgent(req.headers)
+  const limiter = await checkRateLimit({
+    key: `signup:${ip ?? 'unknown'}`,
+    limit: 8,
+    windowSeconds: 60 * 15,
+    blockSeconds: 60 * 30,
+  })
+  if (!limiter.allowed) {
+    return NextResponse.json(
+      { error: 'Trop de tentatives. Réessayez dans quelques minutes.' },
+      { status: 429 },
+    )
+  }
+
   const cookieConsent = req.cookies.get('livo_cookie_consent')?.value
   if (cookieConsent !== 'accepted') {
     return NextResponse.json(
@@ -40,6 +60,10 @@ export async function POST(req: NextRequest) {
   }
 
   const { prenom, nom, email, password, garageNom, garageTel, garageVille } = parsed.data
+  const passwordValidation = validateStrongPassword(password)
+  if (!passwordValidation.valid) {
+    return NextResponse.json({ error: passwordValidation.message }, { status: 400 })
+  }
 
   const existing = await prisma.user.findUnique({
     where: {
@@ -49,7 +73,7 @@ export async function POST(req: NextRequest) {
 
   if (existing) {
     return NextResponse.json(
-      { error: 'Cet email est déjà utilisé' },
+      { error: 'Cet email est déjà utilisé.' },
       { status: 409 }
     )
   }
@@ -66,6 +90,7 @@ export async function POST(req: NextRequest) {
         nom,
         email,
         passwordHash,
+        passwordChangedAt: new Date(),
         role: 'OWNER',
         actif: true,
       },
@@ -92,8 +117,18 @@ export async function POST(req: NextRequest) {
     return newUser
   })
 
+  await writeSecurityAuditLog({
+    event: SecurityAuditEvent.SIGNUP_CREATED,
+    userId: user.id,
+    ip,
+    userAgent,
+  })
+
+  await sendEmailVerification(user.id)
+
   return NextResponse.json({
     success: true,
     userId: user.id,
+    requiresEmailVerification: true,
   })
 }

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import Link from 'next/link'
 import styles from '../demo/page.module.css'
 
@@ -38,7 +39,7 @@ export default function LivoDemoAdminPage() {
     <main className={styles.adminDemo}>
       <aside className={styles.adminSidebar} aria-label="Navigation démo admin">
         <div className={styles.adminLogo}>
-          <span>L</span>
+          <Image src="/logo/livo-app-logo.png" alt="LIVO" width={48} height={48} priority />
           <strong>LIVO</strong>
         </div>
         <nav>

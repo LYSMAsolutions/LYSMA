@@ -11,6 +11,7 @@ export default function ConnexionPage() {
   const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [twoFactorCode, setTwoFactorCode] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -23,11 +24,12 @@ export default function ConnexionPage() {
     const result = await signIn('credentials', {
       email,
       password,
+      twoFactorCode: twoFactorCode.trim() || undefined,
       redirect: false,
     })
 
     if (result?.error) {
-      setError('Email ou mot de passe incorrect')
+      setError('Connexion impossible. Vérifiez vos identifiants, votre email validé et votre code 2FA si vous l’avez activé.')
       setLoading(false)
       return
     }
@@ -75,6 +77,16 @@ export default function ConnexionPage() {
               </button>
             }
             error={error}
+          />
+          <Input
+            label="Code 2FA"
+            type="text"
+            inputMode="numeric"
+            placeholder="123456"
+            value={twoFactorCode}
+            onChange={e => setTwoFactorCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+            autoComplete="one-time-code"
+            inputSize="lg"
           />
           <Button type="submit" variant="primary" size="lg" fullWidth loading={loading}>
             Se connecter

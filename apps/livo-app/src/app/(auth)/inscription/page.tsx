@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { signIn } from 'next-auth/react'
 import Link from 'next/link'
 import { Input, Button } from '@/components/ui'
 import { Check, ArrowRight, Buildings, User } from '@phosphor-icons/react'
@@ -57,7 +56,10 @@ export default function InscriptionPage() {
 
   function validateEtape1() {
     if (!prenom || !nom || !email || !password) return 'Tous les champs sont requis'
-    if (password.length < 8) return 'Le mot de passe doit contenir au moins 8 caractères'
+    if (password.length < 12) return 'Le mot de passe doit contenir au moins 12 caractères'
+    if (!/[a-z]/.test(password) || !/[A-Z]/.test(password) || !/[0-9]/.test(password) || !/[^a-zA-Z0-9]/.test(password)) {
+      return 'Le mot de passe doit contenir une minuscule, une majuscule, un chiffre et un caractère spécial.'
+    }
     if (password !== confirmPassword) return 'Les mots de passe ne correspondent pas'
     return null
   }
@@ -100,17 +102,7 @@ export default function InscriptionPage() {
         return
       }
 
-      const signInResult = await signIn('credentials', {
-        email,
-        password,
-        redirect: false,
-      })
-
-      if (signInResult?.ok) {
-        router.push('/dashboard')
-      } else {
-        router.push('/connexion')
-      }
+      router.push(`/verification-email/envoye?email=${encodeURIComponent(email)}`)
     } finally {
       setLoading(false)
     }
@@ -158,7 +150,7 @@ export default function InscriptionPage() {
               <Input label="Nom *" value={nom} onChange={(e) => setNom(e.target.value)} placeholder="Dupont" />
             </div>
             <Input label="Email *" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="jean@garage.fr" type="email" />
-            <Input label="Mot de passe *" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="8 caractères minimum" type="password" />
+            <Input label="Mot de passe *" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="12 caractères, majuscule, chiffre, caractère spécial" type="password" />
             <Input label="Confirmer le mot de passe *" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder="••••••••" type="password" />
           </div>
         )}

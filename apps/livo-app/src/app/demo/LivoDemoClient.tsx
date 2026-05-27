@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Image from 'next/image'
 import {
   ArrowRight,
   Barcode,
@@ -281,7 +282,9 @@ export function LivoDemoClient() {
         <div className={styles.demoRibbon}>Démo publique · données fictives · aucune action enregistrée</div>
         <div className={loginStyles.card}>
           <div className={loginStyles.logoWrap}>
-            <div className={loginStyles.logoIcon}><Wrench weight="fill" size={28} /></div>
+            <div className={styles.demoLogoIcon}>
+              <Image src="/logo/livo-app-logo.png" alt="LIVO" width={58} height={58} priority />
+            </div>
             <div>
               <div className={loginStyles.logoName}>Espace Atelier</div>
               <div className={loginStyles.logoSub}>LIVO-APP</div>
