@@ -8,6 +8,8 @@ const PUBLIC_ROUTES = [
   '/inscription',
   '/atelier-login',
   '/demo',
+  '/demo-admin',
+  '/demo-atelier',
   '/abonnement-expire',
   '/politique-confidentialite',
   '/cookies',
