@@ -1,741 +1,656 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
+import {
+  ArrowRight,
+  Barcode,
+  Buildings,
+  Coffee,
+  ForkKnife,
+  IdentificationCard,
+  Lock,
+  LockKey,
+  Play,
+  SignOut,
+  Stop,
+  Wrench,
+  X,
+} from '@phosphor-icons/react'
+import { Badge } from '@/components/ui'
+import loginStyles from '../(atelier)/atelier-login/page.module.css'
+import atelierStyles from '@/components/atelier/AtelierDashboard/AtelierDashboard.module.css'
 import styles from './page.module.css'
 
-type ViewKey = 'dashboard' | 'pointage' | 'atelier' | 'fiches' | 'rentabilite' | 'absences' | 'rapports'
-type DeviceMode = 'desktop' | 'tablet' | 'mobile'
-type FicheStatus = 'En cours' | 'En attente' | 'Terminée' | 'Contrôle'
-type CompanionStatus = 'Arrivé atelier' | 'En pause' | 'En intervention' | 'Formation'
+type LoginStep = 'login' | 'compagnon' | 'pin' | 'atelier'
+type Statut = 'ABSENT' | 'EN_TRAVAIL' | 'PAUSE_CAFE' | 'PAUSE_DEJEUNER' | 'PARTI'
+type StatutFiche = 'EN_ATTENTE' | 'EN_COURS' | 'EN_PAUSE' | 'TERMINEE'
 
-type Companion = {
+type Compagnon = {
   id: string
-  name: string
-  role: string
-  status: CompanionStatus
-  arrivedAt: string
-  currentTask: string
-  productive: string
-  realHours: number
-  billedHours: number
-}
-
-type Vehicle = {
-  id: string
-  label: string
-  plate: string
-  client: string
-  ficheId: string
-  status: string
-  entryAt: string
+  prenom: string
+  nom: string
+  poste: string | null
+  hasPin: boolean
+  statut: Statut
+  heureArrivee: string | null
 }
 
 type Fiche = {
   id: string
-  number: string
-  vehicle: string
-  plate: string
-  client: string
-  work: string
-  status: FicheStatus
-  companion: string
-  plannedHours: number
-  realHours: number
-  amount: number
-  cost: number
-  dueAt: string
+  numero: string
+  statut: StatutFiche
+  travaux: string
+  vehicule: string
+  immat: string | null
+  clientNom: string
+  tempsReel: number | null
+  pointagesActifs: { compagnonId: string; compagnonNom: string; debutAt: string }[]
 }
 
-type Absence = {
-  id: string
-  name: string
-  reason: string
-  period: string
-  status: string
+const GARAGE = {
+  id: 'demo-garage',
+  nom: 'Garage Morel Auto',
+  email: 'atelier@garage-demo.fr',
+  password: 'demo',
 }
 
-type DemoStats = {
-  dayRevenue: number
-  monthRevenue: number
-  amount: number
-  margin: number
-  realHours: number
-  billedHours: number
-  occupancy: number
-  vehiclesInShop: number
-  closedToday: number
-}
-
-const views: Array<{ key: ViewKey; label: string; hint: string }> = [
-  { key: 'dashboard', label: 'Dashboard', hint: 'Vue rapide' },
-  { key: 'pointage', label: 'Pointage', hint: 'Compagnons' },
-  { key: 'atelier', label: 'Atelier', hint: 'Véhicules' },
-  { key: 'fiches', label: 'Fiches', hint: 'Travaux' },
-  { key: 'rentabilite', label: 'Rentabilité', hint: 'Marge' },
-  { key: 'absences', label: 'Absences', hint: 'Planning' },
-  { key: 'rapports', label: 'Rapports', hint: 'Synthèse' },
+const COMPAGNONS_DEMO: Compagnon[] = [
+  { id: 'marc', prenom: 'Marc', nom: 'Dubois', poste: 'Chef atelier', hasPin: true, statut: 'ABSENT', heureArrivee: null },
+  { id: 'lina', prenom: 'Lina', nom: 'Martin', poste: 'Carrossière', hasPin: true, statut: 'EN_TRAVAIL', heureArrivee: todayAt('07:55') },
+  { id: 'karim', prenom: 'Karim', nom: 'Benali', poste: 'Mécanicien', hasPin: true, statut: 'PAUSE_CAFE', heureArrivee: todayAt('08:03') },
+  { id: 'sophie', prenom: 'Sophie', nom: 'Leclerc', poste: 'Peintre', hasPin: true, statut: 'EN_TRAVAIL', heureArrivee: todayAt('07:48') },
 ]
 
-const companions: Companion[] = [
-  {
-    id: 'marc',
-    name: 'Marc Dubois',
-    role: 'Chef atelier',
-    status: 'En intervention',
-    arrivedAt: '07:42',
-    currentTask: 'FT-2026-014 - distribution Clio IV',
-    productive: '6 h 20',
-    realHours: 6.3,
-    billedHours: 7.1,
-  },
-  {
-    id: 'lina',
-    name: 'Lina Martin',
-    role: 'Carrossière',
-    status: 'En intervention',
-    arrivedAt: '07:55',
-    currentTask: 'FT-2026-016 - préparation pare-chocs',
-    productive: '5 h 45',
-    realHours: 5.75,
-    billedHours: 6.2,
-  },
-  {
-    id: 'karim',
-    name: 'Karim Benali',
-    role: 'Mécanicien',
-    status: 'En pause',
-    arrivedAt: '08:03',
-    currentTask: 'Pause déjeuner',
-    productive: '4 h 10',
-    realHours: 4.2,
-    billedHours: 4.6,
-  },
-  {
-    id: 'sophie',
-    name: 'Sophie Leclerc',
-    role: 'Peintre',
-    status: 'En intervention',
-    arrivedAt: '07:50',
-    currentTask: 'FT-2026-019 - teinte aile arrière',
-    productive: '5 h 05',
-    realHours: 5.1,
-    billedHours: 5.8,
-  },
-  {
-    id: 'hugo',
-    name: 'Hugo Bernard',
-    role: 'Apprenti',
-    status: 'Formation',
-    arrivedAt: '08:12',
-    currentTask: 'Contrôle qualité accompagné',
-    productive: '3 h 30',
-    realHours: 3.5,
-    billedHours: 2.8,
-  },
-]
-
-const fiches: Fiche[] = [
+const FICHES_DEMO: Fiche[] = [
   {
     id: 'ft-014',
-    number: 'FT-2026-014',
-    vehicle: 'Renault Clio IV',
-    plate: 'GH-246-MQ',
-    client: 'Mme Perrin',
-    work: 'Distribution, pompe à eau et révision',
-    status: 'En cours',
-    companion: 'Marc Dubois',
-    plannedHours: 5.5,
-    realHours: 4.75,
-    amount: 620,
-    cost: 352,
-    dueAt: 'Aujourd’hui 17:30',
+    numero: 'FT-2026-014',
+    statut: 'EN_ATTENTE',
+    travaux: 'Distribution\nPompe à eau\nRévision complète',
+    vehicule: 'Renault Clio IV',
+    immat: 'GH-246-MQ',
+    clientNom: 'Perrin',
+    tempsReel: null,
+    pointagesActifs: [],
   },
   {
     id: 'ft-015',
-    number: 'FT-2026-015',
-    vehicle: 'Peugeot 308',
-    plate: 'GM-821-LP',
-    client: 'ETS Lavigne',
-    work: 'Freinage avant et diagnostic bruit',
-    status: 'En attente',
-    companion: 'Karim Benali',
-    plannedHours: 2.8,
-    realHours: 1.4,
-    amount: 390,
-    cost: 214,
-    dueAt: 'Demain 10:00',
+    numero: 'FT-2026-015',
+    statut: 'EN_COURS',
+    travaux: 'Freinage avant\nContrôle bruit train roulant',
+    vehicule: 'Peugeot 308',
+    immat: 'GM-821-LP',
+    clientNom: 'ETS Lavigne',
+    tempsReel: 1.4,
+    pointagesActifs: [{ compagnonId: 'lina', compagnonNom: 'Lina Martin', debutAt: todayAt('10:12') }],
   },
   {
     id: 'ft-016',
-    number: 'FT-2026-016',
-    vehicle: 'BMW Série 1',
-    plate: 'FY-119-CR',
-    client: 'M. Renaud',
-    work: 'Pare-chocs avant, peinture et lustrage',
-    status: 'Contrôle',
-    companion: 'Lina Martin',
-    plannedHours: 6.5,
-    realHours: 6.1,
-    amount: 980,
-    cost: 571,
-    dueAt: 'Aujourd’hui 16:45',
+    numero: 'FT-2026-016',
+    statut: 'EN_COURS',
+    travaux: 'Pare-chocs avant\nPréparation peinture\nLustrage',
+    vehicule: 'BMW Série 1',
+    immat: 'FY-119-CR',
+    clientNom: 'Renaud',
+    tempsReel: 4.2,
+    pointagesActifs: [{ compagnonId: 'sophie', compagnonNom: 'Sophie Leclerc', debutAt: todayAt('09:40') }],
   },
   {
     id: 'ft-017',
-    number: 'FT-2026-017',
-    vehicle: 'Renault Kangoo',
-    plate: 'BN-774-VT',
-    client: 'Boulangerie Martin',
-    work: 'Diagnostic démarrage et batterie',
-    status: 'Terminée',
-    companion: 'Marc Dubois',
-    plannedHours: 1.5,
-    realHours: 1.2,
-    amount: 210,
-    cost: 92,
-    dueAt: 'Livrable',
-  },
-  {
-    id: 'ft-019',
-    number: 'FT-2026-019',
-    vehicle: 'Citroën Jumpy',
-    plate: 'HL-502-DK',
-    client: 'Garage Moreau',
-    work: 'Aile arrière, teinte et raccord',
-    status: 'En cours',
-    companion: 'Sophie Leclerc',
-    plannedHours: 4.8,
-    realHours: 3.9,
-    amount: 740,
-    cost: 410,
-    dueAt: 'Demain 15:00',
+    numero: 'FT-2026-017',
+    statut: 'TERMINEE',
+    travaux: 'Diagnostic démarrage\nBatterie\nContrôle charge alternateur',
+    vehicule: 'Renault Kangoo',
+    immat: 'BN-774-VT',
+    clientNom: 'Boulangerie Martin',
+    tempsReel: 1.2,
+    pointagesActifs: [],
   },
 ]
 
-const vehicles: Vehicle[] = [
-  { id: 'v1', label: 'Renault Clio IV', plate: 'GH-246-MQ', client: 'Mme Perrin', ficheId: 'ft-014', status: 'Travaux en cours', entryAt: '08:18' },
-  { id: 'v2', label: 'Peugeot 308', plate: 'GM-821-LP', client: 'ETS Lavigne', ficheId: 'ft-015', status: 'Pièces attendues', entryAt: '09:05' },
-  { id: 'v3', label: 'BMW Série 1', plate: 'FY-119-CR', client: 'M. Renaud', ficheId: 'ft-016', status: 'Contrôle qualité', entryAt: 'Hier 15:20' },
-  { id: 'v4', label: 'Renault Kangoo', plate: 'BN-774-VT', client: 'Boulangerie Martin', ficheId: 'ft-017', status: 'Prêt à livrer', entryAt: '10:35' },
-  { id: 'v5', label: 'Citroën Jumpy', plate: 'HL-502-DK', client: 'Garage Moreau', ficheId: 'ft-019', status: 'Peinture', entryAt: 'Hier 08:50' },
-]
-
-const absences: Absence[] = [
-  { id: 'a1', name: 'Emma Girard', reason: 'Congé validé', period: 'Vendredi - journée', status: 'Planifié' },
-  { id: 'a2', name: 'Karim Benali', reason: 'Formation climatisation', period: 'Mardi 14:00 - 17:00', status: 'Validé' },
-  { id: 'a3', name: 'Hugo Bernard', reason: 'École alternance', period: 'Jeudi matin', status: 'Planifié' },
-]
-
-function euro(value: number) {
-  return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(value)
+const STATUT_BADGE: Record<Statut, { label: string; variant: 'muted' | 'success' | 'warning' | 'blue' }> = {
+  ABSENT: { label: 'Absent', variant: 'muted' },
+  EN_TRAVAIL: { label: 'En travail', variant: 'success' },
+  PAUSE_CAFE: { label: 'Pause café', variant: 'warning' },
+  PAUSE_DEJEUNER: { label: 'Pause déjeuner', variant: 'warning' },
+  PARTI: { label: 'Parti', variant: 'muted' },
 }
 
-function hours(value: number) {
-  return `${value.toLocaleString('fr-FR', { minimumFractionDigits: 1, maximumFractionDigits: 1 })} h`
+const FICHE_BADGE: Record<StatutFiche, { label: string; variant: 'blue' | 'success' | 'warning' | 'muted' }> = {
+  EN_ATTENTE: { label: 'En attente', variant: 'warning' },
+  EN_COURS: { label: 'En cours', variant: 'blue' },
+  EN_PAUSE: { label: 'En pause', variant: 'warning' },
+  TERMINEE: { label: 'Terminée', variant: 'success' },
 }
 
-function cn(...classes: Array<string | false | null | undefined>) {
-  return classes.filter(Boolean).join(' ')
+function todayAt(time: string) {
+  const [hours, minutes] = time.split(':').map(Number)
+  const date = new Date()
+  date.setHours(hours ?? 0, minutes ?? 0, 0, 0)
+  return date.toISOString()
+}
+
+function initials(compagnon: Compagnon) {
+  return `${compagnon.prenom[0]}${compagnon.nom[0]}`.toUpperCase()
+}
+
+function formatTime(iso: string | null) {
+  if (!iso) return null
+  return new Date(iso).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
+}
+
+function formatDuree(debutIso: string) {
+  const debut = new Date(debutIso)
+  const now = new Date()
+  const min = Math.max(0, Math.floor((now.getTime() - debut.getTime()) / 60000))
+  const h = Math.floor(min / 60)
+  const m = min % 60
+  return `${h}h${m.toString().padStart(2, '0')}`
 }
 
 export function LivoDemoClient() {
-  const [activeView, setActiveView] = useState<ViewKey>('dashboard')
-  const [deviceMode, setDeviceMode] = useState<DeviceMode>('desktop')
-  const [selectedFicheId, setSelectedFicheId] = useState<string>(fiches[0].id)
-  const [selectedCompanionId, setSelectedCompanionId] = useState<string>(companions[0].id)
-  const [notice, setNotice] = useState('Démo isolée : aucune donnée réelle n’est enregistrée.')
+  const [step, setStep] = useState<LoginStep>('login')
+  const [email, setEmail] = useState(GARAGE.email)
+  const [password, setPassword] = useState(GARAGE.password)
+  const [loginError, setLoginError] = useState('')
+  const [compagnons, setCompagnons] = useState<Compagnon[]>(COMPAGNONS_DEMO)
+  const [fiches, setFiches] = useState<Fiche[]>(FICHES_DEMO)
+  const [compagnonSelectionne, setCompagnonSelectionne] = useState<Compagnon | null>(null)
+  const [compagnonConnecteId, setCompagnonConnecteId] = useState<string | null>(null)
+  const [pin, setPin] = useState('')
+  const [pinError, setPinError] = useState('')
+  const [loadingAction, setLoadingAction] = useState<string | null>(null)
+  const [scannerOpen, setScannerOpen] = useState(false)
+  const [confirmDepartOpen, setConfirmDepartOpen] = useState(false)
+  const [pointageError, setPointageError] = useState('')
+  const [now, setNow] = useState(new Date())
 
-  const selectedFiche = fiches.find((fiche) => fiche.id === selectedFicheId) ?? fiches[0]
-  const selectedCompanion = companions.find((companion) => companion.id === selectedCompanionId) ?? companions[0]
-
-  const stats = useMemo(() => {
-    const amount = fiches.reduce((sum, fiche) => sum + fiche.amount, 0)
-    const cost = fiches.reduce((sum, fiche) => sum + fiche.cost, 0)
-    const realHours = fiches.reduce((sum, fiche) => sum + fiche.realHours, 0)
-    const billedHours = fiches.reduce((sum, fiche) => sum + fiche.plannedHours, 0)
-
-    return {
-      dayRevenue: 2480,
-      monthRevenue: 42800,
-      amount,
-      margin: amount - cost,
-      realHours,
-      billedHours,
-      occupancy: 82,
-      vehiclesInShop: vehicles.length,
-      closedToday: fiches.filter((fiche) => fiche.status === 'Terminée').length,
-    }
+  useEffect(() => {
+    const timer = window.setInterval(() => setNow(new Date()), 30000)
+    return () => window.clearInterval(timer)
   }, [])
 
-  function simulateAction(message: string) {
-    setNotice(`${message} Simulation uniquement, rien n’est enregistré.`)
+  const compagnonConnecte = compagnons.find((compagnon) => compagnon.id === compagnonConnecteId)
+
+  function handleLogin() {
+    setLoginError('')
+    if (!email || !password) {
+      setLoginError('Saisissez l’email du garage et le mot de passe atelier.')
+      return
+    }
+    setStep('compagnon')
   }
 
-  function openFiche(ficheId: string) {
-    setSelectedFicheId(ficheId)
-    setActiveView('fiches')
+  function handleSelectCompagnon(compagnon: Compagnon) {
+    setCompagnonSelectionne(compagnon)
+    setPin('')
+    setPinError('')
+    setStep('pin')
   }
 
-  return (
-    <div className={styles.demoShell}>
-      <aside className={styles.sidebar}>
-        <div className={styles.garageCard}>
-          <span className={styles.garageLabel}>Garage fictif</span>
-          <strong>Garage Morel Auto</strong>
-          <small>Mécanique, carrosserie et entretien rapide</small>
-        </div>
+  function handlePinDigit(digit: string) {
+    if (pin.length >= 4 || !compagnonSelectionne) return
+    const nextPin = pin + digit
+    setPin(nextPin)
+    if (nextPin.length === 4) {
+      if (nextPin === '1234') {
+        setCompagnonConnecteId(compagnonSelectionne.id)
+        setStep('atelier')
+      } else {
+        setPinError('Code PIN incorrect. Pour la démo, utilisez 1234.')
+        setPin('')
+      }
+    }
+  }
 
-        <nav className={styles.nav} aria-label="Navigation demo LIVO">
-          {views.map((view) => (
-            <button
-              key={view.key}
-              type="button"
-              className={cn(styles.navButton, activeView === view.key && styles.navButtonActive)}
-              onClick={() => setActiveView(view.key)}
-            >
-              <span>{view.label}</span>
-              <small>{view.hint}</small>
+  function actionPointage(action: 'ARRIVEE' | 'PAUSE_CAFE_DEBUT' | 'PAUSE_CAFE_FIN' | 'PAUSE_DEJ_DEBUT' | 'PAUSE_DEJ_FIN' | 'DEPART') {
+    if (!compagnonConnecteId) return
+    setLoadingAction(action)
+    setPointageError('')
+
+    window.setTimeout(() => {
+      setCompagnons((current) => current.map((compagnon) => {
+        if (compagnon.id !== compagnonConnecteId) return compagnon
+
+        if (action === 'ARRIVEE') {
+          if (compagnon.statut === 'PARTI') {
+            setPointageError('Votre journée a déjà été clôturée. Vous ne pouvez plus repointer en arrivée atelier aujourd’hui.')
+            return compagnon
+          }
+          return { ...compagnon, statut: 'EN_TRAVAIL', heureArrivee: new Date().toISOString() }
+        }
+
+        if (action === 'PAUSE_CAFE_DEBUT') return { ...compagnon, statut: 'PAUSE_CAFE' }
+        if (action === 'PAUSE_CAFE_FIN') return { ...compagnon, statut: 'EN_TRAVAIL' }
+        if (action === 'PAUSE_DEJ_DEBUT') return { ...compagnon, statut: 'PAUSE_DEJEUNER' }
+        if (action === 'PAUSE_DEJ_FIN') return { ...compagnon, statut: 'EN_TRAVAIL' }
+        if (action === 'DEPART') return { ...compagnon, statut: 'PARTI' }
+
+        return compagnon
+      }))
+      setLoadingAction(null)
+    }, 240)
+  }
+
+  function actionFiche(ficheId: string, action: 'POINTER' | 'DEPOINTER') {
+    if (!compagnonConnecteId || !compagnonConnecte) return
+    setLoadingAction(ficheId)
+
+    window.setTimeout(() => {
+      setFiches((current) => current.map((fiche) => {
+        if (fiche.id !== ficheId) return fiche
+
+        if (action === 'POINTER') {
+          const dejaPointe = fiche.pointagesActifs.some((pointage) => pointage.compagnonId === compagnonConnecteId)
+          if (dejaPointe) return fiche
+          return {
+            ...fiche,
+            statut: 'EN_COURS',
+            pointagesActifs: [
+              ...fiche.pointagesActifs,
+              {
+                compagnonId: compagnonConnecteId,
+                compagnonNom: `${compagnonConnecte.prenom} ${compagnonConnecte.nom}`,
+                debutAt: new Date().toISOString(),
+              },
+            ],
+          }
+        }
+
+        const pointagesActifs = fiche.pointagesActifs.filter((pointage) => pointage.compagnonId !== compagnonConnecteId)
+        return {
+          ...fiche,
+          statut: pointagesActifs.length > 0 ? 'EN_COURS' : 'TERMINEE',
+          pointagesActifs,
+        }
+      }))
+      setLoadingAction(null)
+    }, 220)
+  }
+
+  function deconnecter() {
+    setCompagnonConnecteId(null)
+    setCompagnonSelectionne(null)
+    setPin('')
+    setStep('atelier')
+  }
+
+  if (step === 'login') {
+    return (
+      <div className={loginStyles.page}>
+        <div className={styles.demoRibbon}>Démo publique · données fictives · aucune action enregistrée</div>
+        <div className={loginStyles.card}>
+          <div className={loginStyles.logoWrap}>
+            <div className={loginStyles.logoIcon}><Wrench weight="fill" size={28} /></div>
+            <div>
+              <div className={loginStyles.logoName}>Espace Atelier</div>
+              <div className={loginStyles.logoSub}>LIVO-APP</div>
+            </div>
+          </div>
+
+          <h1 className={loginStyles.title}>Connexion atelier</h1>
+          <p className={loginStyles.intro}>
+            Connectez d’abord le garage. Ensuite, chaque compagnon choisit son profil et saisit son code PIN.
+          </p>
+
+          <div className={loginStyles.steps}>
+            <div className={`${loginStyles.step} ${loginStyles.stepActive}`}>
+              <Buildings size={16} />
+              <span>1. Garage</span>
+            </div>
+            <div className={loginStyles.step}>
+              <IdentificationCard size={16} />
+              <span>2. Compagnon</span>
+            </div>
+            <div className={loginStyles.step}>
+              <LockKey size={16} />
+              <span>3. PIN</span>
+            </div>
+          </div>
+
+          <div className={loginStyles.form}>
+            <input
+              className={loginStyles.input}
+              type="email"
+              placeholder="Email du garage"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              autoFocus
+            />
+            <input
+              className={loginStyles.input}
+              type="password"
+              placeholder="Mot de passe atelier"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              onKeyDown={(event) => event.key === 'Enter' && handleLogin()}
+            />
+            {loginError && <p className={loginStyles.error}>{loginError}</p>}
+            <button className={loginStyles.btnPrimary} onClick={handleLogin}>
+              Accéder à l’atelier
             </button>
-          ))}
-        </nav>
+          </div>
 
-        <div className={styles.devicePanel}>
-          <span>Mode de présentation</span>
-          <div className={styles.deviceSwitch}>
-            {(['desktop', 'tablet', 'mobile'] as DeviceMode[]).map((mode) => (
+          <button className={styles.linkButton} onClick={() => setStep('compagnon')}>
+            → Passer directement à la sélection compagnon
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  if (step === 'compagnon') {
+    return (
+      <div className={loginStyles.page}>
+        <div className={styles.demoRibbon}>Démo publique · PIN compagnon : 1234</div>
+        <div className={loginStyles.cardLarge}>
+          <div className={loginStyles.garageHeader}>
+            <div className={loginStyles.garageDot} />
+            <span className={loginStyles.garageNom}>{GARAGE.nom}</span>
+          </div>
+          <h1 className={loginStyles.title}>Qui êtes-vous ?</h1>
+
+          <p className={loginStyles.intro}>Choisissez votre profil pour ouvrir votre espace atelier.</p>
+
+          <div className={loginStyles.compagnonsGrid}>
+            {compagnons.map((compagnon) => (
               <button
-                key={mode}
-                type="button"
-                className={cn(styles.deviceButton, deviceMode === mode && styles.deviceButtonActive)}
-                onClick={() => setDeviceMode(mode)}
+                key={compagnon.id}
+                className={loginStyles.compagnonBtn}
+                onClick={() => handleSelectCompagnon(compagnon)}
               >
-                {mode === 'desktop' ? 'Ordinateur' : mode === 'tablet' ? 'Tablette' : 'Atelier'}
+                <div className={loginStyles.compagnonAvatar}>{initials(compagnon)}</div>
+                <span className={loginStyles.compagnonNom}>{compagnon.prenom}</span>
+                <span className={loginStyles.compagnonPoste}>{compagnon.poste ?? 'Mécanicien'}</span>
               </button>
             ))}
           </div>
         </div>
-      </aside>
-
-      <section className={cn(styles.demoFrame, styles[deviceMode])}>
-        <div className={styles.appHeader}>
-          <div>
-            <span className={styles.overline}>LIVO - Démo terrain</span>
-            <h1>{viewTitle(activeView)}</h1>
-            <p>{viewDescription(activeView)}</p>
-          </div>
-          <div className={styles.headerStatus}>
-            <strong>Mercredi 27 mai</strong>
-            <span>Atelier ouvert depuis 07:42</span>
-          </div>
-        </div>
-
-        <div className={styles.notice}>{notice}</div>
-
-        {activeView === 'dashboard' && (
-          <DashboardView stats={stats} onOpenFiche={openFiche} onAction={simulateAction} />
-        )}
-
-        {activeView === 'pointage' && (
-          <PointageView
-            selectedCompanionId={selectedCompanion.id}
-            onSelectCompanion={setSelectedCompanionId}
-            onAction={simulateAction}
-          />
-        )}
-
-        {activeView === 'atelier' && <AtelierView onOpenFiche={openFiche} />}
-
-        {activeView === 'fiches' && (
-          <FichesView selectedFiche={selectedFiche} onSelectFiche={setSelectedFicheId} onAction={simulateAction} />
-        )}
-
-        {activeView === 'rentabilite' && <RentabiliteView stats={stats} />}
-
-        {activeView === 'absences' && <AbsencesView onAction={simulateAction} />}
-
-        {activeView === 'rapports' && <RapportsView stats={stats} onAction={simulateAction} />}
-      </section>
-    </div>
-  )
-}
-
-function viewTitle(view: ViewKey) {
-  const titles: Record<ViewKey, string> = {
-    dashboard: 'Tableau de bord atelier',
-    pointage: 'Pointage des compagnons',
-    atelier: 'Vue atelier',
-    fiches: 'Fiches de travail',
-    rentabilite: 'Rentabilité atelier',
-    absences: 'Congés et absences',
-    rapports: 'Rapports simples',
-  }
-
-  return titles[view]
-}
-
-function viewDescription(view: ViewKey) {
-  const descriptions: Record<ViewKey, string> = {
-    dashboard: 'Une vision claire de la journée, des véhicules présents, des heures et de la marge estimée.',
-    pointage: 'Suivez les arrivées, pauses, interventions et fins de journée sans ressaisie inutile.',
-    atelier: 'Visualisez les véhicules présents, leur statut et la fiche atelier associée.',
-    fiches: 'Consultez les travaux, les temps prévus, les temps réels et les marges estimées.',
-    rentabilite: 'Comparez les heures vendues, les heures passées et la rentabilité par dossier.',
-    absences: 'Gardez une vue simple sur les congés, formations et indisponibilités prévues.',
-    rapports: 'Préparez une synthèse lisible pour piloter l’activité sans tableur compliqué.',
-  }
-
-  return descriptions[view]
-}
-
-function DashboardView({
-  stats,
-  onOpenFiche,
-  onAction,
-}: {
-  stats: DemoStats
-  onOpenFiche: (ficheId: string) => void
-  onAction: (message: string) => void
-}) {
-  return (
-    <div className={styles.viewStack}>
-      <div className={styles.kpiGrid}>
-        <Kpi label="CA du jour" value={euro(stats.dayRevenue)} detail="6 fiches facturables" tone="blue" />
-        <Kpi label="Véhicules atelier" value={String(stats.vehiclesInShop)} detail="dont 2 prêts à livrer" tone="green" />
-        <Kpi label="Heures réelles" value={hours(stats.realHours)} detail={`${hours(stats.billedHours)} prévues`} tone="orange" />
-        <Kpi label="Marge estimée" value={euro(stats.margin)} detail="sur les fiches ouvertes" tone="purple" />
       </div>
+    )
+  }
 
-      <div className={styles.gridTwo}>
-        <section className={styles.panel}>
-          <PanelTitle title="Fiches à surveiller" action="Voir toutes" onClick={() => onAction('Ouverture de la liste complète.')} />
-          <div className={styles.list}>
-            {fiches.slice(0, 4).map((fiche) => (
-              <button key={fiche.id} type="button" className={styles.ficheRow} onClick={() => onOpenFiche(fiche.id)}>
-                <span>
-                  <strong>{fiche.number}</strong>
-                  <small>{fiche.vehicle} - {fiche.client}</small>
-                </span>
-                <StatusBadge status={fiche.status} />
+  if (step === 'pin' && compagnonSelectionne) {
+    return (
+      <div className={loginStyles.page}>
+        <div className={styles.demoRibbon}>Démo publique · tapez 1234</div>
+        <div className={loginStyles.card}>
+          <button className={loginStyles.backBtn} onClick={() => { setStep('compagnon'); setPinError('') }}>
+            ← Retour
+          </button>
+
+          <div className={loginStyles.compagnonSelected}>
+            <div className={loginStyles.compagnonAvatarLg}>{initials(compagnonSelectionne)}</div>
+            <span className={loginStyles.compagnonNomLg}>{compagnonSelectionne.prenom} {compagnonSelectionne.nom}</span>
+          </div>
+
+          <p className={loginStyles.pinLabel}>Entrez votre code PIN</p>
+
+          <div className={loginStyles.pinDots}>
+            {[0, 1, 2, 3].map((index) => (
+              <div key={index} className={`${loginStyles.pinDot} ${pin.length > index ? loginStyles.pinDotFilled : ''}`} />
+            ))}
+          </div>
+
+          {pinError && <p className={loginStyles.error}>{pinError}</p>}
+
+          <div className={loginStyles.pinPad}>
+            {['1', '2', '3', '4', '5', '6', '7', '8', '9', '', '0', '⌫'].map((digit, index) => (
+              <button
+                key={index}
+                className={`${loginStyles.pinKey} ${digit === '' ? loginStyles.pinKeyEmpty : ''}`}
+                onClick={() => digit === '⌫' ? setPin((current) => current.slice(0, -1)) : digit !== '' && handlePinDigit(digit)}
+                disabled={digit === ''}
+              >
+                {digit}
               </button>
             ))}
           </div>
-        </section>
-
-        <section className={styles.panel}>
-          <PanelTitle title="Atelier en temps réel" action="Actualiser" onClick={() => onAction('Actualisation demandée.')} />
-          <div className={styles.timeline}>
-            <TimelineItem time="07:42" title="Marc Dubois arrivé atelier" detail="Pointage validé" />
-            <TimelineItem time="08:18" title="Clio IV entrée en intervention" detail="Distribution et pompe à eau" />
-            <TimelineItem time="10:35" title="Kangoo prêt à livrer" detail="Diagnostic terminé" />
-            <TimelineItem time="12:08" title="Pause atelier enregistrée" detail="3 compagnons en pause" />
-          </div>
-        </section>
+        </div>
       </div>
-    </div>
-  )
-}
+    )
+  }
 
-function PointageView({
-  selectedCompanionId,
-  onSelectCompanion,
-  onAction,
-}: {
-  selectedCompanionId: string
-  onSelectCompanion: (id: string) => void
-  onAction: (message: string) => void
-}) {
-  const companion = companions.find((item) => item.id === selectedCompanionId) ?? companions[0]
+  const statut = compagnonConnecte?.statut ?? 'ABSENT'
+  const badge = STATUT_BADGE[statut]
+  const heureArrivee = formatTime(compagnonConnecte?.heureArrivee ?? null)
+  const dateStr = now.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' })
+  const heureStr = now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
 
   return (
-    <div className={styles.gridTwo}>
-      <section className={styles.panel}>
-        <PanelTitle title="Compagnons pointés" action="Nouveau pointage" onClick={() => onAction('Pointage atelier demandé.')} />
-        <div className={styles.companionGrid}>
-          {companions.map((item) => (
-            <button
-              key={item.id}
-              type="button"
-              className={cn(styles.companionCard, selectedCompanionId === item.id && styles.selectedCard)}
-              onClick={() => onSelectCompanion(item.id)}
-            >
-              <span className={styles.avatar}>{initials(item.name)}</span>
-              <strong>{item.name}</strong>
-              <small>{item.role}</small>
-              <StatusBadge status={item.status} />
+    <div className={atelierStyles.page}>
+      <div className={styles.demoRibbon}>Démo publique · aucune donnée réelle n’est enregistrée</div>
+      <div className={atelierStyles.header}>
+        <div className={atelierStyles.headerLeft}>
+          <div className={atelierStyles.garageDot} />
+          <span className={atelierStyles.garageNom}>{GARAGE.nom}</span>
+          <span className={atelierStyles.headerDate}>{dateStr}</span>
+        </div>
+        <div className={atelierStyles.headerRight}>
+          <span className={atelierStyles.horloge}>{heureStr}</span>
+          {compagnonConnecte && (
+            <button className={atelierStyles.deconnecterBtn} onClick={deconnecter}>
+              <Lock size={14} /> Verrouiller
             </button>
-          ))}
+          )}
         </div>
-      </section>
-
-      <section className={styles.panel}>
-        <PanelTitle title="Détail du pointage" action="Historique" onClick={() => onAction('Historique de pointage ouvert.')} />
-        <div className={styles.detailCard}>
-          <span className={styles.avatarLarge}>{initials(companion.name)}</span>
-          <h2>{companion.name}</h2>
-          <p>{companion.role}</p>
-          <div className={styles.detailGrid}>
-            <Info label="Arrivée" value={companion.arrivedAt} />
-            <Info label="État" value={companion.status} />
-            <Info label="Productif" value={companion.productive} />
-            <Info label="Mission" value={companion.currentTask} />
-          </div>
-          <div className={styles.actionRow}>
-            <button type="button" className={styles.secondaryButton} onClick={() => onAction('Pause enregistrée.')}>Pause</button>
-            <button type="button" className={styles.primaryButton} onClick={() => onAction('Fin de journée demandée.')}>Dépointer</button>
-          </div>
-        </div>
-      </section>
-    </div>
-  )
-}
-
-function AtelierView({ onOpenFiche }: { onOpenFiche: (ficheId: string) => void }) {
-  return (
-    <div className={styles.viewStack}>
-      <div className={styles.kpiGrid}>
-        <Kpi label="Présents" value="5" detail="compagnons pointés" tone="blue" />
-        <Kpi label="En cours" value="3" detail="véhicules en intervention" tone="green" />
-        <Kpi label="En attente" value="1" detail="pièces ou validation client" tone="orange" />
-        <Kpi label="Prêts" value="1" detail="livraison possible" tone="purple" />
       </div>
 
-      <section className={styles.panel}>
-        <PanelTitle title="Véhicules présents à l’atelier" />
-        <div className={styles.vehicleGrid}>
-          {vehicles.map((vehicle) => (
-            <button key={vehicle.id} type="button" className={styles.vehicleCard} onClick={() => onOpenFiche(vehicle.ficheId)}>
-              <span className={styles.plate}>{vehicle.plate}</span>
-              <strong>{vehicle.label}</strong>
-              <small>{vehicle.client}</small>
-              <span className={styles.vehicleMeta}>{vehicle.status} - Entrée {vehicle.entryAt}</span>
-            </button>
-          ))}
-        </div>
-      </section>
-    </div>
-  )
-}
-
-function FichesView({
-  selectedFiche,
-  onSelectFiche,
-  onAction,
-}: {
-  selectedFiche: Fiche
-  onSelectFiche: (id: string) => void
-  onAction: (message: string) => void
-}) {
-  return (
-    <div className={styles.gridTwoWide}>
-      <section className={styles.panel}>
-        <PanelTitle title="Liste des fiches de travail" action="Créer une fiche" onClick={() => onAction('Création de fiche ouverte.')} />
-        <div className={styles.tableLike}>
-          {fiches.map((fiche) => (
-            <button
-              key={fiche.id}
-              type="button"
-              className={cn(styles.tableRow, selectedFiche.id === fiche.id && styles.tableRowActive)}
-              onClick={() => onSelectFiche(fiche.id)}
-            >
-              <span>
-                <strong>{fiche.number}</strong>
-                <small>{fiche.work}</small>
-              </span>
-              <span>{fiche.vehicle}</span>
-              <span>{fiche.companion}</span>
-              <StatusBadge status={fiche.status} />
-            </button>
-          ))}
-        </div>
-      </section>
-
-      <section className={styles.panel}>
-        <PanelTitle title="Détail de la fiche" action="Imprimer" onClick={() => onAction('Export PDF demandé.')} />
-        <div className={styles.detailCard}>
-          <div className={styles.detailHeader}>
-            <span>
-              <strong>{selectedFiche.number}</strong>
-              <small>{selectedFiche.client}</small>
-            </span>
-            <StatusBadge status={selectedFiche.status} />
+      {!compagnonConnecteId && (
+        <div className={atelierStyles.selectionWrap}>
+          <h2 className={atelierStyles.selectionTitle}>Qui êtes-vous ?</h2>
+          <div className={atelierStyles.compagnonsGrid}>
+            {compagnons.map((compagnon) => {
+              const companionBadge = STATUT_BADGE[compagnon.statut]
+              return (
+                <button
+                  key={compagnon.id}
+                  className={atelierStyles.compagnonCard}
+                  onClick={() => handleSelectCompagnon(compagnon)}
+                >
+                  <div className={atelierStyles.compagnonAvatar}>{initials(compagnon)}</div>
+                  <span className={atelierStyles.compagnonNom}>{compagnon.prenom}</span>
+                  <span className={atelierStyles.compagnonPoste}>{compagnon.poste ?? 'Mécanicien'}</span>
+                  <Badge variant={companionBadge.variant} dot>{companionBadge.label}</Badge>
+                </button>
+              )
+            })}
           </div>
-          <h2>{selectedFiche.vehicle}</h2>
-          <p>{selectedFiche.work}</p>
-          <div className={styles.detailGrid}>
-            <Info label="Immatriculation" value={selectedFiche.plate} />
-            <Info label="Compagnon" value={selectedFiche.companion} />
-            <Info label="Échéance" value={selectedFiche.dueAt} />
-            <Info label="Montant" value={euro(selectedFiche.amount)} />
-            <Info label="Temps prévu" value={hours(selectedFiche.plannedHours)} />
-            <Info label="Temps réel" value={hours(selectedFiche.realHours)} />
+        </div>
+      )}
+
+      {compagnonConnecte && (
+        <div className={atelierStyles.dashboard}>
+          <div className={atelierStyles.compagnonBlock}>
+            <div className={atelierStyles.compagnonBlockLeft}>
+              <div className={atelierStyles.compagnonAvatarLg}>{initials(compagnonConnecte)}</div>
+              <div>
+                <div className={atelierStyles.compagnonNomLg}>{compagnonConnecte.prenom} {compagnonConnecte.nom}</div>
+                <div className={atelierStyles.compagnonPosteLg}>{compagnonConnecte.poste ?? 'Mécanicien'}</div>
+                {heureArrivee && <div className={atelierStyles.arriveeHeure}>Arrivée {heureArrivee}</div>}
+              </div>
+              <Badge variant={badge.variant} dot>{badge.label}</Badge>
+            </div>
+
+            <div className={atelierStyles.actionsJournee}>
+              {statut === 'ABSENT' && (
+                <button className={`${atelierStyles.actionBtn} ${atelierStyles.actionArrivee}`}
+                  onClick={() => actionPointage('ARRIVEE')} disabled={!!loadingAction}>
+                  <ArrowRight weight="bold" size={20} />
+                  Arrivée atelier
+                </button>
+              )}
+              {statut === 'EN_TRAVAIL' && (
+                <>
+                  <button className={`${atelierStyles.actionBtn} ${atelierStyles.actionPause}`}
+                    onClick={() => actionPointage('PAUSE_CAFE_DEBUT')} disabled={!!loadingAction}>
+                    <Coffee weight="fill" size={18} /> Pause café
+                  </button>
+                  <button className={`${atelierStyles.actionBtn} ${atelierStyles.actionPause}`}
+                    onClick={() => actionPointage('PAUSE_DEJ_DEBUT')} disabled={!!loadingAction}>
+                    <ForkKnife weight="fill" size={18} /> Pause déjeuner
+                  </button>
+                  <button className={`${atelierStyles.actionBtn} ${atelierStyles.actionDepart}`}
+                    onClick={() => setConfirmDepartOpen(true)} disabled={!!loadingAction}>
+                    <SignOut weight="bold" size={18} /> Fin de journée
+                  </button>
+                </>
+              )}
+              {(statut === 'PAUSE_CAFE' || statut === 'PAUSE_DEJEUNER') && (
+                <button className={`${atelierStyles.actionBtn} ${atelierStyles.actionReprise}`}
+                  onClick={() => actionPointage(statut === 'PAUSE_CAFE' ? 'PAUSE_CAFE_FIN' : 'PAUSE_DEJ_FIN')}
+                  disabled={!!loadingAction}>
+                  <ArrowRight weight="bold" size={20} /> Reprendre
+                </button>
+              )}
+              {statut === 'PARTI' && (
+                <div className={atelierStyles.partiMsg}>Bonne journée !</div>
+              )}
+            </div>
+            {pointageError && <p className={atelierStyles.pointageError}>{pointageError}</p>}
           </div>
-          <div className={styles.progressBlock}>
-            <span>Avancement estimé</span>
-            <div className={styles.progressTrack}>
-              <span style={{ width: `${Math.min(100, (selectedFiche.realHours / selectedFiche.plannedHours) * 100)}%` }} />
+
+          <div className={atelierStyles.fichesSection}>
+            <div className={atelierStyles.fichesTitleRow}>
+              <h3 className={atelierStyles.fichesTitle}>
+                <Wrench size={16} /> Fiches de travaux
+                <span className={atelierStyles.fichesCount}>{fiches.length}</span>
+              </h3>
+              <button className={atelierStyles.scanBtn} onClick={() => setScannerOpen(true)}>
+                <Barcode weight="bold" size={16} /> Rechercher / Scanner
+              </button>
+            </div>
+
+            <div className={atelierStyles.fichesList}>
+              {fiches.map((fiche) => {
+                const estPointe = fiche.pointagesActifs.some((pointage) => pointage.compagnonId === compagnonConnecteId)
+                const ficheBadge = FICHE_BADGE[fiche.statut]
+                const peutPointer = ['EN_ATTENTE', 'EN_COURS', 'TERMINEE'].includes(fiche.statut) && statut === 'EN_TRAVAIL'
+                const pointageMoi = fiche.pointagesActifs.find((pointage) => pointage.compagnonId === compagnonConnecteId)
+                const lignes = fiche.travaux.split('\n').filter(Boolean)
+
+                return (
+                  <div key={fiche.id} className={`${atelierStyles.ficheCard} ${estPointe ? atelierStyles.ficheActive : ''}`}>
+                    <div className={atelierStyles.ficheCardHeader}>
+                      <div className={atelierStyles.ficheCardLeft}>
+                        <span className={atelierStyles.ficheNumero}>{fiche.numero}</span>
+                        <Badge variant={ficheBadge.variant} dot>{ficheBadge.label}</Badge>
+                      </div>
+                      {peutPointer && (
+                        <button
+                          className={`${atelierStyles.ficheBtn} ${estPointe ? atelierStyles.ficheBtnStop : atelierStyles.ficheBtnStart}`}
+                          onClick={() => actionFiche(fiche.id, estPointe ? 'DEPOINTER' : 'POINTER')}
+                          disabled={!!loadingAction}
+                        >
+                          {loadingAction === fiche.id
+                            ? '...'
+                            : estPointe
+                              ? <><Stop weight="fill" size={16} /> Dépointer</>
+                              : <><Play weight="fill" size={16} /> Pointer</>
+                          }
+                        </button>
+                      )}
+                    </div>
+                    <div className={atelierStyles.ficheVehicule}>
+                      <span className={atelierStyles.ficheVehiculeNom}>{fiche.vehicule}</span>
+                      {fiche.immat && <span className={atelierStyles.ficheImmat}>{fiche.immat}</span>}
+                      <span className={atelierStyles.ficheClient}>{fiche.clientNom}</span>
+                    </div>
+                    <ul className={atelierStyles.ficheTravaux}>
+                      {lignes.slice(0, 2).map((travail, index) => <li key={index}>{travail}</li>)}
+                      {lignes.length > 2 && <li className={atelierStyles.ficheMore}>+{lignes.length - 2} autre{lignes.length - 2 > 1 ? 's' : ''}</li>}
+                    </ul>
+                    {estPointe && pointageMoi && (
+                      <div className={atelierStyles.ficheEnCours}>
+                        En cours depuis {formatDuree(pointageMoi.debutAt)}
+                      </div>
+                    )}
+                    {fiche.pointagesActifs.filter((pointage) => pointage.compagnonId !== compagnonConnecteId).map((pointage) => (
+                      <div key={pointage.compagnonId} className={atelierStyles.ficheAutreCompagnon}>
+                        {pointage.compagnonNom.split(' ')[0]} travaille dessus
+                      </div>
+                    ))}
+                  </div>
+                )
+              })}
             </div>
           </div>
         </div>
-      </section>
-    </div>
-  )
-}
+      )}
 
-function RentabiliteView({ stats }: { stats: DemoStats }) {
-  return (
-    <div className={styles.viewStack}>
-      <div className={styles.kpiGrid}>
-        <Kpi label="CA fiches ouvertes" value={euro(stats.amount)} detail="hors devis non validés" tone="blue" />
-        <Kpi label="Marge estimée" value={euro(stats.margin)} detail="pièces et temps inclus" tone="green" />
-        <Kpi label="Occupation atelier" value={`${stats.occupancy} %`} detail="objectif 80 %" tone="purple" />
-        <Kpi label="Écart heures" value="+2,9 h" detail="heures vendues vs réelles" tone="orange" />
-      </div>
+      {scannerOpen && compagnonConnecteId && (
+        <DemoScanner
+          fiches={fiches}
+          onClose={() => setScannerOpen(false)}
+          onPointer={(ficheId) => {
+            actionFiche(ficheId, 'POINTER')
+            setScannerOpen(false)
+          }}
+        />
+      )}
 
-      <section className={styles.panel}>
-        <PanelTitle title="Rentabilité par fiche" />
-        <div className={styles.tableLike}>
-          {fiches.map((fiche) => {
-            const margin = fiche.amount - fiche.cost
-            return (
-              <div key={fiche.id} className={styles.tableRowStatic}>
-                <span>
-                  <strong>{fiche.number}</strong>
-                  <small>{fiche.vehicle}</small>
-                </span>
-                <span>{euro(fiche.amount)}</span>
-                <span>{euro(fiche.cost)}</span>
-                <span className={margin > 200 ? styles.positive : styles.neutral}>{euro(margin)}</span>
-              </div>
-            )
-          })}
+      {confirmDepartOpen && (
+        <div className={atelierStyles.confirmOverlay} onClick={(event) => event.target === event.currentTarget && setConfirmDepartOpen(false)}>
+          <div className={atelierStyles.confirmModal} role="dialog" aria-modal="true" aria-labelledby="confirm-fin-journee-title">
+            <h2 id="confirm-fin-journee-title">Confirmer la fin de journée ?</h2>
+            <p>
+              Cette action clôture votre journée de pointage. Vous ne pourrez plus revenir à l’état Arrivé atelier aujourd’hui.
+            </p>
+            <div className={atelierStyles.confirmActions}>
+              <button className={atelierStyles.confirmCancel} onClick={() => setConfirmDepartOpen(false)} disabled={!!loadingAction}>
+                Annuler
+              </button>
+              <button className={atelierStyles.confirmDanger} onClick={() => { actionPointage('DEPART'); setConfirmDepartOpen(false) }} disabled={!!loadingAction}>
+                Confirmer la fin de journée
+              </button>
+            </div>
+          </div>
         </div>
-      </section>
+      )}
     </div>
   )
 }
 
-function AbsencesView({ onAction }: { onAction: (message: string) => void }) {
+function DemoScanner({
+  fiches,
+  onClose,
+  onPointer,
+}: {
+  fiches: Fiche[]
+  onClose: () => void
+  onPointer: (ficheId: string) => void
+}) {
+  const [query, setQuery] = useState('FT-2026-014')
+  const results = fiches.filter((fiche) =>
+    `${fiche.numero} ${fiche.vehicule} ${fiche.immat ?? ''} ${fiche.clientNom}`.toLowerCase().includes(query.toLowerCase())
+  )
+
   return (
-    <div className={styles.gridTwo}>
-      <section className={styles.panel}>
-        <PanelTitle title="Planning des absences" action="Ajouter" onClick={() => onAction('Ajout d’absence ouvert.')} />
-        <div className={styles.list}>
-          {absences.map((absence) => (
-            <button key={absence.id} type="button" className={styles.ficheRow} onClick={() => onAction(`Absence ${absence.name} consultée.`)}>
-              <span>
-                <strong>{absence.name}</strong>
-                <small>{absence.reason} - {absence.period}</small>
-              </span>
-              <span className={styles.smallChip}>{absence.status}</span>
+    <div className={styles.scanOverlay} onClick={(event) => event.target === event.currentTarget && onClose()}>
+      <div className={styles.scanModal}>
+        <div className={styles.scanHeader}>
+          <h2>Trouver une fiche</h2>
+          <button onClick={onClose} aria-label="Fermer"><X size={18} /></button>
+        </div>
+        <p className={styles.scanIntro}>
+          Démo sans caméra : tapez un numéro de fiche, une immatriculation ou choisissez une fiche ci-dessous.
+        </p>
+        <input
+          className={styles.scanInput}
+          value={query}
+          onChange={(event) => setQuery(event.target.value.toUpperCase())}
+          placeholder="Ex : FT-2026-014"
+          autoFocus
+        />
+        <div className={styles.scanResults}>
+          {results.map((fiche) => (
+            <button key={fiche.id} onClick={() => onPointer(fiche.id)}>
+              <strong>{fiche.numero}</strong>
+              <span>{fiche.vehicule} · {fiche.immat} · {fiche.clientNom}</span>
             </button>
           ))}
         </div>
-      </section>
-
-      <section className={styles.panel}>
-        <PanelTitle title="Impact atelier" />
-        <div className={styles.kpiColumn}>
-          <Kpi label="Capacité vendredi" value="82 %" detail="planning encore confortable" tone="green" />
-          <Kpi label="Formation prévue" value="3 h" detail="Karim - climatisation" tone="blue" />
-          <Kpi label="Risque retard" value="Faible" detail="aucune fiche urgente bloquée" tone="purple" />
-        </div>
-      </section>
-    </div>
-  )
-}
-
-function RapportsView({ stats, onAction }: { stats: DemoStats; onAction: (message: string) => void }) {
-  return (
-    <div className={styles.viewStack}>
-      <div className={styles.kpiGrid}>
-        <Kpi label="CA semaine" value="13 650,00 €" detail="du lundi au vendredi" tone="blue" />
-        <Kpi label="CA mois" value={euro(stats.monthRevenue)} detail="objectif 48 000 €" tone="green" />
-        <Kpi label="Fiches terminées" value="38" detail="sur le mois en cours" tone="purple" />
-        <Kpi label="Temps productif" value="79 %" detail="moyenne atelier" tone="orange" />
-      </div>
-
-      <section className={styles.panel}>
-        <PanelTitle title="Exports de démonstration" action="Exporter" onClick={() => onAction('Export rapport demandé.')} />
-        <div className={styles.reportGrid}>
-          <ReportCard title="Rapport atelier" text="Synthèse des fiches, véhicules, compagnons et statuts." onClick={() => onAction('Rapport atelier ouvert.')} />
-          <ReportCard title="Pointage mensuel" text="Heures réelles, pauses, absences et formations." onClick={() => onAction('Pointage mensuel ouvert.')} />
-          <ReportCard title="Rentabilité" text="CA, coûts estimés, marges et écart entre temps vendu et temps passé." onClick={() => onAction('Rapport rentabilité ouvert.')} />
-        </div>
-      </section>
-    </div>
-  )
-}
-
-function Kpi({ label, value, detail, tone }: { label: string; value: string; detail: string; tone: 'blue' | 'green' | 'orange' | 'purple' }) {
-  return (
-    <article className={cn(styles.kpi, styles[`tone${tone}`])}>
-      <span>{label}</span>
-      <strong>{value}</strong>
-      <small>{detail}</small>
-    </article>
-  )
-}
-
-function PanelTitle({ title, action, onClick }: { title: string; action?: string; onClick?: () => void }) {
-  return (
-    <div className={styles.panelTitle}>
-      <h2>{title}</h2>
-      {action ? (
-        <button type="button" onClick={onClick}>
-          {action}
-        </button>
-      ) : null}
-    </div>
-  )
-}
-
-function StatusBadge({ status }: { status: FicheStatus | CompanionStatus }) {
-  const tone = status.includes('attente') || status === 'En pause'
-    ? styles.badgeWarning
-    : status === 'Terminée' || status === 'Arrivé atelier'
-      ? styles.badgeSuccess
-      : status === 'Contrôle' || status === 'Formation'
-        ? styles.badgeInfo
-        : styles.badgeActive
-
-  return <span className={cn(styles.statusBadge, tone)}>{status}</span>
-}
-
-function TimelineItem({ time, title, detail }: { time: string; title: string; detail: string }) {
-  return (
-    <div className={styles.timelineItem}>
-      <span>{time}</span>
-      <div>
-        <strong>{title}</strong>
-        <small>{detail}</small>
       </div>
     </div>
   )
-}
-
-function Info({ label, value }: { label: string; value: string }) {
-  return (
-    <div className={styles.info}>
-      <span>{label}</span>
-      <strong>{value}</strong>
-    </div>
-  )
-}
-
-function ReportCard({ title, text, onClick }: { title: string; text: string; onClick: () => void }) {
-  return (
-    <button type="button" className={styles.reportCard} onClick={onClick}>
-      <strong>{title}</strong>
-      <span>{text}</span>
-    </button>
-  )
-}
-
-function initials(name: string) {
-  return name
-    .split(' ')
-    .map((part) => part[0])
-    .join('')
-    .slice(0, 2)
-    .toUpperCase()
 }
