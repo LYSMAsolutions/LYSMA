@@ -82,21 +82,18 @@
     .brand {
       display: inline-flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       font-family: Manrope, sans-serif;
       font-weight: 900;
       letter-spacing: .03em;
     }
 
     .brand-mark {
-      width: 36px;
-      height: 36px;
+      width: 42px;
+      height: 42px;
       display: grid;
       place-items: center;
-      border-radius: 13px;
-      background: linear-gradient(135deg, var(--blue-2), #8fc8ff);
-      color: #03142a;
-      box-shadow: 0 0 34px rgba(30, 115, 216, .45);
+      flex: 0 0 auto;
     }
 
     .brand-logo {
@@ -104,8 +101,6 @@
       height: 100%;
       display: block;
       object-fit: contain;
-      padding: 5px;
-      border-radius: inherit;
       filter: drop-shadow(0 8px 16px rgba(0, 0, 0, .22));
     }
 
@@ -733,7 +728,7 @@
         white-space: nowrap;
       }
       .brand span:last-child { display: none; }
-      .brand-mark { width: 40px; height: 40px; border-radius: 15px; }
+      .brand-mark { width: 42px; height: 42px; }
       .hero { padding: 112px 0 42px; }
       h1 {
         max-width: 100%;
