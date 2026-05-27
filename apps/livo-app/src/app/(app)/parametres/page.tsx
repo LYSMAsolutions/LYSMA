@@ -15,7 +15,11 @@ export default async function ParametresPage() {
   const garage = await getPrimaryGarageForUser(session.user.id)
   if (!garage) redirect('/dashboard')
 
-  const [taux, compagnons] = await Promise.all([
+  const [user, taux, compagnons] = await Promise.all([
+    prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: { twoFactorEnabled: true },
+    }),
     prisma.tauxGarage.findMany({ where: { garageId: garage.id }, orderBy: { type: 'asc' } }),
     prisma.compagnon.findMany({
       where: { garageId: garage.id, actif: true },
@@ -53,6 +57,9 @@ export default async function ParametresPage() {
             poste: c.poste,
             hasPin: !!c.pin,
           }))}
+          security={{
+            twoFactorEnabled: user?.twoFactorEnabled ?? false,
+          }}
         />
       </div>
     </>

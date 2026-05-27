@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button, Input } from '@/components/ui'
-import { Check, Buildings, CurrencyEur, LockKey, Eye, EyeSlash, DeviceMobile } from '@phosphor-icons/react'
+import { Check, Buildings, CurrencyEur, LockKey, Eye, EyeSlash, DeviceMobile, ShieldCheck } from '@phosphor-icons/react'
 import styles from './ParametresClient.module.css'
 
 type TauxGarage = {
@@ -37,9 +37,12 @@ type Props = {
   garage: Garage
   taux: TauxGarage[]
   compagnons: Compagnon[]
+  security: {
+    twoFactorEnabled: boolean
+  }
 }
 
-export function ParametresClient({ garage, taux: tauxInit, compagnons }: Props) {
+export function ParametresClient({ garage, taux: tauxInit, compagnons, security }: Props) {
   const router = useRouter()
 
   // Garage
@@ -71,6 +74,16 @@ export function ParametresClient({ garage, taux: tauxInit, compagnons }: Props) 
   const [savingPins, setSavingPins] = useState<Record<string, boolean>>({})
   const [savedPins, setSavedPins] = useState<Record<string, boolean>>({})
   const [errorPins, setErrorPins] = useState<Record<string, string>>({})
+
+  // Double authentification
+  const [twoFactorEnabled, setTwoFactorEnabled] = useState(security.twoFactorEnabled)
+  const [twoFactorQrCode, setTwoFactorQrCode] = useState('')
+  const [twoFactorManualKey, setTwoFactorManualKey] = useState('')
+  const [twoFactorCode, setTwoFactorCode] = useState('')
+  const [twoFactorRecoveryCodes, setTwoFactorRecoveryCodes] = useState<string[]>([])
+  const [twoFactorLoading, setTwoFactorLoading] = useState(false)
+  const [twoFactorError, setTwoFactorError] = useState('')
+  const [twoFactorSuccess, setTwoFactorSuccess] = useState('')
 
   async function saveGarage() {
     setSavingGarage(true)
@@ -143,6 +156,76 @@ export function ParametresClient({ garage, taux: tauxInit, compagnons }: Props) 
     setTaux(prev => prev.map(t => t.id === id ? { ...t, [field]: value } : t))
   }
 
+  async function startTwoFactorSetup() {
+    setTwoFactorLoading(true)
+    setTwoFactorError('')
+    setTwoFactorSuccess('')
+    setTwoFactorRecoveryCodes([])
+    try {
+      const res = await fetch('/api/security/2fa/setup', { method: 'POST' })
+      const data = await res.json()
+      if (!res.ok) {
+        setTwoFactorError(data.error ?? 'Impossible de préparer la double authentification.')
+        return
+      }
+      setTwoFactorQrCode(data.qrCodeDataUrl)
+      setTwoFactorManualKey(data.manualKey)
+      setTwoFactorSuccess('Scannez le QR code avec Google Authenticator, puis saisissez le code à 6 chiffres.')
+    } finally {
+      setTwoFactorLoading(false)
+    }
+  }
+
+  async function confirmTwoFactorSetup() {
+    setTwoFactorLoading(true)
+    setTwoFactorError('')
+    setTwoFactorSuccess('')
+    try {
+      const res = await fetch('/api/security/2fa/confirm', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: twoFactorCode }),
+      })
+      const data = await res.json()
+      if (!res.ok) {
+        setTwoFactorError(data.error ?? 'Code incorrect. Vérifiez Google Authenticator et réessayez.')
+        return
+      }
+      setTwoFactorEnabled(true)
+      setTwoFactorQrCode('')
+      setTwoFactorManualKey('')
+      setTwoFactorCode('')
+      setTwoFactorRecoveryCodes(data.recoveryCodes ?? [])
+      setTwoFactorSuccess('Double authentification activée.')
+      router.refresh()
+    } finally {
+      setTwoFactorLoading(false)
+    }
+  }
+
+  async function disableTwoFactor() {
+    setTwoFactorLoading(true)
+    setTwoFactorError('')
+    setTwoFactorSuccess('')
+    try {
+      const res = await fetch('/api/security/2fa/disable', { method: 'POST' })
+      const data = await res.json().catch(() => ({}))
+      if (!res.ok) {
+        setTwoFactorError(data.error ?? 'Impossible de désactiver la double authentification.')
+        return
+      }
+      setTwoFactorEnabled(false)
+      setTwoFactorQrCode('')
+      setTwoFactorManualKey('')
+      setTwoFactorCode('')
+      setTwoFactorRecoveryCodes([])
+      setTwoFactorSuccess('Double authentification désactivée.')
+      router.refresh()
+    } finally {
+      setTwoFactorLoading(false)
+    }
+  }
+
   return (
     <div className={styles.wrapper}>
 
@@ -206,6 +289,89 @@ export function ParametresClient({ garage, taux: tauxInit, compagnons }: Props) 
           <Button variant="primary" size="sm" loading={savingTaux} icon={savedTaux ? <Check weight="bold" /> : undefined} onClick={saveTaux}>
             {savedTaux ? 'Enregistré !' : 'Enregistrer les taux'}
           </Button>
+        </div>
+      </section>
+
+      <section className={styles.section}>
+        <div className={styles.sectionHeader}>
+          <div className={styles.sectionIcon}><ShieldCheck size={16} /></div>
+          <div>
+            <h2 className={styles.sectionTitle}>Sécurité du compte</h2>
+            <p className={styles.sectionDesc}>Activez la double authentification avec Google Authenticator, Microsoft Authenticator ou Authy.</p>
+          </div>
+        </div>
+
+        <div className={styles.form}>
+          <div className={styles.securityPanel}>
+            <div>
+              <h3 className={styles.subTitle}>Double authentification</h3>
+              <p className={styles.subDesc}>
+                {twoFactorEnabled
+                  ? 'Votre compte demandera un code à 6 chiffres à chaque connexion.'
+                  : 'La double authentification ajoute une protection forte à votre compte administrateur.'}
+              </p>
+            </div>
+            <span className={twoFactorEnabled ? styles.statusActive : styles.statusInactive}>
+              {twoFactorEnabled ? 'Activée' : 'Inactive'}
+            </span>
+          </div>
+
+          {!twoFactorEnabled && !twoFactorQrCode && (
+            <div className={styles.inlineAction}>
+              <Button variant="primary" size="sm" loading={twoFactorLoading} onClick={startTwoFactorSetup}>
+                Générer le QR code Google Authenticator
+              </Button>
+            </div>
+          )}
+
+          {!twoFactorEnabled && twoFactorQrCode && (
+            <div className={styles.twoFactorSetup}>
+              <div className={styles.qrBox}>
+                <img src={twoFactorQrCode} alt="QR code Google Authenticator" />
+              </div>
+              <div className={styles.twoFactorSteps}>
+                <p className={styles.subDesc}>1. Ouvrez Google Authenticator.</p>
+                <p className={styles.subDesc}>2. Scannez ce QR code.</p>
+                <p className={styles.subDesc}>3. Saisissez le code généré pour activer la protection.</p>
+                <div className={styles.manualKey}>
+                  Clé manuelle : <code>{twoFactorManualKey}</code>
+                </div>
+                <div className={styles.twoFactorConfirm}>
+                  <Input
+                    label="Code à 6 chiffres"
+                    value={twoFactorCode}
+                    onChange={e => setTwoFactorCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                    placeholder="123456"
+                    inputMode="numeric"
+                  />
+                  <Button variant="primary" size="sm" loading={twoFactorLoading} onClick={confirmTwoFactorSetup}>
+                    Activer la double authentification
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {twoFactorEnabled && (
+            <div className={styles.inlineAction}>
+              <Button variant="secondary" size="sm" loading={twoFactorLoading} onClick={disableTwoFactor}>
+                Désactiver la double authentification
+              </Button>
+            </div>
+          )}
+
+          {twoFactorRecoveryCodes.length > 0 && (
+            <div className={styles.recoveryBox}>
+              <h3 className={styles.subTitle}>Codes de secours</h3>
+              <p className={styles.subDesc}>Conservez ces codes dans un endroit sûr. Ils ne seront affichés qu’une seule fois.</p>
+              <div className={styles.recoveryGrid}>
+                {twoFactorRecoveryCodes.map((code) => <code key={code}>{code}</code>)}
+              </div>
+            </div>
+          )}
+
+          {twoFactorSuccess && <p className={styles.successSm}>{twoFactorSuccess}</p>}
+          {twoFactorError && <p className={styles.errorSm}>{twoFactorError}</p>}
         </div>
       </section>
 

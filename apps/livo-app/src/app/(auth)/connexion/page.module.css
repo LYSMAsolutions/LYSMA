@@ -66,6 +66,23 @@
   gap: var(--space-4);
 }
 
+.twoFactorToggle {
+  width: fit-content;
+  border: 0;
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  font: inherit;
+  font-size: var(--text-sm);
+  text-align: left;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.twoFactorToggle:hover {
+  color: var(--color-blue-electric);
+}
+
 /* ── Footer ─────────────────────────────────────────────────── */
 .footer {
   font-size: var(--text-xs);

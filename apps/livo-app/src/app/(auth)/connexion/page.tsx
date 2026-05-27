@@ -12,6 +12,7 @@ export default function ConnexionPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [twoFactorCode, setTwoFactorCode] = useState('')
+  const [showTwoFactor, setShowTwoFactor] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -29,7 +30,7 @@ export default function ConnexionPage() {
     })
 
     if (result?.error) {
-      setError('Connexion impossible. Vérifiez vos identifiants, votre email validé et votre code 2FA si vous l’avez activé.')
+      setError('Connexion impossible. Vérifiez votre email, votre mot de passe et la validation de votre adresse email.')
       setLoading(false)
       return
     }
@@ -78,16 +79,26 @@ export default function ConnexionPage() {
             }
             error={error}
           />
-          <Input
-            label="Code 2FA"
-            type="text"
-            inputMode="numeric"
-            placeholder="123456"
-            value={twoFactorCode}
-            onChange={e => setTwoFactorCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
-            autoComplete="one-time-code"
-            inputSize="lg"
-          />
+          {showTwoFactor ? (
+            <Input
+              label="Code de double authentification"
+              type="text"
+              inputMode="numeric"
+              placeholder="123456"
+              value={twoFactorCode}
+              onChange={e => setTwoFactorCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+              autoComplete="one-time-code"
+              inputSize="lg"
+            />
+          ) : (
+            <button
+              type="button"
+              className={styles.twoFactorToggle}
+              onClick={() => setShowTwoFactor(true)}
+            >
+              J’ai activé la double authentification
+            </button>
+          )}
           <Button type="submit" variant="primary" size="lg" fullWidth loading={loading}>
             Se connecter
           </Button>
