@@ -22,6 +22,15 @@ export async function AppShell({ children }: AppShellProps) {
         id: session.user.id,
         actif: true,
       },
+      select: {
+        id: true,
+        email: true,
+        nom: true,
+        prenom: true,
+        emailVerified: true,
+        emailVerifiedAt: true,
+        twoFactorEnabled: true,
+      },
     }),
     getPrimaryGarageForUser(session.user.id),
   ])
@@ -32,6 +41,10 @@ export async function AppShell({ children }: AppShellProps) {
 
   if (!user.emailVerified && !user.emailVerifiedAt) {
     redirect(`/verification-email/envoye?email=${encodeURIComponent(user.email)}`)
+  }
+
+  if (!user.twoFactorEnabled) {
+    redirect('/double-authentification')
   }
 
   if (!garage) {
