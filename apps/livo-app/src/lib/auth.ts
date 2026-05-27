@@ -158,10 +158,65 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           email: user.email,
           name: `${user.prenom} ${user.nom}`,
           role: user.role,
+          emailVerifiedAt: user.emailVerifiedAt ?? user.emailVerified,
+          sessionVersion: user.sessionVersion,
           atelierMode: false,
           garageId: user.garages[0]?.id,
         } as any
       },
     }),
   ],
+  callbacks: {
+    ...authConfig.callbacks,
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id
+        token.role = (user as any).role
+        token.emailVerifiedAt = (user as any).emailVerifiedAt
+          ? new Date((user as any).emailVerifiedAt).toISOString()
+          : null
+        token.sessionVersion = (user as any).sessionVersion ?? 1
+        token.atelierMode = (user as any).atelierMode ?? false
+        token.garageId = (user as any).garageId
+        return token
+      }
+
+      if (token.id) {
+        const freshUser = await prisma.user.findUnique({
+          where: { id: token.id as string },
+          select: {
+            actif: true,
+            role: true,
+            emailVerified: true,
+            emailVerifiedAt: true,
+            sessionVersion: true,
+          },
+        })
+
+        const verifiedAt = freshUser?.emailVerifiedAt ?? freshUser?.emailVerified ?? null
+        token.active = !!freshUser?.actif
+        token.role = freshUser?.role
+        token.emailVerifiedAt = verifiedAt ? verifiedAt.toISOString() : null
+        token.sessionVersion = freshUser?.sessionVersion ?? 0
+      }
+
+      return token
+    },
+    async session({ session, token }) {
+      if (token && session.user) {
+        const accountIsUsable = token.active !== false && Boolean(token.emailVerifiedAt)
+        session.user.id = token.id as string
+        session.user.role = token.role as string
+        ;(session.user as any).emailVerifiedAt = token.emailVerifiedAt
+        ;(session as any).atelierMode = token.atelierMode
+        ;(session as any).garageId = token.garageId
+        ;(session as any).active = token.active !== false
+
+        if (!accountIsUsable) {
+          session.user.id = ''
+        }
+      }
+      return session
+    },
+  },
 })

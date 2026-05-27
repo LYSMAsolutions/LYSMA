@@ -124,7 +124,16 @@ export async function POST(req: NextRequest) {
     userAgent,
   })
 
-  await sendEmailVerification(user.id)
+  try {
+    await sendEmailVerification(user.id)
+  } catch (error) {
+    await prisma.user.delete({ where: { id: user.id } }).catch(() => null)
+    console.error('[signup] email verification failed', error)
+    return NextResponse.json(
+      { error: 'Le compte n’a pas pu être créé car l’email de validation n’a pas pu être envoyé. Vérifiez la configuration email puis réessayez.' },
+      { status: 502 },
+    )
+  }
 
   return NextResponse.json({
     success: true,

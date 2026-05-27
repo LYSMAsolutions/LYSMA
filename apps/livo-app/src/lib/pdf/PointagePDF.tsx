@@ -191,17 +191,13 @@ const s = StyleSheet.create({
 
   // ── Note légale ───────────────────────────────────────────
   legalNote: {
-    flexDirection: 'row',
-    gap: 10,
     marginTop: 14,
     padding: 10,
     backgroundColor: '#fffbf0',
     borderWidth: 1,
     borderColor: '#f0d8a0',
     borderRadius: 6,
-    alignItems: 'flex-start',
   },
-  legalIcon: { fontSize: 18, marginTop: 1 },
   legalTextWrap: { flex: 1 },
   legalTitle: { fontSize: 8, fontFamily: 'Helvetica-Bold', color: '#8a6a00', marginBottom: 3 },
   legalText: { fontSize: 7, color: '#8a6a00', lineHeight: 1.4 },
@@ -385,7 +381,6 @@ export function PointagePDF({ compagnon, garage, pointages, mois, annee, logoSrc
 
         {/* Note légale */}
         <View style={s.legalNote}>
-          <Text style={s.legalIcon}>⚖</Text>
           <View style={s.legalTextWrap}>
             <Text style={s.legalTitle}>Base légale — Obligation de suivi du temps de travail</Text>
             <Text style={s.legalText}>

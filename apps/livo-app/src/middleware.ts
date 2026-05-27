@@ -26,9 +26,6 @@ export default auth(async (req) => {
   const atelierCookie = req.cookies.get('atelier-garage-id')?.value
 
   if (PUBLIC_ROUTES.some((route) => pathname === route || (route !== '/' && pathname.startsWith(route)))) {
-    if (isLoggedIn && pathname === '/connexion') {
-      return NextResponse.redirect(new URL('/dashboard', req.url))
-    }
     return NextResponse.next()
   }
 

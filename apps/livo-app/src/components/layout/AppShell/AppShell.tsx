@@ -30,6 +30,10 @@ export async function AppShell({ children }: AppShellProps) {
     redirect('/connexion')
   }
 
+  if (!user.emailVerified && !user.emailVerifiedAt) {
+    redirect(`/verification-email/envoye?email=${encodeURIComponent(user.email)}`)
+  }
+
   if (!garage) {
     redirect('/connexion')
   }

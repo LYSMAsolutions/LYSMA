@@ -5,6 +5,13 @@ export async function getPrimaryGarageForUser(userId: string) {
     where: {
       ownerId: userId,
       actif: true,
+      owner: {
+        actif: true,
+        OR: [
+          { emailVerified: { not: null } },
+          { emailVerifiedAt: { not: null } },
+        ],
+      },
     },
     orderBy: {
       createdAt: 'asc',

@@ -16,8 +16,8 @@ export const metadata: Metadata = {
   },
   description: "Gestion d'atelier automobile. Simple. Précis. Légal.",
   icons: {
-    icon: 'logo/livo-app-logo.png',
-    apple: 'logo/livo-app-logo.png',
+    icon: '/logo/livo-app-logo.png',
+    apple: '/logo/livo-app-logo.png',
   },
   applicationName: 'Livo-app',
   keywords: ['garage', 'atelier', 'mécanique', 'pointage', 'gestion RH'],

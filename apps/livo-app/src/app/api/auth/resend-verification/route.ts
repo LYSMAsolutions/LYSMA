@@ -32,7 +32,15 @@ export async function POST(req: NextRequest) {
   })
 
   if (user && !user.emailVerified && !user.emailVerifiedAt) {
-    await sendEmailVerification(user.id)
+    try {
+      await sendEmailVerification(user.id)
+    } catch (error) {
+      console.error('[email-verification] resend failed', error)
+      return NextResponse.json(
+        { error: 'L’email de vérification n’a pas pu être envoyé pour le moment.' },
+        { status: 502 },
+      )
+    }
   }
 
   return NextResponse.json({ ok: true })
