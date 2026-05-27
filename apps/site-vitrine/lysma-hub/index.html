@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>LYSMA Solutions - Applications metier et sites vitrines premium</title>
   <meta name="description" content="LYSMA Solutions cree des applications web, portails metier et sites vitrines premium pour les garages, ateliers, distributeurs et petites entreprises.">
+  <link rel="icon" href="./public/favicon.ico" sizes="any">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
@@ -24,7 +25,7 @@
       --border: rgba(255, 255, 255, .14);
       --shadow: 0 28px 90px rgba(0, 0, 0, .36);
       --radius: 24px;
-      --max: 1180px;
+      --max: 1560px;
     }
 
     html { scroll-behavior: smooth; background: var(--navy); }
@@ -55,6 +56,8 @@
     }
 
     a { color: inherit; text-decoration: none; }
+    img, iframe { max-width: 100%; }
+    h1, h2, h3, p, a, span, strong, li { overflow-wrap: anywhere; }
     .shell { width: min(var(--max), calc(100% - 40px)); margin: 0 auto; }
 
     .nav {
@@ -96,6 +99,16 @@
       box-shadow: 0 0 34px rgba(30, 115, 216, .45);
     }
 
+    .brand-logo {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: contain;
+      padding: 5px;
+      border-radius: inherit;
+      filter: drop-shadow(0 8px 16px rgba(0, 0, 0, .22));
+    }
+
     .nav-links {
       display: flex;
       align-items: center;
@@ -118,12 +131,14 @@
     }
 
     .hero {
-      min-height: 100svh;
-      padding: 144px 0 80px;
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(360px, .92fr);
-      gap: 54px;
-      align-items: center;
+      min-height: auto;
+      padding: 156px 0 92px;
+      display: block;
+    }
+
+    .hero > div {
+      max-width: 1120px;
+      min-width: 0;
     }
 
     .badge {
@@ -152,15 +167,15 @@
     h1, h2, h3 { font-family: Manrope, Inter, sans-serif; letter-spacing: -.04em; }
 
     h1 {
-      max-width: 760px;
+      max-width: 1080px;
       margin-top: 22px;
-      font-size: clamp(3.1rem, 7vw, 5.85rem);
+      font-size: clamp(3.6rem, 6.2vw, 7.4rem);
       line-height: .98;
       font-weight: 900;
     }
 
     .hero-text {
-      max-width: 650px;
+      max-width: 860px;
       margin-top: 24px;
       color: var(--soft);
       font-size: clamp(1.05rem, 2vw, 1.22rem);
@@ -198,11 +213,27 @@
     .btn-secondary:hover,
     .card-link:hover { transform: translateY(-2px); }
 
-    .hero-visual { position: relative; min-height: 560px; }
+    .hero-visual {
+      position: relative;
+      min-height: auto;
+    }
+
+    .dashboard-section {
+      padding-top: 10px;
+    }
+
+    .dashboard-heading {
+      max-width: 980px;
+      margin-bottom: 28px;
+    }
+
+    .dashboard-heading h2 {
+      max-width: 900px;
+    }
 
     .dashboard {
       position: relative;
-      padding: 20px;
+      padding: 30px;
       border: 1px solid var(--border);
       border-radius: 34px;
       background: linear-gradient(145deg, rgba(255,255,255,.13), rgba(255,255,255,.045));
@@ -233,8 +264,8 @@
       padding: 8px 6px 18px;
     }
 
-    .dash-title strong { display: block; font-family: Manrope, sans-serif; font-size: 1rem; }
-    .dash-title span, .muted { display: block; color: var(--muted); font-size: .82rem; line-height: 1.55; }
+    .dash-title strong { display: block; font-family: Manrope, sans-serif; font-size: 1.08rem; }
+    .dash-title span, .muted { display: block; color: var(--muted); font-size: .9rem; line-height: 1.55; }
 
     .status-pill {
       padding: 8px 10px;
@@ -263,12 +294,12 @@
       box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
     }
 
-    .kpi { padding: 16px; }
-    .kpi span { color: var(--muted); font-size: .74rem; }
-    .kpi strong { display: block; margin-top: 8px; font-size: 1rem; }
+    .kpi { padding: 20px; }
+    .kpi span { color: var(--muted); font-size: .82rem; }
+    .kpi strong { display: block; margin-top: 8px; font-size: 1.1rem; }
 
     .dash-body { display: grid; grid-template-columns: 1.35fr .8fr; gap: 12px; }
-    .dash-table { padding: 16px; }
+    .dash-table { padding: 20px 24px; }
 
     .row {
       display: grid;
@@ -277,11 +308,11 @@
       padding: 12px 0;
       border-bottom: 1px solid rgba(255,255,255,.08);
       color: var(--soft);
-      font-size: .85rem;
+      font-size: .98rem;
     }
     .row:last-child { border-bottom: 0; }
 
-    .dash-side { padding: 16px; }
+    .dash-side { padding: 24px; }
     .progress {
       height: 9px;
       margin: 14px 0 20px;
@@ -298,15 +329,20 @@
     }
 
     .float-card {
-      position: absolute;
-      z-index: 2;
-      padding: 16px 18px;
+      padding: 18px 20px;
       backdrop-filter: blur(18px);
     }
-    .float-card strong { display: block; font-size: 1.1rem; }
-    .float-card span { color: var(--muted); font-size: .78rem; }
-    .float-card.one { left: -28px; bottom: 64px; animation: drift 6s ease-in-out infinite; }
-    .float-card.two { right: -22px; top: 74px; animation: drift 7s ease-in-out infinite reverse; }
+    .float-card strong { display: block; font-size: 1.18rem; }
+    .float-card span { color: var(--muted); font-size: .9rem; }
+
+    .dashboard-badges {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
 
     .section { padding: 96px 0; position: relative; }
     .section-head { max-width: 760px; margin-bottom: 34px; }
@@ -422,6 +458,7 @@
       justify-content: space-between;
       padding: 0 22px;
       color: var(--soft);
+      gap: 16px;
     }
     .proof-line:nth-child(1) { top: 48px; }
     .proof-line:nth-child(2) { top: 144px; left: 72px; }
@@ -660,27 +697,167 @@
       .hero, .promise, .proof, .site-panel { grid-template-columns: 1fr; }
       .hero-visual { min-height: auto; }
       .solution-grid, .grid-4, .method, .previews { grid-template-columns: repeat(2, 1fr); }
+      .site-preview { transform: none; }
     }
 
     @media (max-width: 760px) {
       .shell { width: min(100% - 28px, var(--max)); }
-      .nav { top: 10px; width: calc(100% - 20px); border-radius: 22px; }
+      body {
+        background:
+          radial-gradient(circle at 50% 0%, rgba(30, 115, 216, .26), transparent 22rem),
+          linear-gradient(180deg, #06182d 0%, #081f3a 44%, #06182d 100%);
+      }
+      .nav {
+        top: 10px;
+        width: calc(100% - 20px);
+        min-height: 60px;
+        border-radius: 22px;
+        padding: 10px;
+      }
       .nav-links { display: none; }
-      .nav-cta { padding: 10px 13px; font-size: .78rem; }
+      .nav-cta {
+        min-height: 40px;
+        padding: 0 12px;
+        font-size: .76rem;
+        white-space: nowrap;
+      }
       .brand span:last-child { display: none; }
-      .hero { grid-template-columns: 1fr; padding: 118px 0 56px; }
-      h1 { font-size: clamp(2.65rem, 13vw, 4.2rem); }
+      .brand-mark { width: 40px; height: 40px; border-radius: 15px; }
+      .hero { padding: 112px 0 42px; }
+      h1 {
+        max-width: 100%;
+        font-size: clamp(2.45rem, 12vw, 4.2rem);
+        line-height: 1.02;
+      }
+      h2 {
+        font-size: clamp(2rem, 10vw, 3rem);
+        line-height: 1.08;
+      }
+      .hero-text,
+      .lead,
+      .final-cta p {
+        font-size: 1rem;
+        line-height: 1.65;
+      }
+      .actions {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+      .btn-primary,
+      .btn-secondary,
+      .card-link {
+        width: 100%;
+      }
       .dash-grid, .dash-body, .grid-3, .grid-4, .solution-grid, .promise-list, .method, .previews { grid-template-columns: 1fr; }
-      .dashboard { padding: 14px; border-radius: 24px; }
-      .float-card { display: none; }
+      .dashboard {
+        padding: 14px;
+        border-radius: 24px;
+        animation: none;
+      }
+      .dash-top {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 4px 2px 14px;
+      }
+      .status-pill { width: fit-content; }
+      .kpi,
+      .dash-table,
+      .dash-side,
+      .float-card {
+        border-radius: 18px;
+      }
+      .kpi { padding: 16px; }
+      .row {
+        grid-template-columns: 1fr;
+        gap: 6px;
+        font-size: .95rem;
+      }
+      .row strong { color: var(--white); }
+      .dash-side { padding: 18px; }
+      .dashboard-badges { grid-template-columns: 1fr; }
+      .float-card { padding: 16px; }
+      .card,
+      .solution-card,
+      .method-step,
+      .promise-panel,
+      .site-panel,
+      .preview-card {
+        border-radius: 22px;
+      }
+      .card,
+      .solution-card,
+      .method-step {
+        padding: 20px;
+      }
+      .promise-panel,
+      .site-panel {
+        padding: 18px;
+      }
+      .solution-card {
+        min-height: auto;
+      }
+      .proof-visual {
+        min-height: auto;
+        display: grid;
+        gap: 12px;
+        padding: 16px;
+      }
+      .proof-line {
+        position: static;
+        height: auto;
+        min-height: 68px;
+        padding: 16px;
+      }
+      .site-preview {
+        min-height: auto;
+        padding: 16px;
+      }
       .section { padding: 66px 0; }
       .preview-frame { height: 250px; }
       .preview-frame iframe { transform: scale(.3); }
-      .livo-preview { height: 250px; padding: 14px; }
+      .preview-heading,
+      .preview-info {
+        padding: 18px;
+      }
+      .livo-preview {
+        height: auto;
+        min-height: 250px;
+        padding: 14px;
+      }
+      .livo-window { min-height: 220px; }
+      .livo-title {
+        align-items: flex-start;
+        flex-direction: column;
+      }
       .livo-kpis { grid-template-columns: 1fr; }
       .livo-kpi:nth-child(3), .livo-lines { display: none; }
       .final-cta { padding: 34px 18px; }
       .footer-inner { flex-direction: column; text-align: center; }
+    }
+
+    @media (max-width: 430px) {
+      .shell { width: min(100% - 22px, var(--max)); }
+      .nav {
+        gap: 8px;
+      }
+      .nav-cta {
+        max-width: calc(100vw - 86px);
+        padding: 0 10px;
+        font-size: .72rem;
+      }
+      h1 {
+        font-size: clamp(2.15rem, 11vw, 3.1rem);
+      }
+      .badge {
+        font-size: .7rem;
+      }
+      .preview-frame {
+        height: 210px;
+      }
+      .preview-frame iframe {
+        transform: scale(.25);
+      }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -692,7 +869,7 @@
 <body>
   <header class="nav" aria-label="Navigation principale">
     <a href="#" class="brand" aria-label="Accueil LYSMA Solutions">
-      <span class="brand-mark">L</span>
+      <span class="brand-mark"><img class="brand-logo" src="./public/logo-lysma.PNG" alt="" aria-hidden="true"></span>
       <span>LYSMA Solutions</span>
     </a>
     <nav class="nav-links" aria-label="Sections du site">
@@ -720,7 +897,12 @@
       </div>
     </section>
 
-      <section class="section shell" aria-label="Apercu d'un tableau de bord LYSMA">
+    <section class="section shell dashboard-section" aria-label="Apercu d'un tableau de bord LYSMA">
+      <div class="section-head dashboard-heading reveal">
+        <p class="eyebrow">Tableau de bord detaille</p>
+        <h2>Une vue claire pour suivre l'activite, les demandes et les priorites.</h2>
+        <p class="lead">L'objectif est simple : voir rapidement ce qui avance, ce qui bloque et ce qui merite votre attention.</p>
+      </div>
       <div class="hero-visual" aria-label="Apercu d'un tableau de bord LYSMA">
         <div class="dashboard">
           <div class="dash-top">
@@ -748,9 +930,11 @@
               <strong>Une seule vue pour decider plus vite.</strong>
             </div>
           </div>
+          <div class="dashboard-badges">
+            <div class="float-card"><strong>PDF / Excel</strong><span>exports propres</span></div>
+            <div class="float-card"><strong>Portail client</strong><span>demandes centralisees</span></div>
+          </div>
         </div>
-        <div class="float-card one"><strong>PDF / Excel</strong><span>exports propres</span></div>
-        <div class="float-card two"><strong>Portail client</strong><span>demandes centralisees</span></div>
       </div>
     </section>
 
