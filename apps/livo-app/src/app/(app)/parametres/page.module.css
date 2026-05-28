@@ -1,4 +1,5 @@
 .content {
   padding: var(--space-8);
-  max-width: 800px;
+  width: 100%;
+  max-width: 1120px;
 }
