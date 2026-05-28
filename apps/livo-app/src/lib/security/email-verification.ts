@@ -5,7 +5,19 @@ import { createSecurityToken, consumeSecurityToken } from './tokens'
 import { writeSecurityAuditLog } from './audit'
 
 function appUrl() {
-  return process.env.NEXT_PUBLIC_APP_URL || process.env.AUTH_URL || process.env.NEXTAUTH_URL || 'http://localhost:3003'
+  const configuredUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.AUTH_URL || process.env.NEXTAUTH_URL
+  const productionUrl = 'https://livo-app.com'
+
+  if (!configuredUrl) {
+    return process.env.NODE_ENV === 'production' ? productionUrl : 'http://localhost:3003'
+  }
+
+  const cleanUrl = configuredUrl.replace(/\/$/, '')
+  if (process.env.NODE_ENV === 'production' && cleanUrl.endsWith('.vercel.app')) {
+    return productionUrl
+  }
+
+  return cleanUrl
 }
 
 export async function sendEmailVerification(userId: string) {
