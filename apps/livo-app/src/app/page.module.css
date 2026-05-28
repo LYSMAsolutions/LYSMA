@@ -88,6 +88,7 @@
 .features,
 .split,
 .vehicleSection,
+.securitySection,
 .pricing,
 .target,
 .footer {
@@ -302,6 +303,66 @@
   padding-bottom: var(--space-16);
 }
 
+.securitySection {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 0.8fr);
+  gap: var(--space-6);
+  align-items: stretch;
+  padding-top: var(--space-16);
+  padding-bottom: var(--space-16);
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.securityCard,
+.securityPoints {
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-2xl);
+  background: linear-gradient(180deg, rgba(13, 21, 48, 0.78), rgba(8, 14, 30, 0.72));
+  box-shadow: var(--shadow-xl);
+  backdrop-filter: blur(18px);
+}
+
+.securityCard {
+  padding: var(--space-8);
+}
+
+.securityCard h2 {
+  margin-top: var(--space-3);
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  line-height: var(--leading-tight);
+  letter-spacing: 0;
+}
+
+.securityCard p {
+  margin-top: var(--space-4);
+  color: var(--color-text-secondary);
+  line-height: var(--leading-normal);
+}
+
+.securityPoints {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-5);
+}
+
+.securityPoints div {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-lg);
+  background: rgba(4, 6, 15, 0.38);
+}
+
+.securityPoints strong {
+  color: var(--color-text-primary);
+}
+
+.securityPoints span {
+  color: var(--color-text-secondary);
+  line-height: var(--leading-normal);
+}
+
 .sectionIntro {
   display: grid;
   gap: var(--space-3);
@@ -449,6 +510,7 @@
   .hero,
   .problem,
   .split,
+  .securitySection,
   .pricing,
   .target {
     grid-template-columns: 1fr;
@@ -483,6 +545,7 @@
   .features,
   .split,
   .vehicleSection,
+  .securitySection,
   .pricing,
   .target,
   .footer {
@@ -508,6 +571,7 @@
 
   .priceCard,
   .glassPanel,
+  .securityCard,
   .target {
     padding: var(--space-6);
   }

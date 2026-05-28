@@ -56,6 +56,10 @@ const features = [
     title: 'Rentabilité atelier',
     text: 'Livo rapproche les heures réelles, les heures facturées et les montants pour mieux piloter la productivité atelier.',
   },
+  {
+    title: 'Sécurité renforcée',
+    text: 'Chaque compte administrateur est protégé par une double authentification compatible Google Authenticator, Microsoft Authenticator et Authy.',
+  },
 ]
 
 const benefits = [
@@ -83,6 +87,7 @@ export default function HomePage() {
         <nav className={styles.nav} aria-label="Navigation principale">
           <a href="#fonctionnalites">Fonctionnalités</a>
           <a href="#pointage">Pointage</a>
+          <a href="#securite">Sécurité</a>
           <a href="#rentabilite">Rentabilité</a>
           <Link href="/demo">Démo</Link>
           <Link href="/connexion">Connexion</Link>
@@ -202,6 +207,33 @@ export default function HomePage() {
             leur ordre de réparation et leur avancement. Le bureau sait ce qui est en attente,
             ce qui est en cours, ce qui doit être clôturé et ce qui peut être facturé.
           </p>
+        </div>
+      </section>
+
+      <section id="securite" className={styles.securitySection}>
+        <div className={styles.securityCard}>
+          <span className={styles.sectionKicker}>Sécurité Livo</span>
+          <h2>Un accès protégé par double authentification.</h2>
+          <p>
+            Livo impose la validation de l’adresse email et l’activation d’une double authentification
+            compatible Google Authenticator avant l’accès à l’outil. Vos données d’atelier, vos fiches
+            de travail et vos informations de gestion restent protégées par une sécurité pensée pour
+            un usage professionnel.
+          </p>
+        </div>
+        <div className={styles.securityPoints}>
+          <div>
+            <strong>Email validé</strong>
+            <span>Un compte doit confirmer son adresse email avant d’utiliser Livo.</span>
+          </div>
+          <div>
+            <strong>Google Authenticator</strong>
+            <span>La connexion administrateur demande un code à 6 chiffres généré sur téléphone.</span>
+          </div>
+          <div>
+            <strong>Accès serveur contrôlé</strong>
+            <span>Les protections sensibles sont vérifiées côté serveur, pas seulement dans l’interface.</span>
+          </div>
         </div>
       </section>
 
