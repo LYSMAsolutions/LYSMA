@@ -10,6 +10,7 @@ declare module 'next-auth' {
       id: string
       role?: string
       emailVerifiedAt?: string | null
+      twoFactorEnabled?: boolean
     } & DefaultSession['user']
     active?: boolean
   }
@@ -20,6 +21,7 @@ declare module 'next-auth/jwt' {
     id?: string
     role?: string
     emailVerifiedAt?: string | null
+    twoFactorEnabled?: boolean
     sessionVersion?: number
     active?: boolean
     atelierMode?: boolean

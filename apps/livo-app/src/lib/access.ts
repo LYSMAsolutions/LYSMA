@@ -1,6 +1,6 @@
-import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { cookies } from 'next/headers'
+import { requireSecureSession } from '@/lib/security/secure-session'
 
 export type AdminAccess = {
   mode: 'admin'
@@ -16,7 +16,7 @@ export type AtelierAccess = {
 export type PointageAccess = AdminAccess | AtelierAccess
 
 export async function getPointageAccess(): Promise<PointageAccess | null> {
-  const session = await auth()
+  const { session } = await requireSecureSession()
 
   if (session?.user?.id) {
     return { mode: 'admin', userId: session.user.id }

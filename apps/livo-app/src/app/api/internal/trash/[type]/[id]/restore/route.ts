@@ -1,16 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-
-function isAuthorized(req: NextRequest) {
-  const apiKey = req.headers.get('x-internal-api-key')
-  return Boolean(process.env.INTERNAL_API_KEY) && apiKey === process.env.INTERNAL_API_KEY
-}
+import { isInternalApiAuthorized } from '@/lib/security/internal-api'
 
 export async function POST(
   req: NextRequest,
   { params }: { params: Promise<{ type: string; id: string }> },
 ) {
-  if (!isAuthorized(req)) {
+  if (!isInternalApiAuthorized(req)) {
     return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
   }
 

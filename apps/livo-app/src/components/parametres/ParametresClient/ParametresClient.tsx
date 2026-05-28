@@ -203,29 +203,6 @@ export function ParametresClient({ garage, taux: tauxInit, compagnons, security 
     }
   }
 
-  async function disableTwoFactor() {
-    setTwoFactorLoading(true)
-    setTwoFactorError('')
-    setTwoFactorSuccess('')
-    try {
-      const res = await fetch('/api/security/2fa/disable', { method: 'POST' })
-      const data = await res.json().catch(() => ({}))
-      if (!res.ok) {
-        setTwoFactorError(data.error ?? 'Impossible de désactiver la double authentification.')
-        return
-      }
-      setTwoFactorEnabled(false)
-      setTwoFactorQrCode('')
-      setTwoFactorManualKey('')
-      setTwoFactorCode('')
-      setTwoFactorRecoveryCodes([])
-      setTwoFactorSuccess('Double authentification désactivée.')
-      router.refresh()
-    } finally {
-      setTwoFactorLoading(false)
-    }
-  }
-
   return (
     <div className={styles.wrapper}>
 
@@ -307,7 +284,7 @@ export function ParametresClient({ garage, taux: tauxInit, compagnons, security 
               <h3 className={styles.subTitle}>Double authentification</h3>
               <p className={styles.subDesc}>
                 {twoFactorEnabled
-                  ? 'Votre compte demandera un code à 6 chiffres à chaque connexion.'
+                  ? 'Votre compte est protégé. Le code Google Authenticator sera demandé sur les nouveaux appareils ou navigateurs.'
                   : 'La double authentification ajoute une protection forte à votre compte administrateur.'}
               </p>
             </div>
@@ -349,14 +326,6 @@ export function ParametresClient({ garage, taux: tauxInit, compagnons, security 
                   </Button>
                 </div>
               </div>
-            </div>
-          )}
-
-          {twoFactorEnabled && (
-            <div className={styles.inlineAction}>
-              <Button variant="secondary" size="sm" loading={twoFactorLoading} onClick={disableTwoFactor}>
-                Désactiver la double authentification
-              </Button>
             </div>
           )}
 

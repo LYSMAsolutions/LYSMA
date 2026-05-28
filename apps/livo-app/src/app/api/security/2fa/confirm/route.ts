@@ -8,6 +8,7 @@ import { prisma } from '@/lib/prisma'
 import { decryptSecret } from '@/lib/security/crypto'
 import { verifyTotpCode } from '@/lib/security/totp'
 import { requestIp, requestUserAgent, writeSecurityAuditLog } from '@/lib/security/audit'
+import { createTrustedDevice } from '@/lib/security/trusted-device'
 
 const schema = z.object({
   code: z.string().regex(/^\d{6}$/),
@@ -59,6 +60,8 @@ export async function POST(req: NextRequest) {
     ip: requestIp(req.headers),
     userAgent: requestUserAgent(req.headers),
   })
+
+  await createTrustedDevice(req, user.id)
 
   return NextResponse.json({ recoveryCodes: codes })
 }

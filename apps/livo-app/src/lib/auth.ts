@@ -10,6 +10,7 @@ import { checkRateLimit } from '@/lib/security/rate-limit'
 import { requestIp, requestUserAgent, writeSecurityAuditLog } from '@/lib/security/audit'
 import { decryptSecret } from '@/lib/security/crypto'
 import { verifyTotpCode } from '@/lib/security/totp'
+import { readTrustedDeviceTokenFromCookieHeader, verifyTrustedDevice } from '@/lib/security/trusted-device'
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -35,6 +36,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         const headers = new Headers((request as any)?.headers)
         const ip = requestIp(headers)
         const userAgent = requestUserAgent(headers)
+        const trustedDeviceToken = readTrustedDeviceTokenFromCookieHeader(headers.get('cookie'))
         const rate = await checkRateLimit({
           key: `login:${ip ?? 'unknown'}:${email}`,
           limit: 8,
@@ -114,7 +116,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         }
 
         if (user.twoFactorEnabled) {
-          if (!user.twoFactorSecretEncrypted || !parsed.data.twoFactorCode) {
+          const trustedDeviceValid = await verifyTrustedDevice({
+            userId: user.id,
+            token: trustedDeviceToken,
+          })
+          const twoFactorSecret = user.twoFactorSecretEncrypted
+          const twoFactorCode = parsed.data.twoFactorCode
+
+          if (!trustedDeviceValid && (!twoFactorSecret || !twoFactorCode)) {
             await writeSecurityAuditLog({
               event: SecurityAuditEvent.TWO_FACTOR_FAILED,
               userId: user.id,
@@ -125,7 +134,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             return null
           }
 
-          const validTotp = verifyTotpCode(decryptSecret(user.twoFactorSecretEncrypted), parsed.data.twoFactorCode)
+          const validTotp = trustedDeviceValid
+            ? true
+            : verifyTotpCode(decryptSecret(twoFactorSecret!), twoFactorCode!)
+
           if (!validTotp) {
             await writeSecurityAuditLog({
               event: SecurityAuditEvent.TWO_FACTOR_FAILED,
@@ -159,6 +171,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           name: `${user.prenom} ${user.nom}`,
           role: user.role,
           emailVerifiedAt: user.emailVerifiedAt ?? user.emailVerified,
+          twoFactorEnabled: user.twoFactorEnabled,
           sessionVersion: user.sessionVersion,
           atelierMode: false,
           garageId: user.garages[0]?.id,
@@ -175,6 +188,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         token.emailVerifiedAt = (user as any).emailVerifiedAt
           ? new Date((user as any).emailVerifiedAt).toISOString()
           : null
+        token.twoFactorEnabled = (user as any).twoFactorEnabled === true
         token.sessionVersion = (user as any).sessionVersion ?? 1
         token.atelierMode = (user as any).atelierMode ?? false
         token.garageId = (user as any).garageId
@@ -189,6 +203,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             role: true,
             emailVerified: true,
             emailVerifiedAt: true,
+            twoFactorEnabled: true,
             sessionVersion: true,
           },
         })
@@ -197,6 +212,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         token.active = !!freshUser?.actif
         token.role = freshUser?.role
         token.emailVerifiedAt = verifiedAt ? verifiedAt.toISOString() : null
+        token.twoFactorEnabled = freshUser?.twoFactorEnabled ?? false
         token.sessionVersion = freshUser?.sessionVersion ?? 0
       }
 
@@ -208,6 +224,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         session.user.id = token.id as string
         session.user.role = token.role as string
         ;(session.user as any).emailVerifiedAt = token.emailVerifiedAt
+        ;(session.user as any).twoFactorEnabled = token.twoFactorEnabled === true
         ;(session as any).atelierMode = token.atelierMode
         ;(session as any).garageId = token.garageId
         ;(session as any).active = token.active !== false

@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
-import { auth } from '@/lib/auth'
 import { getPrimaryGarageForUser } from '@/lib/garage'
 import { prisma } from '@/lib/prisma'
+import { requireSecureSession } from '@/lib/security/secure-session'
 
 function companionName(compagnon: {
   nom: string
@@ -12,10 +12,8 @@ function companionName(compagnon: {
 }
 
 export async function GET() {
-  const session = await auth()
-  if (!session?.user?.id) {
-    return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
-  }
+  const { session, response } = await requireSecureSession()
+  if (response) return response
 
   const garage = await getPrimaryGarageForUser(session.user.id)
   if (!garage) {

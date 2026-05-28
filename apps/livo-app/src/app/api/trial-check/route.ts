@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { auth } from '@/lib/auth'
+import { requireSecureSession } from '@/lib/security/secure-session'
 
 export async function GET(req: NextRequest) {
-  const session = await auth()
-  if (!session?.user?.id) return NextResponse.json({ expired: false })
+  const { session, response } = await requireSecureSession()
+  if (response) return NextResponse.json({ expired: false })
 
   const user = await prisma.user.findUnique({
     where: { id: session.user.id },

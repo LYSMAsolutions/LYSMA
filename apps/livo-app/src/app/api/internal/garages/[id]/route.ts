@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { z } from 'zod'
+import { isInternalApiAuthorized } from '@/lib/security/internal-api'
 
 const patchSchema = z.object({
   garage: z.object({
@@ -55,11 +56,6 @@ const patchSchema = z.object({
   }).optional(),
 })
 
-function isAuthorized(req: NextRequest) {
-  const apiKey = req.headers.get('x-internal-api-key')
-  return Boolean(process.env.INTERNAL_API_KEY) && apiKey === process.env.INTERNAL_API_KEY
-}
-
 function daysLeft(date: Date | null) {
   if (!date) return null
   return Math.ceil((date.getTime() - Date.now()) / 86400000)
@@ -69,7 +65,7 @@ export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  if (!isAuthorized(req)) {
+  if (!isInternalApiAuthorized(req)) {
     return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
   }
 
@@ -204,7 +200,7 @@ export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  if (!isAuthorized(req)) {
+  if (!isInternalApiAuthorized(req)) {
     return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
   }
 

@@ -30,9 +30,13 @@ export default function ConnexionPage() {
     })
 
     if (result?.error) {
-      setError('Connexion impossible. Vérifiez votre email, votre mot de passe et la validation de votre adresse email.')
+      setError('Connexion impossible. Vérifiez votre email, votre mot de passe, la validation de votre adresse email et, si vous êtes sur un nouvel appareil, le code Google Authenticator.')
       setLoading(false)
       return
+    }
+
+    if (twoFactorCode.trim()) {
+      await fetch('/api/security/trusted-device', { method: 'POST' }).catch(() => null)
     }
 
     // Vérifier le mode (admin ou atelier)
@@ -81,7 +85,7 @@ export default function ConnexionPage() {
           />
           {showTwoFactor ? (
             <Input
-              label="Code de double authentification"
+              label="Code Google Authenticator"
               type="text"
               inputMode="numeric"
               placeholder="123456"
@@ -96,7 +100,7 @@ export default function ConnexionPage() {
               className={styles.twoFactorToggle}
               onClick={() => setShowTwoFactor(true)}
             >
-              J’ai activé la double authentification
+              Nouvel appareil ? Saisir le code Google Authenticator
             </button>
           )}
           <Button type="submit" variant="primary" size="lg" fullWidth loading={loading}>

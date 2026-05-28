@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
     },
   })
 
-  if (!owner || !owner.garages[0]) {
+  if (!owner || (!owner.emailVerified && !owner.emailVerifiedAt) || !owner.garages[0]) {
     return NextResponse.json(
       { error: 'Email ou mot de passe incorrect' },
       { status: 401 }

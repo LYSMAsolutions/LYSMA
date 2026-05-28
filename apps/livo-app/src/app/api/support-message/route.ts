@@ -1,19 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { getPrimaryGarageForUser } from '@/lib/garage'
 import { z } from 'zod'
+import { requireSecureSession } from '@/lib/security/secure-session'
 
 const supportSchema = z.object({
   message: z.string().min(3).max(4000),
 })
 
 export async function POST(req: NextRequest) {
-  const session = await auth()
-
-  if (!session?.user?.id) {
-    return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
-  }
+  const { session, response } = await requireSecureSession()
+  if (response) return response
 
   const body = await req.json().catch(() => null)
   const parsed = supportSchema.safeParse(body)

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { auth } from '@/lib/auth'
+import { requireSecureSession } from '@/lib/security/secure-session'
 import { z } from 'zod'
 import bcrypt from 'bcryptjs'
 
@@ -17,11 +17,8 @@ const schema = z.object({
 })
 
 export async function POST(req: NextRequest) {
-  const session = await auth()
-
-  if (!session?.user?.id) {
-    return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
-  }
+  const { session, response } = await requireSecureSession()
+  if (response) return response
 
   const body = await req.json()
   const parsed = schema.safeParse(body)
@@ -76,11 +73,8 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET(req: NextRequest) {
-  const session = await auth()
-
-  if (!session?.user?.id) {
-    return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
-  }
+  const { session, response } = await requireSecureSession()
+  if (response) return response
 
   const { searchParams } = new URL(req.url)
   const garageId = searchParams.get('garageId')

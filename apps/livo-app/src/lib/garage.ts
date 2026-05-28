@@ -7,6 +7,7 @@ export async function getPrimaryGarageForUser(userId: string) {
       actif: true,
       owner: {
         actif: true,
+        twoFactorEnabled: true,
         OR: [
           { emailVerified: { not: null } },
           { emailVerifiedAt: { not: null } },
