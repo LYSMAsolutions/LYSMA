@@ -21,7 +21,6 @@ export async function GET(
     searchParams.get('mois') ?? String(new Date().getMonth() + 1),
     10
   )
-
   const annee = Number.parseInt(
     searchParams.get('annee') ?? String(new Date().getFullYear()),
     10
@@ -72,8 +71,31 @@ export async function GET(
     )
   }
 
-  const logoPath = path.join(process.cwd(), 'public/logo/livo-app-pdf.png')
+  const review = await prisma.pointageMonthlyReview.findUnique({
+    where: {
+      compagnonId_mois_annee: {
+        compagnonId: compagnon.id,
+        mois,
+        annee,
+      },
+    },
+    include: {
+      validatedBy: {
+        select: {
+          prenom: true,
+          nom: true,
+          email: true,
+        },
+      },
+    },
+  })
 
+  const validatedByName = review?.validatedBy
+    ? `${review.validatedBy.prenom ?? ''} ${review.validatedBy.nom ?? ''}`.trim() ||
+      review.validatedBy.email
+    : null
+
+  const logoPath = path.join(process.cwd(), 'public/logo/livo-app-pdf.png')
   const logoSrc = fs.existsSync(logoPath)
     ? `data:image/png;base64,${fs.readFileSync(logoPath).toString('base64')}`
     : undefined
@@ -100,6 +122,13 @@ export async function GET(
       mois,
       annee,
       logoSrc,
+      review: review
+        ? {
+            status: review.status,
+            validatedAt: review.validatedAt,
+            validatedByName,
+          }
+        : null,
     }) as any
   )
 
@@ -110,7 +139,6 @@ export async function GET(
   }
 
   const buffer = Buffer.concat(chunks)
-
   const nomFichier = `Pointage_${compagnon.user?.nom ?? compagnon.nom}_${String(mois).padStart(2, '0')}_${annee}.pdf`
 
   return new NextResponse(new Uint8Array(buffer), {

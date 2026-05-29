@@ -5,6 +5,7 @@ import { redirect, notFound } from 'next/navigation'
 import { Header } from '@/components/layout/Header'
 import { Button, Badge } from '@/components/ui'
 import { PointageExport } from '@/components/rh/PointageExport/PointageExport'
+import { PointageReviewPanel } from '@/components/rh/PointageReviewPanel/PointageReviewPanel'
 import { ArrowLeft, Clock, Wrench, Calendar } from '@phosphor-icons/react/dist/ssr'
 import Link from 'next/link'
 import { getSoldeConges, getCompteurAbsences } from '@/lib/rh'
@@ -36,7 +37,6 @@ function formatDate(d: Date) {
 
 function formatTime(d: Date | null) {
   if (!d) return '—'
-
   return new Date(d).toLocaleTimeString('fr-FR', {
     hour: '2-digit',
     minute: '2-digit',
@@ -73,7 +73,6 @@ export default async function CompagnonFichePage({
   params: Promise<{ id: string }>
 }) {
   const { id } = await params
-
   const session = await auth()
 
   if (!session?.user?.id) {
@@ -95,15 +94,11 @@ export default async function CompagnonFichePage({
     include: {
       user: true,
       pointagesJour: {
-        orderBy: {
-          date: 'desc',
-        },
+        orderBy: { date: 'desc' },
         take: 30,
       },
       absences: {
-        orderBy: {
-          dateDebut: 'desc',
-        },
+        orderBy: { dateDebut: 'desc' },
         take: 20,
       },
       pointagesFiche: {
@@ -114,9 +109,7 @@ export default async function CompagnonFichePage({
             },
           },
         },
-        orderBy: {
-          debutAt: 'desc',
-        },
+        orderBy: { debutAt: 'desc' },
         take: 20,
       },
     },
@@ -130,6 +123,10 @@ export default async function CompagnonFichePage({
   const nom = compagnon.user?.nom ?? compagnon.nom ?? ''
   const telephone = compagnon.user?.telephone ?? null
   const initials = `${prenom[0] ?? '?'}${nom[0] ?? '?'}`.toUpperCase()
+  const now = new Date()
+  const debutMois = new Date(now.getFullYear(), now.getMonth(), 1)
+  const moisCourant = debutMois.getMonth() + 1
+  const anneeCourante = debutMois.getFullYear()
 
   const taux = await prisma.tauxGarage.findMany({
     where: {
@@ -138,50 +135,59 @@ export default async function CompagnonFichePage({
     },
   })
 
-  const tauxMap = Object.fromEntries(
-    taux.map((t: any) => [t.type, Number(t.montant)])
-  )
-
+  const tauxMap = Object.fromEntries(taux.map((t) => [t.type, Number(t.montant)]))
   const tauxMoyen = taux.length
-    ? taux.reduce((sum: number, t: any) => sum + Number(t.montant), 0) / taux.length
+    ? taux.reduce((sum, t) => sum + Number(t.montant), 0) / taux.length
     : 65
-
-  const debutMois = new Date(new Date().getFullYear(), new Date().getMonth(), 1)
 
   type PointageFicheItem = (typeof compagnon.pointagesFiche)[number]
 
   const fichesMois = compagnon.pointagesFiche.filter((pointage: PointageFicheItem) => {
-    return (
-      new Date(pointage.debutAt) >= debutMois &&
-      pointage.fiche?.statut === 'CLOTUREE'
-    )
+    return new Date(pointage.debutAt) >= debutMois && pointage.fiche?.statut === 'CLOTUREE'
   })
 
   const delta = fichesMois.reduce((sum: number, pointage: PointageFicheItem) => {
     const fiche = pointage.fiche
+    if (!fiche) return sum
 
-    if (!fiche) {
-      return sum
-    }
-
-    const tauxFiche = fiche.tauxApplique
-      ? tauxMap[fiche.tauxApplique] ?? tauxMoyen
-      : tauxMoyen
+    const tauxFiche = fiche.tauxApplique ? tauxMap[fiche.tauxApplique] ?? tauxMoyen : tauxMoyen
 
     return (
       sum +
-      (Number(fiche.tempsFacture ?? 0) -
-        Number(fiche.tempsReel ?? fiche.tempsFacture ?? 0)) *
+      (Number(fiche.tempsFacture ?? 0) - Number(fiche.tempsReel ?? fiche.tempsFacture ?? 0)) *
         tauxFiche
     )
   }, 0)
 
-  const [solde, compteurs] = await Promise.all([
+  const [solde, compteurs, monthlyReview] = await Promise.all([
     compagnon.dateEntree
       ? getSoldeConges(compagnon.id, compagnon.dateEntree)
       : { acquis: 0, pris: 0, solde: 0 },
     getCompteurAbsences(compagnon.id),
+    prisma.pointageMonthlyReview.findUnique({
+      where: {
+        compagnonId_mois_annee: {
+          compagnonId: compagnon.id,
+          mois: moisCourant,
+          annee: anneeCourante,
+        },
+      },
+      include: {
+        validatedBy: {
+          select: {
+            prenom: true,
+            nom: true,
+            email: true,
+          },
+        },
+      },
+    }),
   ])
+
+  const validatedBy = monthlyReview?.validatedBy
+    ? `${monthlyReview.validatedBy.prenom ?? ''} ${monthlyReview.validatedBy.nom ?? ''}`.trim() ||
+      monthlyReview.validatedBy.email
+    : null
 
   return (
     <>
@@ -212,15 +218,13 @@ export default async function CompagnonFichePage({
               </h2>
 
               <p className={styles.profilSub}>
-                {compagnon.poste ?? 'Mécanicien'} · {Number(compagnon.heuresContrat ?? 35)}h/sem
+                {compagnon.poste ?? 'Mécanicien'} · {Number(compagnon.heuresContrat ?? 35)} h/sem
               </p>
 
               {telephone && <p className={styles.profilContact}>{telephone}</p>}
 
               {compagnon.dateEntree && (
-                <p className={styles.profilContact}>
-                  Entrée : {formatDate(compagnon.dateEntree)}
-                </p>
+                <p className={styles.profilContact}>Entrée : {formatDate(compagnon.dateEntree)}</p>
               )}
             </div>
           </div>
@@ -283,6 +287,15 @@ export default async function CompagnonFichePage({
           </div>
         </div>
 
+        <PointageReviewPanel
+          compagnonId={compagnon.id}
+          mois={moisCourant}
+          annee={anneeCourante}
+          initialStatus={monthlyReview?.status ?? 'BROUILLON'}
+          validatedAt={monthlyReview?.validatedAt?.toISOString() ?? null}
+          validatedBy={validatedBy}
+        />
+
         <div className={styles.grid}>
           <section className={styles.section}>
             <h2 className={styles.sectionTitle}>
@@ -329,24 +342,17 @@ export default async function CompagnonFichePage({
               ) : (
                 compagnon.pointagesFiche.map((pointageFiche) => {
                   const fiche = pointageFiche.fiche
-
-                  if (!fiche) {
-                    return null
-                  }
+                  if (!fiche) return null
 
                   const statut = STATUT_FICHE[fiche.statut] ?? {
                     label: fiche.statut,
                     variant: 'muted' as const,
                   }
 
-                  const tauxFiche = fiche.tauxApplique
-                    ? tauxMap[fiche.tauxApplique] ?? tauxMoyen
-                    : tauxMoyen
-
+                  const tauxFiche = fiche.tauxApplique ? tauxMap[fiche.tauxApplique] ?? tauxMoyen : tauxMoyen
                   const deltaFiche =
                     fiche.statut === 'CLOTUREE'
-                      ? (Number(fiche.tempsFacture ?? 0) -
-                          Number(fiche.tempsReel ?? fiche.tempsFacture ?? 0)) *
+                      ? (Number(fiche.tempsFacture ?? 0) - Number(fiche.tempsReel ?? fiche.tempsFacture ?? 0)) *
                         tauxFiche
                       : null
 
@@ -398,15 +404,9 @@ export default async function CompagnonFichePage({
                     {formatDate(absence.dateDebut)} → {formatDate(absence.dateFin)}
                   </span>
 
-                  <span className={styles.absenceJours}>
-                    {Number(absence.nbJours ?? 0)}j
-                  </span>
+                  <span className={styles.absenceJours}>{Number(absence.nbJours ?? 0)}j</span>
 
-                  {absence.approuve ? (
-                    <Badge variant="success">Approuvé</Badge>
-                  ) : (
-                    <Badge variant="muted">En attente</Badge>
-                  )}
+                  {absence.approuve ? <Badge variant="success">Approuvé</Badge> : <Badge variant="muted">En attente</Badge>}
                 </div>
               ))}
             </div>

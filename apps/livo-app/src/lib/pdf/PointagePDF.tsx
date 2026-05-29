@@ -13,6 +13,8 @@ type PointageJour = {
   dureeMinutes: number | null
 }
 
+type ReviewStatus = 'BROUILLON' | 'A_VERIFIER' | 'VALIDE' | 'CONTESTE'
+
 type Props = {
   compagnon: {
     prenom: string
@@ -33,401 +35,404 @@ type Props = {
   pointages: PointageJour[]
   mois: number
   annee: number
-  logoSrc: string
+  logoSrc?: string
+  review?: {
+    status: ReviewStatus
+    validatedAt?: Date | string | null
+    validatedByName?: string | null
+  } | null
 }
 
-const MOIS = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre']
+const MOIS = [
+  'Janvier',
+  'Février',
+  'Mars',
+  'Avril',
+  'Mai',
+  'Juin',
+  'Juillet',
+  'Août',
+  'Septembre',
+  'Octobre',
+  'Novembre',
+  'Décembre',
+]
 
-function formatTime(d: Date | null) {
-  if (!d) return '—'
-  return new Date(d).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
+const STATUT_LABELS: Record<string, string> = {
+  ABSENT: 'Absent',
+  ARRIVE: 'Arrivé',
+  EN_TRAVAIL: 'En travail',
+  PAUSE_CAFE: 'Pause café',
+  PAUSE_DEJEUNER: 'Pause déjeuner',
+  PARTI: 'Journée clôturée',
 }
-function formatH(min: number) {
-  const h = Math.floor(min / 60); const m = min % 60
-  return `${h}h${m.toString().padStart(2,'0')}`
+
+const REVIEW_LABELS: Record<ReviewStatus, string> = {
+  BROUILLON: 'Brouillon',
+  A_VERIFIER: 'À vérifier',
+  VALIDE: 'Validé',
+  CONTESTE: 'Contesté',
 }
-function formatDateFR(d: Date) {
-  return new Date(d).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' })
+
+function asDate(date: Date | string | null | undefined) {
+  return date ? new Date(date) : null
+}
+
+function minutesBetween(start: Date | null, end: Date | null) {
+  if (!start || !end) return 0
+  return Math.max(0, Math.round((end.getTime() - start.getTime()) / 60000))
+}
+
+function pauseMinutes(pointage: PointageJour) {
+  const cafe = minutesBetween(asDate(pointage.pauseCafeDebut), asDate(pointage.pauseCafeFin))
+  const dejeuner = minutesBetween(asDate(pointage.pauseDejDebut), asDate(pointage.pauseDejFin))
+  return cafe + dejeuner
+}
+
+function formatTime(date: Date | null) {
+  const value = asDate(date)
+  if (!value) return '-'
+  return value.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
+}
+
+function formatDate(date: Date | string) {
+  return new Date(date).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' })
+}
+
+function formatShortDate(date: Date) {
+  return new Date(date).toLocaleDateString('fr-FR', { weekday: 'short', day: '2-digit', month: '2-digit' })
+}
+
+function formatDuration(minutes: number) {
+  const sign = minutes < 0 ? '-' : ''
+  const abs = Math.abs(minutes)
+  const hours = Math.floor(abs / 60)
+  const mins = abs % 60
+  return `${sign}${hours} h ${String(mins).padStart(2, '0')}`
+}
+
+function formatContractHours(hours: number) {
+  return `${new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 2 }).format(hours)} h / semaine`
 }
 
 const s = StyleSheet.create({
   page: {
     fontFamily: 'Helvetica',
-    fontSize: 9,
+    fontSize: 8,
     backgroundColor: '#ffffff',
-    paddingTop: 32,
-    paddingBottom: 48,
+    color: '#172033',
+    paddingTop: 30,
+    paddingBottom: 54,
     paddingHorizontal: 32,
   },
-
-  // ── Barre légale verticale gauche ─────────────────────────
-  legalBar: {
-    position: 'absolute',
-    left: 10,
-    top: 100,
-    bottom: 60,
-    width: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  legalBarLine: {
-    position: 'absolute',
-    left: 5,
-    top: 0,
-    bottom: 0,
-    width: 1,
-    backgroundColor: '#dde8f5',
-  },
-  legalBarText: {
-    fontSize: 7,
-    color: '#8099cc',
-    transform: 'rotate(-90deg)',
-    letterSpacing: 1,
-    width: 200,
-    textAlign: 'center',
-  },
-
-  // ── Header 3 colonnes ─────────────────────────────────────
   header: {
     flexDirection: 'row',
-    gap: 16,
-    marginBottom: 20,
-    paddingBottom: 16,
+    justifyContent: 'space-between',
+    gap: 18,
+    paddingBottom: 14,
+    marginBottom: 14,
     borderBottomWidth: 2,
     borderBottomColor: COLORS.blueElectric,
   },
-  col1: { flex: 1.2 },
-  col2: {
-    flex: 1.5,
-    borderLeftWidth: 1,
-    borderRightWidth: 1,
-    borderColor: '#dde8f5',
-    paddingHorizontal: 16,
-  },
-  col3: { flex: 1, alignItems: 'flex-end' },
-
-  garageNom: { fontSize: 16, fontFamily: 'Helvetica-Bold', color: COLORS.blueDeep, marginBottom: 6 },
-  garageInfoRow: { flexDirection: 'row', alignItems: 'flex-start', marginBottom: 3, gap: 4 },
-  garageInfoIcon: { fontSize: 8, color: COLORS.blueElectric, width: 10 },
-  garageInfoText: { fontSize: 8, color: '#333333', flex: 1 },
-
-  docTitle: { fontSize: 18, fontFamily: 'Helvetica-Bold', color: COLORS.blueDeep, marginBottom: 2 },
-  docMois: { fontSize: 11, color: COLORS.blueElectric, marginBottom: 8 },
-  docSectionLabel: { fontSize: 8, fontFamily: 'Helvetica-Bold', color: '#555555', marginBottom: 6, textTransform: 'uppercase', letterSpacing: 0.8 },
-  compagnonRow: { flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 3 },
-  compagnonNom: { fontSize: 12, fontFamily: 'Helvetica-Bold', color: COLORS.blueDeep },
-  compagnonSub: { fontSize: 8, color: '#666666' },
-
-  contratBox: {
-    backgroundColor: '#f4f7ff',
-    borderRadius: 6,
-    padding: 10,
-    alignItems: 'flex-end',
-    marginBottom: 10,
-  },
-  contratLabel: { fontSize: 7, color: COLORS.blueElectric, fontFamily: 'Helvetica-Bold', textTransform: 'uppercase', letterSpacing: 0.8, marginBottom: 2 },
-  contratVal: { fontSize: 20, fontFamily: 'Helvetica-Bold', color: COLORS.blueDeep },
-  contratSub: { fontSize: 8, color: '#666666', marginTop: 1 },
-  periodeBox: {
-    backgroundColor: '#f4f7ff',
-    borderRadius: 6,
-    padding: 8,
-    alignItems: 'flex-end',
-    width: '100%',
-  },
-  periodeLabel: { fontSize: 7, color: COLORS.blueElectric, fontFamily: 'Helvetica-Bold', textTransform: 'uppercase', letterSpacing: 0.8, marginBottom: 3 },
-  periodeVal: { fontSize: 8, color: COLORS.blueDeep },
-
-  // ── Filigrane ─────────────────────────────────────────────
-  watermark: {
-    position: 'absolute',
-    top: 200,
-    left: 0,
-    right: 0,
-    alignItems: 'center',
-    opacity: 0.04,
-  },
-  watermarkImg: { width: 40, height: 20 },
-
-  // ── Tableau ───────────────────────────────────────────────
-  tableWrap: { marginTop: 4 },
-  tableHead: {
-    flexDirection: 'row',
-    backgroundColor: COLORS.blueDeep,
-    paddingVertical: 7,
-    paddingHorizontal: 8,
-    borderRadius: 4,
-    marginBottom: 1,
-  },
-  thCell: { fontSize: 7, color: '#ffffff', fontFamily: 'Helvetica-Bold', textTransform: 'uppercase', letterSpacing: 0.6 },
-  tableRow: {
-    flexDirection: 'row',
-    paddingVertical: 6,
-    paddingHorizontal: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: '#eef2fa',
-  },
-  tableRowAlt: { backgroundColor: '#f8faff' },
-  tdCell: { fontSize: 8, color: '#333333' },
-  tdBold: { fontSize: 8, color: COLORS.blueDeep, fontFamily: 'Helvetica-Bold' },
-
-  // ── Total ─────────────────────────────────────────────────
-  totalRow: {
-    flexDirection: 'row',
-    backgroundColor: COLORS.blueDeep,
-    padding: 12,
-    borderRadius: 6,
-    marginTop: 16,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  totalLeft: {},
-  totalLabel: { fontSize: 9, color: '#ffffff', fontFamily: 'Helvetica-Bold', textTransform: 'uppercase', letterSpacing: 0.5 },
-  totalSub: { fontSize: 7, color: '#a0c0e0', marginTop: 2 },
-  totalVal: { fontSize: 20, color: COLORS.gold, fontFamily: 'Helvetica-Bold' },
-  totalRight: { alignItems: 'flex-end' },
-  totalVsLabel: { fontSize: 8, color: '#a0c0e0', textTransform: 'uppercase', letterSpacing: 0.5 },
-  totalVsVal: { fontSize: 14, fontFamily: 'Helvetica-Bold', marginTop: 2 },
-
-  // ── Note légale ───────────────────────────────────────────
-  legalNote: {
-    marginTop: 14,
-    padding: 10,
-    backgroundColor: '#fffbf0',
-    borderWidth: 1,
-    borderColor: '#f0d8a0',
-    borderRadius: 6,
-  },
-  legalTextWrap: { flex: 1 },
-  legalTitle: { fontSize: 8, fontFamily: 'Helvetica-Bold', color: '#8a6a00', marginBottom: 3 },
-  legalText: { fontSize: 7, color: '#8a6a00', lineHeight: 1.4 },
-
-  // ── Signatures ────────────────────────────────────────────
-  sigRow: { flexDirection: 'row', gap: 12, marginTop: 16 },
-  sigBox: {
+  garageBlock: { width: '31%' },
+  titleBlock: { width: '38%', alignItems: 'center' },
+  periodBlock: { width: '31%', alignItems: 'flex-end' },
+  garageName: { fontSize: 16, fontFamily: 'Helvetica-Bold', color: COLORS.blueDeep, marginBottom: 5 },
+  infoText: { fontSize: 7.5, color: '#4a5568', lineHeight: 1.35 },
+  documentTitle: { fontSize: 18, fontFamily: 'Helvetica-Bold', color: COLORS.blueDeep, marginBottom: 3 },
+  documentSub: { fontSize: 9, color: COLORS.blueElectric, fontFamily: 'Helvetica-Bold' },
+  documentMeta: { fontSize: 7, color: '#64748b', marginTop: 5, textAlign: 'center', lineHeight: 1.35 },
+  periodLabel: { fontSize: 7, color: COLORS.blueElectric, textTransform: 'uppercase', fontFamily: 'Helvetica-Bold', letterSpacing: 0.8 },
+  periodValue: { fontSize: 10, color: COLORS.blueDeep, fontFamily: 'Helvetica-Bold', marginTop: 3 },
+  generatedAt: { fontSize: 7, color: '#64748b', marginTop: 8 },
+  identityGrid: { flexDirection: 'row', gap: 10, marginBottom: 12 },
+  identityCard: {
     flex: 1,
     borderWidth: 1,
-    borderColor: '#dde8f5',
+    borderColor: '#dbe7f5',
     borderRadius: 6,
-    padding: 12,
+    padding: 10,
+    backgroundColor: '#f8fbff',
   },
-  sigHeader: { flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 6 },
-  sigIcon: { fontSize: 16 },
-  sigTitle: { fontSize: 8, fontFamily: 'Helvetica-Bold', color: COLORS.blueDeep, textTransform: 'uppercase', letterSpacing: 0.5 },
-  sigSub: { fontSize: 7, color: '#888888', marginBottom: 28 },
-  sigLine: { borderBottomWidth: 1, borderBottomColor: '#b0c0d8', marginTop: 4 },
-  sigDate: { fontSize: 7, color: '#888888', marginTop: 6 },
-
-  // ── Footer ────────────────────────────────────────────────
+  cardLabel: { fontSize: 7, color: COLORS.blueElectric, textTransform: 'uppercase', fontFamily: 'Helvetica-Bold', letterSpacing: 0.8, marginBottom: 5 },
+  cardTitle: { fontSize: 12, color: COLORS.blueDeep, fontFamily: 'Helvetica-Bold', marginBottom: 3 },
+  cardText: { fontSize: 8, color: '#334155', lineHeight: 1.35 },
+  summaryGrid: { flexDirection: 'row', gap: 8, marginBottom: 12 },
+  summaryCard: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: '#dbe7f5',
+    borderRadius: 6,
+    padding: 9,
+    backgroundColor: '#ffffff',
+  },
+  summaryLabel: { fontSize: 7, color: '#64748b', textTransform: 'uppercase', fontFamily: 'Helvetica-Bold', letterSpacing: 0.7 },
+  summaryValue: { fontSize: 14, color: COLORS.blueDeep, fontFamily: 'Helvetica-Bold', marginTop: 4 },
+  summaryValuePositive: { color: COLORS.success },
+  summaryValueNegative: { color: COLORS.error },
+  sectionTitle: {
+    fontSize: 9,
+    color: COLORS.blueElectric,
+    fontFamily: 'Helvetica-Bold',
+    textTransform: 'uppercase',
+    letterSpacing: 1.2,
+    marginBottom: 6,
+    paddingBottom: 4,
+    borderBottomWidth: 1,
+    borderBottomColor: '#e2e8f0',
+  },
+  table: { borderWidth: 1, borderColor: '#dbe7f5', borderRadius: 5, overflow: 'hidden' },
+  tableHeader: { flexDirection: 'row', backgroundColor: COLORS.blueDeep, paddingVertical: 6, paddingHorizontal: 6 },
+  tableHeaderCell: { fontSize: 6.5, color: '#ffffff', fontFamily: 'Helvetica-Bold', textTransform: 'uppercase', letterSpacing: 0.4 },
+  tableRow: { flexDirection: 'row', paddingVertical: 5.5, paddingHorizontal: 6, borderBottomWidth: 1, borderBottomColor: '#edf2f7' },
+  tableRowAlt: { backgroundColor: '#f8fbff' },
+  tableCell: { fontSize: 7.2, color: '#27364a' },
+  tableCellBold: { fontSize: 7.2, color: COLORS.blueDeep, fontFamily: 'Helvetica-Bold' },
+  noData: {
+    padding: 12,
+    borderWidth: 1,
+    borderColor: '#dbe7f5',
+    borderRadius: 6,
+    color: '#64748b',
+    fontSize: 8,
+  },
+  legalNote: {
+    marginTop: 12,
+    padding: 10,
+    backgroundColor: '#fff8e6',
+    borderWidth: 1,
+    borderColor: '#f2d28a',
+    borderRadius: 6,
+  },
+  legalTitle: { fontSize: 8, fontFamily: 'Helvetica-Bold', color: '#8a5a00', marginBottom: 4 },
+  legalText: { fontSize: 7, color: '#6f4b00', lineHeight: 1.35 },
+  traceNote: {
+    marginTop: 8,
+    padding: 9,
+    borderWidth: 1,
+    borderColor: '#dbe7f5',
+    borderRadius: 6,
+    backgroundColor: '#f8fbff',
+  },
+  traceTitle: { fontSize: 7.5, fontFamily: 'Helvetica-Bold', color: COLORS.blueDeep, marginBottom: 3 },
+  traceText: { fontSize: 7, color: '#475569', lineHeight: 1.35 },
+  signatures: { flexDirection: 'row', gap: 12, marginTop: 12 },
+  signatureBox: {
+    flex: 1,
+    minHeight: 86,
+    borderWidth: 1,
+    borderColor: '#dbe7f5',
+    borderRadius: 6,
+    padding: 10,
+  },
+  signatureTitle: { fontSize: 8, color: COLORS.blueDeep, fontFamily: 'Helvetica-Bold', textTransform: 'uppercase', letterSpacing: 0.6 },
+  signatureText: { fontSize: 7, color: '#64748b', marginTop: 5, lineHeight: 1.35 },
+  signatureLine: { borderBottomWidth: 1, borderBottomColor: '#94a3b8', marginTop: 26 },
+  signatureDate: { fontSize: 7, color: '#64748b', marginTop: 6 },
   footer: {
     position: 'absolute',
-    bottom: 16,
+    bottom: 18,
     left: 32,
     right: 32,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingTop: 8,
     borderTopWidth: 1,
-    borderTopColor: '#dde8f5',
+    borderTopColor: '#dbe7f5',
+    paddingTop: 8,
   },
   footerLeft: { flexDirection: 'row', alignItems: 'center', gap: 6 },
-  footerLogoCircle: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    backgroundColor: COLORS.blueElectric,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  footerLogoText: { fontSize: 7, color: '#ffffff', fontFamily: 'Helvetica-Bold' },
-  footerAppName: { fontSize: 8, fontFamily: 'Helvetica-Bold', color: COLORS.blueDeep },
-  footerDash: { fontSize: 8, color: '#888888' },
-  footerDocType: { fontSize: 7, color: '#888888' },
-  footerCenter: { fontSize: 7, color: '#666666' },
-  footerRight: { fontSize: 7, color: '#888888' },
+  footerLogo: { width: 18, height: 18 },
+  footerText: { fontSize: 6.5, color: '#64748b' },
+  footerStrong: { fontSize: 7, color: COLORS.blueDeep, fontFamily: 'Helvetica-Bold' },
 })
 
-const COL_WIDTHS = { date: 65, arrivee: 50, cafe: 50, dej: 50, depart: 50, duree: 40, statut: 55 }
+const WIDTHS = {
+  date: 58,
+  arrival: 46,
+  coffee: 62,
+  lunch: 62,
+  departure: 46,
+  pause: 46,
+  worked: 46,
+}
 
-export function PointagePDF({ compagnon, garage, pointages, mois, annee, logoSrc }: Props) {
-  const totalMinutes = pointages.reduce((sum, p) => sum + (p.dureeMinutes ?? 0), 0)
-  const joursPresents = pointages.filter(p => p.heureArrivee).length
-  const heuresContratMois = Math.round(compagnon.heuresContrat * 4.33)
-  const delta = Math.round(totalMinutes / 60) - heuresContratMois
-  const joursAvecPointage = pointages.filter(p => p.heureArrivee || p.statutActuel !== 'ABSENT')
-
+export function PointagePDF({ compagnon, garage, pointages, mois, annee, logoSrc, review }: Props) {
   const debutPeriode = new Date(annee, mois - 1, 1)
   const finPeriode = new Date(annee, mois, 0)
+  const joursAvecPointage = pointages.filter((pointage) => pointage.heureArrivee || pointage.statutActuel !== 'ABSENT')
+  const totalMinutes = pointages.reduce((sum, pointage) => sum + (pointage.dureeMinutes ?? 0), 0)
+  const totalPauseMinutes = pointages.reduce((sum, pointage) => sum + pauseMinutes(pointage), 0)
+  const joursPresents = pointages.filter((pointage) => Boolean(pointage.heureArrivee)).length
+  const contratMinutesMois = Math.round((compagnon.heuresContrat * 52 * 60) / 12)
+  const deltaMinutes = totalMinutes - contratMinutesMois
+  const generatedAt = new Date()
+  const reviewStatus = review?.status ?? 'BROUILLON'
+  const validatedAt = asDate(review?.validatedAt)
 
   return (
-    <Document title={`Pointage ${MOIS[mois-1]} ${annee} - ${compagnon.nom}`} author="LIVO-APP">
+    <Document title={`Relevé de pointage ${MOIS[mois - 1]} ${annee} - ${compagnon.prenom} ${compagnon.nom}`} author="LIVO">
       <Page size="A4" style={s.page}>
-
-        {/* Filigrane */}
-        <View style={s.watermark} fixed>
-          <Image src={logoSrc} style={s.watermarkImg} />
-        </View>
-
-        {/* Barre légale verticale */}
-        <View style={s.legalBar} fixed>
-          <View style={s.legalBarLine} />
-          <Text style={s.legalBarText}>Document légal — CJUE 2019/2024</Text>
-        </View>
-
-        {/* Header 3 colonnes */}
         <View style={s.header}>
-          {/* Col 1 — Garage */}
-          <View style={s.col1}>
-            <Text style={s.garageNom}>{garage.nom}</Text>
-            {garage.adresse && (
-              <View style={s.garageInfoRow}>
-                <Text style={s.garageInfoIcon}></Text>
-                <Text style={s.garageInfoText}>{garage.adresse}{'\n'}{[garage.codePostal, garage.ville].filter(Boolean).join(' ')}</Text>
-              </View>
-            )}
-            {garage.telephone && (
-              <View style={s.garageInfoRow}>
-                <Text style={s.garageInfoIcon}></Text>
-                <Text style={s.garageInfoText}>{garage.telephone}</Text>
-              </View>
-            )}
-            {garage.email && (
-              <View style={s.garageInfoRow}>
-                <Text style={s.garageInfoIcon}></Text>
-                <Text style={s.garageInfoText}>{garage.email}</Text>
-              </View>
-            )}
-            {garage.siret && (
-              <View style={s.garageInfoRow}>
-                <Text style={s.garageInfoIcon}></Text>
-                <Text style={s.garageInfoText}>SIRET : {garage.siret}</Text>
-              </View>
-            )}
+          <View style={s.garageBlock}>
+            <Text style={s.garageName}>{garage.nom}</Text>
+            {garage.adresse && <Text style={s.infoText}>{garage.adresse}</Text>}
+            <Text style={s.infoText}>{[garage.codePostal, garage.ville].filter(Boolean).join(' ')}</Text>
+            {garage.telephone && <Text style={s.infoText}>Tél. : {garage.telephone}</Text>}
+            {garage.email && <Text style={s.infoText}>Email : {garage.email}</Text>}
+            {garage.siret && <Text style={s.infoText}>SIRET : {garage.siret}</Text>}
           </View>
 
-          {/* Col 2 — Titre + Compagnon */}
-          <View style={s.col2}>
-            <Text style={s.docTitle}>Fiche de Pointage</Text>
-            <Text style={s.docMois}>{MOIS[mois-1]} {annee}</Text>
-            <Text style={s.docSectionLabel}>Informations du compagnon</Text>
-            <View style={s.compagnonRow}>
-              <Text style={s.compagnonNom}>{compagnon.prenom} {compagnon.nom}</Text>
-            </View>
-            {compagnon.poste && <Text style={s.compagnonSub}>{compagnon.poste}</Text>}
-            {compagnon.matricule && <Text style={s.compagnonSub}>Matricule : {compagnon.matricule}</Text>}
+          <View style={s.titleBlock}>
+            <Text style={s.documentTitle}>Relevé de pointage</Text>
+            <Text style={s.documentSub}>Suivi du temps de travail</Text>
+            <Text style={s.documentMeta}>
+              Document de suivi objectif, fiable et accessible des temps déclarés dans LIVO.
+            </Text>
           </View>
 
-          {/* Col 3 — Contrat + Période */}
-          <View style={s.col3}>
-            <View style={s.contratBox}>
-              <Text style={s.contratLabel}>Contrat</Text>
-              <Text style={s.contratVal}>{compagnon.heuresContrat}h/sem</Text>
-              <Text style={s.contratSub}>H {heuresContratMois}h ce mois</Text>
-            </View>
-            <View style={s.periodeBox}>
-              <Text style={s.periodeLabel}>Période concernée</Text>
-              <Text style={s.periodeVal}>Du {formatDateFR(debutPeriode)} au {formatDateFR(finPeriode)}</Text>
-            </View>
+          <View style={s.periodBlock}>
+            <Text style={s.periodLabel}>Période concernée</Text>
+            <Text style={s.periodValue}>{MOIS[mois - 1]} {annee}</Text>
+            <Text style={s.generatedAt}>Généré le {formatDate(generatedAt)}</Text>
           </View>
         </View>
 
-        {/* Tableau */}
-        <View style={s.tableWrap}>
-          <View style={s.tableHead}>
-            <Text style={[s.thCell, { width: COL_WIDTHS.date }]}>Date</Text>
-            <Text style={[s.thCell, { width: COL_WIDTHS.arrivee }]}>Arrivée</Text>
-            <Text style={[s.thCell, { width: COL_WIDTHS.cafe }]}>P. Café</Text>
-            <Text style={[s.thCell, { width: COL_WIDTHS.dej }]}>P. Déj.</Text>
-            <Text style={[s.thCell, { width: COL_WIDTHS.depart }]}>Départ</Text>
-            <Text style={[s.thCell, { width: COL_WIDTHS.duree }]}>Durée</Text>
-            <Text style={[s.thCell, { flex: 1 }]}>Statut</Text>
+        <View style={s.identityGrid}>
+          <View style={s.identityCard}>
+            <Text style={s.cardLabel}>Entreprise</Text>
+            <Text style={s.cardTitle}>{garage.nom}</Text>
+            <Text style={s.cardText}>Période : du {formatDate(debutPeriode)} au {formatDate(finPeriode)}</Text>
           </View>
-
-          {joursAvecPointage.map((p, i) => {
-            const date = new Date(p.date)
-            const dayLabel = date.toLocaleDateString('fr-FR', { weekday: 'short', day: '2-digit', month: '2-digit' })
-            const pauseCafe = p.pauseCafeDebut ? `${formatTime(p.pauseCafeDebut)}-${formatTime(p.pauseCafeFin)}` : '—'
-            const pauseDej = p.pauseDejDebut ? `${formatTime(p.pauseDejDebut)}-${formatTime(p.pauseDejFin)}` : '—'
-            const statut = p.statutActuel === 'PARTI' ? 'Présent' : p.statutActuel.replace('_', ' ')
-            return (
-              <View key={i} style={i % 2 === 1 ? [s.tableRow, s.tableRowAlt] : s.tableRow}>
-                <Text style={[s.tdCell, { width: COL_WIDTHS.date }]}>{dayLabel}</Text>
-                <Text style={[s.tdCell, { width: COL_WIDTHS.arrivee }]}>{formatTime(p.heureArrivee)}</Text>
-                <Text style={[s.tdCell, { width: COL_WIDTHS.cafe, fontSize: 7 }]}>{pauseCafe}</Text>
-                <Text style={[s.tdCell, { width: COL_WIDTHS.dej, fontSize: 7 }]}>{pauseDej}</Text>
-                <Text style={[s.tdCell, { width: COL_WIDTHS.depart }]}>{formatTime(p.heureDepart)}</Text>
-                <Text style={[s.tdBold, { width: COL_WIDTHS.duree }]}>{p.dureeMinutes ? formatH(p.dureeMinutes) : '—'}</Text>
-                <Text style={[s.tdCell, { flex: 1, fontSize: 7 }]}>{statut}</Text>
-              </View>
-            )
-          })}
-        </View>
-
-        {/* Total */}
-        <View style={s.totalRow}>
-          <View style={s.totalLeft}>
-            <Text style={s.totalLabel}>Total heures travaillées</Text>
-            <Text style={s.totalSub}>{joursPresents} jours de présence</Text>
-          </View>
-          <Text style={s.totalVal}>{formatH(totalMinutes)}</Text>
-          <View style={s.totalRight}>
-            <Text style={s.totalVsLabel}>VS Contrat</Text>
-            <Text style={[s.totalVsVal, { color: delta >= 0 ? COLORS.success : COLORS.error }]}>
-              {delta >= 0 ? '+' : ''}{delta}h
+          <View style={s.identityCard}>
+            <Text style={s.cardLabel}>Salarié</Text>
+            <Text style={s.cardTitle}>{compagnon.prenom} {compagnon.nom}</Text>
+            <Text style={s.cardText}>
+              {compagnon.poste ? `${compagnon.poste}\n` : ''}
+              {compagnon.matricule ? `Matricule : ${compagnon.matricule}\n` : ''}
+              Référence contrat : {formatContractHours(compagnon.heuresContrat)}
             </Text>
           </View>
         </View>
 
-        {/* Note légale */}
+        <View style={s.summaryGrid}>
+          <View style={s.summaryCard}>
+            <Text style={s.summaryLabel}>Jours pointés</Text>
+            <Text style={s.summaryValue}>{joursPresents}</Text>
+          </View>
+          <View style={s.summaryCard}>
+            <Text style={s.summaryLabel}>Heures travaillées</Text>
+            <Text style={s.summaryValue}>{formatDuration(totalMinutes)}</Text>
+          </View>
+          <View style={s.summaryCard}>
+            <Text style={s.summaryLabel}>Pauses enregistrées</Text>
+            <Text style={s.summaryValue}>{formatDuration(totalPauseMinutes)}</Text>
+          </View>
+          <View style={s.summaryCard}>
+            <Text style={s.summaryLabel}>Écart au contrat</Text>
+            <Text style={[s.summaryValue, deltaMinutes >= 0 ? s.summaryValuePositive : s.summaryValueNegative]}>
+              {deltaMinutes >= 0 ? '+' : ''}{formatDuration(deltaMinutes)}
+            </Text>
+          </View>
+        </View>
+
+        <View style={s.traceNote}>
+          <Text style={s.traceTitle}>Statut de validation mensuelle</Text>
+          <Text style={s.traceText}>
+            Statut : {REVIEW_LABELS[reviewStatus]}.{' '}
+            {validatedAt
+              ? `Validé le ${formatDate(validatedAt)}${review?.validatedByName ? ` par ${review.validatedByName}` : ''}.`
+              : 'Ce relevé n’a pas encore été validé par un responsable.'}
+          </Text>
+        </View>
+
+        <Text style={s.sectionTitle}>Détail des pointages</Text>
+        {joursAvecPointage.length > 0 ? (
+          <View style={s.table}>
+            <View style={s.tableHeader}>
+              <Text style={[s.tableHeaderCell, { width: WIDTHS.date }]}>Date</Text>
+              <Text style={[s.tableHeaderCell, { width: WIDTHS.arrival }]}>Arrivée</Text>
+              <Text style={[s.tableHeaderCell, { width: WIDTHS.coffee }]}>Pause café</Text>
+              <Text style={[s.tableHeaderCell, { width: WIDTHS.lunch }]}>Pause déjeuner</Text>
+              <Text style={[s.tableHeaderCell, { width: WIDTHS.departure }]}>Départ</Text>
+              <Text style={[s.tableHeaderCell, { width: WIDTHS.pause }]}>Pause</Text>
+              <Text style={[s.tableHeaderCell, { width: WIDTHS.worked }]}>Travail</Text>
+              <Text style={[s.tableHeaderCell, { flex: 1 }]}>Statut</Text>
+            </View>
+
+            {joursAvecPointage.map((pointage, index) => {
+              const pauseCafe = pointage.pauseCafeDebut
+                ? `${formatTime(pointage.pauseCafeDebut)} - ${formatTime(pointage.pauseCafeFin)}`
+                : '-'
+              const pauseDej = pointage.pauseDejDebut
+                ? `${formatTime(pointage.pauseDejDebut)} - ${formatTime(pointage.pauseDejFin)}`
+                : '-'
+              const statut = STATUT_LABELS[pointage.statutActuel] ?? pointage.statutActuel.replaceAll('_', ' ')
+
+              return (
+                <View key={`${pointage.date}-${index}`} style={index % 2 === 1 ? [s.tableRow, s.tableRowAlt] : s.tableRow} wrap={false}>
+                  <Text style={[s.tableCell, { width: WIDTHS.date }]}>{formatShortDate(pointage.date)}</Text>
+                  <Text style={[s.tableCell, { width: WIDTHS.arrival }]}>{formatTime(pointage.heureArrivee)}</Text>
+                  <Text style={[s.tableCell, { width: WIDTHS.coffee }]}>{pauseCafe}</Text>
+                  <Text style={[s.tableCell, { width: WIDTHS.lunch }]}>{pauseDej}</Text>
+                  <Text style={[s.tableCell, { width: WIDTHS.departure }]}>{formatTime(pointage.heureDepart)}</Text>
+                  <Text style={[s.tableCell, { width: WIDTHS.pause }]}>{formatDuration(pauseMinutes(pointage))}</Text>
+                  <Text style={[s.tableCellBold, { width: WIDTHS.worked }]}>{formatDuration(pointage.dureeMinutes ?? 0)}</Text>
+                  <Text style={[s.tableCell, { flex: 1 }]}>{statut}</Text>
+                </View>
+              )
+            })}
+          </View>
+        ) : (
+          <Text style={s.noData}>Aucun pointage enregistré sur la période.</Text>
+        )}
+
         <View style={s.legalNote}>
-          <View style={s.legalTextWrap}>
-            <Text style={s.legalTitle}>Base légale — Obligation de suivi du temps de travail</Text>
-            <Text style={s.legalText}>
-              Document établi conformément à la directive CJUE C-55/18 (14 mai 2019) et sa confirmation de 2024.{'\n'}
-              Conservation obligatoire 5 ans. Accessible à l'inspection du travail sur demande.
-            </Text>
+          <Text style={s.legalTitle}>Base légale - suivi du temps de travail</Text>
+          <Text style={s.legalText}>
+            Ce relevé constitue un document interne de suivi du temps de travail. Il s’inscrit dans l’obligation de
+            mettre en place un système objectif, fiable et accessible de mesure du temps de travail, rappelée par
+            l’arrêt CJUE C-55/18 du 14 mai 2019 et par la jurisprudence relative à la preuve des heures travaillées.
+            Les données doivent être conservées et présentées en cas de contrôle, de litige ou de demande de
+            l’autorité compétente. Ce document doit être vérifié et validé par l’employeur.
+          </Text>
+        </View>
+
+        <View style={s.traceNote}>
+          <Text style={s.traceTitle}>Traçabilité et conservation</Text>
+          <Text style={s.traceText}>
+            Les horaires affichés proviennent des pointages enregistrés dans LIVO. Toute correction ultérieure doit
+            être tracée, datée, motivée et rattachée à un utilisateur identifié. Conservation recommandée : au moins
+            5 ans, sous réserve des obligations applicables à l’entreprise.
+          </Text>
+        </View>
+
+        <View style={s.signatures}>
+          <View style={s.signatureBox}>
+            <Text style={s.signatureTitle}>Signature du salarié</Text>
+            <Text style={s.signatureText}>Je reconnais avoir pris connaissance du présent relevé de pointage.</Text>
+            <View style={s.signatureLine} />
+            <Text style={s.signatureDate}>Date : ____ / ____ / ______</Text>
+          </View>
+          <View style={s.signatureBox}>
+            <Text style={s.signatureTitle}>Signature de l’employeur</Text>
+            <Text style={s.signatureText}>Relevé vérifié et validé par l’employeur ou son représentant.</Text>
+            <View style={s.signatureLine} />
+            <Text style={s.signatureDate}>Date de validation : ____ / ____ / ______</Text>
           </View>
         </View>
 
-        {/* Signatures */}
-        <View style={s.sigRow}>
-          <View style={s.sigBox}>
-            <View style={s.sigHeader}>
-              <Text style={s.sigIcon}>✍</Text>
-              <Text style={s.sigTitle}>Signature du salarié</Text>
-            </View>
-            <Text style={s.sigSub}>Je certifie l'exactitude des informations ci-dessus</Text>
-            <View style={s.sigLine} />
-            <Text style={s.sigDate}>Date : _______________</Text>
+        <View style={s.footer} fixed>
+          <View style={s.footerLeft}>
+            {logoSrc && <Image src={logoSrc} style={s.footerLogo} />}
+            <Text style={s.footerStrong}>LIVO</Text>
+            <Text style={s.footerText}>by LYSMA Solutions</Text>
           </View>
-          <View style={s.sigBox}>
-            <View style={s.sigHeader}>
-              <Text style={s.sigIcon}>✓</Text>
-              <Text style={s.sigTitle}>Signature de l'employeur</Text>
-            </View>
-            <Text style={s.sigSub}>Validé par le responsable</Text>
-            <View style={s.sigLine} />
-            <Text style={s.sigDate}>Date : _______________</Text>
-          </View>
+          <Text style={s.footerText}>
+            {compagnon.prenom} {compagnon.nom} - {MOIS[mois - 1]} {annee}
+          </Text>
+          <Text style={s.footerText} render={({ pageNumber, totalPages }) => `${pageNumber} / ${totalPages}`} />
         </View>
-
-        {/* Footer */}
-<View style={s.footer} fixed>
-  <View style={s.footerLeft}>
-    <View style={{ alignItems: 'center' }}>
-      <View style={s.footerLogoCircle}>
-        <Image src={logoSrc} style={{ width: 20, height: 20 }} />
-      </View>
-      <Text style={{ fontSize: 5, color: '#888888', marginTop: 2 }}>by LYSMA Solutions</Text>
-    </View>
-    <Text style={s.footerDash}> — </Text>
-    <Text style={s.footerDocType}>Document légal de suivi du temps de travail</Text>
-  </View>
-  <Text style={s.footerCenter}>{compagnon.prenom} {compagnon.nom} — {MOIS[mois-1]} {annee}</Text>
-  <Text style={s.footerRight} render={({ pageNumber, totalPages }) => `${pageNumber} / ${totalPages}`} />
-</View>
-
       </Page>
     </Document>
   )

@@ -178,9 +178,44 @@ export async function POST(req: NextRequest) {
     }
   }
 
-  const updated = await prisma.pointageJour.update({
-    where: { id: pointage.id },
-    data: update,
+  const updated = await prisma.$transaction(async (tx) => {
+    const saved = await tx.pointageJour.update({
+      where: { id: pointage.id },
+      data: update,
+    })
+
+    await tx.pointageAuditLog.create({
+      data: {
+        action: 'CREATION',
+        targetType: 'POINTAGE_JOUR',
+        targetId: saved.id,
+        pointageJourId: saved.id,
+        compagnonId,
+        garageId: compagnon.garageId,
+        userId: access.mode === 'admin' ? access.userId : null,
+        field: 'action',
+        oldValue: {
+          statutActuel: pointage.statutActuel,
+          heureArrivee: pointage.heureArrivee?.toISOString() ?? null,
+          heureDepart: pointage.heureDepart?.toISOString() ?? null,
+        },
+        newValue: {
+          action,
+          statutActuel: saved.statutActuel,
+          heureArrivee: saved.heureArrivee?.toISOString() ?? null,
+          heureDepart: saved.heureDepart?.toISOString() ?? null,
+          dureeMinutes: saved.dureeMinutes,
+        },
+        motif:
+          access.mode === 'atelier'
+            ? 'Action de pointage enregistrée depuis l’espace atelier.'
+            : 'Action de pointage enregistrée depuis l’espace administrateur.',
+        ip: req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? null,
+        userAgent: req.headers.get('user-agent'),
+      },
+    })
+
+    return saved
   })
 
   return NextResponse.json({ success: true, pointage: updated })

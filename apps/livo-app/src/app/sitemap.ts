@@ -1,35 +1,23 @@
 import type { MetadataRoute } from 'next'
+import { SITE_URL, canonical } from '@/lib/seo'
 
-const baseUrl = 'https://livo-app.com'
 const lastModified = new Date()
 
 const staticRoutes: MetadataRoute.Sitemap = [
   {
-    url: baseUrl,
+    url: SITE_URL,
     lastModified,
     changeFrequency: 'weekly',
     priority: 1,
   },
   {
-    url: `${baseUrl}/inscription`,
-    lastModified,
-    changeFrequency: 'monthly',
-    priority: 0.8,
-  },
-  {
-    url: `${baseUrl}/connexion`,
-    lastModified,
-    changeFrequency: 'monthly',
-    priority: 0.4,
-  },
-  {
-    url: `${baseUrl}/cookies`,
+    url: canonical('/cookies'),
     lastModified,
     changeFrequency: 'yearly',
     priority: 0.2,
   },
   {
-    url: `${baseUrl}/politique-confidentialite`,
+    url: canonical('/politique-confidentialite'),
     lastModified,
     changeFrequency: 'yearly',
     priority: 0.2,

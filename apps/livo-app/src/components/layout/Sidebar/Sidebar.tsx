@@ -5,22 +5,23 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import {
-  Gauge,
-  Wrench,
-  Users,
-  Car,
   CalendarCheck,
+  Car,
+  ClipboardText,
+  Gauge,
   Gear,
-  SignOut,
+  Users,
+  Wrench,
 } from '@phosphor-icons/react'
 import styles from './Sidebar.module.css'
 
 const NAV_ITEMS = [
-  { href: '/dashboard',   label: 'Tableau de bord', icon: Gauge },
-  { href: '/atelier',     label: 'Atelier',          icon: Wrench },
-  { href: '/compagnons',  label: 'Compagnons',       icon: Users },
-  { href: '/vehicules',   label: 'Véhicules',        icon: Car },
-  { href: '/rapports',    label: 'RH',               icon: CalendarCheck },
+  { href: '/dashboard', label: 'Tableau de bord', icon: Gauge },
+  { href: '/atelier', label: 'Atelier', icon: Wrench },
+  { href: '/or-externes', label: 'OR externes', icon: ClipboardText },
+  { href: '/compagnons', label: 'Compagnons', icon: Users },
+  { href: '/vehicules', label: 'Véhicules', icon: Car },
+  { href: '/rapports', label: 'RH', icon: CalendarCheck },
 ] as const
 
 const BOTTOM_ITEMS = [
@@ -39,8 +40,6 @@ export function Sidebar({ garageNom, userNom, userEmail, userInitiale }: Sidebar
 
   return (
     <aside className={styles.sidebar}>
-
-      {/* Logo */}
       <div className={styles.logo}>
         <img
           src="/logo/livo-app-logo.png"
@@ -55,16 +54,14 @@ export function Sidebar({ garageNom, userNom, userEmail, userInitiale }: Sidebar
 
       <div className={cn(styles.logoBy, styles.fadeItem)}>BY LYSMA Solutions</div>
 
-      {/* Garage actif */}
       <div className={styles.garageSelector}>
         <div className={styles.garageDot} />
         <span className={cn(styles.garageName, styles.fadeItem)}>{garageNom}</span>
       </div>
 
-      {/* Nav principale */}
       <nav className={styles.nav}>
         {NAV_ITEMS.map(({ href, label, icon: Icon }) => {
-          const isActive = pathname === href || pathname.startsWith(href + '/')
+          const isActive = pathname === href || pathname.startsWith(`${href}/`)
           return (
             <Link
               key={href}
@@ -83,10 +80,8 @@ export function Sidebar({ garageNom, userNom, userEmail, userInitiale }: Sidebar
         })}
       </nav>
 
-      {/* Spacer */}
       <div style={{ flex: 1 }} />
 
-      {/* Nav bas */}
       <div className={styles.bottomNav}>
         {BOTTOM_ITEMS.map(({ href, label, icon: Icon }) => (
           <Link
@@ -100,7 +95,6 @@ export function Sidebar({ garageNom, userNom, userEmail, userInitiale }: Sidebar
           </Link>
         ))}
 
-        {/* User */}
         <div className={styles.userRow}>
           <div className={cn(styles.userInfo, styles.fadeItem)}>
             <span className={styles.userName}>{userNom}</span>
@@ -109,7 +103,6 @@ export function Sidebar({ garageNom, userNom, userEmail, userInitiale }: Sidebar
           <SignOutButton />
         </div>
       </div>
-
     </aside>
   )
 }

@@ -67,6 +67,30 @@ export async function POST(req: NextRequest) {
         where: { id: ficheId },
         data: { statut: 'EN_COURS', dateFermeture: null },
       })
+      await tx.pointageAuditLog.create({
+        data: {
+          action: 'CREATION',
+          targetType: 'POINTAGE_FICHE',
+          targetId: created.id,
+          pointageFicheId: created.id,
+          compagnonId,
+          garageId: compagnon.garageId,
+          userId: access.mode === 'admin' ? access.userId : null,
+          field: 'statut',
+          newValue: {
+            action,
+            ficheId,
+            statut: created.statut,
+            debutAt: created.debutAt.toISOString(),
+          },
+          motif:
+            access.mode === 'atelier'
+              ? 'Pointage sur fiche enregistré depuis l’espace atelier.'
+              : 'Pointage sur fiche enregistré depuis l’espace administrateur.',
+          ip: req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? null,
+          userAgent: req.headers.get('user-agent'),
+        },
+      })
       return created
     })
 
@@ -94,7 +118,7 @@ export async function POST(req: NextRequest) {
       Math.round((now.getTime() - activePointage.debutAt.getTime()) / 60000)
     )
 
-    await tx.pointageFiche.update({
+    const updated = await tx.pointageFiche.update({
       where: { id: activePointage.id },
       data: { statut: 'TERMINE', finAt: now, dureeMinutes },
     })
@@ -108,6 +132,35 @@ export async function POST(req: NextRequest) {
       data: {
         statut: activeCount > 0 ? 'EN_COURS' : 'TERMINEE',
         dateFermeture: activeCount > 0 ? null : now,
+      },
+    })
+
+    await tx.pointageAuditLog.create({
+      data: {
+        action: 'CREATION',
+        targetType: 'POINTAGE_FICHE',
+        targetId: updated.id,
+        pointageFicheId: updated.id,
+        compagnonId,
+        garageId: compagnon.garageId,
+        userId: access.mode === 'admin' ? access.userId : null,
+        field: 'statut',
+        oldValue: {
+          statut: activePointage.statut,
+          debutAt: activePointage.debutAt.toISOString(),
+        },
+        newValue: {
+          action,
+          statut: updated.statut,
+          finAt: updated.finAt?.toISOString() ?? null,
+          dureeMinutes: updated.dureeMinutes,
+        },
+        motif:
+          access.mode === 'atelier'
+            ? 'Fin de pointage sur fiche enregistrée depuis l’espace atelier.'
+            : 'Fin de pointage sur fiche enregistrée depuis l’espace administrateur.',
+        ip: req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? null,
+        userAgent: req.headers.get('user-agent'),
       },
     })
 

@@ -25,6 +25,12 @@ export default auth(async (req) => {
   const isLoggedIn = !!req.auth
   const atelierCookie = req.cookies.get('atelier-garage-id')?.value
 
+  if (req.nextUrl.hostname === 'livo-app.com') {
+    const url = req.nextUrl.clone()
+    url.hostname = 'www.livo-app.com'
+    return NextResponse.redirect(url, 308)
+  }
+
   if (PUBLIC_ROUTES.some((route) => pathname === route || (route !== '/' && pathname.startsWith(route)))) {
     return NextResponse.next()
   }

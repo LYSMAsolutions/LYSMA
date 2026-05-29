@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
+import { canonical } from '@/lib/seo'
 import styles from './page.module.css'
 
 export const metadata: Metadata = {
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
     follow: true,
   },
   alternates: {
-    canonical: '/',
+    canonical: canonical('/'),
   },
   openGraph: {
     title: 'Logiciel de pointage atelier mécanique | Livo',
@@ -20,6 +21,7 @@ export const metadata: Metadata = {
       'Logiciel de gestion atelier pour garages et carrosseries : pointage compagnon, suivi véhicules, fiches de travail et rentabilité atelier.',
     type: 'website',
     siteName: 'Livo',
+    url: canonical('/'),
   },
 }
 
@@ -31,6 +33,7 @@ const softwareJsonLd = {
   operatingSystem: 'Web',
   description:
     'Livo est un logiciel de pointage atelier mécanique et carrosserie pour suivre les compagnons, les véhicules, les fiches de travail, les ordres de réparation et la rentabilité atelier.',
+  url: canonical('/'),
   offers: {
     '@type': 'Offer',
     price: '89',

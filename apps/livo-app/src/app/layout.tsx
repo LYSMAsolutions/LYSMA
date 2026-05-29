@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import '@/styles/globals.css'
 import { CookieBanner } from '@/components/layout/CookieBanner/CookieBanner'
+import { SITE_URL } from '@/lib/seo'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -14,7 +15,7 @@ export const metadata: Metadata = {
     default: 'Livo-app',
     template: '%s — LIVO',
   },
-  description: "Gestion d'atelier automobile. Simple. Précis. Légal.",
+  description: "Gestion d'atelier automobile. Simple, précise et sécurisée.",
   icons: {
     icon: '/logo/livo-app-logo.png',
     apple: '/logo/livo-app-logo.png',
@@ -23,17 +24,17 @@ export const metadata: Metadata = {
   keywords: ['garage', 'atelier', 'mécanique', 'pointage', 'gestion RH'],
   authors: [{ name: 'LYSMA Solutions' }],
   creator: 'LYSMA Solutions',
-  metadataBase: new URL('https://livo-app.com'),
+  metadataBase: new URL(SITE_URL),
   openGraph: {
     type: 'website',
     locale: 'fr_FR',
-    url: 'https://livo-app.com',
+    url: SITE_URL,
     siteName: 'Livo-app',
-    title: 'Livo-app — Gestion d\'atelier automobile',
-    description: "Pointage, ordres de réparation, rentabilité. Fait pour le garage.",
+    title: "Livo-app — Gestion d'atelier automobile",
+    description: 'Pointage, ordres de réparation, rentabilité. Fait pour le garage.',
   },
   robots: {
-    index: false, // SaaS privé — pas d'indexation des espaces connectés.
+    index: false,
     follow: false,
   },
 }
@@ -41,7 +42,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  maximumScale: 1, // Désactive le zoom pour une interface tablette/tactile stable.
+  maximumScale: 1,
   themeColor: '#04060f',
 }
 
