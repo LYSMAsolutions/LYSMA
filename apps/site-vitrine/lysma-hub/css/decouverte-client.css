@@ -239,6 +239,35 @@ textarea::placeholder {
   color: rgba(148, 163, 184, .64);
 }
 
+.section-heading h3 {
+  margin: 6px 0 0;
+  color: var(--white);
+  font-family: Manrope, Inter, sans-serif;
+  font-size: clamp(1.1rem, 2.4vw, 1.45rem);
+  line-height: 1.15;
+}
+
+.section-heading p:not(.eyebrow) {
+  margin-top: 8px;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.faq-block {
+  grid-column: 2;
+  margin-top: 18px;
+  padding: 18px;
+  border: 1px solid rgba(136, 199, 255, .16);
+  border-radius: var(--radius);
+  background: rgba(4, 16, 31, .3);
+}
+
+.section-heading.compact {
+  margin-bottom: 16px;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+}
+
 .wide {
   grid-column: 1 / -1;
 }
@@ -328,6 +357,10 @@ textarea::placeholder {
   .form-section,
   .submit-panel {
     grid-template-columns: 1fr;
+  }
+
+  .faq-block {
+    grid-column: 1;
   }
 }
 

@@ -28,6 +28,25 @@ function doPost(e) {
     var goals = data.goals || "";
     var seoCities = data.seoCities || "";
     var seoKeywords = data.seoKeywords || "";
+    var seoTargetCities = data.seoTargetCities || "";
+    var seoPriorityServices = data.seoPriorityServices || "";
+    var seoKnownKeywords = data.seoKnownKeywords || "";
+    var seoGrowthServices = data.seoGrowthServices || "";
+    var seoSpecialities = data.seoSpecialities || "";
+    var seoAdvantages = data.seoAdvantages || "";
+    var idealCustomer = data.idealCustomer || "";
+    var mainBusinessAreas = data.mainBusinessAreas || "";
+    var excludedKeywords = data.excludedKeywords || "";
+    var faqQuestion1 = data.faqQuestion1 || "";
+    var faqAnswer1 = data.faqAnswer1 || "";
+    var faqQuestion2 = data.faqQuestion2 || "";
+    var faqAnswer2 = data.faqAnswer2 || "";
+    var faqQuestion3 = data.faqQuestion3 || "";
+    var faqAnswer3 = data.faqAnswer3 || "";
+    var faqQuestion4 = data.faqQuestion4 || "";
+    var faqAnswer4 = data.faqAnswer4 || "";
+    var faqQuestion5 = data.faqQuestion5 || "";
+    var faqAnswer5 = data.faqAnswer5 || "";
     var availablePhotos = data.availablePhotos || "";
     var strategicAnswer = data.strategicAnswer || "";
     var internalNotes = data.internalNotes || "";
@@ -74,9 +93,30 @@ function doPost(e) {
       "OBJECTIFS DU FUTUR SITE\n" +
       goals + "\n\n" +
 
-      "SEO LOCAL\n" +
-      "Villes ciblées : " + seoCities + "\n" +
-      "Mots-clés : " + seoKeywords + "\n\n" +
+      "SEO & VISIBILITÉ GOOGLE\n" +
+      "Villes ciblées existantes : " + seoCities + "\n" +
+      "Mots-clés existants : " + seoKeywords + "\n" +
+      "Villes prioritaires Google : " + seoTargetCities + "\n" +
+      "Services prioritaires SEO : " + seoPriorityServices + "\n" +
+      "Mots-clés supposés clients : " + seoKnownKeywords + "\n" +
+      "Prestations à développer : " + seoGrowthServices + "\n" +
+      "Spécialités / expertises : " + seoSpecialities + "\n" +
+      "Avantages concurrentiels : " + seoAdvantages + "\n" +
+      "Client idéal : " + idealCustomer + "\n" +
+      "Zones principales de chiffre d'affaires : " + mainBusinessAreas + "\n" +
+      "Mots-clés / prestations / zones à éviter : " + excludedKeywords + "\n\n" +
+
+      "FAQ CLIENTS POUR GOOGLE\n" +
+      "Question 1 : " + faqQuestion1 + "\n" +
+      "Réponse 1 : " + faqAnswer1 + "\n\n" +
+      "Question 2 : " + faqQuestion2 + "\n" +
+      "Réponse 2 : " + faqAnswer2 + "\n\n" +
+      "Question 3 : " + faqQuestion3 + "\n" +
+      "Réponse 3 : " + faqAnswer3 + "\n\n" +
+      "Question 4 : " + faqQuestion4 + "\n" +
+      "Réponse 4 : " + faqAnswer4 + "\n\n" +
+      "Question 5 : " + faqQuestion5 + "\n" +
+      "Réponse 5 : " + faqAnswer5 + "\n\n" +
 
       "PHOTOS / CONTENUS DISPONIBLES\n" +
       availablePhotos + "\n\n" +
