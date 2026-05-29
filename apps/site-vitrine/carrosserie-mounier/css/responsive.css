@@ -76,8 +76,30 @@
 
   .process-grid,
   .services-grid,
-  .contact-layout {
+  .contact-layout,
+  .quick-actions-grid,
+  .prestations-showcase,
+  .split-feature-grid,
+  .covering-grid,
+  .service-detail-grid {
     grid-template-columns: 1fr;
+  }
+
+  .quick-actions-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .realisation-board,
+  .faq-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .insurance-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .insurance-list {
+    grid-template-columns: repeat(4, 1fr);
   }
 
   .cards-grid {
@@ -238,9 +260,51 @@
   .commitments,
   .gallery-grid,
   .services-grid,
-  .contact-layout {
+  .contact-layout,
+  .quick-actions-grid,
+  .prestations-showcase,
+  .split-feature-grid,
+  .covering-grid,
+  .service-detail-grid,
+  .realisation-board,
+  .faq-grid,
+  .insurance-grid {
     display: grid;
     grid-template-columns: 1fr;
+  }
+
+  .quick-actions {
+    margin-top: 0;
+    padding: 16px 0;
+    background: #252a2d;
+  }
+
+  .quick-action {
+    min-height: 104px;
+  }
+
+  .level-grid,
+  .insurance-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .covering-visual {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+
+  .covering-visual div {
+    min-height: 220px;
+  }
+
+  .before-after,
+  .before-after img {
+    min-height: 310px;
+  }
+
+  .comparison-card img,
+  .comparison-card:first-child img {
+    height: 260px;
   }
 
   .process-card {
