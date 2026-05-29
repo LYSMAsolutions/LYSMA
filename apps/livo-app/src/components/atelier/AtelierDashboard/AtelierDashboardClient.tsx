@@ -1,8 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Play, Stop, Coffee, ForkKnife, SignOut, ArrowRight, Wrench, Lock, Barcode } from '@phosphor-icons/react'
+import { Play, Stop, Coffee, ForkKnife, SignOut, ArrowRight, Wrench, Lock, Barcode, ClipboardText } from '@phosphor-icons/react'
 import { FicheScanner } from '@/components/atelier/FicheScanner/FicheScanner'
 import { Badge } from '@/components/ui'
 import styles from './AtelierDashboard.module.css'
@@ -11,15 +11,39 @@ type Statut = 'ABSENT' | 'EN_TRAVAIL' | 'PAUSE_CAFE' | 'PAUSE_DEJEUNER' | 'PARTI
 type StatutFiche = 'EN_ATTENTE' | 'EN_COURS' | 'EN_PAUSE' | 'TERMINEE' | 'CLOTUREE' | 'ANNULEE'
 
 type Compagnon = {
-  id: string; prenom: string; nom: string; poste: string | null
-  hasPin: boolean; statut: string; heureArrivee: string | null
+  id: string
+  prenom: string
+  nom: string
+  poste: string | null
+  hasPin: boolean
+  statut: string
+  heureArrivee: string | null
 }
 
 type Fiche = {
-  id: string; numero: string; statut: StatutFiche; travaux: string
-  vehicule: string; immat: string | null; clientNom: string
+  id: string
+  numero: string
+  statut: StatutFiche
+  travaux: string
+  vehicule: string
+  immat: string | null
+  clientNom: string
   tempsReel: number | null
   pointagesActifs: { compagnonId: string; compagnonNom: string; debutAt: string }[]
+}
+
+type ExternalMirror = {
+  id: string
+  externalNumber: string
+  sourceSoftware: string | null
+  clientName: string | null
+  vehicleLabel: string | null
+  immatriculation: string | null
+  operation: string | null
+  status: string
+  soldHours: number | null
+  realMinutes: number
+  activePointage: { id: string; debutAt: string } | null
 }
 
 type Props = {
@@ -29,7 +53,7 @@ type Props = {
   compagnonConnecteId: string | null
 }
 
-const STATUT_BADGE: Record<string, { label: string; variant: 'muted'|'success'|'warning'|'blue'|'error'|'default' }> = {
+const STATUT_BADGE: Record<string, { label: string; variant: 'muted' | 'success' | 'warning' | 'blue' | 'error' | 'default' }> = {
   ABSENT: { label: 'Absent', variant: 'muted' },
   EN_TRAVAIL: { label: 'En travail', variant: 'success' },
   PAUSE_CAFE: { label: 'Pause café', variant: 'warning' },
@@ -37,7 +61,7 @@ const STATUT_BADGE: Record<string, { label: string; variant: 'muted'|'success'|'
   PARTI: { label: 'Parti', variant: 'muted' },
 }
 
-const FICHE_BADGE: Record<string, { label: string; variant: 'blue'|'success'|'warning'|'muted'|'default' }> = {
+const FICHE_BADGE: Record<string, { label: string; variant: 'blue' | 'success' | 'warning' | 'muted' | 'default' }> = {
   EN_ATTENTE: { label: 'En attente', variant: 'warning' },
   EN_COURS: { label: 'En cours', variant: 'blue' },
   EN_PAUSE: { label: 'En pause', variant: 'warning' },
@@ -52,12 +76,18 @@ function formatTime(iso: string | null) {
 function formatDuree(debutIso: string) {
   const debut = new Date(debutIso)
   const now = new Date()
-  const min = Math.floor((now.getTime() - debut.getTime()) / 60000)
-  const h = Math.floor(min / 60); const m = min % 60
-  return `${h}h${m.toString().padStart(2,'0')}`
+  const min = Math.max(0, Math.floor((now.getTime() - debut.getTime()) / 60000))
+  const h = Math.floor(min / 60)
+  const m = min % 60
+  return `${h}h${m.toString().padStart(2, '0')}`
 }
 
-// ── PIN Modal ────────────────────────────────────────────────
+function formatMinutes(minutes: number) {
+  const h = Math.floor(minutes / 60)
+  const m = minutes % 60
+  return `${h} h ${String(m).padStart(2, '0')}`
+}
+
 function PinModal({ compagnon, onSuccess, onClose }: { compagnon: Compagnon; onSuccess: (id: string) => void; onClose: () => void }) {
   const [pin, setPin] = useState('')
   const [error, setError] = useState('')
@@ -65,47 +95,185 @@ function PinModal({ compagnon, onSuccess, onClose }: { compagnon: Compagnon; onS
 
   function handleDigit(d: string) {
     if (pin.length >= 4) return
-    const np = pin + d
-    setPin(np)
-    if (np.length === 4) verify(np)
+    const nextPin = pin + d
+    setPin(nextPin)
+    if (nextPin.length === 4) verify(nextPin)
   }
 
-  async function verify(p: string) {
-    setLoading(true); setError('')
+  async function verify(value: string) {
+    setLoading(true)
+    setError('')
     try {
       const res = await fetch('/api/atelier-auth/compagnon-pin', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ compagnonId: compagnon.id, pin: p }),
+        body: JSON.stringify({ compagnonId: compagnon.id, pin: value }),
       })
       const data = await res.json()
-      if (res.ok) { onSuccess(compagnon.id) }
-      else { setError(data.error); setPin('') }
-    } finally { setLoading(false) }
+      if (res.ok) onSuccess(compagnon.id)
+      else {
+        setError(data.error)
+        setPin('')
+      }
+    } finally {
+      setLoading(false)
+    }
   }
 
   const initials = `${compagnon.prenom[0]}${compagnon.nom[0]}`.toUpperCase()
 
   return (
-    <div className={styles.pinOverlay} onClick={e => e.target === e.currentTarget && onClose()}>
+    <div className={styles.pinOverlay} onClick={(event) => event.target === event.currentTarget && onClose()}>
       <div className={styles.pinModal}>
         <button className={styles.pinBack} onClick={onClose}>← Retour</button>
         <div className={styles.pinAvatar}>{initials}</div>
         <p className={styles.pinName}>{compagnon.prenom} {compagnon.nom}</p>
         <p className={styles.pinLabel}>Entrez votre PIN</p>
         <div className={styles.pinDots}>
-          {[0,1,2,3].map(i => <div key={i} className={`${styles.pinDot} ${pin.length > i ? styles.pinDotFilled : ''}`} />)}
+          {[0, 1, 2, 3].map((index) => (
+            <div key={index} className={`${styles.pinDot} ${pin.length > index ? styles.pinDotFilled : ''}`} />
+          ))}
         </div>
         {error && <p className={styles.pinError}>{error}</p>}
         <div className={styles.pinPad}>
-          {['1','2','3','4','5','6','7','8','9','','0','⌫'].map((d, i) => (
-            <button key={i} className={`${styles.pinKey} ${d === '' ? styles.pinKeyEmpty : ''}`}
-              onClick={() => d === '⌫' ? setPin(p => p.slice(0,-1)) : d !== '' && handleDigit(d)}
-              disabled={loading || d === ''}>
-              {d}
+          {['1', '2', '3', '4', '5', '6', '7', '8', '9', '', '0', '⌫'].map((digit, index) => (
+            <button
+              key={index}
+              className={`${styles.pinKey} ${digit === '' ? styles.pinKeyEmpty : ''}`}
+              onClick={() => (digit === '⌫' ? setPin((value) => value.slice(0, -1)) : digit !== '' && handleDigit(digit))}
+              disabled={loading || digit === ''}
+            >
+              {digit}
             </button>
           ))}
         </div>
+      </div>
+    </div>
+  )
+}
+
+function ExternalMirrorModal({
+  compagnonId,
+  canPoint,
+  onClose,
+}: {
+  compagnonId: string
+  canPoint: boolean
+  onClose: () => void
+}) {
+  const [externalNumber, setExternalNumber] = useState('')
+  const [order, setOrder] = useState<ExternalMirror | null>(null)
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState('')
+
+  async function findOrCreate() {
+    setError('')
+    if (!externalNumber.trim()) {
+      setError('Saisissez ou scannez un numéro OR.')
+      return
+    }
+
+    setLoading('search')
+    try {
+      const res = await fetch('/api/or-externes/mirror', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ compagnonId, externalNumber }),
+      })
+      const data = await res.json().catch(() => null)
+      if (!res.ok) {
+        setError(typeof data?.error === 'string' ? data.error : 'Impossible de récupérer cette fiche miroir.')
+        return
+      }
+      setOrder(data.order)
+    } catch {
+      setError('Connexion impossible. Réessayez dans un instant.')
+    } finally {
+      setLoading('')
+    }
+  }
+
+  async function actionPointage(action: 'POINTER' | 'DEPOINTER') {
+    if (!order) return
+    setError('')
+    setLoading(action)
+    try {
+      const res = await fetch(`/api/or-externes/${order.id}/pointage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ compagnonId, action }),
+      })
+      const data = await res.json().catch(() => null)
+      if (!res.ok) {
+        setError(typeof data?.error === 'string' ? data.error : 'Action impossible.')
+        return
+      }
+      await findOrCreate()
+    } catch {
+      setError('Connexion impossible. Réessayez dans un instant.')
+    } finally {
+      setLoading('')
+    }
+  }
+
+  return (
+    <div className={styles.confirmOverlay} onClick={(event) => event.target === event.currentTarget && onClose()}>
+      <div className={styles.externalModal} role="dialog" aria-modal="true" aria-labelledby="external-or-title">
+        <div className={styles.externalHeader}>
+          <div>
+            <h2 id="external-or-title">OR externe</h2>
+            <p>Scannez le QR code de l’OR ou saisissez uniquement son numéro.</p>
+          </div>
+          <button type="button" onClick={onClose}>Fermer</button>
+        </div>
+
+        <div className={styles.externalLookup}>
+          <input
+            value={externalNumber}
+            onChange={(event) => setExternalNumber(event.target.value)}
+            placeholder="Numéro OR externe"
+            autoFocus
+          />
+          <button type="button" onClick={findOrCreate} disabled={loading === 'search'}>
+            {loading === 'search' ? 'Recherche...' : 'Utiliser cet OR'}
+          </button>
+        </div>
+
+        <p className={styles.externalHint}>
+          La fiche miroir est créée automatiquement si elle n’existe pas encore. Aucune fiche complète n’est demandée au compagnon.
+        </p>
+
+        {error && <p className={styles.pointageError}>{error}</p>}
+
+        {order && (
+          <div className={styles.externalCard}>
+            <div className={styles.externalCardTitle}>
+              <strong>{order.externalNumber}</strong>
+              <Badge variant={order.activePointage ? 'blue' : 'muted'} dot>
+                {order.activePointage ? 'Pointage en cours' : 'Prêt à pointer'}
+              </Badge>
+            </div>
+            <p>{order.vehicleLabel || 'Véhicule non renseigné'}{order.immatriculation ? ` · ${order.immatriculation}` : ''}</p>
+            <small>{order.clientName || 'Client non renseigné'} · {order.operation || 'Fiche miroir LIVO'}</small>
+            <div className={styles.externalStats}>
+              <span><small>Temps réel</small><strong>{formatMinutes(order.realMinutes)}</strong></span>
+              <span><small>Temps vendu</small><strong>{order.soldHours ? `${order.soldHours} h` : 'À compléter'}</strong></span>
+            </div>
+
+            {canPoint ? (
+              <button
+                type="button"
+                className={`${styles.ficheBtn} ${order.activePointage ? styles.ficheBtnStop : styles.ficheBtnStart}`}
+                onClick={() => actionPointage(order.activePointage ? 'DEPOINTER' : 'POINTER')}
+                disabled={Boolean(loading)}
+              >
+                {order.activePointage ? <><Stop weight="fill" size={16} /> Dépointer</> : <><Play weight="fill" size={16} /> Pointer</>}
+              </button>
+            ) : (
+              <p className={styles.externalHint}>Vous devez être en travail pour pointer sur un OR externe.</p>
+            )}
+          </div>
+        )}
       </div>
     </div>
   )
@@ -119,17 +287,17 @@ export function AtelierDashboardClient({ garage, compagnons: compagnonsInit, fic
   const [fiches, setFiches] = useState(fichesInit)
   const [loadingAction, setLoadingAction] = useState<string | null>(null)
   const [scannerOpen, setScannerOpen] = useState(false)
+  const [externalOpen, setExternalOpen] = useState(false)
   const [confirmDepartOpen, setConfirmDepartOpen] = useState(false)
   const [pointageError, setPointageError] = useState('')
   const [now, setNow] = useState(new Date())
 
-  // Horloge temps réel
   useEffect(() => {
-    const t = setInterval(() => setNow(new Date()), 30000)
-    return () => clearInterval(t)
+    const timer = setInterval(() => setNow(new Date()), 30000)
+    return () => clearInterval(timer)
   }, [])
 
-  const compagnonConnecte = compagnons.find(c => c.id === compagnonConnecteId)
+  const compagnonConnecte = compagnons.find((compagnon) => compagnon.id === compagnonConnecteId)
 
   function handlePinSuccess(id: string) {
     setCompagnonConnecteId(id)
@@ -148,10 +316,13 @@ export function AtelierDashboardClient({ garage, compagnons: compagnonsInit, fic
       })
       const data = await res.json()
       if (data.success) {
-        setCompagnons(prev => prev.map(c => c.id === compagnonConnecteId
-          ? { ...c, statut: data.pointage.statutActuel, heureArrivee: data.pointage.heureArrivee }
-          : c
-        ))
+        setCompagnons((previous) =>
+          previous.map((compagnon) =>
+            compagnon.id === compagnonConnecteId
+              ? { ...compagnon, statut: data.pointage.statutActuel, heureArrivee: data.pointage.heureArrivee }
+              : compagnon
+          )
+        )
         return true
       }
       setPointageError(data.error ?? 'Action impossible pour le moment.')
@@ -159,7 +330,9 @@ export function AtelierDashboardClient({ garage, compagnons: compagnonsInit, fic
     } catch {
       setPointageError('Connexion impossible. Réessayez dans un instant.')
       return false
-    } finally { setLoadingAction(null) }
+    } finally {
+      setLoadingAction(null)
+    }
   }
 
   async function confirmerFinJournee() {
@@ -171,25 +344,25 @@ export function AtelierDashboardClient({ garage, compagnons: compagnonsInit, fic
     if (!compagnonConnecteId) return
     setLoadingAction(ficheId)
 
-    // Mise à jour optimiste immédiate
-    setFiches(prev => prev.map(f => {
-      if (f.id !== ficheId) return f
-      if (action === 'POINTER') {
-        return {
-          ...f,
-          statut: 'EN_COURS' as const,
-          pointagesActifs: [
-            ...f.pointagesActifs,
-            { compagnonId: compagnonConnecteId, compagnonNom: 'Vous', debutAt: new Date().toISOString() }
-          ]
+    setFiches((previous) =>
+      previous.map((fiche) => {
+        if (fiche.id !== ficheId) return fiche
+        if (action === 'POINTER') {
+          return {
+            ...fiche,
+            statut: 'EN_COURS' as const,
+            pointagesActifs: [
+              ...fiche.pointagesActifs,
+              { compagnonId: compagnonConnecteId, compagnonNom: 'Vous', debutAt: new Date().toISOString() },
+            ],
+          }
         }
-      } else {
         return {
-          ...f,
-          pointagesActifs: f.pointagesActifs.filter(p => p.compagnonId !== compagnonConnecteId)
+          ...fiche,
+          pointagesActifs: fiche.pointagesActifs.filter((pointage) => pointage.compagnonId !== compagnonConnecteId),
         }
-      }
-    }))
+      })
+    )
 
     try {
       const res = await fetch('/api/pointage-fiche/action', {
@@ -197,13 +370,8 @@ export function AtelierDashboardClient({ garage, compagnons: compagnonsInit, fic
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ compagnonId: compagnonConnecteId, ficheId, action }),
       })
-      if (!res.ok) {
-        // Rollback si erreur
-        router.refresh()
-      } else {
-        // Refresh silencieux pour sync
-        router.refresh()
-      }
+      if (!res.ok) router.refresh()
+      else router.refresh()
     } catch {
       router.refresh()
     } finally {
@@ -224,8 +392,6 @@ export function AtelierDashboardClient({ garage, compagnons: compagnonsInit, fic
 
   return (
     <div className={styles.page}>
-
-      {/* ── Header ──────────────────────────────────────── */}
       <div className={styles.header}>
         <div className={styles.headerLeft}>
           <div className={styles.garageDot} />
@@ -242,21 +408,23 @@ export function AtelierDashboardClient({ garage, compagnons: compagnonsInit, fic
         </div>
       </div>
 
-      {/* ── Sélection compagnon (si non connecté) ───────── */}
       {!compagnonConnecteId && (
         <div className={styles.selectionWrap}>
           <h2 className={styles.selectionTitle}>Qui êtes-vous ?</h2>
           <div className={styles.compagnonsGrid}>
-            {compagnons.map(c => {
-              const b = STATUT_BADGE[c.statut] ?? { label: c.statut, variant: 'muted' as const }
-              const initials = `${c.prenom[0]}${c.nom[0]}`.toUpperCase()
+            {compagnons.map((compagnon) => {
+              const companionBadge = STATUT_BADGE[compagnon.statut] ?? { label: compagnon.statut, variant: 'muted' as const }
+              const initials = `${compagnon.prenom[0]}${compagnon.nom[0]}`.toUpperCase()
               return (
-                <button key={c.id} className={styles.compagnonCard}
-                  onClick={() => c.hasPin ? setPinTarget(c) : setCompagnonConnecteId(c.id)}>
+                <button
+                  key={compagnon.id}
+                  className={styles.compagnonCard}
+                  onClick={() => (compagnon.hasPin ? setPinTarget(compagnon) : setCompagnonConnecteId(compagnon.id))}
+                >
                   <div className={styles.compagnonAvatar}>{initials}</div>
-                  <span className={styles.compagnonNom}>{c.prenom}</span>
-                  <span className={styles.compagnonPoste}>{c.poste ?? 'Mécanicien'}</span>
-                  <Badge variant={b.variant} dot>{b.label}</Badge>
+                  <span className={styles.compagnonNom}>{compagnon.prenom}</span>
+                  <span className={styles.compagnonPoste}>{compagnon.poste ?? 'Mécanicien'}</span>
+                  <Badge variant={companionBadge.variant} dot>{companionBadge.label}</Badge>
                 </button>
               )
             })}
@@ -264,11 +432,8 @@ export function AtelierDashboardClient({ garage, compagnons: compagnonsInit, fic
         </div>
       )}
 
-      {/* ── Dashboard compagnon connecté ────────────────── */}
       {compagnonConnecte && (
         <div className={styles.dashboard}>
-
-          {/* Bloc compagnon + pointage journée */}
           <div className={styles.compagnonBlock}>
             <div className={styles.compagnonBlockLeft}>
               <div className={styles.compagnonAvatarLg}>
@@ -284,104 +449,99 @@ export function AtelierDashboardClient({ garage, compagnons: compagnonsInit, fic
 
             <div className={styles.actionsJournee}>
               {statut === 'ABSENT' && (
-                <button className={`${styles.actionBtn} ${styles.actionArrivee}`}
-                  onClick={() => actionPointage('ARRIVEE')} disabled={!!loadingAction}>
+                <button className={`${styles.actionBtn} ${styles.actionArrivee}`} onClick={() => actionPointage('ARRIVEE')} disabled={!!loadingAction}>
                   <ArrowRight weight="bold" size={20} />
                   Arrivée atelier
                 </button>
               )}
               {statut === 'EN_TRAVAIL' && (
                 <>
-                  <button className={`${styles.actionBtn} ${styles.actionPause}`}
-                    onClick={() => actionPointage('PAUSE_CAFE_DEBUT')} disabled={!!loadingAction}>
+                  <button className={`${styles.actionBtn} ${styles.actionPause}`} onClick={() => actionPointage('PAUSE_CAFE_DEBUT')} disabled={!!loadingAction}>
                     <Coffee weight="fill" size={18} /> Pause café
                   </button>
-                  <button className={`${styles.actionBtn} ${styles.actionPause}`}
-                    onClick={() => actionPointage('PAUSE_DEJ_DEBUT')} disabled={!!loadingAction}>
+                  <button className={`${styles.actionBtn} ${styles.actionPause}`} onClick={() => actionPointage('PAUSE_DEJ_DEBUT')} disabled={!!loadingAction}>
                     <ForkKnife weight="fill" size={18} /> Pause déjeuner
                   </button>
-                  <button className={`${styles.actionBtn} ${styles.actionDepart}`}
-                    onClick={() => setConfirmDepartOpen(true)} disabled={!!loadingAction}>
+                  <button className={`${styles.actionBtn} ${styles.actionDepart}`} onClick={() => setConfirmDepartOpen(true)} disabled={!!loadingAction}>
                     <SignOut weight="bold" size={18} /> Fin de journée
                   </button>
                 </>
               )}
               {(statut === 'PAUSE_CAFE' || statut === 'PAUSE_DEJEUNER') && (
-                <button className={`${styles.actionBtn} ${styles.actionReprise}`}
+                <button
+                  className={`${styles.actionBtn} ${styles.actionReprise}`}
                   onClick={() => actionPointage(statut === 'PAUSE_CAFE' ? 'PAUSE_CAFE_FIN' : 'PAUSE_DEJ_FIN')}
-                  disabled={!!loadingAction}>
+                  disabled={!!loadingAction}
+                >
                   <ArrowRight weight="bold" size={20} /> Reprendre
                 </button>
               )}
-              {statut === 'PARTI' && (
-                <div className={styles.partiMsg}>Bonne journée !</div>
-              )}
+              {statut === 'PARTI' && <div className={styles.partiMsg}>Bonne journée !</div>}
             </div>
             {pointageError && <p className={styles.pointageError}>{pointageError}</p>}
           </div>
 
-          {/* Fiches du jour */}
           <div className={styles.fichesSection}>
             <div className={styles.fichesTitleRow}>
               <h3 className={styles.fichesTitle}>
                 <Wrench size={16} /> Fiches de travaux
                 <span className={styles.fichesCount}>{fiches.length}</span>
               </h3>
-              <button className={styles.scanBtn} onClick={() => setScannerOpen(true)}>
-                <Barcode weight="bold" size={16} /> Rechercher / Scanner
-              </button>
+              <div className={styles.fichesActions}>
+                <button className={styles.scanBtn} onClick={() => setExternalOpen(true)}>
+                  <ClipboardText weight="bold" size={16} /> OR externe
+                </button>
+                <button className={styles.scanBtn} onClick={() => setScannerOpen(true)}>
+                  <Barcode weight="bold" size={16} /> Rechercher / Scanner
+                </button>
+              </div>
             </div>
 
             {fiches.length === 0 ? (
               <div className={styles.fichesEmpty}>Aucune fiche active</div>
             ) : (
               <div className={styles.fichesList}>
-                {fiches.map(f => {
-                  const estPointe = f.pointagesActifs.some(p => p.compagnonId === compagnonConnecteId)
-                  const fb = FICHE_BADGE[f.statut] ?? { label: f.statut, variant: 'muted' as const }
-                  const peutPointer = ['EN_ATTENTE', 'EN_COURS', 'TERMINEE'].includes(f.statut) && statut === 'EN_TRAVAIL'
-                  const ptgMoi = f.pointagesActifs.find(p => p.compagnonId === compagnonConnecteId)
-                  const lignes = f.travaux.split('\n').filter(Boolean)
+                {fiches.map((fiche) => {
+                  const estPointe = fiche.pointagesActifs.some((pointage) => pointage.compagnonId === compagnonConnecteId)
+                  const ficheBadge = FICHE_BADGE[fiche.statut] ?? { label: fiche.statut, variant: 'muted' as const }
+                  const peutPointer = ['EN_ATTENTE', 'EN_COURS', 'TERMINEE'].includes(fiche.statut) && statut === 'EN_TRAVAIL'
+                  const pointageMoi = fiche.pointagesActifs.find((pointage) => pointage.compagnonId === compagnonConnecteId)
+                  const lignes = fiche.travaux.split('\n').filter(Boolean)
 
                   return (
-                    <div key={f.id} className={`${styles.ficheCard} ${estPointe ? styles.ficheActive : ''}`}>
+                    <div key={fiche.id} className={`${styles.ficheCard} ${estPointe ? styles.ficheActive : ''}`}>
                       <div className={styles.ficheCardHeader}>
                         <div className={styles.ficheCardLeft}>
-                          <span className={styles.ficheNumero}>{f.numero}</span>
-                          <Badge variant={fb.variant} dot>{fb.label}</Badge>
+                          <span className={styles.ficheNumero}>{fiche.numero}</span>
+                          <Badge variant={ficheBadge.variant} dot>{ficheBadge.label}</Badge>
                         </div>
                         {peutPointer && (
                           <button
                             className={`${styles.ficheBtn} ${estPointe ? styles.ficheBtnStop : styles.ficheBtnStart}`}
-                            onClick={() => actionFiche(f.id, estPointe ? 'DEPOINTER' : 'POINTER')}
+                            onClick={() => actionFiche(fiche.id, estPointe ? 'DEPOINTER' : 'POINTER')}
                             disabled={!!loadingAction}
                           >
-                            {loadingAction === f.id
+                            {loadingAction === fiche.id
                               ? '...'
                               : estPointe
                               ? <><Stop weight="fill" size={16} /> Dépointer</>
-                              : <><Play weight="fill" size={16} /> Pointer</>
-                            }
+                              : <><Play weight="fill" size={16} /> Pointer</>}
                           </button>
                         )}
                       </div>
                       <div className={styles.ficheVehicule}>
-                        <span className={styles.ficheVehiculeNom}>{f.vehicule}</span>
-                        {f.immat && <span className={styles.ficheImmat}>{f.immat}</span>}
-                        <span className={styles.ficheClient}>{f.clientNom}</span>
+                        <span className={styles.ficheVehiculeNom}>{fiche.vehicule}</span>
+                        {fiche.immat && <span className={styles.ficheImmat}>{fiche.immat}</span>}
+                        <span className={styles.ficheClient}>{fiche.clientNom}</span>
                       </div>
                       <ul className={styles.ficheTravaux}>
-                        {lignes.slice(0, 2).map((t, i) => <li key={i}>{t}</li>)}
+                        {lignes.slice(0, 2).map((ligne, index) => <li key={index}>{ligne}</li>)}
                         {lignes.length > 2 && <li className={styles.ficheMore}>+{lignes.length - 2} autre{lignes.length - 2 > 1 ? 's' : ''}</li>}
                       </ul>
-                      {estPointe && ptgMoi && (
-                        <div className={styles.ficheEnCours}>
-                          ⏱ En cours depuis {formatDuree(ptgMoi.debutAt)}
-                        </div>
-                      )}
-                      {f.pointagesActifs.filter(p => p.compagnonId !== compagnonConnecteId).map(p => (
-                        <div key={p.compagnonId} className={styles.ficheAutreCompagnon}>
-                          {p.compagnonNom.split(' ')[0]} travaille dessus
+                      {estPointe && pointageMoi && <div className={styles.ficheEnCours}>En cours depuis {formatDuree(pointageMoi.debutAt)}</div>}
+                      {fiche.pointagesActifs.filter((pointage) => pointage.compagnonId !== compagnonConnecteId).map((pointage) => (
+                        <div key={pointage.compagnonId} className={styles.ficheAutreCompagnon}>
+                          {pointage.compagnonNom.split(' ')[0]} travaille dessus
                         </div>
                       ))}
                     </div>
@@ -390,11 +550,9 @@ export function AtelierDashboardClient({ garage, compagnons: compagnonsInit, fic
               </div>
             )}
           </div>
-
         </div>
       )}
 
-      {/* Scanner modal */}
       {scannerOpen && compagnonConnecteId && (
         <FicheScanner
           compagnonId={compagnonConnecteId}
@@ -403,13 +561,18 @@ export function AtelierDashboardClient({ garage, compagnons: compagnonsInit, fic
         />
       )}
 
-      {/* PIN Modal */}
-      {pinTarget && (
-        <PinModal compagnon={pinTarget} onSuccess={handlePinSuccess} onClose={() => setPinTarget(null)} />
+      {externalOpen && compagnonConnecteId && (
+        <ExternalMirrorModal
+          compagnonId={compagnonConnecteId}
+          canPoint={statut === 'EN_TRAVAIL'}
+          onClose={() => setExternalOpen(false)}
+        />
       )}
 
+      {pinTarget && <PinModal compagnon={pinTarget} onSuccess={handlePinSuccess} onClose={() => setPinTarget(null)} />}
+
       {confirmDepartOpen && (
-        <div className={styles.confirmOverlay} onClick={e => e.target === e.currentTarget && setConfirmDepartOpen(false)}>
+        <div className={styles.confirmOverlay} onClick={(event) => event.target === event.currentTarget && setConfirmDepartOpen(false)}>
           <div className={styles.confirmModal} role="dialog" aria-modal="true" aria-labelledby="confirm-fin-journee-title">
             <h2 id="confirm-fin-journee-title">Confirmer la fin de journée ?</h2>
             <p>

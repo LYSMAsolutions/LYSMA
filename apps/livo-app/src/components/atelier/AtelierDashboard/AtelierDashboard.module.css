@@ -403,6 +403,13 @@
   gap: var(--space-3);
 }
 
+.fichesActions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
 .scanBtn {
   display: flex;
   align-items: center;
@@ -421,4 +428,164 @@
 .scanBtn:hover {
   background: rgba(26,111,255,0.18);
   transform: translateY(-1px);
+}
+
+.externalModal {
+  width: min(100%, 560px);
+  padding: var(--space-6);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-xl);
+}
+
+.externalHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-5);
+}
+
+.externalHeader h2 {
+  color: var(--color-text-primary);
+  font-size: var(--text-xl);
+  font-weight: var(--font-bold);
+}
+
+.externalHeader p,
+.externalHint,
+.externalCard p,
+.externalCard small,
+.externalStats small {
+  color: var(--color-text-muted);
+}
+
+.externalHeader button {
+  color: var(--color-text-secondary);
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-md);
+  padding: var(--space-2) var(--space-3);
+  cursor: pointer;
+}
+
+.externalLookup {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--space-3);
+}
+
+.externalLookup input {
+  width: 100%;
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-surface);
+  color: var(--color-text-primary);
+  padding: var(--space-3);
+  font: inherit;
+}
+
+.externalLookup button,
+.externalCard > button {
+  border: 0;
+  border-radius: var(--radius-lg);
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-blue-electric);
+  color: white;
+  font-weight: var(--font-bold);
+  cursor: pointer;
+}
+
+.externalLookup button:disabled,
+.externalCard > button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.externalHint {
+  margin-top: var(--space-3);
+  font-size: var(--text-sm);
+  line-height: 1.5;
+}
+
+.externalCard {
+  margin-top: var(--space-5);
+  padding: var(--space-5);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-xl);
+  background: var(--color-bg-surface);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.externalCardTitle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.externalCardTitle strong {
+  color: var(--color-text-primary);
+  font-size: var(--text-lg);
+}
+
+.externalStats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+.externalStats span {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-3);
+  border-radius: var(--radius-lg);
+  background: rgba(255,255,255,0.03);
+}
+
+.externalStats strong {
+  color: var(--color-text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 720px) {
+  .header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .dashboard {
+    padding: var(--space-4);
+  }
+
+  .compagnonBlock,
+  .fichesTitleRow,
+  .externalHeader {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .actionsJournee,
+  .fichesActions,
+  .externalLookup {
+    grid-template-columns: 1fr;
+    flex-direction: column;
+  }
+
+  .actionBtn,
+  .scanBtn,
+  .externalLookup button,
+  .externalCard > button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .externalStats {
+    grid-template-columns: 1fr;
+  }
 }

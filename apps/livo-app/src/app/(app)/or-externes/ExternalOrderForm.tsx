@@ -33,7 +33,7 @@ export function ExternalOrderForm() {
       })
       const data = await res.json().catch(() => null)
       if (!res.ok) {
-        setError(typeof data?.error === 'string' ? data.error : 'Impossible de créer cet OR externe.')
+        setError(typeof data?.error === 'string' ? data.error : 'Impossible de créer cette fiche miroir.')
         return
       }
       router.refresh()
@@ -46,7 +46,7 @@ export function ExternalOrderForm() {
 
   return (
     <form action={submit} className={styles.form}>
-      <div className={styles.formGrid}>
+      <div className={styles.formGridCompact}>
         <label>
           <span>Numéro OR externe *</span>
           <input name="externalNumber" required placeholder="OR-2026-1487" />
@@ -54,22 +54,6 @@ export function ExternalOrderForm() {
         <label>
           <span>Logiciel source</span>
           <input name="sourceSoftware" placeholder="Logiciel métier du garage" />
-        </label>
-        <label>
-          <span>Client *</span>
-          <input name="clientName" required placeholder="Nom du client" />
-        </label>
-        <label>
-          <span>Véhicule *</span>
-          <input name="vehicleLabel" required placeholder="Renault Clio IV" />
-        </label>
-        <label>
-          <span>Immatriculation</span>
-          <input name="immatriculation" placeholder="AA-123-BB" />
-        </label>
-        <label>
-          <span>VIN</span>
-          <input name="vin" placeholder="VF1..." />
         </label>
         <label>
           <span>Temps vendu</span>
@@ -80,13 +64,36 @@ export function ExternalOrderForm() {
           <input name="soldAmountHT" type="number" min="0" step="0.01" placeholder="180.00" />
         </label>
       </div>
-      <label>
-        <span>Opération / description *</span>
-        <textarea name="operation" required rows={3} placeholder="Remplacement embrayage, diagnostic, peinture..." />
-      </label>
+
+      <details className={styles.optionalDetails}>
+        <summary>Informations facultatives si elles sont disponibles</summary>
+        <div className={styles.formGrid}>
+          <label>
+            <span>Client</span>
+            <input name="clientName" placeholder="Nom du client" />
+          </label>
+          <label>
+            <span>Véhicule</span>
+            <input name="vehicleLabel" placeholder="Renault Clio IV" />
+          </label>
+          <label>
+            <span>Immatriculation</span>
+            <input name="immatriculation" placeholder="AA-123-BB" />
+          </label>
+          <label>
+            <span>VIN</span>
+            <input name="vin" placeholder="VF1..." />
+          </label>
+        </div>
+        <label>
+          <span>Opération / description</span>
+          <textarea name="operation" rows={3} placeholder="Information récupérée depuis le logiciel métier, si disponible." />
+        </label>
+      </details>
+
       {error && <p className={styles.error}>{error}</p>}
       <button type="submit" disabled={loading} className={styles.submit}>
-        {loading ? 'Création...' : 'Créer l’OR externe'}
+        {loading ? 'Création...' : 'Créer la fiche miroir'}
       </button>
     </form>
   )

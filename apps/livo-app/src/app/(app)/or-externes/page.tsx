@@ -75,14 +75,21 @@ export default async function OrExternesPage() {
   return (
     <>
       <Header
-        title="OR externes"
-        description="Pointage et rentabilité sur ordres de réparation créés hors LIVO."
+        title="Fiches miroir OR"
+        description="Pointage et rentabilité sur ordres de réparation créés dans les logiciels métier du garage."
       />
 
       <main className={styles.content}>
+        <section className={styles.explain}>
+          <strong>LIVO ne remplace pas votre logiciel OR.</strong>
+          <span>
+            La fiche miroir sert uniquement à rattacher les pointages, mesurer le temps réel et suivre la rentabilité atelier.
+          </span>
+        </section>
+
         <section className={styles.kpis}>
           <article>
-            <span>OR suivis</span>
+            <span>Fiches miroir</span>
             <strong>{orders.length}</strong>
           </article>
           <article>
@@ -102,8 +109,8 @@ export default async function OrExternesPage() {
         <section className={styles.panel}>
           <div className={styles.panelHeader}>
             <div>
-              <h2>Créer un OR externe</h2>
-              <p>Utilisez ce formulaire si le garage travaille déjà avec son propre logiciel métier.</p>
+              <h2>Créer une fiche miroir</h2>
+              <p>Seul le numéro OR externe est obligatoire. Les autres informations peuvent venir plus tard par API ou QR code.</p>
             </div>
           </div>
           <ExternalOrderForm />
@@ -112,13 +119,13 @@ export default async function OrExternesPage() {
         <section className={styles.panel}>
           <div className={styles.panelHeader}>
             <div>
-              <h2>OR externes suivis</h2>
+              <h2>Suivi des fiches miroir</h2>
               <p>Lecture simple du temps vendu, du temps réel et de l’écart atelier.</p>
             </div>
           </div>
 
           {orders.length === 0 ? (
-            <p className={styles.empty}>Aucun OR externe enregistré pour le moment.</p>
+            <p className={styles.empty}>Aucune fiche miroir enregistrée pour le moment.</p>
           ) : (
             <div className={styles.list}>
               {orders.map((order) => {
@@ -139,8 +146,13 @@ export default async function OrExternesPage() {
                           </Badge>
                           <span className={`${styles.rentability} ${tone.className}`}>{tone.label}</span>
                         </div>
-                        <p>{order.vehicleLabel}{order.immatriculation ? ` · ${order.immatriculation}` : ''}</p>
-                        <small>{order.clientName} · {order.operation}</small>
+                        <p>
+                          {order.vehicleLabel || 'Véhicule non renseigné'}
+                          {order.immatriculation ? ` · ${order.immatriculation}` : ''}
+                        </p>
+                        <small>
+                          {order.clientName || 'Client non renseigné'} · {order.operation || 'Aucune opération renseignée'}
+                        </small>
                       </div>
                     </div>
                     <div className={styles.metrics}>
@@ -149,7 +161,7 @@ export default async function OrExternesPage() {
                       <span>
                         <small>Écart</small>
                         <strong className={deltaMinutes >= 0 ? styles.goodText : styles.badText}>
-                          {deltaMinutes >= 0 ? '+' : ''}{formatH(deltaMinutes)}
+                          {soldHours ? `${deltaMinutes >= 0 ? '+' : ''}${formatH(deltaMinutes)}` : 'À compléter'}
                         </strong>
                       </span>
                       <span><small>Montant HT</small><strong>{formatEur(order.soldAmountHT)}</strong></span>

@@ -47,7 +47,8 @@ LIVO doit pouvoir devenir la couche de pointage, de preuve, de temps réel et de
 ### Ce qui est en place
 
 - Modèle `ExternalWorkOrder` pour enregistrer un OR externe.
-- Saisie manuelle d’un numéro d’OR externe depuis l’administration.
+- Saisie d’un numéro d’OR externe depuis l’administration, sans obligation de recréer l’OR complet.
+- Création automatique d’une fiche miroir depuis l’espace atelier à partir du seul numéro OR.
 - Prévention des doublons par garage, source et numéro d’OR externe.
 - Modèle `ExternalWorkOrderPointage` pour rattacher les temps réels aux OR externes.
 - API interne de pointage sur OR externe.
@@ -55,13 +56,31 @@ LIVO doit pouvoir devenir la couche de pointage, de preuve, de temps réel et de
 - Journalisation des créations et actions dans `ExternalWorkOrderSyncLog` et `PointageAuditLog`.
 - Navigation administrateur “OR externes”.
 
+## Positionnement produit définitif
+
+LIVO ne doit pas devenir un second logiciel OR.
+
+Le logiciel métier du garage reste la source principale de l’ordre de réparation. LIVO conserve une fiche miroir interne uniquement pour mesurer, tracer et analyser le temps réel.
+
+La fiche miroir existe pour :
+
+- rattacher les pointages ;
+- conserver le temps réel ;
+- conserver le temps vendu si disponible ;
+- calculer les écarts ;
+- calculer la rentabilité ;
+- produire des statistiques ;
+- produire une preuve de suivi.
+
+Elle ne remplace jamais l’OR original.
+
 ### Objectif utilisateur
 
 Le compagnon doit pouvoir, à terme :
 
 - scanner un QR code présent sur un OR externe ;
 - saisir manuellement un numéro d’OR externe ;
-- retrouver l’OR dans LIVO sans recréer une fiche complète ;
+- retrouver ou créer automatiquement la fiche miroir dans LIVO sans recréer une fiche complète ;
 - pointer son temps réel sur cet OR ;
 - arrêter son pointage simplement.
 
@@ -101,6 +120,22 @@ L’administrateur doit pouvoir :
 
 La structure est prête pour une évolution QR code / API, mais aucune API publique dangereuse n’a été exposée.
 
+### Format QR cible
+
+Le QR code cible doit pouvoir contenir :
+
+```json
+{
+  "type": "livo_external_or",
+  "sourceSoftware": "logiciel-partenaire",
+  "garageExternalId": "GARAGE-001",
+  "externalNumber": "OR-2026-1487",
+  "token": "jeton-signe-court"
+}
+```
+
+En phase actuelle, l’espace atelier permet déjà de saisir le numéro OR. Le scan QR complet sera branché ensuite sur cette même route interne de fiche miroir.
+
 Une future API LIVO devra permettre aux logiciels métier garage de synchroniser un OR avec LIVO.
 
 Elle devra couvrir :
@@ -113,6 +148,17 @@ Elle devra couvrir :
 - journalisation des appels ;
 - limitation de débit ;
 - rejet des données incomplètes ou incohérentes.
+
+### Fondations de sécurité attendues pour l’API partenaire
+
+- Une clé API par partenaire.
+- Une clé API ou un rattachement explicite par garage.
+- Validation stricte du payload.
+- Isolation stricte par garage.
+- Journalisation de chaque appel.
+- Limitation de débit.
+- Aucune suppression destructive via API.
+- Mise à jour idempotente pour éviter les doublons.
 
 ## Principe de simplicité atelier
 

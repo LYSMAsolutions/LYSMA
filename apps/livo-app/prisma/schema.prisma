@@ -496,11 +496,11 @@ model ExternalWorkOrder {
   source              ExternalWorkOrderSource @default(MANUEL)
   externalNumber      String
   sourceSoftware      String?
-  clientName          String
-  vehicleLabel        String
+  clientName          String?
+  vehicleLabel        String?
   immatriculation     String?
   vin                 String?
-  operation           String                  @db.Text
+  operation           String?                 @db.Text
   soldHours           Decimal?                @db.Decimal(6, 2)
   soldAmountHT        Decimal?                @db.Decimal(10, 2)
   status              ExternalWorkOrderStatus @default(OUVERT)

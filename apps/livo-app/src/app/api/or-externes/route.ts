@@ -7,11 +7,11 @@ import { getPrimaryGarageForUser } from '@/lib/garage'
 const createSchema = z.object({
   externalNumber: z.string().trim().min(1).max(80),
   sourceSoftware: z.string().trim().max(120).optional().nullable(),
-  clientName: z.string().trim().min(1).max(160),
-  vehicleLabel: z.string().trim().min(1).max(160),
+  clientName: z.string().trim().max(160).optional().nullable(),
+  vehicleLabel: z.string().trim().max(160).optional().nullable(),
   immatriculation: z.string().trim().max(40).optional().nullable(),
   vin: z.string().trim().max(80).optional().nullable(),
-  operation: z.string().trim().min(1).max(3000),
+  operation: z.string().trim().max(3000).optional().nullable(),
   soldHours: z.coerce.number().min(0).max(999).optional().nullable(),
   soldAmountHT: z.coerce.number().min(0).max(999999).optional().nullable(),
   assignedCompagnonId: z.string().optional().nullable(),
@@ -74,23 +74,39 @@ export async function POST(req: NextRequest) {
     if (!compagnon) return NextResponse.json({ error: 'Compagnon affecté introuvable.' }, { status: 400 })
   }
 
+  const existing = await prisma.externalWorkOrder.findFirst({
+    where: {
+      garageId: garage.id,
+      externalNumber: parsed.data.externalNumber,
+    },
+  })
+
+  if (existing) {
+    return NextResponse.json(
+      { error: 'Une fiche miroir existe déjà pour ce numéro OR.' },
+      { status: 409 }
+    )
+  }
+
   const order = await prisma.externalWorkOrder.create({
     data: {
       garageId: garage.id,
       source: 'MANUEL',
       externalNumber: parsed.data.externalNumber,
       sourceSoftware: parsed.data.sourceSoftware || null,
-      clientName: parsed.data.clientName,
-      vehicleLabel: parsed.data.vehicleLabel,
+      clientName: parsed.data.clientName || null,
+      vehicleLabel: parsed.data.vehicleLabel || null,
       immatriculation: parsed.data.immatriculation || null,
       vin: parsed.data.vin || null,
-      operation: parsed.data.operation,
+      operation:
+        parsed.data.operation ||
+        'Fiche miroir créée pour rattacher les pointages LIVO à un OR externe.',
       soldHours: toDecimalOrNull(parsed.data.soldHours),
       soldAmountHT: toDecimalOrNull(parsed.data.soldAmountHT),
       assignedCompagnonId: parsed.data.assignedCompagnonId || null,
       importMetadata: {
         createdBy: 'admin',
-        createdFrom: 'manual_form',
+        createdFrom: 'mirror_manual_form',
       },
     },
   })
@@ -99,9 +115,9 @@ export async function POST(req: NextRequest) {
     data: {
       garageId: garage.id,
       externalWorkOrderId: order.id,
-      action: 'CREATE_MANUAL',
+      action: 'CREATE_MIRROR_MANUAL',
       status: 'SUCCESS',
-      message: 'OR externe créé manuellement dans LIVO.',
+      message: 'Fiche miroir OR externe créée manuellement dans LIVO.',
       payload: parsed.data,
     },
   })

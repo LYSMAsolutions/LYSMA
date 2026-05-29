@@ -3,163 +3,206 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Decouverte Client - LYSMA Solutions</title>
-  <meta name="description" content="Module interne LYSMA Solutions pour preparer les projets de sites internet clients.">
+  <title>Découverte Client - LYSMA Solutions</title>
+  <meta name="description" content="Formulaire de découverte client LYSMA Solutions pour préparer un projet web.">
   <link rel="icon" href="../public/favicon.ico" sizes="any">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Manrope:wght@600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/decouverte-client.css">
 </head>
 <body>
-  <div class="app-shell">
-    <aside class="sidebar" aria-label="Navigation Decouverte Client">
-      <a class="brand" href="../index.html" aria-label="Retour LYSMA Solutions">
+  <main class="page-shell">
+    <header class="hero">
+      <a class="brand" href="../index.html" aria-label="Retour au site LYSMA Solutions">
         <span class="brand-mark"><img src="../public/logo-lysma.PNG" alt="" aria-hidden="true"></span>
-        <span>
-          <strong>LYSMA</strong>
-          <small>Decouverte Client</small>
-        </span>
+        <span>LYSMA Solutions</span>
       </a>
 
-      <nav class="side-nav">
-        <button class="nav-item active" type="button" data-route="dashboard"><span class="nav-icon">D</span>Tableau de bord</button>
-        <button class="nav-item" type="button" data-route="new"><span class="nav-icon">+</span>Nouveau projet</button>
-      </nav>
-
-      <div class="side-panel">
-        <p class="eyebrow">V1 interne</p>
-        <p>Questionnaire, contenus, medias et preparation IA dans une interface agence propre.</p>
+      <div class="hero-content">
+        <p class="eyebrow">Questionnaire projet web</p>
+        <h1>Découverte Client</h1>
+        <p>Préparons ensemble votre projet web avec les bonnes informations dès le départ.</p>
       </div>
-    </aside>
+    </header>
 
-    <main class="workspace">
-      <header class="topbar">
-        <div>
-          <p class="eyebrow">LYSMA Solutions</p>
-          <h1>Decouverte Client</h1>
-        </div>
-        <div class="topbar-actions">
-          <span class="sync-pill">Mock local</span>
-          <button class="primary-action" type="button" data-route="new">Nouveau projet</button>
-        </div>
-      </header>
+    <form id="discovery-form" class="discovery-form" novalidate>
+      <input class="hp-field" type="text" name="websiteUrl" tabindex="-1" autocomplete="off" aria-hidden="true">
 
-      <section id="view" class="view" aria-live="polite"></section>
-    </main>
-  </div>
-
-  <template id="dashboard-template">
-    <section class="hero-strip">
-      <div>
-        <p class="eyebrow">Preparation projet</p>
-        <h2>Centraliser la matiere client avant de produire un site solide.</h2>
-        <p class="lead">Une base unique pour les informations client, le questionnaire, les medias, les objectifs, le SEO et les futures generations.</p>
-      </div>
-      <div class="hero-metrics" aria-label="Indicateurs projets">
-        <div><span data-kpi="total">0</span><small>projets</small></div>
-        <div><span data-kpi="ready">0</span><small>prets</small></div>
-        <div><span data-kpi="active">0</span><small>actifs</small></div>
-      </div>
-    </section>
-
-    <section class="panel">
-      <div class="panel-heading">
-        <div>
-          <p class="eyebrow">Pipeline</p>
-          <h3>Projets clients</h3>
-        </div>
-        <button class="secondary-action" type="button" data-route="new">Nouveau projet</button>
-      </div>
-      <div class="project-table" data-project-table></div>
-    </section>
-  </template>
-
-  <template id="project-form-template">
-    <section class="panel form-panel">
-      <div class="panel-heading">
-        <div>
-          <p class="eyebrow">Creation</p>
-          <h2>Nouveau projet client</h2>
-        </div>
-        <button class="ghost-action" type="button" data-route="dashboard">Retour</button>
-      </div>
-
-      <form id="project-form" class="project-form">
-        <label><span>Nom de l'entreprise</span><input name="companyName" required autocomplete="organization"></label>
-        <label><span>Secteur d'activite</span><input name="sector" required placeholder="Carrosserie, artisan, agence immobiliere..."></label>
-        <label><span>Nom du contact</span><input name="contactName" required autocomplete="name"></label>
-        <label><span>Telephone</span><input name="phone" autocomplete="tel"></label>
-        <label><span>Email</span><input name="email" type="email" autocomplete="email"></label>
-        <label><span>Adresse</span><input name="address" autocomplete="street-address"></label>
-        <label><span>Ville</span><input name="city" autocomplete="address-level2"></label>
-        <label><span>Code postal</span><input name="postalCode" autocomplete="postal-code"></label>
-        <label class="wide"><span>Site actuel</span><input name="currentWebsite" placeholder="https://..."></label>
-        <label class="wide"><span>Notes internes</span><textarea name="internalNotes" rows="5" placeholder="Contexte, promesse commerciale, points sensibles, informations a verifier..."></textarea></label>
-        <div class="form-actions wide">
-          <button class="ghost-action" type="button" data-route="dashboard">Annuler</button>
-          <button class="primary-action" type="submit">Creer le projet</button>
-        </div>
-      </form>
-    </section>
-  </template>
-
-  <template id="detail-template">
-    <section class="detail-layout">
-      <aside class="project-summary panel">
-        <button class="ghost-action full" type="button" data-route="dashboard">Retour au tableau</button>
-        <div class="summary-block">
-          <p class="eyebrow">Projet</p>
-          <h2 data-project-name></h2>
-          <span class="status-badge" data-project-status></span>
-        </div>
-        <dl class="summary-list">
-          <div><dt>Secteur</dt><dd data-project-sector></dd></div>
-          <div><dt>Contact</dt><dd data-project-contact></dd></div>
-          <div><dt>Telephone</dt><dd data-project-phone></dd></div>
-          <div><dt>Email</dt><dd data-project-email></dd></div>
-          <div><dt>Adresse</dt><dd data-project-address></dd></div>
-          <div><dt>Creation</dt><dd data-project-created></dd></div>
-        </dl>
-        <label class="status-select"><span>Statut du projet</span><select data-status-select></select></label>
-      </aside>
-
-      <div class="detail-main">
-        <section class="panel">
-          <div class="panel-heading">
-            <div>
-              <p class="eyebrow">Questionnaire</p>
-              <h2>Decouverte structuree</h2>
-            </div>
-            <span class="progress-chip" data-answer-progress></span>
+      <section class="form-section">
+        <div class="section-heading">
+          <span>01</span>
+          <div>
+            <p class="eyebrow">Base projet</p>
+            <h2>Informations entreprise</h2>
           </div>
-          <div class="questionnaire" data-questionnaire></div>
-        </section>
+        </div>
+        <div class="field-grid">
+          <label>
+            <span>Nom de l’entreprise *</span>
+            <input name="companyName" required autocomplete="organization">
+          </label>
+          <label>
+            <span>Secteur d’activité</span>
+            <input name="sector" placeholder="Artisan, garage, transporteur, agence immobilière..." autocomplete="organization-title">
+          </label>
+          <label class="wide">
+            <span>Adresse</span>
+            <input name="address" autocomplete="street-address">
+          </label>
+          <label>
+            <span>Code postal</span>
+            <input name="postalCode" autocomplete="postal-code">
+          </label>
+          <label>
+            <span>Ville</span>
+            <input name="city" autocomplete="address-level2">
+          </label>
+          <label class="wide">
+            <span>Site actuel</span>
+            <input name="currentWebsite" type="url" placeholder="https://..." autocomplete="url">
+          </label>
+        </div>
+      </section>
 
-        <section class="panel">
-          <div class="panel-heading">
-            <div>
-              <p class="eyebrow">Mediatheque</p>
-              <h2>Medias du projet</h2>
-            </div>
-            <span class="sync-pill">Upload &agrave; connecter</span>
+      <section class="form-section">
+        <div class="section-heading">
+          <span>02</span>
+          <div>
+            <p class="eyebrow">Echanges</p>
+            <h2>Contact principal</h2>
           </div>
-          <div class="media-grid" data-media-grid></div>
-        </section>
+        </div>
+        <div class="field-grid">
+          <label>
+            <span>Nom du contact *</span>
+            <input name="contactName" required autocomplete="name">
+          </label>
+          <label>
+            <span>Téléphone</span>
+            <input name="phone" autocomplete="tel">
+          </label>
+          <label class="wide">
+            <span>Email *</span>
+            <input name="email" type="email" required autocomplete="email">
+          </label>
+        </div>
+      </section>
 
-        <section class="panel">
-          <div class="panel-heading">
-            <div>
-              <p class="eyebrow">Generation IA</p>
-              <h2>Actions preparatoires</h2>
-            </div>
-            <span class="sync-pill">IA non connectee</span>
+      <section class="form-section">
+        <div class="section-heading">
+          <span>03</span>
+          <div>
+            <p class="eyebrow">Matiere commerciale</p>
+            <h2>Activite, image et objectifs</h2>
           </div>
-          <div class="generation-grid" data-generation-grid></div>
-        </section>
-      </div>
-    </section>
-  </template>
+        </div>
+        <div class="field-grid">
+          <label class="wide">
+            <span>Histoire de l’entreprise</span>
+            <textarea name="story" rows="5" placeholder="Depuis quand existe-t-elle ? Y a-t-il une histoire familiale, une reprise, une évolution récente ?"></textarea>
+          </label>
+          <label class="wide">
+            <span>Valeurs / positionnement</span>
+            <textarea name="values" rows="5" placeholder="Quelle image souhaitez-vous donner : proximité, expertise, premium, rapidité, confiance, innovation ?"></textarea>
+          </label>
+          <label class="wide">
+            <span>Prestations</span>
+            <textarea name="services" rows="5" placeholder="Listez les services à mettre en avant, les offres prioritaires et les prestations à éviter."></textarea>
+          </label>
+          <label class="wide">
+            <span>Clientèle cible</span>
+            <textarea name="targetCustomers" rows="4" placeholder="Particuliers, professionnels, flottes, clients locaux, haut de gamme, toutes marques..."></textarea>
+          </label>
+        </div>
+      </section>
+
+      <section class="form-section">
+        <div class="section-heading">
+          <span>04</span>
+          <div>
+            <p class="eyebrow">Marche local</p>
+            <h2>Zone, concurrents et presence actuelle</h2>
+          </div>
+        </div>
+        <div class="field-grid">
+          <label class="wide">
+            <span>Zone geographique</span>
+            <textarea name="serviceArea" rows="4" placeholder="Villes, communes voisines, zone d’intervention, déplacement ou accueil sur place."></textarea>
+          </label>
+          <label class="wide">
+            <span>Concurrents</span>
+            <textarea name="competitors" rows="4" placeholder="Concurrents locaux connus, différences, points forts à rendre visibles."></textarea>
+          </label>
+          <label class="wide">
+            <span>Presence digitale actuelle</span>
+            <textarea name="currentDigitalPresence" rows="4" placeholder="Site existant, Google Business Profile, réseaux sociaux, avis clients, annuaires."></textarea>
+          </label>
+        </div>
+      </section>
+
+      <section class="form-section">
+        <div class="section-heading">
+          <span>05</span>
+          <div>
+            <p class="eyebrow">Production du site</p>
+            <h2>Objectifs, SEO et contenus</h2>
+          </div>
+        </div>
+        <div class="field-grid">
+          <label class="wide">
+            <span>Objectifs du futur site</span>
+            <textarea name="goals" rows="5" placeholder="Recevoir plus d’appels, demandes de devis, améliorer l’image, recruter, attirer des clients pros..."></textarea>
+          </label>
+          <label>
+            <span>Villes ciblées SEO</span>
+            <textarea name="seoCities" rows="4" placeholder="Perigueux, Trelissac, Boulazac..."></textarea>
+          </label>
+          <label>
+            <span>Mots-clés prioritaires</span>
+            <textarea name="seoKeywords" rows="4" placeholder="Carrosserie, peinture auto, artisan couvreur, transport express..."></textarea>
+          </label>
+          <label class="wide">
+            <span>Photos / contenus disponibles</span>
+            <textarea name="availablePhotos" rows="4" placeholder="Logo, photos de l'equipe, locaux, realisations, avant/apres, documents, temoignages."></textarea>
+          </label>
+        </div>
+      </section>
+
+      <section class="form-section">
+        <div class="section-heading">
+          <span>06</span>
+          <div>
+            <p class="eyebrow">Synthese</p>
+            <h2>Question strategique finale</h2>
+          </div>
+        </div>
+        <div class="field-grid">
+          <label class="wide">
+            <span>Pourquoi un client devrait-il choisir votre entreprise plutôt qu’un concurrent ?</span>
+            <textarea name="strategicAnswer" rows="5"></textarea>
+          </label>
+          <label class="wide">
+            <span>Notes complémentaires</span>
+            <textarea name="internalNotes" rows="4" placeholder="Informations utiles, contraintes, délais, demandes particulières."></textarea>
+          </label>
+        </div>
+      </section>
+
+      <section class="submit-panel" aria-live="polite">
+        <div>
+          <p class="eyebrow">Envoi sécurisé</p>
+          <h2>Transmettre la découverte à LYSMA</h2>
+          <p>Les informations seront envoyées à LYSMA Solutions pour préparer votre projet web.</p>
+        </div>
+        <button id="submit-button" class="primary-action" type="submit">
+          <span class="button-loader" aria-hidden="true"></span>
+          <span data-submit-label>Envoyer la découverte à LYSMA</span>
+        </button>
+        <p id="form-message" class="form-message" role="status"></p>
+      </section>
+    </form>
+  </main>
 
   <script src="../js/decouverte-client.js" defer></script>
 </body>
