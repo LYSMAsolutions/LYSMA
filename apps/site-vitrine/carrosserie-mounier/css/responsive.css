@@ -104,6 +104,17 @@
     grid-template-columns: repeat(4, 1fr);
   }
 
+  .realisation-hero-grid,
+  .result-proof-grid,
+  .realisation-card-grid,
+  .premium-gallery,
+  .prestations-hub-grid,
+  .service-hero-grid,
+  .service-page-layout,
+  .related-grid {
+    grid-template-columns: 1fr;
+  }
+
   .cards-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -284,8 +295,14 @@
     background: #252a2d;
   }
 
+  .quick-actions-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
   .quick-action {
-    min-height: 104px;
+    min-width: 0;
+    min-height: 56px;
   }
 
   .level-grid,
@@ -315,6 +332,73 @@
   .contact-map {
     min-height: 280px;
     padding: 22px;
+  }
+
+  .realisation-hero {
+    padding: 58px 0;
+  }
+
+  .realisation-hero-grid,
+  .result-proof-grid,
+  .realisation-card-grid,
+  .premium-gallery,
+  .prestations-hub-grid,
+  .service-hero-grid,
+  .service-page-layout,
+  .related-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .featured-ba-caption,
+  .category-cta {
+    display: grid;
+  }
+
+  .featured-ba-caption span {
+    text-align: left;
+  }
+
+  .ba-slider,
+  .work-card .ba-slider {
+    min-height: 290px;
+  }
+
+  .ba-handle {
+    width: 48px;
+    height: 48px;
+  }
+
+  .premium-gallery-item,
+  .premium-gallery-item:first-child {
+    min-height: 260px;
+  }
+
+  .trust-statement {
+    padding: 38px 24px;
+  }
+
+  .service-hero {
+    padding: 58px 0;
+  }
+
+  .service-hero-image {
+    min-height: 280px;
+  }
+
+  .service-page-main {
+    padding: 28px;
+  }
+
+  .service-page-main h2 {
+    font-size: 24px;
+  }
+
+  .service-page-side {
+    position: static;
+  }
+
+  .prestation-mini-card {
+    min-height: 150px;
   }
 
   .contact-panel,

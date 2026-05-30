@@ -21,3 +21,35 @@ document.querySelectorAll(".accordion-item > button").forEach((button) => {
     item.classList.toggle("is-open");
   });
 });
+
+document.querySelectorAll(".ba-slider").forEach((slider) => {
+  const input = slider.querySelector('input[type="range"]');
+  if (!input) return;
+
+  const update = (value) => {
+    const position = Math.max(0, Math.min(100, Number(value)));
+    slider.style.setProperty("--position", `${position}%`);
+    input.value = position;
+  };
+
+  const updateFromPointer = (event) => {
+    const rect = slider.getBoundingClientRect();
+    const clientX = event.touches ? event.touches[0].clientX : event.clientX;
+    update(((clientX - rect.left) / rect.width) * 100);
+  };
+
+  input.addEventListener("input", (event) => update(event.target.value));
+  slider.addEventListener("pointerdown", (event) => {
+    slider.setPointerCapture(event.pointerId);
+    updateFromPointer(event);
+  });
+  slider.addEventListener("pointermove", (event) => {
+    if (event.buttons !== 1) return;
+    updateFromPointer(event);
+  });
+  slider.addEventListener("touchmove", (event) => {
+    updateFromPointer(event);
+  }, { passive: true });
+
+  update(input.value || 50);
+});

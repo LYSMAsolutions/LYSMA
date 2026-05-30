@@ -9,6 +9,19 @@ for (const entry of await readdir('pages', { withFileTypes: true }).catch(() => 
   }
 }
 
+async function collectIndexFiles(directory) {
+  for (const entry of await readdir(directory, { withFileTypes: true }).catch(() => [])) {
+    const filePath = path.join(directory, entry.name)
+    if (entry.isDirectory()) {
+      await collectIndexFiles(filePath)
+    } else if (entry.isFile() && entry.name.endsWith('.html')) {
+      htmlFiles.push(filePath)
+    }
+  }
+}
+
+await collectIndexFiles('prestations')
+
 const errors = []
 
 for (const file of htmlFiles) {
