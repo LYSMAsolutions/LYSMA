@@ -63,8 +63,8 @@ const prestations = [
     intro: "Les amortisseurs influencent directement la tenue de route, le confort et la stabilité au freinage.",
     why: "Une suspension en bon état maintient les pneus au contact de la route et améliore la maîtrise du véhicule.",
     symptoms: ['Véhicule qui rebondit', 'Bruit sur route dégradée', 'Usure irrégulière des pneus', 'Perte de confort', 'Sensation d’instabilité'],
-    includes: ['Contrôle amortisseurs', 'Contrôle suspension', 'Coupelles selon besoin', 'Conseil géométrie', 'Vérification après intervention'],
-    faq: [['Quand changer des amortisseurs voiture ?', "Lorsque la tenue de route, le confort ou l'usure des pneus deviennent anormaux."], ['Une géométrie est-elle utile après remplacement ?', "Elle peut être recommandée selon l'intervention sur le train roulant."]],
+    includes: ['Contrôle amortisseurs', 'Contrôle suspension', 'Coupelles selon besoin', 'Conseil sur la tenue de route', 'Vérification après intervention'],
+    faq: [['Quand changer des amortisseurs voiture ?', "Lorsque la tenue de route, le confort ou l'usure des pneus deviennent anormaux."], ['Les amortisseurs influencent-ils la sécurité ?', "Oui, ils participent à la stabilité, au confort et au comportement du véhicule au freinage."]],
     related: ['parallelisme-geometrie', 'freinage', 'diagnostic-securite'],
   },
   {
@@ -251,7 +251,18 @@ const prestations = [
   },
 ]
 
-const bySlug = Object.fromEntries(prestations.map((item) => [item.slug, item]))
+const hiddenPrestations = new Set([
+  'climatisation',
+  'parallelisme-geometrie',
+  'diagnostic-electronique',
+  'liquide-frein',
+  'vanne-egr',
+  'pot-echappement',
+  'diagnostic-securite',
+])
+
+const activePrestations = prestations.filter((item) => !hiddenPrestations.has(item.slug))
+const bySlug = Object.fromEntries(activePrestations.map((item) => [item.slug, item]))
 
 function pageUrl(slug) {
   return `../${slug}/`
@@ -412,10 +423,10 @@ function html(item) {
 `
 }
 
-for (const item of prestations) {
+for (const item of activePrestations) {
   const directory = path.join('prestations', item.slug)
   await mkdir(directory, { recursive: true })
   await writeFile(path.join(directory, 'index.html'), html(item), 'utf8')
 }
 
-console.log(`Generated ${prestations.length} prestation pages.`)
+console.log(`Generated ${activePrestations.length} prestation pages.`)

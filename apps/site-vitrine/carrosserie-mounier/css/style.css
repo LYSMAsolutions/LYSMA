@@ -276,7 +276,7 @@ body {
 /* SECTIONS */
 
 .section {
-  padding: 82px 0;
+  padding: 104px 0;
 }
 
 .section-soft {
@@ -1109,34 +1109,37 @@ body {
 }
 
 .insurance-partners {
-  padding: 28px 0;
-  background: #fff;
-  border-bottom: 1px solid #e5e7eb;
+  padding: 56px 0;
+  background:
+    radial-gradient(circle at top right, rgba(255, 106, 0, 0.08), transparent 28%),
+    #fff;
+  border-block: 1px solid #e5e7eb;
 }
 
 .insurance-grid {
   display: grid;
-  grid-template-columns: 250px 1fr;
-  gap: 30px;
+  grid-template-columns: 360px 1fr;
+  gap: 42px;
   align-items: center;
 }
 
 .insurance-list {
   display: grid;
-  grid-template-columns: repeat(8, 1fr);
-  gap: 10px;
+  grid-template-columns: repeat(9, 1fr);
+  gap: 12px;
 }
 
 .insurance-list span {
-  min-height: 56px;
+  min-height: 64px;
   display: grid;
   place-items: center;
-  background: #f4f5f6;
-  border: 1px solid #e5e7eb;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(56, 62, 66, 0.1);
+  border-radius: 999px;
   color: var(--ral-7016);
   font-weight: 900;
   font-size: 13px;
-  filter: grayscale(1);
+  box-shadow: 0 16px 38px rgba(18, 25, 31, 0.06);
 }
 
 .faq-grid {
@@ -1751,13 +1754,13 @@ body {
 
 .prestations-hub-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
 }
 
 .prestation-mini-card {
-  min-height: 190px;
-  padding: 24px;
+  min-height: 164px;
+  padding: 26px;
   display: grid;
   align-content: space-between;
   background: white;
