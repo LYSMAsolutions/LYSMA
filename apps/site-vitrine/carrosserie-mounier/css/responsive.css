@@ -90,7 +90,9 @@
   }
 
   .realisation-board,
-  .faq-grid {
+  .faq-grid,
+  .trust-grid,
+  .reviews-grid {
     grid-template-columns: 1fr;
   }
 
@@ -268,7 +270,10 @@
   .service-detail-grid,
   .realisation-board,
   .faq-grid,
-  .insurance-grid {
+  .insurance-grid,
+  .trust-grid,
+  .reviews-grid,
+  .contact-premium {
     display: grid;
     grid-template-columns: 1fr;
   }
@@ -305,6 +310,68 @@
   .comparison-card img,
   .comparison-card:first-child img {
     height: 260px;
+  }
+
+  .contact-map {
+    min-height: 280px;
+    padding: 22px;
+  }
+
+  .contact-panel,
+  .trust-card,
+  .review-card {
+    padding: 26px;
+  }
+
+  .contact-premium-lines a,
+  .contact-premium-lines div {
+    display: grid;
+    gap: 6px;
+  }
+
+  .contact-premium-lines span {
+    text-align: left;
+  }
+
+  .accordion-item button {
+    min-height: 58px;
+    font-size: 14px;
+  }
+
+  .mobile-sticky-cta {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    z-index: 120;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding: 10px;
+    background: rgba(37, 42, 45, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.26);
+    backdrop-filter: blur(16px);
+  }
+
+  .mobile-sticky-cta a {
+    min-height: 46px;
+    display: grid;
+    place-items: center;
+    background: var(--orange);
+    color: white;
+    font-size: 12px;
+    font-weight: 900;
+    text-transform: uppercase;
+  }
+
+  .mobile-sticky-cta a:last-child {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+  }
+
+  body {
+    padding-bottom: 74px;
   }
 
   .process-card {

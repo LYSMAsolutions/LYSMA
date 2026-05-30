@@ -13,3 +13,11 @@ if (toggle && nav) {
 
 const year = document.querySelector("[data-year]");
 if (year) year.textContent = new Date().getFullYear();
+
+document.querySelectorAll(".accordion-item > button").forEach((button) => {
+  button.addEventListener("click", () => {
+    const item = button.closest(".accordion-item");
+    if (!item) return;
+    item.classList.toggle("is-open");
+  });
+});

@@ -1172,6 +1172,14 @@ body {
   line-height: 1.15;
 }
 
+.service-detail-card h4 {
+  margin-top: 18px;
+  color: var(--ral-7016);
+  font-size: 13px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
 .service-detail-card p {
   margin-top: 13px;
   color: #6b737a;
@@ -1193,4 +1201,221 @@ body {
 
 .recruitment-form .input[type="file"] {
   padding: 15px;
+}
+
+.trust-grid,
+.reviews-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.trust-card,
+.review-card {
+  padding: 30px;
+  background: white;
+  border: 1px solid rgba(56, 62, 66, 0.12);
+  box-shadow: 0 20px 58px rgba(18, 25, 31, 0.09);
+  transition: transform 0.28s ease, box-shadow 0.28s ease;
+}
+
+.trust-card:hover,
+.review-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 28px 74px rgba(18, 25, 31, 0.14);
+}
+
+.trust-card span {
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  color: var(--orange);
+  border: 1px solid rgba(255, 106, 0, 0.45);
+  border-radius: 999px;
+  font-weight: 900;
+  margin-bottom: 18px;
+}
+
+.trust-card h3,
+.review-card h3 {
+  color: var(--ral-7016);
+  font-size: 20px;
+  line-height: 1.15;
+  text-transform: uppercase;
+}
+
+.trust-card p,
+.review-card p {
+  margin-top: 12px;
+  color: #6b737a;
+  line-height: 1.7;
+}
+
+.section-dark .review-card {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.13);
+}
+
+.section-dark .review-card h3 {
+  color: white;
+}
+
+.section-dark .review-card p {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.reviews-summary {
+  display: inline-grid;
+  grid-template-columns: auto auto;
+  gap: 6px 18px;
+  align-items: center;
+  padding: 18px 24px;
+  margin-bottom: 22px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: white;
+}
+
+.reviews-summary span {
+  color: var(--orange);
+  font-size: 34px;
+  font-weight: 900;
+}
+
+.reviews-summary small {
+  grid-column: 1 / -1;
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.stars {
+  color: var(--orange);
+  font-size: 18px;
+  margin-bottom: 14px;
+  letter-spacing: 0.08em;
+}
+
+.accordion {
+  display: grid;
+  gap: 12px;
+}
+
+.accordion-item {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  overflow: hidden;
+}
+
+.accordion-item button {
+  width: 100%;
+  min-height: 64px;
+  padding: 18px 22px;
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: center;
+  background: transparent;
+  color: white;
+  border: 0;
+  text-align: left;
+  font-size: 16px;
+  font-weight: 900;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.accordion-item button::after {
+  content: "+";
+  color: var(--orange);
+  font-size: 24px;
+  line-height: 1;
+}
+
+.accordion-item.is-open button::after {
+  content: "-";
+}
+
+.accordion-item > div {
+  display: none;
+  padding: 0 22px 22px;
+  color: rgba(255, 255, 255, 0.72);
+  line-height: 1.7;
+}
+
+.accordion-item.is-open > div {
+  display: block;
+}
+
+.contact-premium {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 24px;
+  align-items: stretch;
+}
+
+.contact-map {
+  min-height: 430px;
+  display: grid;
+  place-items: end start;
+  padding: 34px;
+  color: white;
+  background:
+    linear-gradient(180deg, rgba(56, 62, 66, 0.12), rgba(37, 42, 45, 0.86)),
+    url("../assets/images/carrosserie-ext.jpeg") center / cover no-repeat;
+  box-shadow: 0 26px 74px rgba(18, 25, 31, 0.14);
+}
+
+.contact-map div {
+  padding: 22px;
+  background: rgba(37, 42, 45, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(14px);
+}
+
+.contact-map span {
+  color: var(--orange);
+  font-size: 28px;
+}
+
+.contact-map strong,
+.contact-map small {
+  display: block;
+  margin-top: 6px;
+}
+
+.contact-panel {
+  padding: 42px;
+  background: white;
+  border: 1px solid rgba(56, 62, 66, 0.12);
+  box-shadow: 0 22px 64px rgba(18, 25, 31, 0.1);
+}
+
+.contact-premium-lines {
+  display: grid;
+  gap: 12px;
+  margin-top: 26px;
+}
+
+.contact-premium-lines a,
+.contact-premium-lines div {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 16px 0;
+  border-bottom: 1px solid #e5e7eb;
+  color: var(--ral-7016);
+}
+
+.contact-premium-lines strong {
+  text-transform: uppercase;
+  font-size: 12px;
+}
+
+.contact-premium-lines span {
+  color: #6b737a;
+  text-align: right;
+}
+
+.mobile-sticky-cta {
+  display: none;
 }
