@@ -21,6 +21,7 @@ async function collectIndexFiles(directory) {
 }
 
 await collectIndexFiles('prestations')
+await collectIndexFiles('faq')
 
 const errors = []
 

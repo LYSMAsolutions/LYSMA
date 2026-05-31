@@ -51,6 +51,34 @@
     border-bottom: 1px solid rgba(255,255,255,0.1);
   }
 
+  .main-nav.is-open .nav-group {
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .main-nav.is-open .nav-group button {
+    width: 100%;
+    padding: 16px 0;
+    text-align: left;
+  }
+
+  .main-nav.is-open .nav-group > div {
+    position: static;
+    transform: none;
+    min-width: 0;
+    padding: 0 0 12px;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+  }
+
+  .main-nav.is-open .nav-group > div a {
+    padding: 10px 0 10px 16px;
+    font-size: 11px;
+  }
+
   .hero-grid,
   .cinematic-grid,
   .section-head {
@@ -119,7 +147,9 @@
   .prestations-hub-grid,
   .service-hero-grid,
   .service-page-layout,
-  .related-grid {
+  .related-grid,
+  .intro-premium-grid,
+  .faq-page-grid {
     grid-template-columns: 1fr;
   }
 
@@ -367,8 +397,32 @@
   .prestations-hub-grid,
   .service-hero-grid,
   .service-page-layout,
-  .related-grid {
+  .related-grid,
+  .intro-premium-grid,
+  .faq-page-grid {
     grid-template-columns: 1fr;
+  }
+
+  .hero-refined .hero-content {
+    padding-left: 0;
+  }
+
+  .home-prestations {
+    grid-template-columns: 1fr;
+  }
+
+  .insurance-logo {
+    width: 150px;
+    height: 72px;
+  }
+
+  .insurance-logo img {
+    max-width: 118px;
+    height: 34px;
+  }
+
+  .google-review-shell {
+    display: grid;
   }
 
   .featured-ba-caption,

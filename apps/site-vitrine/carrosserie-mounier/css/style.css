@@ -64,8 +64,55 @@ body {
   white-space: nowrap;
 }
 
+.nav-group {
+  position: relative;
+}
+
+.nav-group button {
+  color: inherit;
+  background: transparent;
+  border: 0;
+  font: inherit;
+  text-transform: inherit;
+  cursor: pointer;
+}
+
+.nav-group > div {
+  position: absolute;
+  top: calc(100% + 18px);
+  left: 50%;
+  transform: translateX(-50%) translateY(8px);
+  min-width: 250px;
+  padding: 14px;
+  display: grid;
+  gap: 4px;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  background: rgba(37, 42, 45, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.24);
+  backdrop-filter: blur(18px);
+  transition: 0.25s ease;
+}
+
+.nav-group:hover > div,
+.nav-group.is-open > div {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+
+.nav-group > div a {
+  padding: 11px 12px;
+  color: rgba(255, 255, 255, 0.74);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
 .main-nav a:hover,
-.main-nav a.active {
+.main-nav a.active,
+.nav-group button:hover {
   color: var(--orange);
 }
 
@@ -1978,5 +2025,184 @@ body {
   margin: 10px 0 16px;
   color: var(--ral-7016);
   font-size: 18px;
+  text-transform: uppercase;
+}
+
+/* FINAL PREMIUM SIMPLIFICATION */
+
+.hero-refined {
+  min-height: 620px;
+}
+
+.hero-refined .hero-content {
+  padding-left: min(6vw, 82px);
+}
+
+.hero-refined .hero-copy {
+  max-width: 720px;
+}
+
+.hero-refined h1 {
+  max-width: 760px;
+  font-size: clamp(42px, 4.6vw, 76px);
+  line-height: 0.95;
+  letter-spacing: -0.055em;
+}
+
+.hero-refined .hero-grid {
+  display: block;
+}
+
+.hero-refined .hero-panel {
+  display: none;
+}
+
+.intro-premium {
+  background: #f7f7f7;
+}
+
+.intro-premium-grid {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 70px;
+  align-items: start;
+}
+
+.intro-text {
+  padding-top: 14px;
+}
+
+.intro-text p {
+  color: #5f6870;
+  font-size: 19px;
+  line-height: 1.85;
+}
+
+.intro-text p + p {
+  margin-top: 18px;
+}
+
+.home-prestations {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.insurance-marquee-section {
+  padding: 88px 0;
+  background:
+    radial-gradient(circle at top right, rgba(255, 106, 0, 0.08), transparent 30%),
+    #fff;
+  overflow: hidden;
+}
+
+.insurance-logo-marquee {
+  position: relative;
+  overflow: hidden;
+  margin-top: 34px;
+  padding: 18px 0;
+}
+
+.insurance-logo-marquee::before,
+.insurance-logo-marquee::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 140px;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.insurance-logo-marquee::before {
+  left: 0;
+  background: linear-gradient(to right, #fff, transparent);
+}
+
+.insurance-logo-marquee::after {
+  right: 0;
+  background: linear-gradient(to left, #fff, transparent);
+}
+
+.insurance-logo-track {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  width: max-content;
+  animation: scrollLogos 36s linear infinite;
+}
+
+.insurance-logo {
+  width: 190px;
+  height: 86px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid rgba(56, 62, 66, 0.1);
+  box-shadow: 0 18px 44px rgba(18, 25, 31, 0.07);
+}
+
+.insurance-logo img {
+  width: auto;
+  max-width: 138px;
+  height: 42px;
+  object-fit: contain;
+  filter: grayscale(100%) contrast(1.05);
+  opacity: 0.82;
+}
+
+.insurance-logo:hover img {
+  filter: grayscale(0%) contrast(1);
+  opacity: 1;
+}
+
+.google-review-shell {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: center;
+  padding: 32px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+}
+
+.google-review-shell strong {
+  display: block;
+  color: var(--orange);
+  font-size: 34px;
+  line-height: 1;
+}
+
+.google-review-shell span {
+  display: block;
+  margin-top: 8px;
+  color: rgba(255, 255, 255, 0.68);
+}
+
+.faq-page-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+}
+
+.faq-link-card {
+  padding: 28px;
+  background: white;
+  border: 1px solid rgba(56, 62, 66, 0.12);
+  box-shadow: 0 18px 48px rgba(18, 25, 31, 0.08);
+}
+
+.faq-link-card strong {
+  display: block;
+  color: var(--ral-7016);
+  font-size: 22px;
+  line-height: 1.18;
+}
+
+.faq-link-card span {
+  display: inline-flex;
+  margin-top: 18px;
+  color: var(--orange);
+  font-size: 12px;
+  font-weight: 900;
   text-transform: uppercase;
 }

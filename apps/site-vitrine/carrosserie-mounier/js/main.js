@@ -22,6 +22,14 @@ document.querySelectorAll(".accordion-item > button").forEach((button) => {
   });
 });
 
+document.querySelectorAll(".nav-group > button").forEach((button) => {
+  button.addEventListener("click", () => {
+    const group = button.closest(".nav-group");
+    if (!group) return;
+    group.classList.toggle("is-open");
+  });
+});
+
 document.querySelectorAll(".ba-slider").forEach((slider) => {
   const input = slider.querySelector('input[type="range"]');
   if (!input) return;
