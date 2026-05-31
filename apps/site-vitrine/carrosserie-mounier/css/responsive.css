@@ -104,6 +104,14 @@
     grid-template-columns: repeat(3, 1fr);
   }
 
+  .insurance-logo-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .insurance-note {
+    grid-template-columns: 1fr;
+  }
+
   .realisation-hero-grid,
   .result-proof-grid,
   .realisation-card-grid,
@@ -303,6 +311,20 @@
   .quick-action {
     min-width: 0;
     min-height: 56px;
+  }
+
+  .insurance-logo-grid,
+  .insurance-note {
+    grid-template-columns: 1fr;
+  }
+
+  .insurance-logo-card {
+    min-height: 96px;
+  }
+
+  .insurance-logo-card img {
+    max-width: 150px;
+    height: 40px;
   }
 
   .level-grid,

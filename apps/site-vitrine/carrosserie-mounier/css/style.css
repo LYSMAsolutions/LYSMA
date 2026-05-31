@@ -1109,37 +1109,91 @@ body {
 }
 
 .insurance-partners {
-  padding: 56px 0;
+  padding: 88px 0;
   background:
     radial-gradient(circle at top right, rgba(255, 106, 0, 0.08), transparent 28%),
     #fff;
   border-block: 1px solid #e5e7eb;
 }
 
-.insurance-grid {
-  display: grid;
-  grid-template-columns: 360px 1fr;
-  gap: 42px;
-  align-items: center;
+.insurance-head {
+  max-width: 880px;
+  margin: 0 auto 42px;
+  text-align: center;
 }
 
-.insurance-list {
-  display: grid;
-  grid-template-columns: repeat(9, 1fr);
-  gap: 12px;
+.insurance-head h2 {
+  color: var(--ral-7016);
+  font-size: clamp(34px, 4vw, 58px);
+  line-height: 1;
+  font-weight: 850;
+  letter-spacing: -0.055em;
+  text-transform: uppercase;
 }
 
-.insurance-list span {
-  min-height: 64px;
+.insurance-head p {
+  max-width: 760px;
+  margin: 18px auto 0;
+  color: #6b737a;
+  font-size: 17px;
+  line-height: 1.7;
+}
+
+.insurance-logo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.insurance-logo-card {
+  min-height: 118px;
+  padding: 24px;
   display: grid;
   place-items: center;
-  background: rgba(255, 255, 255, 0.78);
+  background: rgba(255, 255, 255, 0.82);
   border: 1px solid rgba(56, 62, 66, 0.1);
-  border-radius: 999px;
+  box-shadow: 0 20px 52px rgba(18, 25, 31, 0.08);
+  backdrop-filter: blur(16px);
+  transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
+}
+
+.insurance-logo-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(255, 106, 0, 0.28);
+  box-shadow: 0 28px 72px rgba(18, 25, 31, 0.12);
+}
+
+.insurance-logo-card img {
+  width: auto;
+  max-width: 170px;
+  height: 46px;
+  object-fit: contain;
+  filter: grayscale(100%) contrast(1.05);
+  opacity: 0.78;
+  transition: filter 0.28s ease, opacity 0.28s ease, transform 0.28s ease;
+}
+
+.insurance-logo-card:hover img {
+  filter: grayscale(0%) contrast(1);
+  opacity: 1;
+  transform: scale(1.03);
+}
+
+.insurance-note {
+  max-width: 900px;
+  margin: 34px auto 0;
+  padding: 24px 30px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  background: rgba(244, 245, 246, 0.78);
+  border: 1px solid rgba(56, 62, 66, 0.1);
+}
+
+.insurance-note p {
   color: var(--ral-7016);
-  font-weight: 900;
-  font-size: 13px;
-  box-shadow: 0 16px 38px rgba(18, 25, 31, 0.06);
+  font-weight: 800;
+  line-height: 1.55;
 }
 
 .faq-grid {
