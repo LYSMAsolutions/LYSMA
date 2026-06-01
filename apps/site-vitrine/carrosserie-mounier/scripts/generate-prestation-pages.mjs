@@ -362,6 +362,7 @@ function html(item) {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="../../assets/icons/favicon-mounier.ico" type="image/x-icon">
   <title>${item.title} à Trélissac | Carrosserie Mounier</title>
   <meta name="description" content="${item.title} chez Carrosserie Mounier à Trélissac près de Périgueux. ${item.seo}. Devis clair, diagnostic et accompagnement.">
   <link rel="stylesheet" href="../../css/style.css">

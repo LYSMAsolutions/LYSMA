@@ -74,6 +74,7 @@ await writeFile(
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="../assets/icons/favicon-mounier.ico" type="image/x-icon">
   <title>Carrosserie, lustrage, covering et flocage en Dordogne | Carrosserie Mounier</title>
   <meta name="description" content="Carrosserie Mounier intervient à Trélissac, Périgueux et en Dordogne pour carrosserie, peinture automobile, lustrage, covering et flocage véhicule.">
   <link rel="canonical" href="${siteUrl}/pages/zones-intervention.html">

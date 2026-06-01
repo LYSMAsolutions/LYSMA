@@ -35,6 +35,7 @@ function layout({ title, body, root = '..' }) {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="${root}/assets/icons/favicon-mounier.ico" type="image/x-icon">
   <title>${title} | Carrosserie Mounier</title>
   <meta name="description" content="${title} - Réponse claire par Carrosserie Mounier à Trélissac près de Périgueux.">
   <link rel="stylesheet" href="${root}/css/style.css">
