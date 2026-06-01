@@ -1,10 +1,10 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="fr">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Contact et devis | Carrosserie Mounier à Trélissac</title>
-  <meta name="description" content="Contactez Carrosserie Mounier à Trélissac pour un devis carrosserie, peinture, entretien automobile, covering, flocage ou candidature.">
+  <meta name="description" content="Contactez Carrosserie Mounier à Trélissac pour un devis carrosserie, peinture, entretien automobile, covering ou flocage.">
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/responsive.css">
 </head>
@@ -48,6 +48,7 @@
         <a href="realisations.html">Réalisations</a>
         <a href="../faq/index.html">FAQ</a>
         <a class="active" href="contact.html">Contact</a>
+        <a href="recrutement.html">Recrutement</a>
         <div class="menu-actions">
           <a href="tel:+33608378217">Appeler</a>
           <a href="contact.html">Devis</a>
@@ -69,7 +70,7 @@
         <div class="hero-copy reveal">
           <div class="eyebrow">Contact</div>
           <h1 class="section-title">Appeler, demander un devis ou venir &agrave; l'atelier.</h1>
-          <p class="section-desc">Une demande carrosserie, peinture, entretien, covering, flocage ou recrutement ? L'&eacute;quipe vous r&eacute;pond avec clart&eacute;.</p>
+          <p class="section-desc">Une demande carrosserie, peinture, entretien, covering ou flocage à L'&eacute;quipe vous r&eacute;pond avec clart&eacute;.</p>
           <div class="hero-actions hero-bubble-actions">
             <a class="side-action" href="tel:+33608378217"><span>&#9742;</span><strong>Appeler</strong><small>06 08 37 82 17</small></a>
             <a class="side-action side-action-devis" href="#contactForm"><span>&#8599;</span><strong>Devis</strong><small>Demande rapide</small></a>
@@ -82,7 +83,7 @@
       <div class="container contact-premium">
         <div class="contact-map reveal">
           <div>
-            <span>📍</span>
+            <span>&#9906;</span>
             <strong>32 Route du Pouyault</strong>
             <small>24750 Trélissac</small>
           </div>
@@ -96,7 +97,7 @@
             <a href="tel:+33608378217"><strong>Téléphone</strong><span>06 08 37 82 17</span></a>
             <a href="mailto:contact@carrosserie-mounier.fr"><strong>Email</strong><span>contact@carrosserie-mounier.fr</span></a>
             <div><strong>Adresse</strong><span>32 Route du Pouyault - 24750 Trélissac</span></div>
-            <div><strong>Horaires</strong><span>Lundi au vendredi - 8h00 / 12h00 · 14h00 / 18h00</span></div>
+            <div><strong>Horaires</strong><span>Lundi au vendredi - 8h00 / 12h00 à 14h00 / 18h00</span></div>
             <a href="https://www.google.com/maps/search/?api=1&query=32+Route+du+Pouyault+24750+Tr%C3%A9lissac" target="_blank" rel="noopener"><strong>Itinéraire</strong><span>Ouvrir Google Maps</span></a>
           </div>
 
@@ -121,14 +122,15 @@
           <h3>Votre demande</h3>
 
           <div class="form-grid">
-            <input class="input uppercase" type="text" name="nom" placeholder="Nom" required>
-            <input class="input uppercase" type="text" name="prenom" placeholder="Prénom" required>
-            <input class="input" type="email" name="email" placeholder="Email" required>
-            <input class="input" type="tel" name="telephone" placeholder="Téléphone" required>
-            <input class="input uppercase" type="text" name="immatriculation" placeholder="Immatriculation">
-            <input class="input uppercase" type="text" name="marque" placeholder="Marque de votre véhicule">
-            <input class="input uppercase" type="text" name="modele" placeholder="Modèle de votre véhicule">
-            <textarea class="textarea" name="travaux" placeholder="Décrivez votre besoin" required></textarea>
+            <input class="input uppercase" type="text" name="nom" placeholder="Nom" maxlength="80" autocomplete="family-name" required>
+            <input class="input uppercase" type="text" name="prenom" placeholder="Prénom" maxlength="80" autocomplete="given-name" required>
+            <input class="input" type="email" name="email" placeholder="Email" maxlength="120" autocomplete="email" required>
+            <input class="input" type="tel" name="telephone" placeholder="Téléphone" maxlength="30" autocomplete="tel" required>
+            <input class="input uppercase" type="text" name="immatriculation" placeholder="Immatriculation" maxlength="20" autocomplete="off">
+            <input class="input uppercase" type="text" name="marque" placeholder="Marque de votre véhicule" maxlength="80">
+            <input class="input uppercase" type="text" name="modele" placeholder="Modèle de votre véhicule" maxlength="80">
+            <textarea class="textarea" name="travaux" placeholder="Décrivez votre besoin" maxlength="1800" required></textarea>
+            <input class="form-honeypot" type="text" name="site_web" tabindex="-1" autocomplete="off" aria-hidden="true">
 
             <button class="btn btn-primary" type="submit">Envoyer la demande</button>
             <p id="formMessage" class="form-message"></p>
@@ -137,34 +139,11 @@
       </div>
     </section>
 
-    <section class="section section-dark" id="recrutement">
-      <div class="container contact-layout">
-        <div class="contact-card reveal">
-          <div class="kicker">Recrutement</div>
-          <h2 class="section-title">Vous souhaitez rejoindre une carrosserie moderne et exigeante ?</h2>
-          <p class="section-desc">
-            Présentez votre candidature. L'équipe étudie les profils motivés, soigneux et attachés au travail bien fait.
-          </p>
-        </div>
-
-        <form class="contact-form recruitment-form reveal">
-          <h3>Candidature</h3>
-          <div class="form-grid">
-            <input class="input uppercase" type="text" name="candidat_nom" placeholder="Nom et prénom">
-            <input class="input" type="email" name="candidat_email" placeholder="Email">
-            <input class="input" type="tel" name="candidat_tel" placeholder="Téléphone">
-            <input class="input" type="file" name="cv" accept=".pdf,.doc,.docx">
-            <textarea class="textarea" name="message" placeholder="Votre message"></textarea>
-            <a class="btn btn-primary" href="mailto:contact@carrosserie-mounier.fr?subject=Candidature%20Carrosserie%20Mounier">Envoyer ma candidature</a>
-          </div>
-        </form>
-      </div>
-    </section>
   </main>
 
   <div class="mobile-sticky-cta" aria-label="Actions rapides mobile">
-    <a href="tel:+33608378217">📞 Appeler</a>
-    <a href="#contactForm">📄 Devis</a>
+    <a href="tel:+33608378217">Appeler</a>
+    <a href="#contactForm">Devis Devis</a>
   </div>
 
   <footer class="site-footer">
@@ -179,9 +158,10 @@
         <a href="prestations.html">Prestations</a>
         <a href="realisations.html">Réalisations</a>
         <a href="contact.html">Contact</a>
+        <a href="recrutement.html">Recrutement</a>
       </div>
 
-      <div>© <span data-year></span> Carrosserie Mounier</div>
+      <div>&copy; <span data-year></span> Carrosserie Mounier</div>
     </div>
   </footer>
 
@@ -191,21 +171,32 @@
   <script>
     const contactForm = document.getElementById("contactForm");
     const formMessage = document.getElementById("formMessage");
+    const contactSubmit = contactForm.querySelector("button[type='submit']");
 
     contactForm.addEventListener("submit", async function (e) {
       e.preventDefault();
 
       formMessage.textContent = "Envoi en cours...";
       formMessage.className = "form-message";
+      contactSubmit.disabled = true;
 
       const data = Object.fromEntries(new FormData(contactForm).entries());
+      if (data.site_web) {
+        formMessage.textContent = "Votre demande a bien été envoyée.";
+        formMessage.className = "form-message success";
+        contactForm.reset();
+        contactSubmit.disabled = false;
+        return;
+      }
 
+      data.type = "contact";
+      delete data.site_web;
       data.immatriculation = (data.immatriculation || "").toUpperCase();
       data.marque = (data.marque || "").toUpperCase();
       data.modele = (data.modele || "").toUpperCase();
 
       try {
-        await fetch("https://script.google.com/macros/s/AKfycbzHGyqjX6f9pAP4BOYk5zpr_Aq5I9REIShp5xyiBrx3Dpfc9GLARNOpFzBEDuE4BIga/exec", {
+        await fetch("https://script.google.com/macros/s/AKfycbz9bbhFB6BzA4uvHjZCQ_cv9kvDHR_O2NzC3RlV9CWVJI-ygHWKFp7f0PyUi0tprNBv/exec", {
           method: "POST",
           mode: "no-cors",
           body: JSON.stringify(data)
@@ -217,6 +208,8 @@
       } catch (error) {
         formMessage.textContent = "Erreur lors de l'envoi. Merci de réessayer ou d'appeler directement.";
         formMessage.className = "form-message error";
+      } finally {
+        contactSubmit.disabled = false;
       }
     });
   </script>

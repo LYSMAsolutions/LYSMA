@@ -52,6 +52,7 @@ function layout({ title, body, root = '..' }) {
         <a href="${root}/pages/realisations.html">Réalisations</a>
         <a class="active" href="${root}/faq/index.html">FAQ</a>
         <a href="${root}/pages/contact.html">Contact</a>
+        <a href="${root}/pages/recrutement.html">Recrutement</a>
         <div class="menu-actions"><a href="tel:+33608378217">Appeler</a><a href="${root}/pages/contact.html">Devis</a></div>
       </nav>
       <a class="btn btn-header" href="${root}/pages/contact.html">Demander un devis</a>
@@ -62,7 +63,7 @@ function layout({ title, body, root = '..' }) {
   <footer class="site-footer">
     <div class="container footer-inner">
       <div><strong>Carrosserie Mounier</strong><br>Carrosserie, entretien, covering et flocage à Trélissac.</div>
-      <div class="footer-links"><a href="${root}/pages/prestations.html">Prestations</a><a href="${root}/pages/realisations.html">Réalisations</a><a href="${root}/faq/index.html">FAQ</a><a href="${root}/pages/contact.html">Contact</a></div>
+      <div class="footer-links"><a href="${root}/pages/prestations.html">Prestations</a><a href="${root}/pages/realisations.html">Réalisations</a><a href="${root}/faq/index.html">FAQ</a><a href="${root}/pages/contact.html">Contact</a><a href="${root}/pages/recrutement.html">Recrutement</a></div>
       <div>© <span data-year></span> Carrosserie Mounier</div>
     </div>
   </footer>
