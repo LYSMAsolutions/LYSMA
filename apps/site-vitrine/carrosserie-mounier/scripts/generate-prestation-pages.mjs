@@ -320,7 +320,7 @@ function mechanicalLogoSection() {
     <section class="section section-soft mechanic-equipment">
       <div class="container mechanic-equipment-grid">
         <div class="mechanic-equipment-main reveal">
-          <span>&Eacute;quipementier principal</span>
+          <span>Fournisseur principal</span>
           <img loading="lazy" src="../../assets/logo-marque-mecanique/${aaiLogo}" alt="AAI">
         </div>
         <div class="mechanic-equipment-content reveal">
