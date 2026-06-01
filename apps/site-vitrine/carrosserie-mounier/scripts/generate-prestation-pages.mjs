@@ -1,5 +1,11 @@
-import { mkdir, writeFile } from 'node:fs/promises'
+import { mkdir, readdir, writeFile } from 'node:fs/promises'
 import path from 'node:path'
+
+const logoMecaniqueDir = path.join('assets', 'logo-marque-mecanique')
+const logoMecaniqueFiles = (await readdir(logoMecaniqueDir, { withFileTypes: true }).catch(() => []))
+  .filter((entry) => entry.isFile() && /\.(png|jpe?g|webp|avif|svg)$/i.test(entry.name))
+  .map((entry) => entry.name)
+  .sort((a, b) => a.localeCompare(b, 'fr'))
 
 const prestations = [
   {
@@ -176,7 +182,14 @@ const prestations = [
     title: 'Réparation rayure profonde',
     category: 'Carrosserie',
     seo: 'rayure voiture, réparation carrosserie',
-    image: 'realisations/avant-apres-01.jpg',
+    image: 'realisations/rayures-profonde-apres.png',
+    compare: {
+      before: 'realisations/rayures-profonde-avant.png',
+      after: 'realisations/rayures-profonde-apres.png',
+      position: 42,
+      label: 'Comparer une rayure profonde avant et après',
+    },
+    gallery: ['realisations/rayures-profonde-avant.png', 'realisations/rayures-profonde-apres.png', 'realisations/aile-avant-apres.png'],
     intro: "Une rayure profonde dégrade l'esthétique et peut exposer la carrosserie à la corrosion.",
     why: "Réparer rapidement protège la surface, valorise le véhicule et évite que le défaut ne s'aggrave.",
     symptoms: ['Rayure sensible au toucher', 'Peinture traversée', 'Trace blanche ou mate', 'Début d’oxydation', 'Frottement parking'],
@@ -189,7 +202,8 @@ const prestations = [
     title: 'Réparation carrosserie',
     category: 'Carrosserie',
     seo: 'réparation carrosserie Dordogne, carrosserie Périgueux',
-    image: 'realisations/avant-apres-02.jpg',
+    image: 'realisations/choc-apres.png',
+    gallery: ['realisations/choc-avant.png', 'realisations/choc-apres.png', 'realisations/choc-lateral-apres.png'],
     intro: "Choc léger, dommage intermédiaire ou réparation plus importante : chaque véhicule est examiné avec méthode.",
     why: "Une carrosserie réparée protège le véhicule, restaure son apparence et préserve sa valeur.",
     symptoms: ['Frottement parking', 'Rayure profonde', 'Petit enfoncement', 'Aile ou portière touchée', 'Pare-chocs déplacé'],
@@ -202,7 +216,8 @@ const prestations = [
     title: 'Réparation pare-chocs plastique',
     category: 'Carrosserie',
     seo: 'réparation pare-chocs, pare-chocs plastique',
-    image: 'realisations/avant-apres-02.jpg',
+    image: 'realisations/pc_AR-apres.png',
+    gallery: ['realisations/pc_AR-avant.png', 'realisations/pc_AR-apres.png', 'realisations/pc_AR-avant-apres.png'],
     intro: "Un pare-chocs plastique abîmé ne nécessite pas toujours un remplacement complet.",
     why: "Lorsque c'est possible, réparer permet de conserver l'élément d'origine et de maîtriser le coût.",
     symptoms: ['Fissure', 'Frottement', 'Rayure', 'Déformation légère', 'Fixation fragilisée'],
@@ -215,7 +230,8 @@ const prestations = [
     title: 'Rénovation optique de phare',
     category: 'Optiques',
     seo: 'rénovation phare, optique voiture Périgueux',
-    image: 'realisations/avant-apres-03.jpg',
+    image: 'realisations/phare-apres.png',
+    gallery: ['realisations/phare-avant.png', 'realisations/phare-apres.png', 'realisations/phare-avant-apres.png'],
     intro: "Des phares ternis réduisent la visibilité, vieillissent l'apparence du véhicule et peuvent poser problème au contrôle technique.",
     why: "La rénovation optique améliore la transparence, l'esthétique et la sécurité de nuit.",
     symptoms: ['Optique jaunie', 'Voile opaque', 'Éclairage faible', 'Contrôle technique défavorable', 'Aspect vieilli'],
@@ -229,6 +245,7 @@ const prestations = [
     category: 'Personnalisation',
     seo: 'covering automobile, covering partiel, protection carrosserie',
     image: 'carrosserie-ext.jpeg',
+    gallery: ['carrosserie-ext.jpeg', 'atelier-resine.jpg', 'labo-peinture.jpg'],
     intro: "Le covering automobile permet de personnaliser, protéger ou transformer l'apparence d'un véhicule avec une finition premium.",
     why: "C'est une solution flexible pour un covering partiel, complet ou une protection ciblée de la carrosserie.",
     symptoms: ['Envie de personnalisation', 'Peinture à protéger', 'Projet esthétique', 'Véhicule professionnel', 'Changement d’image'],
@@ -242,6 +259,7 @@ const prestations = [
     category: 'Marquage',
     seo: 'flocage utilitaire, marquage publicitaire véhicule',
     image: 'carrosserie-ext.jpeg',
+    gallery: ['carrosserie-ext.jpeg', 'atelier-resine.jpg', 'outillage-premium.jpg'],
     intro: "Le flocage professionnel transforme un utilitaire, un véhicule commercial ou une flotte en support de communication visible.",
     why: "Un marquage propre renforce votre image et rend votre entreprise identifiable dans vos déplacements locaux.",
     symptoms: ['Véhicule sans identité', 'Ancien marquage fatigué', 'Nouvelle activité', 'Flotte à harmoniser', 'Besoin de visibilité'],
@@ -263,9 +281,17 @@ const hiddenPrestations = new Set([
 
 const activePrestations = prestations.filter((item) => !hiddenPrestations.has(item.slug))
 const bySlug = Object.fromEntries(activePrestations.map((item) => [item.slug, item]))
+const mechanicalPrestations = new Set([
+  'revision-vidange',
+  'courroie-distribution',
+  'freinage',
+  'amortisseurs',
+  'liquide-refroidissement',
+  'bougies-allumage',
+])
 
 function pageUrl(slug) {
-  return `../${slug}/`
+  return `../${slug}/index.html`
 }
 
 function listItems(items) {
@@ -279,9 +305,58 @@ function relatedLinks(current) {
     .join('\n')
 }
 
+function mechanicalLogoSection() {
+  const aaiLogo = logoMecaniqueFiles.find((file) => /aai/i.test(file)) ?? logoMecaniqueFiles[0]
+  const carouselLogos = logoMecaniqueFiles.filter((file) => file !== aaiLogo)
+  const trackLogos = carouselLogos.length ? carouselLogos : logoMecaniqueFiles
+
+  if (!aaiLogo) return ''
+
+  const track = [...trackLogos, ...trackLogos]
+    .map((file) => `<div class="mechanic-equipment-logo"><img loading="lazy" src="../../assets/logo-marque-mecanique/${file}" alt="${path.parse(file).name}"></div>`)
+    .join('\n              ')
+
+  return `
+    <section class="section section-soft mechanic-equipment">
+      <div class="container mechanic-equipment-grid">
+        <div class="mechanic-equipment-main reveal">
+          <span>&Eacute;quipementier principal</span>
+          <img loading="lazy" src="../../assets/logo-marque-mecanique/${aaiLogo}" alt="AAI">
+        </div>
+        <div class="mechanic-equipment-content reveal">
+          <div class="kicker">&Eacute;quipementiers m&eacute;caniques</div>
+          <h2 class="section-title">Des pi&egrave;ces et &eacute;quipements s&eacute;lectionn&eacute;s avec soin.</h2>
+          <p class="section-desc">Notre atelier travaille avec des r&eacute;f&eacute;rences adapt&eacute;es aux interventions m&eacute;caniques courantes afin de proposer un service clair, fiable et coh&eacute;rent.</p>
+          <div class="mechanic-logo-marquee" aria-label="Logos &eacute;quipementiers m&eacute;caniques">
+            <div class="mechanic-logo-track">
+              ${track}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>`
+}
+
 function html(item) {
   const image = `../../assets/images/${item.image}`
+  const gallery = item.gallery ?? [item.image, 'atelier-resine.jpg', 'outillage-premium.jpg']
   const isOptique = item.slug === 'renovation-optique'
+  const mechanicEquipmentSection = mechanicalPrestations.has(item.slug) ? mechanicalLogoSection() : ''
+  const photosSection = mechanicalPrestations.has(item.slug) ? '' : `
+    <section class="section section-soft">
+      <div class="container">
+        <div class="section-head reveal">
+          <div><div class="kicker">Photos</div><h2 class="section-title">Un aperçu du savoir-faire.</h2></div>
+        </div>
+        <div class="premium-gallery">
+          ${gallery.map((src, index) => {
+            const href = `../../assets/images/${src}`
+            const alt = index === 0 ? `${item.title} Carrosserie Mounier` : `Réalisation ${item.title}`
+            return `<a class="premium-gallery-item reveal" href="${href}"><img loading="lazy" src="${href}" alt="${alt}"></a>`
+          }).join('\n          ')}
+        </div>
+      </div>
+    </section>`
   return `<!doctype html>
 <html lang="fr">
 <head>
@@ -300,11 +375,13 @@ function html(item) {
       </a>
       <nav class="main-nav" aria-label="Navigation principale">
         <a href="../../index.html">Accueil</a>
-        <a href="../../pages/atelier.html">L'atelier</a>
-        <a href="../../pages/technologies.html">Technologies</a>
-        <a class="active" href="../../pages/prestations.html">Prestations</a>
+        <div class="nav-group"><button type="button">Prestations mécaniques</button><div><a href="../../prestations/revision-vidange/index.html">Révision et Vidange</a><a href="../../prestations/courroie-distribution/index.html">Courroie de Distribution</a><a href="../../prestations/freinage/index.html">Freinage</a><a href="../../prestations/amortisseurs/index.html">Amortisseurs</a><a href="../../prestations/liquide-refroidissement/index.html">Liquide de Refroidissement</a><a href="../../prestations/bougies-allumage/index.html">Bougies d'Allumage</a></div></div>
+        <div class="nav-group"><button type="button">Prestations carrosserie</button><div><a href="../../prestations/rayure-profonde/index.html">Rayure Profonde</a><a href="../../prestations/reparation-carrosserie/index.html">Réparation Carrosserie</a><a href="../../prestations/reparation-parechoc-plastique/index.html">Pare-Chocs Plastique</a><a href="../../prestations/renovation-optique/index.html">Rénovation Optique</a></div></div>
+        <div class="nav-group"><button type="button">Covering & Flocage</button><div><a href="../../prestations/covering/index.html">Covering Automobile</a><a href="../../prestations/flocage/index.html">Flocage Véhicule & Entreprise</a></div></div>
         <a href="../../pages/realisations.html">Réalisations</a>
+        <a href="../../faq/index.html">FAQ</a>
         <a href="../../pages/contact.html">Contact</a>
+        <div class="menu-actions"><a href="tel:+33608378217">Appeler</a><a href="../../pages/contact.html">Devis</a></div>
       </nav>
       <a class="btn btn-header" href="../../pages/contact.html">Demander un devis</a>
       <button class="mobile-toggle" type="button" aria-label="Ouvrir le menu"><span></span><span></span><span></span></button>
@@ -312,18 +389,18 @@ function html(item) {
   </header>
 
   <main>
-    <section class="service-hero section-dark">
-      <div class="container service-hero-grid">
-        <div class="reveal">
-          <div class="kicker">${item.category}</div>
+    <section class="hero hero-premium hero-refined page-hero">
+      <div class="hero-glow"></div>
+      <div class="container hero-content">
+        <div class="hero-copy reveal">
+          <div class="eyebrow">${item.category}</div>
           <h1 class="section-title">${item.title}</h1>
           <p class="section-desc">${item.intro}</p>
-          <div class="hero-actions">
-            <a class="btn btn-primary" href="tel:+33608378217">📞 Appeler maintenant</a>
-            <a class="btn btn-outline" href="../../pages/contact.html">📄 Demander un devis</a>
+          <div class="hero-actions hero-bubble-actions">
+            <a class="side-action" href="tel:+33608378217"><span>&#9742;</span><strong>Appeler</strong><small>06 08 37 82 17</small></a>
+            <a class="side-action side-action-devis" href="../../pages/contact.html"><span>&#8599;</span><strong>Devis</strong><small>Demande rapide</small></a>
           </div>
         </div>
-        <div class="service-hero-image reveal" style="background-image:url('${image}')"></div>
       </div>
     </section>
 
@@ -343,12 +420,16 @@ function html(item) {
         <aside class="service-page-side reveal">
           <strong>Carrosserie Mounier</strong>
           <span>Trélissac, Périgueux, Champcevinel, Boulazac, Chancelade et Dordogne.</span>
-          <a class="btn btn-primary" href="tel:+33608378217">📞 Appeler</a>
-          <a class="btn btn-outline dark" href="../../pages/contact.html">📄 Devis</a>
-          <a class="btn btn-outline dark" href="../../pages/prestations.html">Toutes les prestations</a>
+          <div class="service-side-actions">
+            <a class="side-action" href="tel:+33608378217"><span>&#9742;</span><strong>Appeler</strong><small>06 08 37 82 17</small></a>
+            <a class="side-action side-action-devis" href="../../pages/contact.html"><span>&#8599;</span><strong>Devis</strong><small>Demande rapide</small></a>
+            <a class="side-action" href="../../pages/prestations.html"><span>&#8769;</span><strong>Prestations</strong><small>Tout consulter</small></a>
+          </div>
         </aside>
       </div>
     </section>
+
+    ${mechanicEquipmentSection}
 
     <section class="section section-dark">
       <div class="container">
@@ -362,28 +443,16 @@ function html(item) {
       </div>
     </section>
 
-    <section class="section section-soft">
-      <div class="container">
-        <div class="section-head reveal">
-          <div><div class="kicker">Photos</div><h2 class="section-title">Un aperçu du savoir-faire.</h2></div>
-          <p class="section-desc">Les visuels peuvent être remplacés par des photos dédiées à cette prestation.</p>
-        </div>
-        <div class="premium-gallery">
-          <a class="premium-gallery-item reveal" href="${image}"><img loading="lazy" src="${image}" alt="${item.title} Carrosserie Mounier"></a>
-          <a class="premium-gallery-item reveal" href="../../assets/images/realisations/avant-apres-01.jpg"><img loading="lazy" src="../../assets/images/realisations/avant-apres-01.jpg" alt="Avant après ${item.title}"></a>
-          <a class="premium-gallery-item reveal" href="../../assets/images/realisations/avant-apres-02.jpg"><img loading="lazy" src="../../assets/images/realisations/avant-apres-02.jpg" alt="Réalisation ${item.title}"></a>
-        </div>
-      </div>
-    </section>
+    ${photosSection}
 
     <section class="section section-soft">
       <div class="container">
         <div class="cta-final reveal">
           <h2>Besoin d'un diagnostic pour ${item.title.toLowerCase()} ?</h2>
           <p>Contactez l'atelier pour une réponse claire et une estimation adaptée à votre véhicule.</p>
-          <div class="hero-actions">
-            <a class="btn btn-primary" href="tel:+33608378217">📞 Appeler maintenant</a>
-            <a class="btn btn-outline" href="../../pages/contact.html">📄 Demander un devis</a>
+          <div class="hero-actions cta-bubble-actions">
+            <a class="side-action" href="tel:+33608378217"><span>&#9742;</span><strong>Appeler</strong><small>06 08 37 82 17</small></a>
+            <a class="side-action side-action-devis" href="../../pages/contact.html"><span>&#8599;</span><strong>Devis</strong><small>Demande rapide</small></a>
           </div>
         </div>
 

@@ -65,18 +65,60 @@
     position: static;
     transform: none;
     min-width: 0;
+    max-height: 0;
+    padding: 0;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    overflow: hidden;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    transition: max-height 0.28s ease, opacity 0.22s ease, padding 0.22s ease;
+  }
+
+  .main-nav.is-open .nav-group.is-open > div {
+    max-height: 420px;
+    margin: 0;
     padding: 0 0 12px;
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
     background: transparent;
-    border: 0;
-    box-shadow: none;
+    border-left: 0;
+    border-radius: 0;
   }
 
   .main-nav.is-open .nav-group > div a {
     padding: 10px 0 10px 16px;
     font-size: 11px;
+    min-height: auto;
+    white-space: normal;
+  }
+
+  .main-nav.is-open .menu-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 18px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(255,255,255,0.14);
+  }
+
+  .main-nav.is-open .menu-actions a {
+    min-height: 46px;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    background: var(--orange);
+    color: white;
+    border: 0;
+    font-size: 12px;
+  }
+
+  .main-nav.is-open .menu-actions a:last-child {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.16);
   }
 
   .hero-grid,
@@ -96,6 +138,15 @@
 
   .partners-inner {
     grid-template-columns: 1fr;
+  }
+
+  .mechanic-equipment-grid {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+
+  .mechanic-equipment-main {
+    min-height: 150px;
   }
 
   .partner-title {
@@ -205,6 +256,10 @@
     padding: 64px 0 54px;
   }
 
+  .hero-refined .hero-content {
+    padding: 48px 0 42px;
+  }
+
   .hero-grid {
     display: grid;
     grid-template-columns: 1fr;
@@ -216,6 +271,10 @@
     letter-spacing: -0.055em;
   }
 
+  .hero-refined h1 {
+    font-size: 42px;
+  }
+
   .hero p {
     font-size: 16px;
     max-width: 100%;
@@ -224,6 +283,20 @@
   .hero-actions {
     display: grid;
     gap: 12px;
+  }
+
+  .page-hero {
+    margin-bottom: 82px;
+  }
+
+  .page-hero .hero-bubble-actions {
+    width: min(100% - 28px, 420px);
+    bottom: -70px;
+  }
+
+  .hero-bubble-actions .side-action {
+    min-width: 0;
+    width: 100%;
   }
 
   .btn {
@@ -287,6 +360,26 @@
     opacity: 0.95;
   }
 
+  .mechanic-equipment-main img {
+    max-width: 150px;
+  }
+
+  .mechanic-logo-track {
+    gap: 28px;
+    animation-duration: 22s;
+  }
+
+  .mechanic-equipment-logo {
+    width: 142px;
+    height: 68px;
+    padding: 10px 14px;
+  }
+
+  .mechanic-equipment-logo img {
+    max-width: 118px;
+    max-height: 46px;
+  }
+
   .section {
     padding: 58px 0;
   }
@@ -336,6 +429,7 @@
   .quick-actions-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
+    padding-left: 0;
   }
 
   .quick-action {
@@ -376,9 +470,13 @@
     min-height: 310px;
   }
 
+  .comparison-card {
+    grid-template-rows: 260px 1fr;
+  }
+
   .comparison-card img,
   .comparison-card:first-child img {
-    height: 260px;
+    height: 100%;
   }
 
   .contact-map {
@@ -457,7 +555,8 @@
     padding: 58px 0;
   }
 
-  .service-hero-image {
+  .service-hero-image,
+  .service-hero-compare {
     min-height: 280px;
   }
 
@@ -567,11 +666,48 @@
 
   .footer-inner {
     display: grid;
-    gap: 24px;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    gap: 22px;
+    justify-items: center;
+    text-align: center;
+    padding-inline: 0;
+  }
+
+  .footer-brand-social,
+  .footer-links,
+  .footer-copy,
+  .footer-credit {
+    grid-column: 1;
+    justify-self: center;
+    text-align: center;
+  }
+
+  .cookie-consent {
+    grid-template-columns: 1fr;
+    bottom: 12px;
+    width: min(100% - 24px, 520px);
+  }
+
+  .cookie-consent-actions,
+  .cookie-modal-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    justify-content: stretch;
+  }
+
+  .cookie-modal-panel {
+    padding: 24px;
+  }
+
+  .footer-brand-social {
+    display: grid;
+    gap: 14px;
   }
 
   .footer-links {
     flex-wrap: wrap;
+    justify-content: center;
     gap: 14px;
   }
 }

@@ -46,10 +46,13 @@ function layout({ title, body, root = '..' }) {
       <a class="logo" href="${root}/index.html" aria-label="Accueil Carrosserie Mounier"><img src="${root}/assets/logos/logo-mounier.png" alt="Carrosserie Mounier" class="logo-img"></a>
       <nav class="main-nav" aria-label="Navigation principale">
         <a href="${root}/index.html">Accueil</a>
-        <a href="${root}/pages/prestations.html">Prestations</a>
+        <div class="nav-group"><button type="button">Prestations mécaniques</button><div><a href="${root}/prestations/revision-vidange/index.html">Révision et Vidange</a><a href="${root}/prestations/courroie-distribution/index.html">Courroie de Distribution</a><a href="${root}/prestations/freinage/index.html">Freinage</a><a href="${root}/prestations/amortisseurs/index.html">Amortisseurs</a><a href="${root}/prestations/liquide-refroidissement/index.html">Liquide de Refroidissement</a><a href="${root}/prestations/bougies-allumage/index.html">Bougies d'Allumage</a></div></div>
+        <div class="nav-group"><button type="button">Prestations carrosserie</button><div><a href="${root}/prestations/rayure-profonde/index.html">Rayure Profonde</a><a href="${root}/prestations/reparation-carrosserie/index.html">Réparation Carrosserie</a><a href="${root}/prestations/reparation-parechoc-plastique/index.html">Pare-Chocs Plastique</a><a href="${root}/prestations/renovation-optique/index.html">Rénovation Optique</a></div></div>
+        <div class="nav-group"><button type="button">Covering & Flocage</button><div><a href="${root}/prestations/covering/index.html">Covering Automobile</a><a href="${root}/prestations/flocage/index.html">Flocage Véhicule & Entreprise</a></div></div>
         <a href="${root}/pages/realisations.html">Réalisations</a>
-        <a class="active" href="${root}/faq/">FAQ</a>
+        <a class="active" href="${root}/faq/index.html">FAQ</a>
         <a href="${root}/pages/contact.html">Contact</a>
+        <div class="menu-actions"><a href="tel:+33608378217">Appeler</a><a href="${root}/pages/contact.html">Devis</a></div>
       </nav>
       <a class="btn btn-header" href="${root}/pages/contact.html">Demander un devis</a>
       <button class="mobile-toggle" type="button" aria-label="Ouvrir le menu"><span></span><span></span><span></span></button>
@@ -59,7 +62,7 @@ function layout({ title, body, root = '..' }) {
   <footer class="site-footer">
     <div class="container footer-inner">
       <div><strong>Carrosserie Mounier</strong><br>Carrosserie, entretien, covering et flocage à Trélissac.</div>
-      <div class="footer-links"><a href="${root}/pages/prestations.html">Prestations</a><a href="${root}/pages/realisations.html">Réalisations</a><a href="${root}/faq/">FAQ</a><a href="${root}/pages/contact.html">Contact</a></div>
+      <div class="footer-links"><a href="${root}/pages/prestations.html">Prestations</a><a href="${root}/pages/realisations.html">Réalisations</a><a href="${root}/faq/index.html">FAQ</a><a href="${root}/pages/contact.html">Contact</a></div>
       <div>© <span data-year></span> Carrosserie Mounier</div>
     </div>
   </footer>
@@ -72,15 +75,23 @@ function layout({ title, body, root = '..' }) {
 await mkdir('faq', { recursive: true })
 
 const indexBody = `<main>
-  <section class="section section-dark">
-    <div class="container section-head reveal">
-      <div><div class="kicker">FAQ</div><h1 class="section-title">Questions fréquentes.</h1></div>
-      <p class="section-desc">Des réponses simples sur l'assurance, les délais, les devis et les principales interventions.</p>
+  <section class="hero hero-premium hero-refined page-hero">
+    <div class="hero-glow"></div>
+    <div class="container hero-content">
+      <div class="hero-copy reveal">
+        <div class="eyebrow">FAQ</div>
+        <h1 class="section-title">Questions fr&eacute;quentes.</h1>
+        <p class="section-desc">Des r&eacute;ponses simples sur l'assurance, les d&eacute;lais, les devis et les principales interventions.</p>
+        <div class="hero-actions hero-bubble-actions">
+          <a class="side-action" href="tel:+33608378217"><span>&#9742;</span><strong>Appeler</strong><small>06 08 37 82 17</small></a>
+          <a class="side-action side-action-devis" href="../pages/contact.html"><span>&#8599;</span><strong>Devis</strong><small>Demande rapide</small></a>
+        </div>
+      </div>
     </div>
   </section>
   <section class="section section-soft">
     <div class="container faq-page-grid">
-      ${faqs.map((faq) => `<a class="faq-link-card reveal" href="${faq.slug}/"><strong>${faq.title}</strong><span>Lire la réponse</span></a>`).join('\n')}
+      ${faqs.map((faq) => `<a class="faq-link-card reveal" href="${faq.slug}/index.html"><strong>${faq.title}</strong><span>Lire la réponse</span></a>`).join('\n')}
     </div>
   </section>
 </main>`
@@ -91,9 +102,17 @@ for (const faq of faqs) {
   const dir = path.join('faq', faq.slug)
   await mkdir(dir, { recursive: true })
   const body = `<main>
-  <section class="section section-dark">
-    <div class="container section-head reveal">
-      <div><div class="kicker">FAQ</div><h1 class="section-title">${faq.title}</h1></div>
+  <section class="hero hero-premium hero-refined page-hero">
+    <div class="hero-glow"></div>
+    <div class="container hero-content">
+      <div class="hero-copy reveal">
+        <div class="eyebrow">FAQ</div>
+        <h1 class="section-title">${faq.title}</h1>
+        <div class="hero-actions hero-bubble-actions">
+          <a class="side-action" href="tel:+33608378217"><span>&#9742;</span><strong>Appeler</strong><small>06 08 37 82 17</small></a>
+          <a class="side-action side-action-devis" href="../../pages/contact.html"><span>&#8599;</span><strong>Devis</strong><small>Demande rapide</small></a>
+        </div>
+      </div>
     </div>
   </section>
   <section class="section section-soft">
@@ -103,13 +122,13 @@ for (const faq of faqs) {
         <p>${faq.answer}</p>
         <h2>Besoin d'un avis sur votre véhicule ?</h2>
         <p>Contactez l'atelier pour obtenir une réponse adaptée à votre situation, à votre véhicule et au type d'intervention envisagé.</p>
-        <div class="hero-actions"><a class="btn btn-primary" href="../../pages/contact.html">Demander un devis</a><a class="btn btn-outline dark" href="tel:+33608378217">Appeler l'atelier</a></div>
+        <div class="hero-actions cta-bubble-actions"><a class="side-action side-action-devis" href="../../pages/contact.html"><span>&#8599;</span><strong>Devis</strong><small>Demande rapide</small></a><a class="side-action" href="tel:+33608378217"><span>&#9742;</span><strong>Appeler</strong><small>06 08 37 82 17</small></a></div>
       </article>
       <aside class="service-page-side reveal">
         <strong>À lire aussi</strong>
-        <a class="btn btn-outline dark" href="../../prestations/reparation-carrosserie/">Réparation carrosserie</a>
-        <a class="btn btn-outline dark" href="../../prestations/renovation-optique/">Rénovation optique</a>
-        <a class="btn btn-outline dark" href="../../faq/">Toutes les FAQ</a>
+        <a class="btn btn-outline dark" href="../../prestations/reparation-carrosserie/index.html">Réparation carrosserie</a>
+        <a class="btn btn-outline dark" href="../../prestations/renovation-optique/index.html">Rénovation optique</a>
+        <a class="btn btn-outline dark" href="../../faq/index.html">Toutes les FAQ</a>
       </aside>
     </div>
   </section>
