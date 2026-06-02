@@ -9,6 +9,8 @@ export type ShowcaseSite = {
   kind: ShowcaseKind
   path: string
   relativePath: string
+  repository?: string
+  repoPathBase?: string
   entry: string
   packageName?: string
   scripts: string[]
@@ -28,8 +30,6 @@ export function getShowcaseRoot() {
 }
 
 export async function getShowcaseSites(): Promise<ShowcaseSite[]> {
-  if (!existsSync(SITES_ROOT)) return []
-
   const sites = await Promise.all(
     SHOWCASE_MANIFEST.map(async (site) => getShowcaseSite(site.id)),
   )
@@ -42,11 +42,14 @@ export async function getShowcaseSites(): Promise<ShowcaseSite[]> {
 export async function getShowcaseSite(id: string): Promise<ShowcaseSite | null> {
   if (!/^[a-zA-Z0-9-_]+$/.test(id)) return null
 
-  const absolutePath = path.join(SITES_ROOT, id)
-  const indexPath = path.join(absolutePath, 'index.html')
   const manifest = SHOWCASE_MANIFEST.find((site) => site.id === id)
+  const absolutePath = manifest
+    ? path.resolve(process.cwd(), manifest.relativePath)
+    : path.join(SITES_ROOT, id)
+  const indexPath = path.join(absolutePath, 'index.html')
 
   if (!manifest && !existsSync(indexPath)) return null
+  if (manifest && !existsSync(absolutePath)) return null
 
   const name = manifest?.name ?? humanize(id)
   const packageName = manifest?.packageName
@@ -60,6 +63,8 @@ export async function getShowcaseSite(id: string): Promise<ShowcaseSite | null> 
     kind,
     path: absolutePath,
     relativePath: path.relative(process.cwd(), absolutePath),
+    repository: manifest?.repository,
+    repoPathBase: manifest?.repoPathBase,
     entry,
     packageName,
     scripts,
@@ -142,8 +147,10 @@ export async function writeShowcaseContent(id: string, content: unknown) {
 }
 
 export function getShowcaseRepoPath(id: string, relativeFilePath = '') {
+  const manifest = SHOWCASE_MANIFEST.find((site) => site.id === id)
   const cleanPath = relativeFilePath.replace(/^[/\\]+/, '')
-  return path.posix.join('apps/site-vitrine', id, cleanPath).replace(/\\/g, '/')
+  const basePath = manifest?.repoPathBase ?? path.posix.join('apps/site-vitrine', id)
+  return path.posix.join(basePath, cleanPath).replace(/\\/g, '/')
 }
 
 export function shouldWriteLocalShowcaseFiles() {

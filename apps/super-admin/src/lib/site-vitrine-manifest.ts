@@ -6,6 +6,8 @@ export type ShowcaseManifestItem = {
   kind: ShowcaseKind
   entry: string
   relativePath: string
+  repository?: string
+  repoPathBase?: string
   packageName?: string
   scripts?: string[]
 }
@@ -22,7 +24,9 @@ export const SHOWCASE_MANIFEST: ShowcaseManifestItem[] = [
     name: 'Carrosserie Mounier',
     kind: 'static',
     entry: 'pnpm run build -> dist',
-    relativePath: '../site-vitrine/carrosserie-mounier',
+    relativePath: '../../../carrosserie-mounier',
+    repository: 'LYSMAsolutions/carrosserie-mounier',
+    repoPathBase: '',
     scripts: ['dev', 'build', 'start', 'check'],
   },
   {
