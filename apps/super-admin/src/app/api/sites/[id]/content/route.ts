@@ -39,7 +39,8 @@ export async function PUT(
   const site = await getShowcaseSite(id)
   if (!site) return NextResponse.json({ error: 'Site introuvable' }, { status: 404 })
 
-  const content = await req.json()
+  const payload = await req.json()
+  const content = payload.content ?? payload
   const writeLocal = shouldWriteLocalShowcaseFiles()
 
   if (writeLocal) {
@@ -51,6 +52,11 @@ export async function PUT(
     path: getShowcaseRepoPath(id, 'content/site.json'),
     content: serialized,
     message: `chore(site-vitrine): update ${site.name}`,
+    repository: site.repository,
+    branchName: payload.branchName,
+    createPullRequest: payload.createPullRequest,
+    prTitle: payload.prTitle,
+    prBody: payload.prBody,
   })
 
   if (!writeLocal && !publication.github.committed) {

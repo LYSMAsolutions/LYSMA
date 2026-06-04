@@ -8,7 +8,13 @@ type CommitFileInput = {
   path: string
   content: string
   message: string
+  repository?: string
   encoding?: 'utf8' | 'base64'
+  branchName?: string
+  targetBranch?: string
+  createPullRequest?: boolean
+  prTitle?: string
+  prBody?: string
 }
 
 export type PublicationResult = {
@@ -17,6 +23,7 @@ export type PublicationResult = {
     committed: boolean
     path?: string
     commitUrl?: string
+    pullRequestUrl?: string
     error?: string
   }
   vercel: {
@@ -32,6 +39,7 @@ export function getPublishingStatus(siteId?: string) {
     githubReady: isGitHubConfigured(),
     repository: getRepositoryLabel(),
     branch: getGitHubBranch(),
+    publishBranch: siteId ? getGitHubPublishBranchName(siteId) : undefined,
     vercelReady: Boolean(siteId ? getDeployHook(siteId) : getDeployHooksMap()),
   }
 }
@@ -40,8 +48,13 @@ export async function publishShowcaseFile(
   siteId: string,
   input: CommitFileInput,
 ): Promise<PublicationResult> {
-  const github = await commitFileToGitHub(input)
-  const vercel = github.committed
+  const branchName = input.branchName ?? getGitHubPublishBranchName(siteId)
+  const targetBranch = input.targetBranch ?? getGitHubBranch()
+  const createPullRequest = input.createPullRequest ?? process.env.GITHUB_CREATE_PR === 'true'
+  const deployOnBranch = process.env.GITHUB_DEPLOY_ON_BRANCH === 'true'
+
+  const github = await commitFileToGitHub({ ...input, branchName, targetBranch, createPullRequest })
+  const vercel = github.committed && (branchName === targetBranch || deployOnBranch)
     ? await triggerDeployHook(siteId)
     : {
         configured: Boolean(getDeployHook(siteId)),
@@ -52,22 +65,40 @@ export async function publishShowcaseFile(
   return { github, vercel }
 }
 
+export function getPublishingBranchName(siteId: string) {
+  return getGitHubPublishBranchName(siteId)
+}
+
 export async function triggerShowcaseDeploy(siteId: string) {
   return triggerDeployHook(siteId)
 }
 
 async function commitFileToGitHub(input: CommitFileInput): Promise<PublicationResult['github']> {
-  if (!isGitHubConfigured()) {
+  if (!process.env.GITHUB_TOKEN) {
     return { configured: false, committed: false, path: input.path }
   }
 
   const token = process.env.GITHUB_TOKEN!
-  const owner = process.env.GITHUB_OWNER ?? process.env.GITHUB_REPOSITORY?.split('/')[0]
-  const repo = process.env.GITHUB_REPO ?? process.env.GITHUB_REPOSITORY?.split('/')[1]
-  const branch = getGitHubBranch()
-  const url = `https://api.github.com/repos/${owner}/${repo}/contents/${encodePath(input.path)}`
+  const repository = input.repository ?? process.env.GITHUB_REPOSITORY
+  const owner = repository?.split('/')[0] ?? process.env.GITHUB_OWNER
+  const repo = repository?.split('/')[1] ?? process.env.GITHUB_REPO
+  const branch = input.branchName ?? getGitHubBranch()
+  const targetBranch = input.targetBranch ?? getGitHubBranch()
+  if (!owner || !repo) {
+    return {
+      configured: false,
+      committed: false,
+      path: input.path,
+      error: 'Depot GitHub non configure',
+    }
+  }
 
   try {
+    if (branch !== targetBranch) {
+      await ensureGitHubBranch(owner, repo, branch, targetBranch, token)
+    }
+
+    const url = `https://api.github.com/repos/${owner}/${repo}/contents/${encodePath(input.path)}`
     const current = await fetch(`${url}?ref=${encodeURIComponent(branch)}`, {
       headers: githubHeaders(token),
       cache: 'no-store',
@@ -101,12 +132,21 @@ async function commitFileToGitHub(input: CommitFileInput): Promise<PublicationRe
       }
     }
 
-    return {
+    const result: PublicationResult['github'] = {
       configured: true,
       committed: true,
       path: input.path,
       commitUrl: data?.commit?.html_url,
     }
+
+    if (input.createPullRequest && branch !== targetBranch) {
+      const prUrl = await createPullRequest(owner, repo, branch, targetBranch, input.prTitle ?? input.message, input.prBody)
+      if (prUrl) {
+        result.pullRequestUrl = prUrl
+      }
+    }
+
+    return result
   } catch (error) {
     return {
       configured: true,
@@ -115,6 +155,67 @@ async function commitFileToGitHub(input: CommitFileInput): Promise<PublicationRe
       error: error instanceof Error ? error.message : 'Erreur GitHub inconnue',
     }
   }
+}
+
+async function ensureGitHubBranch(owner: string, repo: string, branchName: string, baseBranch: string, token: string) {
+  const branchUrl = `https://api.github.com/repos/${owner}/${repo}/branches/${encodeURIComponent(branchName)}`
+  const branchRes = await fetch(branchUrl, { headers: githubHeaders(token), cache: 'no-store' })
+
+  if (branchRes.ok) {
+    return
+  }
+
+  const baseUrl = `https://api.github.com/repos/${owner}/${repo}/branches/${encodeURIComponent(baseBranch)}`
+  const baseRes = await fetch(baseUrl, { headers: githubHeaders(token), cache: 'no-store' })
+
+  if (!baseRes.ok) {
+    throw new Error(`Impossible de recuperer la branche de base ${baseBranch}`)
+  }
+
+  const baseData = await baseRes.json() as { commit: { sha: string } }
+  const refUrl = `https://api.github.com/repos/${owner}/${repo}/git/refs`
+  const createRes = await fetch(refUrl, {
+    method: 'POST',
+    headers: githubHeaders(token),
+    body: JSON.stringify({
+      ref: `refs/heads/${branchName}`,
+      sha: baseData.commit.sha,
+    }),
+  })
+
+  if (!createRes.ok) {
+    const errorData = await createRes.json().catch(() => null)
+    throw new Error(errorData?.message ?? `Impossible de creer la branche ${branchName}`)
+  }
+}
+
+async function createPullRequest(owner: string, repo: string, headBranch: string, baseBranch: string, title: string, body?: string) {
+  const listUrl = `https://api.github.com/repos/${owner}/${repo}/pulls?head=${encodeURIComponent(owner + ':' + headBranch)}&base=${encodeURIComponent(baseBranch)}&state=open`
+  const listRes = await fetch(listUrl, { headers: githubHeaders(process.env.GITHUB_TOKEN!), cache: 'no-store' })
+  if (listRes.ok) {
+    const prs = await listRes.json() as Array<{ html_url?: string }>
+    if (prs.length > 0) return prs[0].html_url
+  }
+
+  const createUrl = `https://api.github.com/repos/${owner}/${repo}/pulls`
+  const createRes = await fetch(createUrl, {
+    method: 'POST',
+    headers: githubHeaders(process.env.GITHUB_TOKEN!),
+    body: JSON.stringify({
+      title,
+      head: headBranch,
+      base: baseBranch,
+      body,
+      maintainer_can_modify: true,
+    }),
+  })
+
+  if (!createRes.ok) {
+    return null
+  }
+
+  const data = await createRes.json() as { html_url?: string }
+  return data.html_url ?? null
 }
 
 async function triggerDeployHook(siteId: string): Promise<PublicationResult['vercel']> {
@@ -160,6 +261,16 @@ function getRepositoryLabel() {
 
 function getGitHubBranch() {
   return process.env.GITHUB_BRANCH || 'main'
+}
+
+function getGitHubPublishBranchName(siteId: string) {
+  const prefix = (process.env.GITHUB_PUBLISH_BRANCH_PREFIX ?? 'super-admin/').replace(/\/+$|^\/+/, '')
+  const raw = `${prefix}/${siteId}`
+  return raw
+    .toLowerCase()
+    .replace(/[^a-z0-9\-_/]+/g, '-')
+    .replace(/\/+/g, '/')
+    .replace(/^-+|-+$/g, '')
 }
 
 function getCommitIdentity() {

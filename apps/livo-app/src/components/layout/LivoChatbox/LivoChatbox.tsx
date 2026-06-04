@@ -1,6 +1,6 @@
 'use client'
 
-import { FormEvent, useState } from 'react'
+import { FormEvent, useRef, useState } from 'react'
 import { ChatCircleText, PaperPlaneTilt, X } from '@phosphor-icons/react'
 import styles from './LivoChatbox.module.css'
 
@@ -58,7 +58,34 @@ function getAnswer(message: string) {
   return "Nous pouvons vous orienter sur le suivi atelier, le pointage, les rapports ou l'usage general de LIVO. Pour une demande precise, vous pouvez aussi ecrire a LYSMA."
 }
 
+function createConversationId() {
+  const storageKey = 'livoChatboxConversationId'
+  const existing = typeof window !== 'undefined' ? window.sessionStorage.getItem(storageKey) : null
+  if (existing) return existing
+
+  const id = `livo-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`
+  if (typeof window !== 'undefined') {
+    window.sessionStorage.setItem(storageKey, id)
+  }
+
+  return id
+}
+
+function logChatExchange(conversationId: string, userPrompt: string, assistantResponse: string) {
+  fetch('/api/chatbox/log', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      conversationId,
+      userPrompt,
+      assistantResponse,
+    }),
+    keepalive: true,
+  }).catch(() => undefined)
+}
+
 export function LivoChatbox() {
+  const conversationIdRef = useRef(createConversationId())
   const [open, setOpen] = useState(false)
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -70,11 +97,14 @@ export function LivoChatbox() {
   function ask(message: string) {
     const cleanMessage = message.trim()
     if (!cleanMessage) return
+    const answer = getAnswer(cleanMessage)
+
+    void logChatExchange(conversationIdRef.current, cleanMessage, answer)
 
     setMessages((current) => [
       ...current,
       { role: 'user', content: cleanMessage },
-      { role: 'assistant', content: getAnswer(cleanMessage) },
+      { role: 'assistant', content: answer },
     ])
   }
 

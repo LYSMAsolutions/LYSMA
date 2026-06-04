@@ -172,6 +172,21 @@ exports.Prisma.MessageScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.ChatLogScalarFieldEnum = {
+  id: 'id',
+  source: 'source',
+  conversationId: 'conversationId',
+  userName: 'userName',
+  userEmail: 'userEmail',
+  userPrompt: 'userPrompt',
+  assistantResponse: 'assistantResponse',
+  quality: 'quality',
+  qualityNotes: 'qualityNotes',
+  metadata: 'metadata',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.AuditLogScalarFieldEnum = {
   id: 'id',
   outil: 'outil',
@@ -361,6 +376,12 @@ exports.MessageStatut = exports.$Enums.MessageStatut = {
   TRAITE: 'TRAITE'
 };
 
+exports.ChatQuality = exports.$Enums.ChatQuality = {
+  UNKNOWN: 'UNKNOWN',
+  GOOD: 'GOOD',
+  BAD: 'BAD'
+};
+
 exports.FinanceVatStatus = exports.$Enums.FinanceVatStatus = {
   FRANCHISE: 'FRANCHISE',
   ASSUJETTI: 'ASSUJETTI'
@@ -455,6 +476,7 @@ exports.Prisma.ModelName = {
   Client: 'Client',
   Acces: 'Acces',
   Message: 'Message',
+  ChatLog: 'ChatLog',
   AuditLog: 'AuditLog',
   ErrorReport: 'ErrorReport',
   FinanceSettings: 'FinanceSettings',

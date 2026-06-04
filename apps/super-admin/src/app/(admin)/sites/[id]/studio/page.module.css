@@ -99,11 +99,22 @@
   cursor: wait;
 }
 
-.ghostBtn {
-  padding: 5px 9px;
-  color: var(--blue);
+.ghostBtn,
+.secondaryAction {
+  padding: 7px 11px;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
   background: transparent;
-  font-size: 11px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all var(--dur-fast) var(--ease);
+}
+
+.ghostBtn:hover,
+.secondaryAction:hover {
+  background: var(--bg-hover);
 }
 
 .form {
@@ -131,6 +142,114 @@
   font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 0.06em;
+}
+
+.discoveryPanel {
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  background: var(--bg-elevated);
+  margin-bottom: 16px;
+  display: grid;
+  gap: 12px;
+}
+
+.discoveryHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.discoveryHeader strong {
+  display: block;
+  color: var(--text-primary);
+  font-size: 13px;
+}
+
+.discoveryHeader p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.discoveryError {
+  color: var(--red);
+  font-size: 12px;
+  background: rgba(232, 84, 84, 0.08);
+  border: 1px solid rgba(232, 84, 84, 0.16);
+  border-radius: var(--radius-sm);
+  padding: 10px;
+}
+
+.discoveryResults {
+  display: grid;
+  gap: 12px;
+}
+
+.discoveryMeta {
+  display: grid;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.discoveryMeta strong {
+  color: var(--text-primary);
+}
+
+.discoveryActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.discoveryRow {
+  display: grid;
+  gap: 12px;
+}
+
+@media (min-width: 840px) {
+  .discoveryRow {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.discoveryItem {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+
+.colorList,
+.fontList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.colorChip,
+.fontChip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  padding: 4px 8px;
+  font-size: 11px;
+  color: var(--text-primary);
+}
+
+.colorChip {
+  min-width: 72px;
+  height: 28px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+}
+
+.fontChip {
+  background: rgba(88, 166, 255, 0.08);
+  border: 1px solid rgba(88, 166, 255, 0.18);
 }
 
 .publishBox strong {

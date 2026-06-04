@@ -49,9 +49,10 @@ export default async function SiteDetailPage({ params }: Props) {
         <InfoCard label="fichiers" value={site.files} />
         <InfoCard label="package" value={site.packageName ?? '-'} />
         <InfoCard label="scripts" value={site.scripts.length ? site.scripts.join(', ') : '-'} />
-        <InfoCard label="commande" value={site.entry} wide />
-        <InfoCard label="github" value={publishing.githubReady ? `${publishing.repository}/${publishing.branch}` : 'non configure'} wide />
-        <InfoCard label="vercel" value={publishing.vercelReady ? 'deploy hook pret' : 'hook manquant'} />
+        <InfoCard label="commande" value={site.entry} />
+        <InfoCard label="github" value={publishing.githubReady ? `${publishing.repository}/${publishing.branch}` : 'non configure'} />
+        <InfoCard label="publication_branche" value={publishing.githubReady ? publishing.publishBranch ?? '-' : '-'} />
+        <InfoCard label="vercel" value={publishing.vercelReady ? 'deploy hook pret' : 'hook manquant'} wide />
       </section>
 
       <section className={styles.panel}>

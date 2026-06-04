@@ -93,7 +93,143 @@ export async function readShowcaseContent(id: string) {
   }
 
   const raw = await readFile(contentPath, 'utf8')
-  return JSON.parse(raw)
+  return JSON.parse(raw.replace(/^\uFEFF/, ''))
+}
+
+export type ShowcaseDiscoveryPage = {
+  path: string
+  title: string
+  description: string | null
+  headings: string[]
+  keywords: string[]
+}
+
+export type ShowcaseDiscovery = {
+  meta: {
+    title?: string
+    description?: string
+    source?: string
+  }
+  pages: ShowcaseDiscoveryPage[]
+  colors: string[]
+  fonts: string[]
+}
+
+export async function discoverShowcaseSite(id: string): Promise<ShowcaseDiscovery | null> {
+  const site = await getShowcaseSite(id)
+  if (!site) return null
+
+  const htmlFiles = await getFilesByExtension(site.path, '.html')
+  const cssFiles = await getFilesByExtension(site.path, '.css')
+
+  const pages = await Promise.all(htmlFiles.map(async (filePath) => {
+    const raw = await readFile(filePath, 'utf8')
+    return {
+      path: path.relative(site.path, filePath).replace(/\\/g, '/'),
+      title: extractHtmlTitle(raw),
+      description: extractHtmlDescription(raw),
+      headings: extractHtmlHeadings(raw),
+      keywords: extractHtmlKeywords(raw),
+    }
+  }))
+
+  const metaPage = pages.find((page) => page.path === 'index.html') || pages[0]
+  const colors = await extractCssColors(cssFiles)
+  const fonts = await extractCssFonts(cssFiles)
+
+  return {
+    meta: {
+      title: metaPage?.title,
+      description: metaPage?.description ?? undefined,
+      source: metaPage?.path,
+    },
+    pages,
+    colors,
+    fonts,
+  }
+}
+
+async function getFilesByExtension(dir: string, extension: string): Promise<string[]> {
+  const entries = await readdir(dir, { withFileTypes: true })
+  const files: string[] = []
+
+  for (const entry of entries) {
+    const resolved = path.join(dir, entry.name)
+
+    if (entry.isDirectory()) {
+      files.push(...await getFilesByExtension(resolved, extension))
+      continue
+    }
+
+    if (entry.isFile() && path.extname(entry.name).toLowerCase() === extension) {
+      files.push(resolved)
+    }
+  }
+
+  return files
+}
+
+function extractHtmlTitle(html: string) {
+  const match = html.match(/<title[^>]*>([^<]+)<\/title>/i)
+  return match?.[1]?.trim() ?? ''
+}
+
+function extractHtmlDescription(html: string) {
+  const match = html.match(/<meta\s+name=["']description["']\s+content=["']([^"']+)["']/i)
+  return match?.[1]?.trim() ?? null
+}
+
+function extractHtmlHeadings(html: string) {
+  const headings = Array.from(html.matchAll(/<(h[1-3])[^>]*>(.*?)<\/\1>/gi))
+    .map((match) => match[2].replace(/<[^>]+>/g, '').trim())
+    .filter(Boolean)
+
+  return headings.slice(0, 10)
+}
+
+function extractHtmlKeywords(html: string) {
+  const meta = html.match(/<meta\s+name=["']keywords["']\s+content=["']([^"']+)["']/i)
+  const content = meta?.[1]?.trim() ?? ''
+  return content ? content.split(',').map((item) => item.trim()).filter(Boolean) : []
+}
+
+async function extractCssColors(cssFiles: string[]) {
+  const colors = new Set<string>()
+
+  for (const filePath of cssFiles) {
+    const raw = await readFile(filePath, 'utf8')
+    for (const match of raw.matchAll(/(--[\w-]+)\s*:\s*([^;]+);/gi)) {
+      const value = match[2].trim()
+      if (isColorValue(value)) colors.add(value)
+    }
+    for (const match of raw.matchAll(/(#(?:[0-9a-fA-F]{3,8})|rgba?\([^\)]+\)|hsla?\([^\)]+\))/gi)) {
+      colors.add(match[1] ?? match[0])
+    }
+  }
+
+  return Array.from(colors).slice(0, 20)
+}
+
+async function extractCssFonts(cssFiles: string[]) {
+  const fonts = new Set<string>()
+
+  for (const filePath of cssFiles) {
+    const raw = await readFile(filePath, 'utf8')
+    for (const match of raw.matchAll(/font-family\s*:\s*([^;]+);/gi)) {
+      const candidate = match[1].trim().replace(/['"]/g, '')
+      if (candidate) {
+        candidate.split(',').map((font) => font.trim()).forEach((font) => {
+          if (font) fonts.add(font)
+        })
+      }
+    }
+  }
+
+  return Array.from(fonts).slice(0, 20)
+}
+
+function isColorValue(value: string) {
+  return /^(#(?:[0-9a-fA-F]{3,8})|rgba?\([^\)]+\)|hsla?\([^\)]+\))$/.test(value)
 }
 
 export async function hasShowcaseContent(id: string) {
@@ -160,7 +296,10 @@ export function shouldWriteLocalShowcaseFiles() {
 export function resolveShowcaseFile(id: string, relativeFilePath = 'index.html') {
   if (!/^[a-zA-Z0-9-_]+$/.test(id)) return null
 
-  const sitePath = path.join(SITES_ROOT, id)
+  const manifest = SHOWCASE_MANIFEST.find((site) => site.id === id)
+  const sitePath = manifest
+    ? path.resolve(process.cwd(), manifest.relativePath)
+    : path.join(SITES_ROOT, id)
   const cleanPath = relativeFilePath.replace(/^[/\\]+/, '') || 'index.html'
   const absoluteFile = path.resolve(sitePath, cleanPath)
 

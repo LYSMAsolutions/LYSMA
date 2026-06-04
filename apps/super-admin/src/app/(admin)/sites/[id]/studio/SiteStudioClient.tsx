@@ -68,6 +68,7 @@ type Props = {
     githubReady: boolean
     repository: string
     branch: string
+    publishBranch?: string
     vercelReady: boolean
   }
 }
@@ -78,6 +79,7 @@ type PublicationResponse = {
     committed: boolean
     path?: string
     commitUrl?: string
+    pullRequestUrl?: string
     error?: string
   }
   vercel?: {
@@ -85,6 +87,25 @@ type PublicationResponse = {
     triggered: boolean
     error?: string
   }
+}
+
+type SiteDiscoveryPage = {
+  path: string
+  title: string
+  description: string | null
+  headings: string[]
+  keywords: string[]
+}
+
+type SiteDiscovery = {
+  meta: {
+    title?: string
+    description?: string
+    source?: string
+  }
+  pages: SiteDiscoveryPage[]
+  colors: string[]
+  fonts: string[]
 }
 
 export function SiteStudioClient({ siteId, siteName, initialContent, previewPages, editable, publishing }: Props) {
@@ -95,8 +116,17 @@ export function SiteStudioClient({ siteId, siteName, initialContent, previewPage
   const [saving, setSaving] = useState(false)
   const [savedAt, setSavedAt] = useState<string | null>(null)
   const [publication, setPublication] = useState<PublicationResponse | null>(null)
+  const [discovery, setDiscovery] = useState<SiteDiscovery | null>(null)
+  const [discovering, setDiscovering] = useState(false)
+  const [discoveryError, setDiscoveryError] = useState<string | null>(null)
+  const [usePullRequest, setUsePullRequest] = useState<boolean>(() =>
+    Boolean(publishing.githubReady && publishing.publishBranch && publishing.publishBranch !== publishing.branch),
+  )
 
-  const previewUrl = useMemo(() => `/preview/sites/${siteId}/${previewPage}?studio=${previewVersion}`, [siteId, previewPage, previewVersion])
+  const previewUrl = useMemo(
+    () => `/preview/sites/${siteId}/${previewPage}?studio=${previewVersion}`,
+    [siteId, previewPage, previewVersion],
+  )
 
   function patch(path: string, value: string) {
     setContent((current) => {
@@ -127,7 +157,7 @@ export function SiteStudioClient({ siteId, siteName, initialContent, previewPage
       const res = await fetch(`/api/sites/${siteId}/content`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(content),
+        body: JSON.stringify({ content, createPullRequest: usePullRequest }),
       })
 
       if (!res.ok) {
@@ -166,6 +196,57 @@ export function SiteStudioClient({ siteId, siteName, initialContent, previewPage
     patch(path, data.path)
   }
 
+  async function discoverSite() {
+    setDiscovering(true)
+    setDiscoveryError(null)
+
+    try {
+      const res = await fetch(`/api/sites/${siteId}/discover`)
+      const data = await res.json()
+
+      if (!res.ok) {
+        throw new Error(data.error ?? 'Erreur lors de l analyse')
+      }
+
+      setDiscovery(data.discovery)
+    } catch (error) {
+      setDiscoveryError(error instanceof Error ? error.message : 'Erreur inconnue')
+    } finally {
+      setDiscovering(false)
+    }
+  }
+
+  function importHeroFromDiscovery() {
+    if (!discovery?.meta?.title && !discovery?.meta?.description) return
+
+    setContent((current) => {
+      const next = structuredClone(current)
+      if (discovery.meta.title) {
+        next.hero.title = discovery.meta.title
+        next.seo.title = discovery.meta.title
+      }
+      if (discovery.meta.description) {
+        next.hero.description = discovery.meta.description
+        next.seo.description = discovery.meta.description
+      }
+      postPreview(next)
+      return next
+    })
+  }
+
+  function importColorsFromDiscovery() {
+    if (!discovery?.colors?.length) return
+
+    setContent((current) => {
+      const next = structuredClone(current)
+      next.colors.primary = discovery.colors[0] ?? next.colors.primary
+      next.colors.accent = discovery.colors[1] ?? next.colors.accent
+      next.colors.text = discovery.colors[2] ?? next.colors.text
+      postPreview(next)
+      return next
+    })
+  }
+
   return (
     <div className={styles.studio}>
       <section className={styles.editor}>
@@ -188,11 +269,27 @@ export function SiteStudioClient({ siteId, siteName, initialContent, previewPage
               </strong>
             </div>
             <div>
+              <span>Branche publication</span>
+              <strong data-state={publishing.githubReady ? 'ready' : 'missing'}>
+                {publishing.githubReady ? publishing.publishBranch ?? '-' : 'non configure'}
+              </strong>
+            </div>
+            <div>
               <span>Vercel</span>
               <strong data-state={publishing.vercelReady ? 'ready' : 'missing'}>
                 {publishing.vercelReady ? 'deploy hook pret' : 'deploy hook absent'}
               </strong>
             </div>
+            {publishing.githubReady && publishing.publishBranch && publishing.publishBranch !== publishing.branch && (
+              <label className={styles.checkbox}>
+                <input
+                  type="checkbox"
+                  checked={usePullRequest}
+                  onChange={(event) => setUsePullRequest(event.target.checked)}
+                />
+                creer une pull request si la branche diverge
+              </label>
+            )}
           </div>
 
           <Group title="Apercu">
@@ -215,75 +312,74 @@ export function SiteStudioClient({ siteId, siteName, initialContent, previewPage
 
           {editable && (
             <>
+              <Group title="Identite">
+                <Input label="Nom" value={content.brand.name} onChange={(value) => patch('brand.name', value)} />
+                <Input label="Logo" value={content.brand.logo} onChange={(value) => patch('brand.logo', value)} />
+                <Upload label="Importer logo" onChange={(file) => uploadImage('brand.logo', file)} />
+              </Group>
 
-          <Group title="Identite">
-            <Input label="Nom" value={content.brand.name} onChange={(value) => patch('brand.name', value)} />
-            <Input label="Logo" value={content.brand.logo} onChange={(value) => patch('brand.logo', value)} />
-            <Upload label="Importer logo" onChange={(file) => uploadImage('brand.logo', file)} />
-          </Group>
+              <Group title="Couleurs">
+                <Color label="Principal" value={content.colors.primary} onChange={(value) => patch('colors.primary', value)} />
+                <Color label="Principal sombre" value={content.colors.primaryDark} onChange={(value) => patch('colors.primaryDark', value)} />
+                <Color label="Accent" value={content.colors.accent} onChange={(value) => patch('colors.accent', value)} />
+                <Color label="Accent doux" value={content.colors.accentSoft} onChange={(value) => patch('colors.accentSoft', value)} />
+                <Color label="Texte" value={content.colors.text} onChange={(value) => patch('colors.text', value)} />
+                <Color label="Fond" value={content.colors.background} onChange={(value) => patch('colors.background', value)} />
+              </Group>
 
-          <Group title="Couleurs">
-            <Color label="Principal" value={content.colors.primary} onChange={(value) => patch('colors.primary', value)} />
-            <Color label="Principal sombre" value={content.colors.primaryDark} onChange={(value) => patch('colors.primaryDark', value)} />
-            <Color label="Accent" value={content.colors.accent} onChange={(value) => patch('colors.accent', value)} />
-            <Color label="Accent doux" value={content.colors.accentSoft} onChange={(value) => patch('colors.accentSoft', value)} />
-            <Color label="Texte" value={content.colors.text} onChange={(value) => patch('colors.text', value)} />
-            <Color label="Fond" value={content.colors.background} onChange={(value) => patch('colors.background', value)} />
-          </Group>
+              <Group title="Hero">
+                <Input label="Eyebrow" value={content.hero.eyebrow} onChange={(value) => patch('hero.eyebrow', value)} />
+                <Input label="Titre" value={content.hero.title} onChange={(value) => patch('hero.title', value)} />
+                <Input label="Mot accent" value={content.hero.highlight} onChange={(value) => patch('hero.highlight', value)} />
+                <Textarea label="Description" value={content.hero.description} onChange={(value) => patch('hero.description', value)} />
+                <Input label="Image hero" value={content.hero.image} onChange={(value) => patch('hero.image', value)} />
+                <Upload label="Importer image hero" onChange={(file) => uploadImage('hero.image', file)} />
+                <Input label="Bouton principal" value={content.hero.primaryCta} onChange={(value) => patch('hero.primaryCta', value)} />
+                <Input label="Bouton secondaire" value={content.hero.secondaryCta} onChange={(value) => patch('hero.secondaryCta', value)} />
+                <Input label="Encart titre" value={content.hero.panelTitle} onChange={(value) => patch('hero.panelTitle', value)} />
+                <Textarea label="Encart texte" value={content.hero.panelText} onChange={(value) => patch('hero.panelText', value)} />
+              </Group>
 
-          <Group title="Hero">
-            <Input label="Eyebrow" value={content.hero.eyebrow} onChange={(value) => patch('hero.eyebrow', value)} />
-            <Input label="Titre" value={content.hero.title} onChange={(value) => patch('hero.title', value)} />
-            <Input label="Mot accent" value={content.hero.highlight} onChange={(value) => patch('hero.highlight', value)} />
-            <Textarea label="Description" value={content.hero.description} onChange={(value) => patch('hero.description', value)} />
-            <Input label="Image hero" value={content.hero.image} onChange={(value) => patch('hero.image', value)} />
-            <Upload label="Importer image hero" onChange={(file) => uploadImage('hero.image', file)} />
-            <Input label="Bouton principal" value={content.hero.primaryCta} onChange={(value) => patch('hero.primaryCta', value)} />
-            <Input label="Bouton secondaire" value={content.hero.secondaryCta} onChange={(value) => patch('hero.secondaryCta', value)} />
-            <Input label="Encart titre" value={content.hero.panelTitle} onChange={(value) => patch('hero.panelTitle', value)} />
-            <Textarea label="Encart texte" value={content.hero.panelText} onChange={(value) => patch('hero.panelText', value)} />
-          </Group>
+              <Group title="Sections">
+                <Textarea label="Titre process" value={content.sections.processTitle} onChange={(value) => patch('sections.processTitle', value)} />
+                <Textarea label="Description process" value={content.sections.processDescription} onChange={(value) => patch('sections.processDescription', value)} />
+                <Textarea label="Titre atelier" value={content.sections.atelierTitle} onChange={(value) => patch('sections.atelierTitle', value)} />
+                <Textarea label="Texte atelier" value={content.sections.atelierText} onChange={(value) => patch('sections.atelierText', value)} />
+                <Textarea label="Titre final" value={content.sections.ctaTitle} onChange={(value) => patch('sections.ctaTitle', value)} />
+                <Textarea label="Texte final" value={content.sections.ctaText} onChange={(value) => patch('sections.ctaText', value)} />
+              </Group>
 
-          <Group title="Sections">
-            <Textarea label="Titre process" value={content.sections.processTitle} onChange={(value) => patch('sections.processTitle', value)} />
-            <Textarea label="Description process" value={content.sections.processDescription} onChange={(value) => patch('sections.processDescription', value)} />
-            <Textarea label="Titre atelier" value={content.sections.atelierTitle} onChange={(value) => patch('sections.atelierTitle', value)} />
-            <Textarea label="Texte atelier" value={content.sections.atelierText} onChange={(value) => patch('sections.atelierText', value)} />
-            <Textarea label="Titre final" value={content.sections.ctaTitle} onChange={(value) => patch('sections.ctaTitle', value)} />
-            <Textarea label="Texte final" value={content.sections.ctaText} onChange={(value) => patch('sections.ctaText', value)} />
-          </Group>
+              <Group title="Pages internes">
+                {Object.entries(content.pages).map(([page, data]) => (
+                  <div key={page} className={styles.pageBlock}>
+                    <strong>{page}</strong>
+                    <Input label="Kicker" value={data.kicker} onChange={(value) => patchPage(page, 'kicker', value)} />
+                    <Textarea label="Titre" value={data.title} onChange={(value) => patchPage(page, 'title', value)} />
+                    <Textarea label="Description" value={data.description} onChange={(value) => patchPage(page, 'description', value)} />
+                    <Input label="SEO title" value={data.seoTitle} onChange={(value) => patchPage(page, 'seoTitle', value)} />
+                    <Textarea label="SEO description" value={data.seoDescription} onChange={(value) => patchPage(page, 'seoDescription', value)} />
+                  </div>
+                ))}
+              </Group>
 
-          <Group title="Pages internes">
-            {Object.entries(content.pages).map(([page, data]) => (
-              <div key={page} className={styles.pageBlock}>
-                <strong>{page}</strong>
-                <Input label="Kicker" value={data.kicker} onChange={(value) => patchPage(page, 'kicker', value)} />
-                <Textarea label="Titre" value={data.title} onChange={(value) => patchPage(page, 'title', value)} />
-                <Textarea label="Description" value={data.description} onChange={(value) => patchPage(page, 'description', value)} />
-                <Input label="SEO title" value={data.seoTitle} onChange={(value) => patchPage(page, 'seoTitle', value)} />
-                <Textarea label="SEO description" value={data.seoDescription} onChange={(value) => patchPage(page, 'seoDescription', value)} />
-              </div>
-            ))}
-          </Group>
+              <Group title="Contact">
+                <Input label="Adresse" value={content.contact.address} onChange={(value) => patch('contact.address', value)} />
+                <Input label="Telephone" value={content.contact.phone} onChange={(value) => patch('contact.phone', value)} />
+                <Input label="Email" value={content.contact.email} onChange={(value) => patch('contact.email', value)} />
+                <Input label="Horaires" value={content.contact.hours} onChange={(value) => patch('contact.hours', value)} />
+              </Group>
 
-          <Group title="Contact">
-            <Input label="Adresse" value={content.contact.address} onChange={(value) => patch('contact.address', value)} />
-            <Input label="Telephone" value={content.contact.phone} onChange={(value) => patch('contact.phone', value)} />
-            <Input label="Email" value={content.contact.email} onChange={(value) => patch('contact.email', value)} />
-            <Input label="Horaires" value={content.contact.hours} onChange={(value) => patch('contact.hours', value)} />
-          </Group>
-
-          <Group title="SEO">
-            <Input label="Title" value={content.seo.title} onChange={(value) => patch('seo.title', value)} />
-            <Textarea label="Description" value={content.seo.description} onChange={(value) => patch('seo.description', value)} />
-            <Input label="URL canonique" value={content.seo.canonical ?? ''} onChange={(value) => patch('seo.canonical', value)} />
-            <Input label="Mots cles" value={content.seo.keywords ?? ''} onChange={(value) => patch('seo.keywords', value)} />
-            <Input label="Robots" value={content.seo.robots ?? ''} onChange={(value) => patch('seo.robots', value)} />
-            <Input label="Open Graph title" value={content.seo.ogTitle ?? ''} onChange={(value) => patch('seo.ogTitle', value)} />
-            <Textarea label="Open Graph description" value={content.seo.ogDescription ?? ''} onChange={(value) => patch('seo.ogDescription', value)} />
-            <Input label="Image reseaux" value={content.seo.ogImage ?? ''} onChange={(value) => patch('seo.ogImage', value)} />
-            <Upload label="Importer image reseaux" onChange={(file) => uploadImage('seo.ogImage', file)} />
-          </Group>
+              <Group title="SEO">
+                <Input label="Title" value={content.seo.title} onChange={(value) => patch('seo.title', value)} />
+                <Textarea label="Description" value={content.seo.description} onChange={(value) => patch('seo.description', value)} />
+                <Input label="URL canonique" value={content.seo.canonical ?? ''} onChange={(value) => patch('seo.canonical', value)} />
+                <Input label="Mots cles" value={content.seo.keywords ?? ''} onChange={(value) => patch('seo.keywords', value)} />
+                <Input label="Robots" value={content.seo.robots ?? ''} onChange={(value) => patch('seo.robots', value)} />
+                <Input label="Open Graph title" value={content.seo.ogTitle ?? ''} onChange={(value) => patch('seo.ogTitle', value)} />
+                <Textarea label="Open Graph description" value={content.seo.ogDescription ?? ''} onChange={(value) => patch('seo.ogDescription', value)} />
+                <Input label="Image reseaux" value={content.seo.ogImage ?? ''} onChange={(value) => patch('seo.ogImage', value)} />
+                <Upload label="Importer image reseaux" onChange={(file) => uploadImage('seo.ogImage', file)} />
+              </Group>
             </>
           )}
         </div>
@@ -294,6 +390,12 @@ export function SiteStudioClient({ siteId, siteName, initialContent, previewPage
             {publication?.github?.configured && (
               <span>
                 GitHub : {publication.github.committed ? 'commit cree' : publication.github.error ?? 'non publie'}
+                {publication.github.commitUrl && (
+                  <a href={publication.github.commitUrl} target="_blank" rel="noreferrer">voir commit</a>
+                )}
+                {publication.github.pullRequestUrl && (
+                  <a href={publication.github.pullRequestUrl} target="_blank" rel="noreferrer">voir PR</a>
+                )}
               </span>
             )}
             {publication?.vercel?.configured && (

@@ -70,6 +70,7 @@ export async function POST(
     content: buffer.toString('base64'),
     encoding: 'base64',
     message: `chore(site-vitrine): upload ${fileName}`,
+    repository: site.repository,
   })
 
   if (!writeLocal && !publication.github.committed) {

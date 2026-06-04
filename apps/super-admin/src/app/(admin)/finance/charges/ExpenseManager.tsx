@@ -11,7 +11,9 @@ const emptyForm = {
   category: 'LOGICIEL',
   relatedTool: 'GLOBAL',
   amountHT: '0',
-  vatAmount: '0',
+  // `vatAmount` in the form can temporarily hold a percent (e.g. 20) or an absolute value.
+  // The update logic normalizes it to an absolute VAT amount and computes `amountTTC`.
+  vatAmount: '20',
   amountTTC: '0',
   frequency: 'MENSUEL',
   startDate: new Date().toISOString().slice(0, 10),
@@ -32,6 +34,35 @@ export function ExpenseManager({ expenses }: { expenses: ExpenseView[] }) {
   const currentLabel = useMemo(() => editingId ? 'Modifier la charge' : 'Ajouter une charge', [editingId])
 
   function update(name: keyof FormState, value: string) {
+    // Helper to parse numbers safely
+    const parse = (v: string) => {
+      const n = Number(String(v).replace(',', '.'))
+      return Number.isFinite(n) ? n : 0
+    }
+
+    // Compute derived fields when HT, TVA or TTC change.
+    if (name === 'amountHT' || name === 'vatAmount') {
+      const newForm = { ...form, [name]: value }
+      const ht = parse(newForm.amountHT)
+      const vatInput = parse(newForm.vatAmount)
+
+      // If vatInput looks like a percent (0..100) treat it as percent, else as absolute VAT amount.
+      const vatAbs = vatInput >= 0 && vatInput <= 100 ? Math.round((ht * (vatInput / 100)) * 100) / 100 : Math.round(vatInput * 100) / 100
+      const ttc = Math.round((ht + vatAbs) * 100) / 100
+
+      setForm((state) => ({ ...state, ...newForm, vatAmount: String(vatAbs), amountTTC: String(ttc) }))
+      return
+    }
+
+    if (name === 'amountTTC') {
+      const newForm = { ...form, amountTTC: value }
+      const ht = parse(newForm.amountHT)
+      const ttc = parse(value)
+      const vatAbs = Math.max(0, Math.round((ttc - ht) * 100) / 100)
+      setForm((state) => ({ ...state, ...newForm, vatAmount: String(vatAbs) }))
+      return
+    }
+
     setForm((state) => ({ ...state, [name]: value }))
   }
 

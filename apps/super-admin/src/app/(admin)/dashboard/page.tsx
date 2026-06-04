@@ -38,6 +38,12 @@ export default async function DashboardPage() {
   ])
 
   const publishing = getPublishingStatus()
+  const githubDetail = publishing.githubReady
+    ? publishing.publishBranch && publishing.publishBranch !== publishing.branch
+      ? `${publishing.repository} / ${publishing.branch} → ${publishing.publishBranch}`
+      : `${publishing.repository} / ${publishing.branch}`
+    : 'GITHUB_TOKEN + repository manquants'
+
   const trialUrgents = clients.filter((client) => {
     if (client.statut !== 'TRIAL' || !client.trialFinAt) return false
     const days = Math.ceil((new Date(client.trialFinAt).getTime() - Date.now()) / 86400000)
@@ -78,7 +84,7 @@ export default async function DashboardPage() {
         <CommandCard
           title="GitHub"
           value={publishing.githubReady ? 'configure' : 'a connecter'}
-          detail={`${publishing.repository} / ${publishing.branch}`}
+          detail={githubDetail}
           href="/sites"
           tone={publishing.githubReady ? 'green' : 'yellow'}
         />

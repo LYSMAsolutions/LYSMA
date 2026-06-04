@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useRef, useState } from "react";
 import { MessageCircle, Send, X } from "lucide-react";
 
 type ChatMessage = {
@@ -50,6 +50,7 @@ const getAnswer = (message: string) => {
 
 export function LysmaChatbox() {
   const [open, setOpen] = useState(false);
+  const conversationId = useRef(`site-vitrine:lysma-hub:${Date.now()}:${Math.random().toString(36).slice(2)}`);
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       role: "assistant",
@@ -63,11 +64,26 @@ export function LysmaChatbox() {
       return;
     }
 
+    const answer = getAnswer(cleanMessage);
+
     setMessages((current) => [
       ...current,
       { role: "user", content: cleanMessage },
-      { role: "assistant", content: getAnswer(cleanMessage) },
+      { role: "assistant", content: answer },
     ]);
+
+    void fetch("/api/chatbox/log", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        source: "site-vitrine:lysma-hub",
+        conversationId: conversationId.current,
+        userPrompt: cleanMessage,
+        assistantResponse: answer,
+      }),
+    }).catch((error) => {
+      console.error("Chatbox log error:", error);
+    });
   };
 
   const submit = (event: FormEvent<HTMLFormElement>) => {

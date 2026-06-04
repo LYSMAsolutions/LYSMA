@@ -73,6 +73,26 @@ model Message {
   @@map("messages")
 }
 
+model ChatLog {
+  id                String      @id @default(cuid())
+  source            String
+  conversationId    String?
+  userName          String?
+  userEmail         String?
+  userPrompt        String
+  assistantResponse String?
+  quality           ChatQuality @default(UNKNOWN)
+  qualityNotes      String?
+  metadata          Json?
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+
+  @@index([source])
+  @@index([conversationId])
+  @@index([createdAt])
+  @@map("chat_logs")
+}
+
 model AuditLog {
   id          String   @id @default(cuid())
   outil       String
@@ -268,6 +288,12 @@ enum MessageStatut {
   NOUVEAU
   LU
   TRAITE
+}
+
+enum ChatQuality {
+  UNKNOWN
+  GOOD
+  BAD
 }
 
 enum FinanceTool {

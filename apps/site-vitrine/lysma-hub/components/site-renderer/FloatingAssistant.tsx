@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useRef, useState } from "react";
 import { Button } from "../ui/Button";
 
 type Message = {
@@ -19,6 +19,7 @@ const quickQuestions = [
 export function FloatingAssistant({ siteSlug }: { siteSlug: string }) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const conversationId = useRef(`site-vitrine:${siteSlug}:${Date.now()}:${Math.random().toString(36).slice(2)}`);
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
@@ -37,7 +38,7 @@ export function FloatingAssistant({ siteSlug }: { siteSlug: string }) {
     const response = await fetch("/api/assistant", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ siteSlug, message: cleanMessage }),
+      body: JSON.stringify({ siteSlug, message: cleanMessage, conversationId: conversationId.current }),
     });
     const result = (await response.json()) as { answer?: string };
 
