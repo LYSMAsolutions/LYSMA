@@ -22,6 +22,12 @@ const staticRoutes: MetadataRoute.Sitemap = [
     changeFrequency: 'yearly',
     priority: 0.2,
   },
+  {
+    url: canonical('/conformite-temps-travail'),
+    lastModified,
+    changeFrequency: 'monthly',
+    priority: 0.7,
+  },
 ]
 
 const futureSeoRoutes: MetadataRoute.Sitemap = []

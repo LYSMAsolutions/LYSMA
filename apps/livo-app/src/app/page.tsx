@@ -90,6 +90,7 @@ export default function HomePage() {
         <nav className={styles.nav} aria-label="Navigation principale">
           <a href="#fonctionnalites">Fonctionnalités</a>
           <a href="#pointage">Pointage</a>
+          <a href="/conformite-temps-travail">Conformité</a>
           <a href="#securite">Sécurité</a>
           <a href="#rentabilite">Rentabilité</a>
           <Link href="/demo">Démo</Link>
@@ -289,6 +290,7 @@ export default function HomePage() {
         <div>
           <Link href="/cookies">Cookies</Link>
           <Link href="/politique-confidentialite">Confidentialité</Link>
+          <a href="/conformite-temps-travail">Conformité</a>
           <Link href="/connexion">Connexion</Link>
         </div>
       </footer>

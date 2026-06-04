@@ -4,9 +4,20 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "build": "node scripts/build-static-site.mjs",
-    "dev": "node scripts/static-server.mjs --port 3022",
-    "start": "node scripts/static-server.mjs --port 3022",
-    "check": "node scripts/check-static-site.mjs"
+    "dev": "next dev --port 3022",
+    "build": "next build",
+    "start": "next start --port 3022",
+    "check": "next build"
+  },
+  "dependencies": {
+    "lucide-react": "^1.17.0",
+    "next": "16.2.2",
+    "react": "19.1.0",
+    "react-dom": "19.1.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "typescript": "^5"
   }
 }

@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import '@/styles/globals.css'
 import { CookieBanner } from '@/components/layout/CookieBanner/CookieBanner'
+import { LivoChatbox } from '@/components/layout/LivoChatbox'
 import { SITE_URL } from '@/lib/seo'
 
 const inter = Inter({
@@ -13,15 +14,15 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: {
     default: 'Livo-app',
-    template: '%s — LIVO',
+    template: '%s - LIVO',
   },
-  description: "Gestion d'atelier automobile. Simple, précise et sécurisée.",
+  description: "Gestion d'atelier automobile. Simple, precise et securisee.",
   icons: {
     icon: '/logo/livo-app-logo.png',
     apple: '/logo/livo-app-logo.png',
   },
   applicationName: 'Livo-app',
-  keywords: ['garage', 'atelier', 'mécanique', 'pointage', 'gestion RH'],
+  keywords: ['garage', 'atelier', 'mecanique', 'pointage', 'gestion RH'],
   authors: [{ name: 'LYSMA Solutions' }],
   creator: 'LYSMA Solutions',
   metadataBase: new URL(SITE_URL),
@@ -30,8 +31,8 @@ export const metadata: Metadata = {
     locale: 'fr_FR',
     url: SITE_URL,
     siteName: 'Livo-app',
-    title: "Livo-app — Gestion d'atelier automobile",
-    description: 'Pointage, ordres de réparation, rentabilité. Fait pour le garage.',
+    title: "Livo-app - Gestion d'atelier automobile",
+    description: 'Pointage, ordres de reparation, rentabilite. Fait pour le garage.',
   },
   robots: {
     index: false,
@@ -56,6 +57,7 @@ export default function RootLayout({
       <body>
         {children}
         <CookieBanner />
+        <LivoChatbox />
       </body>
     </html>
   )
