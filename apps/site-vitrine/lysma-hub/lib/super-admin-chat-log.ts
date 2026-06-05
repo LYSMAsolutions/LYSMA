@@ -19,7 +19,7 @@ export async function forwardChatLog(input: ChatLogInput) {
   }
 
   try {
-    await fetch(endpoint, {
+    const response = await fetch(endpoint, {
       method: "POST",
       headers,
       body: JSON.stringify({
@@ -31,6 +31,11 @@ export async function forwardChatLog(input: ChatLogInput) {
       }),
       cache: "no-store",
     });
+
+    if (!response.ok) {
+      const details = await response.text().catch(() => "");
+      console.error("Super-admin chat log rejected:", response.status, details.slice(0, 500));
+    }
   } catch (error) {
     console.error("Super-admin chat log error:", error);
   }

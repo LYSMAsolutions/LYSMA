@@ -9,6 +9,24 @@ import { sendChatboxBadAlertEmail } from '@/lib/chatbox-bad-alert-email'
 const MAX_BODY_SIZE = 32_000
 const DEFAULT_RATE_LIMIT_WINDOW_MS = 60_000
 const DEFAULT_RATE_LIMIT_MAX = 40
+const DEFAULT_ALLOWED_ORIGINS = [
+  'http://localhost:3021',
+  'http://localhost:3022',
+  'https://lysma-hub.vercel.app',
+  'https://lysmasolutions.fr',
+  'https://www.lysmasolutions.fr',
+  'https://carrosserie-mounier.vercel.app',
+  'https://carrosserie-mounier-ruddy.vercel.app',
+  'https://carrosserie-mounier.fr',
+  'https://www.carrosserie-mounier.fr',
+  'https://livo-app.com',
+  'https://www.livo-app.com',
+]
+const DEFAULT_ALLOWED_SOURCES = [
+  'site-vitrine:lysma-hub',
+  'site-vitrine:carrosserie-mounier',
+  'app:livo-app',
+]
 
 const globalForChatbox = globalThis as unknown as {
   chatboxLogRateLimit?: Map<string, { count: number; resetAt: number }>
@@ -130,8 +148,12 @@ function parseList(value: string | undefined) {
     .filter(Boolean)
 }
 
+function unique(values: string[]) {
+  return Array.from(new Set(values))
+}
+
 function getAllowedOrigins() {
-  return parseList(process.env.CHATBOX_ALLOWED_ORIGINS)
+  return unique([...DEFAULT_ALLOWED_ORIGINS, ...parseList(process.env.CHATBOX_ALLOWED_ORIGINS)])
 }
 
 function getAllowedOrigin(req: NextRequest) {
@@ -169,12 +191,12 @@ function isAuthorized(req: NextRequest) {
   const hasValidOrigin = Boolean(getAllowedOrigin(req))
   if (hasValidOrigin) return true
 
-  return process.env.NODE_ENV !== 'production' && !secret && getAllowedOrigins().length === 0
+  return process.env.NODE_ENV !== 'production' && !secret
 }
 
 function isAllowedSource(source: string) {
-  const allowedSources = parseList(process.env.CHATBOX_ALLOWED_SOURCES)
-  return allowedSources.length === 0 || allowedSources.includes(source)
+  const allowedSources = unique([...DEFAULT_ALLOWED_SOURCES, ...parseList(process.env.CHATBOX_ALLOWED_SOURCES)])
+  return allowedSources.includes(source)
 }
 
 function checkRateLimit(req: NextRequest, source: string) {

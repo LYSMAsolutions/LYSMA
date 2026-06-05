@@ -17,11 +17,11 @@ function parseList(value: string | undefined) {
 }
 
 function getRecipients() {
-  return parseList(process.env.CHATBOX_BAD_ALERT_EMAIL_TO)
+  return parseList(process.env.CHATBOX_BAD_ALERT_EMAIL_TO || process.env.CHATBOX_BAD_ALERT_TO)
 }
 
 function getFromAddress() {
-  return process.env.CHATBOX_BAD_ALERT_EMAIL_FROM || process.env.RESEND_FROM_EMAIL || ''
+  return process.env.CHATBOX_BAD_ALERT_EMAIL_FROM || process.env.CHATBOX_BAD_ALERT_FROM || process.env.RESEND_FROM_EMAIL || ''
 }
 
 async function sendEmail(payload: EmailPayload) {
@@ -61,7 +61,14 @@ export async function sendChatboxBadAlertEmail(log: ChatReviewLog) {
 
   const recipients = getRecipients()
   const from = getFromAddress()
-  if (!process.env.RESEND_API_KEY || recipients.length === 0 || !from) return
+  if (!process.env.RESEND_API_KEY || recipients.length === 0 || !from) {
+    console.warn('Chatbox BAD alert email skipped: missing email configuration', {
+      hasApiKey: Boolean(process.env.RESEND_API_KEY),
+      hasRecipients: recipients.length > 0,
+      hasFrom: Boolean(from),
+    })
+    return
+  }
 
   const conversationLogs = await getConversationLogs(log)
   const duplicateOf = getDuplicateOf(log.metadata)
