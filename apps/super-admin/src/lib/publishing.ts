@@ -1,3 +1,5 @@
+import { SHOWCASE_MANIFEST } from './site-vitrine-manifest'
+
 type GitHubContentResponse = {
   sha?: string
   content?: string
@@ -36,8 +38,8 @@ export type PublicationResult = {
 
 export function getPublishingStatus(siteId?: string) {
   return {
-    githubReady: isGitHubConfigured(),
-    repository: getRepositoryLabel(),
+    githubReady: isGitHubConfigured(siteId),
+    repository: getRepositoryLabel(siteId),
     branch: getGitHubBranch(),
     publishBranch: siteId ? getGitHubPublishBranchName(siteId) : undefined,
     vercelReady: Boolean(siteId ? getDeployHook(siteId) : getDeployHooksMap()),
@@ -245,18 +247,26 @@ async function triggerDeployHook(siteId: string): Promise<PublicationResult['ver
   }
 }
 
-function isGitHubConfigured() {
-  const repository = process.env.GITHUB_REPOSITORY
+function isGitHubConfigured(siteId?: string) {
+  const repository = getSiteRepository(siteId) ?? process.env.GITHUB_REPOSITORY
   const ownerRepo = process.env.GITHUB_OWNER && process.env.GITHUB_REPO
   return Boolean(process.env.GITHUB_TOKEN && (repository || ownerRepo))
 }
 
-function getRepositoryLabel() {
+function getRepositoryLabel(siteId?: string) {
+  const siteRepository = getSiteRepository(siteId)
+  if (siteRepository) return siteRepository
   if (process.env.GITHUB_REPOSITORY) return process.env.GITHUB_REPOSITORY
   if (process.env.GITHUB_OWNER && process.env.GITHUB_REPO) {
     return `${process.env.GITHUB_OWNER}/${process.env.GITHUB_REPO}`
   }
   return 'non_configure'
+}
+
+function getSiteRepository(siteId?: string) {
+  if (!siteId) return undefined
+
+  return SHOWCASE_MANIFEST.find((site) => site.id === siteId)?.repository
 }
 
 function getGitHubBranch() {

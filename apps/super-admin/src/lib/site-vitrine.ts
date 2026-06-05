@@ -15,12 +15,30 @@ export type ShowcaseSite = {
   packageName?: string
   scripts: string[]
   files: number
-  status: 'present' | 'missing'
+  status: 'present' | 'remote'
 }
 
 export type ShowcasePreviewPage = {
   label: string
   value: string
+}
+
+type GitHubContentResponse = {
+  content?: string
+  encoding?: string
+  type?: string
+}
+
+type GitHubTreeResponse = {
+  tree?: Array<{
+    path?: string
+    type?: string
+  }>
+}
+
+export type ShowcaseResolvedFile = {
+  path: string
+  body: Buffer
 }
 
 const SITES_ROOT = path.resolve(process.cwd(), '..', 'site-vitrine')
@@ -47,9 +65,10 @@ export async function getShowcaseSite(id: string): Promise<ShowcaseSite | null> 
     ? path.resolve(process.cwd(), manifest.relativePath)
     : path.join(SITES_ROOT, id)
   const indexPath = path.join(absolutePath, 'index.html')
+  const hasLocalPath = existsSync(absolutePath)
 
   if (!manifest && !existsSync(indexPath)) return null
-  if (manifest && !existsSync(absolutePath)) return null
+  if (manifest && !hasLocalPath && !manifest.repository) return null
 
   const name = manifest?.name ?? humanize(id)
   const packageName = manifest?.packageName
@@ -69,7 +88,7 @@ export async function getShowcaseSite(id: string): Promise<ShowcaseSite | null> 
     packageName,
     scripts,
     files: 0,
-    status: 'present',
+    status: hasLocalPath ? 'present' : 'remote',
   }
 }
 
@@ -77,10 +96,16 @@ export async function readShowcaseText(id: string, fileName: string) {
   const site = await getShowcaseSite(id)
   if (!site) return null
 
-  const absoluteFile = path.join(site.path, fileName)
-  if (!absoluteFile.startsWith(site.path) || !existsSync(absoluteFile)) return null
+  const cleanPath = normalizeShowcasePath(fileName)
+  if (!cleanPath) return null
 
-  return readFile(absoluteFile, 'utf8')
+  const absoluteFile = path.resolve(site.path, cleanPath)
+  if (isInsidePath(site.path, absoluteFile) && existsSync(absoluteFile)) {
+    return readFile(absoluteFile, 'utf8')
+  }
+
+  const remote = await readRemoteShowcaseFile(id, cleanPath)
+  return remote?.toString('utf8') ?? null
 }
 
 export async function readShowcaseContent(id: string) {
@@ -88,11 +113,15 @@ export async function readShowcaseContent(id: string) {
   if (!site) return null
 
   const contentPath = path.join(site.path, 'content', 'site.json')
-  if (!contentPath.startsWith(site.path) || !existsSync(contentPath)) {
-    return defaultShowcaseContent(site.name)
+  if (isInsidePath(site.path, contentPath) && existsSync(contentPath)) {
+    const raw = await readFile(contentPath, 'utf8')
+    return JSON.parse(raw.replace(/^\uFEFF/, ''))
   }
 
-  const raw = await readFile(contentPath, 'utf8')
+  const remote = await readRemoteShowcaseFile(id, 'content/site.json')
+  if (!remote) return defaultShowcaseContent(site.name)
+
+  const raw = remote.toString('utf8')
   return JSON.parse(raw.replace(/^\uFEFF/, ''))
 }
 
@@ -119,13 +148,17 @@ export async function discoverShowcaseSite(id: string): Promise<ShowcaseDiscover
   const site = await getShowcaseSite(id)
   if (!site) return null
 
-  const htmlFiles = await getFilesByExtension(site.path, '.html')
-  const cssFiles = await getFilesByExtension(site.path, '.css')
+  const htmlFiles = site.status === 'remote'
+    ? await getRemoteFilesByExtension(id, '.html')
+    : await getFilesByExtension(site.path, '.html')
+  const cssFiles = site.status === 'remote'
+    ? await getRemoteFilesByExtension(id, '.css')
+    : await getFilesByExtension(site.path, '.css')
 
   const pages = await Promise.all(htmlFiles.map(async (filePath) => {
-    const raw = await readFile(filePath, 'utf8')
+    const raw = await readDiscoveredFile(site, id, filePath)
     return {
-      path: path.relative(site.path, filePath).replace(/\\/g, '/'),
+      path: site.status === 'remote' ? filePath : path.relative(site.path, filePath).replace(/\\/g, '/'),
       title: extractHtmlTitle(raw),
       description: extractHtmlDescription(raw),
       headings: extractHtmlHeadings(raw),
@@ -134,8 +167,9 @@ export async function discoverShowcaseSite(id: string): Promise<ShowcaseDiscover
   }))
 
   const metaPage = pages.find((page) => page.path === 'index.html') || pages[0]
-  const colors = await extractCssColors(cssFiles)
-  const fonts = await extractCssFonts(cssFiles)
+  const cssContents = await Promise.all(cssFiles.map((filePath) => readDiscoveredFile(site, id, filePath)))
+  const colors = extractCssColors(cssContents)
+  const fonts = extractCssFonts(cssContents)
 
   return {
     meta: {
@@ -193,11 +227,18 @@ function extractHtmlKeywords(html: string) {
   return content ? content.split(',').map((item) => item.trim()).filter(Boolean) : []
 }
 
-async function extractCssColors(cssFiles: string[]) {
+async function readDiscoveredFile(site: ShowcaseSite, id: string, filePath: string) {
+  if (site.status === 'remote') {
+    return (await readRemoteShowcaseFile(id, filePath))?.toString('utf8') ?? ''
+  }
+
+  return readFile(filePath, 'utf8')
+}
+
+function extractCssColors(cssFiles: string[]) {
   const colors = new Set<string>()
 
-  for (const filePath of cssFiles) {
-    const raw = await readFile(filePath, 'utf8')
+  for (const raw of cssFiles) {
     for (const match of raw.matchAll(/(--[\w-]+)\s*:\s*([^;]+);/gi)) {
       const value = match[2].trim()
       if (isColorValue(value)) colors.add(value)
@@ -210,11 +251,10 @@ async function extractCssColors(cssFiles: string[]) {
   return Array.from(colors).slice(0, 20)
 }
 
-async function extractCssFonts(cssFiles: string[]) {
+function extractCssFonts(cssFiles: string[]) {
   const fonts = new Set<string>()
 
-  for (const filePath of cssFiles) {
-    const raw = await readFile(filePath, 'utf8')
+  for (const raw of cssFiles) {
     for (const match of raw.matchAll(/font-family\s*:\s*([^;]+);/gi)) {
       const candidate = match[1].trim().replace(/['"]/g, '')
       if (candidate) {
@@ -236,7 +276,10 @@ export async function hasShowcaseContent(id: string) {
   const site = await getShowcaseSite(id)
   if (!site) return false
 
-  return existsSync(path.join(site.path, 'content', 'site.json'))
+  const contentPath = path.join(site.path, 'content', 'site.json')
+  if (isInsidePath(site.path, contentPath) && existsSync(contentPath)) return true
+
+  return Boolean(await readRemoteShowcaseFile(id, 'content/site.json'))
 }
 
 export async function getShowcasePreviewPages(id: string): Promise<ShowcasePreviewPage[]> {
@@ -245,6 +288,19 @@ export async function getShowcasePreviewPages(id: string): Promise<ShowcasePrevi
 
   const pages: ShowcasePreviewPage[] = []
   const indexPath = path.join(site.path, 'index.html')
+
+  if (site.status === 'remote') {
+    const htmlFiles = await getRemoteFilesByExtension(id, '.html')
+    return htmlFiles
+      .filter((filePath) => !filePath.startsWith('dist/'))
+      .filter((filePath) => filePath === 'index.html' || filePath.endsWith('/index.html'))
+      .sort(sortPreviewPages)
+      .slice(0, 80)
+      .map((filePath) => ({
+        label: labelPreviewPage(filePath),
+        value: filePath,
+      }))
+  }
 
   if (existsSync(indexPath)) {
     pages.push({ label: 'Accueil', value: 'index.html' })
@@ -274,7 +330,7 @@ export async function writeShowcaseContent(id: string, content: unknown) {
   const contentDir = path.join(site.path, 'content')
   const contentPath = path.join(contentDir, 'site.json')
 
-  if (!contentPath.startsWith(site.path)) return null
+  if (!isInsidePath(site.path, contentPath)) return null
 
   await mkdir(contentDir, { recursive: true })
   await writeFile(contentPath, JSON.stringify(content, null, 2) + '\n', 'utf8')
@@ -284,7 +340,7 @@ export async function writeShowcaseContent(id: string, content: unknown) {
 
 export function getShowcaseRepoPath(id: string, relativeFilePath = '') {
   const manifest = SHOWCASE_MANIFEST.find((site) => site.id === id)
-  const cleanPath = relativeFilePath.replace(/^[/\\]+/, '')
+  const cleanPath = relativeFilePath.replace(/^[/\\]+/, '').replace(/\\/g, '/')
   const basePath = manifest?.repoPathBase ?? path.posix.join('apps/site-vitrine', id)
   return path.posix.join(basePath, cleanPath).replace(/\\/g, '/')
 }
@@ -300,13 +356,138 @@ export function resolveShowcaseFile(id: string, relativeFilePath = 'index.html')
   const sitePath = manifest
     ? path.resolve(process.cwd(), manifest.relativePath)
     : path.join(SITES_ROOT, id)
-  const cleanPath = relativeFilePath.replace(/^[/\\]+/, '') || 'index.html'
+  const cleanPath = normalizeShowcasePath(relativeFilePath || 'index.html')
+  if (!cleanPath) return null
+
   const absoluteFile = path.resolve(sitePath, cleanPath)
 
-  if (absoluteFile !== sitePath && !absoluteFile.startsWith(sitePath + path.sep)) return null
+  if (!isInsidePath(sitePath, absoluteFile)) return null
   if (!existsSync(absoluteFile)) return null
 
   return absoluteFile
+}
+
+export async function readShowcaseFile(id: string, relativeFilePath = 'index.html'): Promise<ShowcaseResolvedFile | null> {
+  const cleanPath = normalizeShowcasePath(relativeFilePath || 'index.html')
+  if (!cleanPath) return null
+
+  const localFile = resolveShowcaseFile(id, cleanPath)
+  if (localFile) {
+    return {
+      path: localFile,
+      body: await readFile(localFile),
+    }
+  }
+
+  const remote = await readRemoteShowcaseFile(id, cleanPath)
+  if (!remote) return null
+
+  return {
+    path: cleanPath,
+    body: remote,
+  }
+}
+
+async function readRemoteShowcaseFile(id: string, relativeFilePath: string) {
+  const manifest = SHOWCASE_MANIFEST.find((site) => site.id === id)
+  if (!manifest?.repository) return null
+
+  const cleanPath = normalizeShowcasePath(relativeFilePath)
+  if (!cleanPath) return null
+
+  const repoPath = getShowcaseRepoPath(id, cleanPath)
+  const [owner, repo] = manifest.repository.split('/')
+  if (!owner || !repo) return null
+
+  const url = `https://api.github.com/repos/${owner}/${repo}/contents/${encodeGitHubPath(repoPath)}?ref=${encodeURIComponent(getGitHubBranch())}`
+  const res = await fetch(url, {
+    headers: githubReadHeaders(),
+    cache: 'no-store',
+  })
+
+  if (!res.ok) return null
+
+  const data = await res.json() as GitHubContentResponse
+  if (data.type === 'dir' || data.encoding !== 'base64' || !data.content) return null
+
+  return Buffer.from(data.content.replace(/\s/g, ''), 'base64')
+}
+
+async function getRemoteFilesByExtension(id: string, extension: string) {
+  const manifest = SHOWCASE_MANIFEST.find((site) => site.id === id)
+  if (!manifest?.repository) return []
+
+  const [owner, repo] = manifest.repository.split('/')
+  if (!owner || !repo) return []
+
+  const url = `https://api.github.com/repos/${owner}/${repo}/git/trees/${encodeURIComponent(getGitHubBranch())}?recursive=1`
+  const res = await fetch(url, {
+    headers: githubReadHeaders(),
+    cache: 'no-store',
+  })
+
+  if (!res.ok) return []
+
+  const data = await res.json() as GitHubTreeResponse
+  const basePath = normalizeRepoBasePath(manifest.repoPathBase)
+
+  return (data.tree ?? [])
+    .filter((item) => item.type === 'blob' && item.path?.endsWith(extension))
+    .map((item) => item.path!)
+    .filter((filePath) => !basePath || filePath === basePath || filePath.startsWith(`${basePath}/`))
+    .map((filePath) => basePath ? filePath.slice(basePath.length + 1) : filePath)
+}
+
+function normalizeShowcasePath(value: string) {
+  const normalized = path.posix.normalize(value.replace(/\\/g, '/').replace(/^\/+/, '') || 'index.html')
+  if (normalized === '.' || normalized === '..' || normalized.startsWith('../') || path.posix.isAbsolute(normalized)) {
+    return null
+  }
+
+  return normalized
+}
+
+function normalizeRepoBasePath(value?: string) {
+  return value?.replace(/\\/g, '/').replace(/^\/+|\/+$/g, '') ?? ''
+}
+
+function isInsidePath(basePath: string, targetPath: string) {
+  const relative = path.relative(basePath, targetPath)
+  return relative === '' || (!relative.startsWith('..') && !path.isAbsolute(relative))
+}
+
+function getGitHubBranch() {
+  return process.env.GITHUB_BRANCH || 'main'
+}
+
+function githubReadHeaders() {
+  const headers: Record<string, string> = {
+    Accept: 'application/vnd.github+json',
+    'X-GitHub-Api-Version': '2022-11-28',
+  }
+
+  if (process.env.GITHUB_TOKEN) {
+    headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`
+  }
+
+  return headers
+}
+
+function encodeGitHubPath(value: string) {
+  return value.split('/').map(encodeURIComponent).join('/')
+}
+
+function sortPreviewPages(a: string, b: string) {
+  if (a === 'index.html') return -1
+  if (b === 'index.html') return 1
+  return a.localeCompare(b, 'fr')
+}
+
+function labelPreviewPage(filePath: string) {
+  if (filePath === 'index.html') return 'Accueil'
+
+  const withoutIndex = filePath.replace(/\/index\.html$/, '').replace(/\.html$/, '')
+  return humanize(withoutIndex.split('/').pop() || withoutIndex)
 }
 
 function defaultShowcaseContent(name: string) {

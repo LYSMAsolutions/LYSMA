@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { readFile } from 'fs/promises'
 import path from 'path'
-import { resolveShowcaseFile } from '@/lib/site-vitrine'
+import { readShowcaseFile } from '@/lib/site-vitrine'
 
 const TYPES: Record<string, string> = {
   '.css': 'text/css; charset=utf-8',
@@ -21,15 +20,14 @@ export async function GET(
 ) {
   const { id, filePath } = await params
   const relativePath = filePath?.join('/') || 'index.html'
-  const file = resolveShowcaseFile(id, relativePath)
+  const file = await readShowcaseFile(id, relativePath)
 
   if (!file) return new NextResponse('Not found', { status: 404 })
 
-  const body = await readFile(file)
-  const ext = path.extname(file).toLowerCase()
-  const responseBody = ext === '.html'
-    ? rewriteHtml(body.toString('utf8'), id, relativePath)
-    : body
+  const ext = path.extname(file.path).toLowerCase()
+  const responseBody: BodyInit = ext === '.html'
+    ? rewriteHtml(file.body.toString('utf8'), id, relativePath)
+    : new Uint8Array(file.body)
 
   return new NextResponse(responseBody, {
     headers: {
