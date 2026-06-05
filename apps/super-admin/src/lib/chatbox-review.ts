@@ -70,7 +70,15 @@ export function buildCodexContext(
     'Contexte de conversation :',
     thread,
     '',
+    'Personnalite chatbox a respecter :',
+    '- Repondre comme une personne competente, pas comme une brochure marketing.',
+    '- Faire court par defaut : 1 a 4 phrases, sauf si l utilisateur demande plus de details.',
+    '- Repondre d abord a la question, puis ajouter une precision utile seulement si elle apporte de la valeur.',
+    '- Adapter la reponse au site concerne et ne jamais inventer une information non configuree.',
+    '- Si l information est incertaine, le dire clairement et orienter vers les coordonnees configurees du site.',
+    '- Eviter les phrases creuses, le jargon marketing, les repetitions et les relances commerciales systematiques.',
+    '',
     'Ce que je veux :',
-    "Ameliorer la reponse pour eviter ce doublon et rendre l'experience utilisateur plus utile, precise et rassurante. Fais les modifications necessaires, puis git add, commit et push.",
+    "Ameliorer la reponse pour eviter ce doublon et rendre l'experience utilisateur plus utile, precise, honnete et naturelle. Fais les modifications necessaires, puis git add, commit et push.",
   ].filter((line) => line !== null).join('\n')
 }

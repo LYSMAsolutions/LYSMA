@@ -29,22 +29,42 @@ function normalize(value: string) {
     .replace(/[\u0300-\u036f]/g, '')
 }
 
+function hasAny(text: string, keywords: string[]) {
+  return keywords.some((keyword) => text.includes(keyword))
+}
+
 function getAnswer(message: string) {
   const text = normalize(message)
 
+  if (hasAny(text, ['prix', 'tarif', 'combien', 'cout', 'coût', 'abonnement', 'mensuel', 'mois'])) {
+    return "LIVO est affiché à 89 € par mois, avec 30 jours d'essai gratuit."
+  }
+
+  if (hasAny(text, ['telephone', 'smartphone', 'mobile', 'tablette', 'ordinateur', 'pc'])) {
+    return "Oui, LIVO fonctionne sur smartphone, tablette et ordinateur. C'est utile si les compagnons doivent pointer directement depuis l'atelier."
+  }
+
+  if (hasAny(text, ['seul', 'petit garage', 'petite structure', 'mra', 'independant', 'indépendant'])) {
+    return "Oui. LIVO est adapté aux petits et moyens ateliers qui veulent un suivi simple, sans outil lourd."
+  }
+
+  if (hasAny(text, ['fliquer', 'surveillance', 'surveiller', 'espionner'])) {
+    return "L'objectif de LIVO n'est pas de surveiller les salariés. Il sert surtout à comparer le temps réellement passé dans l'atelier avec le temps facturé et à mieux piloter l'activité."
+  }
+
   if (text.includes('sert') || text.includes('livo')) {
-    return 'LIVO sert à rendre le suivi atelier plus clair : ordres de réparation, temps passé, compagnons et indicateurs utiles au quotidien. L’objectif est d’avoir une vue fiable sans multiplier les fichiers à côté.'
+    return "LIVO sert à rendre le suivi atelier plus clair : ordres de réparation, temps passé, compagnons et indicateurs utiles. L'objectif est d'avoir une vue fiable sans multiplier les fichiers à côté."
   }
 
   if (
     (text.includes('legal') || text.includes('conformite') || text.includes('fliquer') || text.includes('surveillance')) &&
     (text.includes('pointage') || text.includes('vehicule') || text.includes('voiture') || text.includes('or') || text.includes('reparation'))
   ) {
-    return "Le point important, c’est la transparence. Le pointage par véhicule doit être présenté comme un suivi d’atelier, pas comme une surveillance individuelle. Il faut expliquer l’objectif, les données suivies, la durée de conservation et les personnes autorisées à les consulter. LIVO sert surtout à relier le temps aux ordres de réparation pour mieux organiser l’atelier et comprendre la rentabilité."
+    return "Le point important, c'est la transparence. Le pointage par véhicule doit être présenté comme un suivi d'atelier, pas comme une surveillance individuelle. Il faut expliquer l'objectif, les données suivies et les personnes autorisées à les consulter."
   }
 
   if (text.includes('conformite') || text.includes('legal') || text.includes('inspection') || text.includes('prud')) {
-    return "LIVO peut aider à garder un historique horodaté et consultable des temps de travail. Pour que ce soit propre côté équipe, l’usage doit être annoncé clairement, limité aux données utiles et relié à l’organisation de l’atelier."
+    return "LIVO peut aider à garder un historique horodaté et consultable des temps de travail. Pour rester clair côté équipe, l'usage doit être annoncé et limité aux données utiles."
   }
 
   if (text.includes('ordre') || text.includes('or') || text.includes('reparation') || text.includes('vehicule')) {
@@ -52,18 +72,18 @@ function getAnswer(message: string) {
   }
 
   if (text.includes('pointage') || text.includes('temps') || text.includes('compagnon') || text.includes('rh')) {
-    return "Le pointage aide à suivre le temps de travail et à comprendre l’activité réelle de l’atelier. L’idée est d’avoir un suivi clair, sans ressaisie dans plusieurs fichiers."
+    return "Le pointage aide à suivre le temps de travail et à comprendre l'activité réelle de l'atelier. L'idée est d'avoir un suivi clair, sans ressaisie dans plusieurs fichiers."
   }
 
   if (text.includes('rentabilite') || text.includes('rapport') || text.includes('stat')) {
-    return "Les rapports donnent une lecture plus simple de l’activité : temps passés, suivi atelier et indicateurs utiles. C’est fait pour piloter avec des chiffres lisibles, pas pour noyer l’équipe sous des tableaux."
+    return "Les rapports donnent une lecture simple de l'activité : temps passés, suivi atelier et indicateurs utiles. Le but est d'aider à piloter, pas de noyer l'équipe sous des tableaux."
   }
 
   if (text.includes('contact') || text.includes('mail') || text.includes('aide') || text.includes('support')) {
-    return 'Pour un cas précis, le plus simple est d’écrire à LYSMA Solutions. Le bouton de contact prépare un email avec le bon sujet.'
+    return "Pour un cas précis, le plus simple est d'écrire à LYSMA Solutions. Le bouton de contact prépare un email avec le bon sujet."
   }
 
-  return "Je peux vous orienter sur le suivi atelier, le pointage, les rapports ou l’usage général de LIVO. Si votre question concerne votre propre atelier, ajoutez un exemple concret et ce sera plus facile à cadrer."
+  return "Je n'ai pas assez d'éléments pour répondre précisément. Je peux quand même vous orienter sur le pointage, les OR, les rapports ou l'usage général de LIVO."
 }
 
 function createConversationId() {

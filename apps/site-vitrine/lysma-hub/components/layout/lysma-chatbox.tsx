@@ -38,8 +38,8 @@ const isToolQuestion = (message: string) => {
 };
 
 const repeatedToolAnswers = [
-  "Oui. Pour avancer concrètement, dites-nous le métier, qui utilisera l'outil, les informations à suivre et le moment où vous perdez le plus de temps. Avec ça, on peut cadrer une première version sans vous demander un gros cahier des charges.",
-  "Si vous avez déjà une idée, envoyez-nous deux ou trois situations réelles : une demande client, une intervention, un suivi ou une donnée difficile à retrouver. C'est souvent suffisant pour proposer une structure d'outil claire.",
+  "Oui. Dites-nous le métier, qui utilisera l'outil et ce qui vous fait perdre du temps. Avec ça, on peut cadrer une première version sans gros cahier des charges.",
+  "Si vous avez déjà une idée, envoyez-nous deux ou trois situations réelles : une demande client, une intervention ou une donnée difficile à retrouver. C'est souvent suffisant pour démarrer proprement.",
 ];
 
 const avoidRepeatedAnswer = (answer: string, normalized: string, history: ChatMessage[]) => {
@@ -55,38 +55,44 @@ const avoidRepeatedAnswer = (answer: string, normalized: string, history: ChatMe
     return repeatedToolAnswers.find((candidate) => !previousAnswers.has(candidate)) ?? repeatedToolAnswers[0];
   }
 
-  return "Je vous ai déjà donné les grandes lignes. Pour aller plus loin, dites-nous surtout votre métier, votre objectif et ce que vous voulez simplifier au quotidien.";
+  return "Je vous ai déjà donné les grandes lignes. Pour préciser, dites-nous surtout votre métier et ce que vous voulez simplifier au quotidien.";
 };
 
 const getAnswer = (message: string, history: ChatMessage[] = []) => {
   const normalized = normalizeQuestion(message);
   let answer =
-    "Je peux vous guider sur un site vitrine, un outil métier ou la meilleure façon de cadrer votre besoin. Pour un cas précis, le plus simple reste de nous écrire avec deux ou trois détails.";
+    "Je peux vous guider sur un site vitrine, un outil métier ou la façon de cadrer votre besoin. Pour un cas précis, écrivez-nous avec deux ou trois détails.";
 
-  if (normalized.includes("site")) {
+  if (hasAnyKeyword(normalized, ["prix", "tarif", "combien", "cout", "budget", "devis"])) {
     answer =
-      "Oui. Pour un site, nous construisons une vitrine propre et lisible : structure, domaine, contenus, pages importantes et base prête à évoluer si votre activité grandit.";
+      "Je ne peux pas donner un prix sérieux sans connaître le besoin. Le montant dépend du contenu, du nombre de pages, des fonctionnalités et du suivi attendu. Pour un devis, envoyez-nous le contexte du projet.";
+  } else if (hasAnyKeyword(normalized, ["boutique", "ecommerce", "e-commerce", "reservation", "réservation"])) {
+    answer =
+      "Non. LYSMA ne fait pas de boutique en ligne ni de gros système de réservation. Nous restons concentrés sur les sites vitrines et les outils métier simples.";
+  } else if (normalized.includes("site")) {
+    answer =
+      "Oui. Pour un site, nous construisons une vitrine claire : structure, domaine, contenus et pages importantes. Le but est que le visiteur comprenne vite qui vous êtes et comment vous contacter.";
   } else if (isToolQuestion(normalized) && hasAnyKeyword(normalized, ["plombier", "plomberie"])) {
     answer =
-      "Pour un plombier, je commencerais par repérer ce qui vous fait vraiment perdre du temps : urgences, devis, interventions, photos, suivi de chantier, rappels ou planning. Pour cadrer l'outil, il nous faut surtout savoir qui l'utilise, quelles infos reviennent à chaque intervention et ce que vous voulez retrouver plus vite. Deux ou trois cas réels suffisent pour poser une première version utile.";
+      "Pour un plombier, je commencerais par ce qui prend du temps : urgences, devis, interventions, photos, rappels ou planning. Il nous faut surtout savoir qui utilise l'outil et quelles infos reviennent à chaque intervention.";
   } else if (
     isToolQuestion(normalized) &&
     hasAnyKeyword(normalized, ["besoin", "besoins", "metier", "artisan", "chantier", "intervention", "depannage", "planning"])
   ) {
     answer =
-      "Le bon point de départ, c'est un problème concret : qui utilise l'outil, quelles informations doivent être suivies, ce qui prend trop de temps et quelle action doit devenir plus simple. Ensuite, on peut proposer une première version : suivi de demandes, tableau d'activité, fiches de travail ou planning.";
+      "Le bon point de départ, c'est un problème concret : qui utilise l'outil, quelles infos doivent être suivies et quelle action doit devenir plus simple. Ensuite, on peut proposer une première version utile.";
   } else if (isToolQuestion(normalized)) {
     answer =
-      "Un outil utile part rarement d'une liste de fonctionnalités. On part plutôt d'un problème métier : organiser, suivre, centraliser ou gagner du temps. L'idée est de livrer une première version simple, puis de l'améliorer avec les vrais retours du terrain.";
+      "Un outil utile part rarement d'une liste de fonctionnalités. On part plutôt d'un problème métier : organiser, suivre, centraliser ou gagner du temps.";
   } else if (normalized.includes("realisation") || normalized.includes("livo") || normalized.includes("mounier")) {
     answer =
-      "Oui. Vous pouvez regarder les réalisations : Carrosserie Mounier montre une vitrine premium, et LIVO App montre un outil métier pensé pour le suivi d'atelier.";
+      "Oui. Carrosserie Mounier montre un site vitrine, et LIVO App montre un outil métier pensé pour le suivi d'atelier.";
   } else if (normalized.includes("methode") || normalized.includes("comment")) {
     answer =
-      "On fait simple : on comprend le besoin, on cadre ce qui doit vraiment être livré, on construit proprement, on teste, puis on améliore si les retours terrain le demandent.";
+      "On fait simple : comprendre le besoin, cadrer ce qui doit être livré, construire, tester, puis améliorer si les retours terrain le demandent.";
   } else if (normalized.includes("contact") || normalized.includes("mail") || normalized.includes("devis")) {
     answer =
-      "Le plus direct est de nous écrire. Le bouton de contact prépare un email à lysmasolutions@gmail.com avec le bon sujet.";
+      "Le plus direct est de nous écrire. Le bouton de contact prépare un email à lysmasolutions@gmail.com.";
   }
 
   return avoidRepeatedAnswer(answer, normalized, history);

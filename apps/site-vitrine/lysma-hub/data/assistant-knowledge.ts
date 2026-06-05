@@ -42,6 +42,14 @@ export const assistantKnowledge: AssistantRule[] = [
     action: { label: "Appeler l'atelier", type: "phone" },
   },
   {
+    id: "mounier-rendez-vous",
+    siteSlug: "carrosserie-mounier",
+    keywords: ["rendez-vous", "rdv", "disponibilite", "creneau", "passer"],
+    answer:
+      "Je ne peux pas prendre rendez-vous directement ici. Le plus fiable est d'appeler l'atelier ou d'envoyer une demande avec vos coordonnées.",
+    action: { label: "Appeler l'atelier", type: "phone" },
+  },
+  {
     id: "mounier-vitrage",
     siteSlug: "carrosserie-mounier",
     keywords: ["pare-brise", "vitrage", "impact", "fissure", "vitre"],
