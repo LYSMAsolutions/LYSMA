@@ -58,9 +58,9 @@ export function CookieBanner() {
         <div className={styles.text}>
           <strong className={styles.title}>Cookies et confidentialité</strong>
           <p className={styles.desc}>
-            LIVO-APP utilise des cookies strictement nécessaires au fonctionnement de
-            l’application : création de compte, authentification et session sécurisée.
-            Ces cookies ne sont pas utilisés à des fins publicitaires.{' '}
+            LIVO-APP utilise des cookies nécessaires au fonctionnement de l'application :
+            création de compte, authentification, session sécurisée et préférences d'information.
+            Aucun cookie publicitaire n'est utilisé.{' '}
             <Link href="/cookies" className={styles.link}>
               Gérer mes choix
             </Link>

@@ -5,7 +5,10 @@ import { requireSecureSession } from '@/lib/security/secure-session'
 
 const patchSchema = z.object({
   action: z.enum(['CLOTURER', 'ANNULER']),
-  motif: z.string().trim().min(8).max(1000),
+  motif: z.string().trim().max(1000).optional().nullable(),
+  tauxType: z.enum(['T1', 'T2', 'T3', 'T4', 'CARROSSERIE', 'PEINTURE', 'AUTRE']).optional().nullable(),
+  soldHours: z.coerce.number().min(0).max(999).optional().nullable(),
+  soldAmountHT: z.coerce.number().min(0).max(999999).optional().nullable(),
 })
 
 export async function PATCH(
@@ -40,11 +43,54 @@ export async function PATCH(
   }
 
   const status = parsed.data.action === 'CLOTURER' ? 'CLOTURE' : 'ANNULE'
+  let closureData = {}
+
+  if (parsed.data.action === 'CLOTURER') {
+    if (!parsed.data.tauxType) {
+      return NextResponse.json({ error: 'Selectionnez un taux horaire pour cloturer cet OR.' }, { status: 400 })
+    }
+
+    const tauxGarage = await prisma.tauxGarage.findFirst({
+      where: {
+        garageId: order.garageId,
+        type: parsed.data.tauxType,
+        actif: true,
+      },
+    })
+
+    if (!tauxGarage) {
+      return NextResponse.json({ error: 'Taux horaire introuvable ou inactif.' }, { status: 400 })
+    }
+
+    const realMinutes = await prisma.externalWorkOrderPointage.aggregate({
+      where: {
+        externalWorkOrderId: id,
+        statut: 'TERMINE',
+      },
+      _sum: {
+        dureeMinutes: true,
+      },
+    })
+
+    const fallbackHours = (realMinutes._sum.dureeMinutes ?? 0) / 60
+    const soldHours = parsed.data.soldHours ?? (order.soldHours ? Number(order.soldHours) : null) ?? fallbackHours
+    const soldAmountHT = parsed.data.soldAmountHT ?? soldHours * Number(tauxGarage.montant)
+
+    closureData = {
+      soldHours,
+      soldAmountHT,
+      tauxApplique: tauxGarage.type,
+      tauxLibelle: tauxGarage.libelle,
+      tauxHoraire: tauxGarage.montant,
+    }
+  }
+
   const updated = await prisma.externalWorkOrder.update({
     where: { id },
     data: {
       status,
       closedAt: new Date(),
+      ...closureData,
     },
   })
 
@@ -54,10 +100,13 @@ export async function PATCH(
       externalWorkOrderId: id,
       action: parsed.data.action,
       status: 'SUCCESS',
-      message: parsed.data.motif,
+      message: parsed.data.motif || (parsed.data.action === 'CLOTURER' ? 'OR externe cloture par l admin.' : 'OR externe annule par l admin.'),
       payload: {
         oldStatus: order.status,
         newStatus: status,
+        tauxType: parsed.data.tauxType || null,
+        soldHours: parsed.data.soldHours ?? null,
+        soldAmountHT: parsed.data.soldAmountHT ?? null,
       },
     },
   })

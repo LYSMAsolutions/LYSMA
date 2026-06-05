@@ -2,7 +2,9 @@ import { Sidebar } from '@/components/layout/Sidebar'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { getPrimaryGarageForUser } from '@/lib/garage'
+import Link from 'next/link'
 import { redirect } from 'next/navigation'
+import { ConnectedDataNotice } from './ConnectedDataNotice'
 import styles from './AppShell.module.css'
 
 type AppShellProps = {
@@ -71,7 +73,17 @@ export async function AppShell({ children }: AppShellProps) {
 
       <div className={styles.main}>
         {children}
+        <footer className={styles.footer}>
+          <span>© {new Date().getFullYear()} LIVO by LYSMA Solutions</span>
+          <nav aria-label="Liens privés et légaux">
+            <Link href="/donnees-support">Données support</Link>
+            <Link href="/cookies">Cookies</Link>
+            <Link href="/politique-confidentialite">Confidentialité</Link>
+          </nav>
+        </footer>
       </div>
+
+      <ConnectedDataNotice />
     </div>
   )
 }

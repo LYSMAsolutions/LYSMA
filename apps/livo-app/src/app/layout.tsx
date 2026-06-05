@@ -13,16 +13,27 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Livo-app',
+    default: 'LIVO - Logiciel pointage garage et atelier',
     template: '%s - LIVO',
   },
-  description: "Gestion d'atelier automobile. Simple, precise et securisee.",
+  description:
+    "Logiciel premium de pointage garage, suivi OR, fiches de travail, compagnons, véhicules et rentabilité atelier pour garages, MRA et carrosseries.",
   icons: {
     icon: '/logo/livo-app-logo.png',
     apple: '/logo/livo-app-logo.png',
   },
   applicationName: 'Livo-app',
-  keywords: ['garage', 'atelier', 'mecanique', 'pointage', 'gestion RH'],
+  keywords: [
+    'logiciel pointage garage',
+    'pointage atelier',
+    'pointage OR',
+    'ordre de réparation garage',
+    'logiciel garage Dordogne',
+    'logiciel carrosserie',
+    'logiciel MRA',
+    'API QR code garage',
+    'rentabilité atelier',
+  ],
   authors: [{ name: 'LYSMA Solutions' }],
   creator: 'LYSMA Solutions',
   metadataBase: new URL(SITE_URL),
@@ -31,12 +42,13 @@ export const metadata: Metadata = {
     locale: 'fr_FR',
     url: SITE_URL,
     siteName: 'Livo-app',
-    title: "Livo-app - Gestion d'atelier automobile",
-    description: 'Pointage, ordres de reparation, rentabilite. Fait pour le garage.',
+    title: 'LIVO - Logiciel pointage garage et atelier',
+    description:
+      'Pointage atelier, OR par QR code, fiches de travail, compagnons, véhicules et rentabilité pour garages et carrosseries.',
   },
   robots: {
-    index: false,
-    follow: false,
+    index: true,
+    follow: true,
   },
 }
 

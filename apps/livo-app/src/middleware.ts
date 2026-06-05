@@ -25,7 +25,7 @@ export default auth(async (req) => {
   const isLoggedIn = !!req.auth
   const atelierCookie = req.cookies.get('atelier-garage-id')?.value
 
-  if (req.nextUrl.hostname === 'livo-app.com') {
+  if (process.env.NODE_ENV === 'production' && req.nextUrl.hostname === 'livo-app.com') {
     const url = req.nextUrl.clone()
     url.hostname = 'www.livo-app.com'
     return NextResponse.redirect(url, 308)

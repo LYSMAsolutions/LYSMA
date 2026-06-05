@@ -33,7 +33,7 @@ export function ExternalOrderForm() {
       })
       const data = await res.json().catch(() => null)
       if (!res.ok) {
-        setError(typeof data?.error === 'string' ? data.error : 'Impossible de créer cette fiche miroir.')
+        setError(typeof data?.error === 'string' ? data.error : 'Impossible de créer cet OR de secours.')
         return
       }
       router.refresh()
@@ -66,7 +66,7 @@ export function ExternalOrderForm() {
       </div>
 
       <details className={styles.optionalDetails}>
-        <summary>Informations facultatives si elles sont disponibles</summary>
+        <summary>Informations facultatives, uniquement si elles sont déjà disponibles</summary>
         <div className={styles.formGrid}>
           <label>
             <span>Client</span>
@@ -93,7 +93,7 @@ export function ExternalOrderForm() {
 
       {error && <p className={styles.error}>{error}</p>}
       <button type="submit" disabled={loading} className={styles.submit}>
-        {loading ? 'Création...' : 'Créer la fiche miroir'}
+        {loading ? 'Création...' : 'Créer l’OR de secours'}
       </button>
     </form>
   )

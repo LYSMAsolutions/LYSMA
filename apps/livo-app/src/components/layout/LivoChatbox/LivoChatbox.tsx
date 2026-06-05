@@ -145,6 +145,11 @@ export function LivoChatbox() {
             ))}
           </div>
 
+          <p className={styles.notice}>
+            Les échanges avec l'assistant peuvent être enregistrés pour le support et l'amélioration de l'expérience.
+            Ils ne sont pas vendus ni utilisés à des fins publicitaires.
+          </p>
+
           <div className={styles.quickReplies}>
             {quickReplies.map((reply) => (
               <button key={reply} type="button" onClick={() => ask(reply)}>

@@ -5,9 +5,19 @@ import { canonical } from '@/lib/seo'
 import styles from './page.module.css'
 
 export const metadata: Metadata = {
-  title: 'Logiciel de pointage atelier mécanique | Livo',
+  title: 'Logiciel pointage garage, OR et atelier | LIVO',
   description:
-    'Livo est un logiciel de gestion atelier pour garages et carrosseries : pointage des compagnons, suivi véhicules, fiches de travail et rentabilité atelier.',
+    'LIVO est un logiciel premium pour garages et carrosseries : pointage atelier, OR par QR code, fiches de travail, compagnons, véhicules et rentabilité.',
+  keywords: [
+    'logiciel pointage garage',
+    'pointage atelier',
+    'pointage OR garage',
+    'logiciel garage Dordogne',
+    'API QR code ordre de réparation',
+    'logiciel MRA',
+    'logiciel carrosserie',
+    'rentabilité atelier',
+  ],
   robots: {
     index: true,
     follow: true,
@@ -16,9 +26,9 @@ export const metadata: Metadata = {
     canonical: canonical('/'),
   },
   openGraph: {
-    title: 'Logiciel de pointage atelier mécanique | Livo',
+    title: 'Logiciel pointage garage, OR et atelier | LIVO',
     description:
-      'Logiciel de gestion atelier pour garages et carrosseries : pointage compagnon, suivi véhicules, fiches de travail et rentabilité atelier.',
+      'Logiciel de gestion atelier pour garages et carrosseries : pointage compagnon, suivi véhicules, OR par QR code et rentabilité.',
     type: 'website',
     siteName: 'Livo',
     url: canonical('/'),
@@ -32,7 +42,7 @@ const softwareJsonLd = {
   applicationCategory: 'BusinessApplication',
   operatingSystem: 'Web',
   description:
-    'Livo est un logiciel de pointage atelier mécanique et carrosserie pour suivre les compagnons, les véhicules, les fiches de travail, les ordres de réparation et la rentabilité atelier.',
+    'LIVO est un logiciel de pointage atelier mécanique et carrosserie pour suivre les compagnons, les véhicules, les fiches de travail, les ordres de réparation, les OR par QR code et la rentabilité atelier.',
   url: canonical('/'),
   offers: {
     '@type': 'Offer',
@@ -50,6 +60,10 @@ const features = [
   {
     title: 'Fiches de travail et OR',
     text: 'Chaque fiche de travail atelier centralise le véhicule, le client, les opérations prévues, les temps passés et l’état d’avancement.',
+  },
+  {
+    title: 'API QR code pour OR',
+    text: 'LIVO peut recevoir les ordres de réparation d’un logiciel de facturation atelier et permettre le pointage OR par QR code, sans double saisie admin.',
   },
   {
     title: 'Suivi véhicules atelier',
@@ -279,6 +293,10 @@ export default function HomePage() {
             qui veulent mieux suivre leurs équipes, leurs véhicules et leurs temps de production,
             sans ajouter de complexité au quotidien.
           </p>
+          <p>
+            Le lancement SEO démarre avec les garages de <Link href="/logiciel-pointage-garage-dordogne">Dordogne</Link>,
+            puis avec les ateliers qui veulent connecter leurs OR via <Link href="/api-qr-ordre-reparation-garage">API et QR code</Link>.
+          </p>
         </div>
         <Link href="/inscription" className={styles.largeCta}>
           Démarrer 30 jours d’essai
@@ -291,6 +309,8 @@ export default function HomePage() {
           <Link href="/cookies">Cookies</Link>
           <Link href="/politique-confidentialite">Confidentialité</Link>
           <a href="/conformite-temps-travail">Conformité</a>
+          <Link href="/logiciel-pointage-garage-dordogne">Dordogne</Link>
+          <Link href="/api-qr-ordre-reparation-garage">API QR OR</Link>
           <Link href="/connexion">Connexion</Link>
         </div>
       </footer>

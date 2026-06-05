@@ -28,6 +28,24 @@ const staticRoutes: MetadataRoute.Sitemap = [
     changeFrequency: 'monthly',
     priority: 0.7,
   },
+  {
+    url: canonical('/logiciel-pointage-garage-dordogne'),
+    lastModified,
+    changeFrequency: 'monthly',
+    priority: 0.9,
+  },
+  {
+    url: canonical('/api-qr-ordre-reparation-garage'),
+    lastModified,
+    changeFrequency: 'monthly',
+    priority: 0.9,
+  },
+  {
+    url: canonical('/demo'),
+    lastModified,
+    changeFrequency: 'monthly',
+    priority: 0.6,
+  },
 ]
 
 const futureSeoRoutes: MetadataRoute.Sitemap = []

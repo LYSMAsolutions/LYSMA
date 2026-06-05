@@ -1,6 +1,8 @@
 type ChatLogInput = {
   source: string
   conversationId?: string | null
+  userName?: string | null
+  userEmail?: string | null
   userPrompt: string
   assistantResponse?: string | null
   metadata?: Record<string, unknown>
@@ -25,6 +27,8 @@ export async function forwardChatLog(input: ChatLogInput) {
       body: JSON.stringify({
         source: input.source,
         conversationId: input.conversationId,
+        userName: input.userName,
+        userEmail: input.userEmail,
         userPrompt: input.userPrompt,
         assistantResponse: input.assistantResponse,
         metadata: input.metadata,

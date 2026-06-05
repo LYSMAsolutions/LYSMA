@@ -503,6 +503,9 @@ model ExternalWorkOrder {
   operation           String?                 @db.Text
   soldHours           Decimal?                @db.Decimal(6, 2)
   soldAmountHT        Decimal?                @db.Decimal(10, 2)
+  tauxApplique        TauxType?
+  tauxLibelle         String?
+  tauxHoraire         Decimal?                @db.Decimal(10, 2)
   status              ExternalWorkOrderStatus @default(OUVERT)
   openedAt            DateTime                @default(now())
   closedAt            DateTime?

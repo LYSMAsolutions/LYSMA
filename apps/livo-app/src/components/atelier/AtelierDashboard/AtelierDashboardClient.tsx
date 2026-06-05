@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Play, Stop, Coffee, ForkKnife, SignOut, ArrowRight, Wrench, Lock, Barcode, ClipboardText } from '@phosphor-icons/react'
 import { FicheScanner } from '@/components/atelier/FicheScanner/FicheScanner'
@@ -279,6 +279,285 @@ function ExternalMirrorModal({
   )
 }
 
+function ExternalMirrorModalV2({
+  compagnonId,
+  canPoint,
+  onClose,
+}: {
+  compagnonId: string
+  canPoint: boolean
+  onClose: () => void
+}) {
+  const [mode, setMode] = useState<'scan' | 'manual'>('scan')
+  const [externalNumber, setExternalNumber] = useState('')
+  const [order, setOrder] = useState<ExternalMirror | null>(null)
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState('')
+  const [scanActive, setScanActive] = useState(false)
+  const [scanError, setScanError] = useState('')
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const streamRef = useRef<MediaStream | null>(null)
+  const scannerControlsRef = useRef<{ stop: () => void } | null>(null)
+  const lastScanRef = useRef('')
+
+  const stopScan = useCallback(() => {
+    scannerControlsRef.current?.stop()
+    scannerControlsRef.current = null
+
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach((track) => track.stop())
+      streamRef.current = null
+    }
+
+    if (videoRef.current) {
+      videoRef.current.srcObject = null
+    }
+
+    setScanActive(false)
+  }, [])
+
+  const close = useCallback(() => {
+    stopScan()
+    onClose()
+  }, [onClose, stopScan])
+
+  const findOrCreate = useCallback(async (options?: { externalNumber?: string; qrPayload?: string }) => {
+    setError('')
+    const nextNumber = options?.externalNumber ?? externalNumber.trim()
+
+    if (!options?.qrPayload && !nextNumber) {
+      setError('Saisissez un numero OR ou scannez le QR de l OR.')
+      return null
+    }
+
+    setLoading('search')
+    try {
+      const res = await fetch('/api/or-externes/mirror', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          compagnonId,
+          ...(options?.qrPayload ? { qrPayload: options.qrPayload } : { externalNumber: nextNumber }),
+        }),
+      })
+      const data = await res.json().catch(() => null)
+      if (!res.ok) {
+        setError(typeof data?.error === 'string' ? data.error : 'Impossible de recuperer cet OR.')
+        return null
+      }
+
+      setOrder(data.order)
+      if (data.order?.externalNumber) setExternalNumber(data.order.externalNumber)
+      return data.order as ExternalMirror
+    } catch {
+      setError('Connexion impossible. Reessayez dans un instant.')
+      return null
+    } finally {
+      setLoading('')
+    }
+  }, [compagnonId, externalNumber])
+
+  const startScan = useCallback(async () => {
+    setError('')
+    setScanError('')
+
+    if (!window.isSecureContext && window.location.hostname !== 'localhost') {
+      setScanError('La camera necessite une connexion HTTPS.')
+      return
+    }
+
+    if (!navigator.mediaDevices?.getUserMedia || !videoRef.current) {
+      setScanError('Camera indisponible sur cet appareil.')
+      return
+    }
+
+    try {
+      stopScan()
+      setScanActive(true)
+
+      const { BarcodeFormat, BrowserMultiFormatReader } = await import('@zxing/browser')
+      const reader = new BrowserMultiFormatReader(undefined, {
+        delayBetweenScanAttempts: 160,
+      })
+      reader.possibleFormats = [BarcodeFormat.QR_CODE, BarcodeFormat.CODE_128, BarcodeFormat.CODE_39]
+
+      const controls = await reader.decodeFromConstraints(
+        {
+          video: {
+            facingMode: { ideal: 'environment' },
+            width: { ideal: 1920 },
+            height: { ideal: 1080 },
+          },
+          audio: false,
+        },
+        videoRef.current,
+        (result) => {
+          if (!result) return
+
+          const raw = result.getText().trim()
+          if (!raw || raw === lastScanRef.current) return
+
+          lastScanRef.current = raw
+          stopScan()
+          setMode('manual')
+          void findOrCreate({ qrPayload: raw })
+        },
+      )
+
+      scannerControlsRef.current = controls
+      streamRef.current = videoRef.current.srcObject as MediaStream | null
+    } catch {
+      stopScan()
+      setScanError('Camera ou QR indisponible. Utilisez la saisie de secours.')
+    }
+  }, [findOrCreate, stopScan])
+
+  useEffect(() => () => stopScan(), [stopScan])
+
+  useEffect(() => {
+    if (mode !== 'scan' || scanActive || scanError) return
+
+    const timer = window.setTimeout(() => {
+      void startScan()
+    }, 0)
+
+    return () => window.clearTimeout(timer)
+  }, [mode, scanActive, scanError, startScan])
+
+  async function actionPointage(action: 'POINTER' | 'DEPOINTER') {
+    if (!order) return
+
+    setError('')
+    setLoading(action)
+    try {
+      const res = await fetch(`/api/or-externes/${order.id}/pointage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          compagnonId,
+          action,
+        }),
+      })
+      const data = await res.json().catch(() => null)
+      if (!res.ok) {
+        setError(typeof data?.error === 'string' ? data.error : 'Action impossible.')
+        return
+      }
+      await findOrCreate({ externalNumber: order.externalNumber })
+    } catch {
+      setError('Connexion impossible. Reessayez dans un instant.')
+    } finally {
+      setLoading('')
+    }
+  }
+
+  return (
+    <div className={styles.confirmOverlay} onClick={(event) => event.target === event.currentTarget && close()}>
+      <div className={styles.externalModal} role="dialog" aria-modal="true" aria-labelledby="external-or-title">
+        <div className={styles.externalHeader}>
+          <div>
+            <h2 id="external-or-title">Scanner un OR</h2>
+            <p>Le QR de l ordre de reparation importe les infos. La saisie numero reste un secours.</p>
+          </div>
+          <button type="button" onClick={close}>Fermer</button>
+        </div>
+
+        <div className={styles.externalModes}>
+          <button
+            type="button"
+            className={mode === 'scan' ? styles.externalModeActive : ''}
+            onClick={() => {
+              setMode('scan')
+              setScanError('')
+            }}
+          >
+            <Barcode weight="bold" size={16} /> QR
+          </button>
+          <button
+            type="button"
+            className={mode === 'manual' ? styles.externalModeActive : ''}
+            onClick={() => {
+              stopScan()
+              setMode('manual')
+            }}
+          >
+            <ClipboardText weight="bold" size={16} /> Secours
+          </button>
+        </div>
+
+        {mode === 'scan' ? (
+          <div className={styles.externalScan}>
+            {scanError ? (
+              <div className={styles.externalScanError}>
+                <p>{scanError}</p>
+                <button type="button" onClick={startScan}>Reessayer</button>
+              </div>
+            ) : (
+              <>
+                <video ref={videoRef} className={styles.externalVideo} autoPlay playsInline muted />
+                <div className={styles.externalScanOverlay}>
+                  <div className={styles.externalScanFrame} />
+                  <p>Cadrez le QR code de l OR</p>
+                </div>
+              </>
+            )}
+          </div>
+        ) : (
+          <>
+            <div className={styles.externalLookup}>
+              <input
+                value={externalNumber}
+                onChange={(event) => setExternalNumber(event.target.value)}
+                placeholder="Numero OR externe"
+                autoFocus
+              />
+              <button type="button" onClick={() => void findOrCreate()} disabled={loading === 'search'}>
+                {loading === 'search' ? 'Recherche...' : 'Utiliser cet OR'}
+              </button>
+            </div>
+
+            <p className={styles.externalHint}>
+              Mode secours: LIVO suivra le numero et les temps, sans client, vehicule ni travaux importes.
+            </p>
+          </>
+        )}
+
+        {error && <p className={styles.pointageError}>{error}</p>}
+
+        {order && (
+          <div className={styles.externalCard}>
+            <div className={styles.externalCardTitle}>
+              <strong>{order.externalNumber}</strong>
+              <Badge variant={order.activePointage ? 'blue' : 'muted'} dot>
+                {order.activePointage ? 'Pointage en cours' : 'Pret a pointer'}
+              </Badge>
+            </div>
+            <p>{order.vehicleLabel || 'Vehicule non renseigne'}{order.immatriculation ? ` · ${order.immatriculation}` : ''}</p>
+            <small>{order.clientName || 'Client non renseigne'} · {order.operation || 'Pointage OR sans details importes'}</small>
+            <div className={styles.externalStats}>
+              <span><small>Temps reel</small><strong>{formatMinutes(order.realMinutes)}</strong></span>
+              <span><small>Temps vendu</small><strong>{order.soldHours ? `${order.soldHours} h` : 'A completer'}</strong></span>
+            </div>
+
+            {canPoint ? (
+              <button
+                type="button"
+                className={`${styles.ficheBtn} ${order.activePointage ? styles.ficheBtnStop : styles.ficheBtnStart}`}
+                onClick={() => actionPointage(order.activePointage ? 'DEPOINTER' : 'POINTER')}
+                disabled={Boolean(loading)}
+              >
+                {order.activePointage ? <><Stop weight="fill" size={16} /> Depointer</> : <><Play weight="fill" size={16} /> Pointer</>}
+              </button>
+            ) : (
+              <p className={styles.externalHint}>Vous devez etre en travail pour pointer sur un OR externe.</p>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
 export function AtelierDashboardClient({ garage, compagnons: compagnonsInit, fiches: fichesInit, compagnonConnecteId: initConnecte }: Props) {
   const router = useRouter()
   const [compagnonConnecteId, setCompagnonConnecteId] = useState(initConnecte)
@@ -489,7 +768,7 @@ export function AtelierDashboardClient({ garage, compagnons: compagnonsInit, fic
               </h3>
               <div className={styles.fichesActions}>
                 <button className={styles.scanBtn} onClick={() => setExternalOpen(true)}>
-                  <ClipboardText weight="bold" size={16} /> OR externe
+                  <Barcode weight="bold" size={16} /> Scanner OR
                 </button>
                 <button className={styles.scanBtn} onClick={() => setScannerOpen(true)}>
                   <Barcode weight="bold" size={16} /> Rechercher / Scanner
@@ -562,7 +841,7 @@ export function AtelierDashboardClient({ garage, compagnons: compagnonsInit, fic
       )}
 
       {externalOpen && compagnonConnecteId && (
-        <ExternalMirrorModal
+        <ExternalMirrorModalV2
           compagnonId={compagnonConnecteId}
           canPoint={statut === 'EN_TRAVAIL'}
           onClose={() => setExternalOpen(false)}

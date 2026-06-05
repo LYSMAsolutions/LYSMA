@@ -205,6 +205,7 @@ export default async function ChatboxPage({
               const conversationLogs = log.conversationId
                 ? conversationMap.get(conversationKey(log.source, log.conversationId)) ?? []
                 : []
+              const supportMeta = chatSupportMeta(log.metadata)
 
               return (
                 <article key={log.id} className={styles.chatCard}>
@@ -230,6 +231,12 @@ export default async function ChatboxPage({
                   <div className={styles.identity}>
                     <span>{log.userName || 'utilisateur anonyme'}</span>
                     <span>{log.userEmail || 'email absent'}</span>
+                    {supportMeta.map((item) => (
+                      <span key={item.label}>
+                        <b>{item.label}</b>
+                        {item.value}
+                      </span>
+                    ))}
                   </div>
 
                   <div className={styles.exchange}>
@@ -339,6 +346,25 @@ function qualityClass(quality: ChatQuality) {
   if (quality === 'GOOD') return styles.good
   if (quality === 'BAD') return styles.bad
   return styles.unknown
+}
+
+function metadataRecord(value: Prisma.JsonValue | null) {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return {}
+  return value as Record<string, unknown>
+}
+
+function metadataString(value: unknown) {
+  return typeof value === 'string' && value.trim() ? value.trim() : null
+}
+
+function chatSupportMeta(value: Prisma.JsonValue | null) {
+  const metadata = metadataRecord(value)
+  return [
+    { label: 'garage', value: metadataString(metadata.garageName) },
+    { label: 'garageId', value: metadataString(metadata.garageId) },
+    { label: 'userId', value: metadataString(metadata.userId) },
+    { label: 'role', value: metadataString(metadata.userRole) },
+  ].filter((item): item is { label: string; value: string } => Boolean(item.value))
 }
 
 function ConversationThread({

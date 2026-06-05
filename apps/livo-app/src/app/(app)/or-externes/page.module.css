@@ -11,6 +11,47 @@
   gap: var(--space-4);
 }
 
+.flowGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.flowGrid article {
+  min-width: 0;
+  padding: var(--space-5);
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-xl);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+.flowGrid strong {
+  color: var(--color-text-primary);
+  font-size: var(--text-base);
+}
+
+.flowGrid span {
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+  line-height: 1.5;
+}
+
+.flowGrid code {
+  width: 100%;
+  padding: var(--space-3);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-elevated);
+  color: var(--color-cyan);
+  font-size: var(--text-xs);
+  white-space: normal;
+  word-break: break-word;
+}
+
 .explain {
   display: flex;
   align-items: center;
@@ -145,6 +186,24 @@
   background: rgba(255,255,255,0.02);
 }
 
+.manualDetails {
+  border: 1px dashed var(--color-border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  background: rgba(255,255,255,0.02);
+}
+
+.manualDetails summary {
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+}
+
+.manualDetails[open] summary {
+  margin-bottom: var(--space-4);
+}
+
 .optionalDetails summary {
   cursor: pointer;
   color: var(--color-text-secondary);
@@ -225,7 +284,7 @@
 
 .metrics {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: var(--space-3);
 }
 
@@ -243,6 +302,7 @@
   color: var(--color-text-primary);
   font-size: var(--text-sm);
   font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
 }
 
 .rentability {
@@ -250,6 +310,183 @@
   padding: 4px 8px;
   font-size: 11px;
   font-weight: var(--font-bold);
+}
+
+.closeOrderButton {
+  border: 1px solid rgba(26,111,255,0.28);
+  border-radius: var(--radius-full);
+  padding: 5px 10px;
+  background: rgba(26,111,255,0.12);
+  color: var(--color-blue-electric);
+  font-size: 11px;
+  font-weight: var(--font-bold);
+  cursor: pointer;
+}
+
+.closeOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+  background: rgba(4,6,15,0.78);
+  backdrop-filter: blur(6px);
+}
+
+.closeModal {
+  width: min(100%, 560px);
+  max-height: calc(100dvh - 32px);
+  overflow: auto;
+  padding: var(--space-6);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+}
+
+.closeHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-5);
+}
+
+.closeHeader h2 {
+  color: var(--color-text-primary);
+  font-size: var(--text-xl);
+  font-weight: var(--font-bold);
+}
+
+.closeHeader p,
+.closeField span,
+.closeRecap span {
+  color: var(--color-text-muted);
+}
+
+.closeHeader button,
+.cancelCloseButton,
+.recalcButton {
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-surface);
+  color: var(--color-text-secondary);
+  padding: var(--space-2) var(--space-3);
+  cursor: pointer;
+}
+
+.closeRecap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  margin-bottom: var(--space-4);
+  border-radius: var(--radius-lg);
+  background: rgba(64,192,255,0.08);
+}
+
+.closeRecap strong {
+  color: var(--color-text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.closeField {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+.closeField span {
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.closeField input,
+.closeField textarea {
+  width: 100%;
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-surface);
+  color: var(--color-text-primary);
+  padding: var(--space-3);
+  font: inherit;
+}
+
+.closeRateGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-2);
+}
+
+.closeRateGrid button {
+  min-height: 76px;
+  padding: var(--space-2);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-lg);
+  background: rgba(255,255,255,0.03);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  text-align: left;
+  cursor: pointer;
+}
+
+.closeRateGrid strong,
+.closeRateGrid small,
+.closeRateGrid em {
+  display: block;
+}
+
+.closeRateGrid strong {
+  color: var(--color-blue-electric);
+  font-size: var(--text-sm);
+}
+
+.closeRateGrid small {
+  margin-top: 2px;
+  color: var(--color-text-primary);
+  font-size: var(--text-xs);
+}
+
+.closeRateGrid em {
+  margin-top: 4px;
+  color: var(--color-text-muted);
+  font-size: 11px;
+  font-style: normal;
+  line-height: 1.25;
+}
+
+.closeRateGrid .closeRateActive {
+  border-color: var(--color-blue-electric);
+  background: rgba(26,111,255,0.16);
+  box-shadow: 0 0 0 1px rgba(26,111,255,0.22);
+}
+
+.closeActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  margin-top: var(--space-5);
+}
+
+.confirmCloseButton {
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--color-blue-electric);
+  color: white;
+  padding: var(--space-3) var(--space-5);
+  font-weight: var(--font-bold);
+  cursor: pointer;
+}
+
+.confirmCloseButton:disabled {
+  opacity: 0.6;
+  cursor: wait;
 }
 
 .good {
@@ -282,6 +519,7 @@
 
 @media (max-width: 1200px) {
   .kpis,
+  .flowGrid,
   .formGridCompact,
   .formGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -298,9 +536,11 @@
   }
 
   .kpis,
+  .flowGrid,
   .formGridCompact,
   .formGrid,
-  .metrics {
+  .metrics,
+  .closeRateGrid {
     grid-template-columns: 1fr;
   }
 
