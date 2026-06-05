@@ -3,6 +3,7 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { Prisma, type ChatQuality } from '@/generated/prisma'
 import { writeAuditLog } from '@/lib/audit'
+import { buildCodexContext, conversationKey, formatChatLogDate, getDuplicateOf } from '@/lib/chatbox-review'
 import { prisma } from '@/lib/prisma'
 import { CopyChatContextButton } from './CopyChatContextButton'
 import styles from './page.module.css'
@@ -222,7 +223,7 @@ export default async function ChatboxPage({
                     </div>
                     <div className={styles.chatMeta}>
                       <span className={qualityClass(log.quality)}>{log.quality.toLowerCase()}</span>
-                      <time>{formatDate(log.createdAt)}</time>
+                    <time>{formatChatLogDate(log.createdAt)}</time>
                     </div>
                   </header>
 
@@ -377,7 +378,7 @@ function ConversationThread({
             <li key={log.id} className={itemClass}>
               <div className={styles.timelineTop}>
                 <span>#{index + 1}</span>
-                <time>{formatDate(log.createdAt)}</time>
+                <time>{formatChatLogDate(log.createdAt)}</time>
                 {isOriginal && <em>reponse originale</em>}
                 {isCurrent && <em>doublon detecte</em>}
               </div>
@@ -413,17 +414,6 @@ function buildConversationMap(logs: Awaited<ReturnType<typeof getConversationLog
   return map
 }
 
-function conversationKey(source: string, conversationId: string) {
-  return `${source}\u0000${conversationId}`
-}
-
-function getDuplicateOf(metadata: Prisma.JsonValue | null) {
-  if (!metadata || typeof metadata !== 'object' || Array.isArray(metadata)) return null
-  const flags = metadata.flags
-  if (!flags || typeof flags !== 'object' || Array.isArray(flags)) return null
-  return typeof flags.duplicateOf === 'string' ? flags.duplicateOf : null
-}
-
 function appendQualityNote(value: string | null) {
   const note = `Amelioration validee le ${new Date().toISOString()}.`
   return [value, note].filter(Boolean).join('\n')
@@ -450,59 +440,6 @@ function markImprovedMetadata(value: Prisma.JsonValue | null) {
 
 function safeReturnTo(value: string) {
   return value.startsWith('/chatbox') && !value.startsWith('//') ? value : '/chatbox'
-}
-
-function buildCodexContext(
-  log: Awaited<ReturnType<typeof getLogs>>[number],
-  conversationLogs: Awaited<ReturnType<typeof getLogs>>,
-  duplicateOf: string | null,
-) {
-  const logs = conversationLogs.length > 0 ? conversationLogs : [log]
-  const originalIndex = duplicateOf ? logs.findIndex((item) => item.id === duplicateOf) : -1
-  const currentIndex = logs.findIndex((item) => item.id === log.id)
-  const thread = logs.map((item, index) => {
-    const labels = [
-      item.id === duplicateOf ? 'reponse originale' : '',
-      item.id === log.id ? 'doublon detecte / BAD' : '',
-    ].filter(Boolean)
-    const suffix = labels.length > 0 ? ` (${labels.join(', ')})` : ''
-
-    return [
-      `#${index + 1}${suffix}`,
-      formatDate(item.createdAt),
-      'question',
-      item.userPrompt,
-      '',
-      'reponse',
-      item.assistantResponse || 'Aucune reponse enregistree.',
-    ].join('\n')
-  }).join('\n\n')
-
-  return [
-    `Site : ${log.source}`,
-    `Conversation : ${log.conversationId ?? 'inconnue'}`,
-    `Log BAD : ${log.id}`,
-    duplicateOf ? `Doublon de : ${duplicateOf}` : 'Doublon de : non detecte',
-    originalIndex >= 0 ? `Reponse originale : #${originalIndex + 1}` : null,
-    currentIndex >= 0 ? `Message a corriger : #${currentIndex + 1}` : null,
-    log.qualityNotes ? `Note super-admin : ${log.qualityNotes}` : null,
-    '',
-    'Contexte de conversation :',
-    thread,
-    '',
-    'Ce que je veux :',
-    "Ameliorer la reponse pour eviter ce doublon et rendre l'experience utilisateur plus utile, precise et rassurante.",
-  ].filter((line) => line !== null).join('\n')
-}
-
-function formatDate(value: Date) {
-  return new Intl.DateTimeFormat('fr-FR', {
-    day: '2-digit',
-    month: '2-digit',
-    year: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-  }).format(value)
 }
 
 function formatJson(value: Prisma.JsonValue) {

@@ -3,6 +3,7 @@ import { z } from 'zod'
 import { Prisma } from '@/generated/prisma'
 import { prisma } from '@/lib/prisma'
 import { writeAuditLog } from '@/lib/audit'
+import { sendChatboxBadAlertEmail } from '@/lib/chatbox-bad-alert-email'
 
 const MAX_BODY_SIZE = 32_000
 const DEFAULT_RATE_LIMIT_WINDOW_MS = 60_000
@@ -104,6 +105,12 @@ export async function POST(req: NextRequest) {
     resume: parsed.data.userPrompt.slice(0, 180),
     apres: log,
   })
+
+  if (log.quality === 'BAD') {
+    await sendChatboxBadAlertEmail(log).catch((error) => {
+      console.error('Chatbox BAD alert email error:', error)
+    })
+  }
 
   return json(req, {
     success: true,
