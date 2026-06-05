@@ -6,7 +6,7 @@ export const assistantKnowledge: AssistantRule[] = [
     siteSlug: "carrosserie-mounier",
     keywords: ["devis", "prix", "tarif", "combien", "cout"],
     answer:
-      "Pour un devis fiable, l'atelier a besoin de quelques informations sur le véhicule et les dégâts visibles. Vous pouvez envoyer votre demande avec vos coordonnées, idéalement avec des photos.",
+      "Pour chiffrer correctement, l'atelier a besoin du véhicule, des dégâts visibles et de vos coordonnées. Si vous pouvez ajouter des photos, c'est encore mieux : l'équipe pourra vous orienter plus vite.",
     action: { label: "Demander un devis", type: "contact" },
   },
   {
@@ -14,7 +14,7 @@ export const assistantKnowledge: AssistantRule[] = [
     siteSlug: "carrosserie-mounier",
     keywords: ["photo", "image", "degat", "envoyer", "piece jointe"],
     answer:
-      "Vous pouvez préparer des photos nettes de loin et de près : vue globale du véhicule, détail de la zone touchée, plaque ou modèle si utile. L'atelier pourra vous orienter plus rapidement.",
+      "Oui, vous pouvez préparer des photos nettes : une vue globale du véhicule, une photo proche de la zone touchée, et le modèle si utile. Ça aide l'atelier à comprendre la demande avant de vous rappeler.",
     action: { label: "Envoyer une photo", type: "photo" },
   },
   {
@@ -22,7 +22,7 @@ export const assistantKnowledge: AssistantRule[] = [
     siteSlug: "carrosserie-mounier",
     keywords: ["rayure", "raye", "griffe", "pare-chocs", "peinture", "carrosserie"],
     answer:
-      "La Carrosserie Mounier traite les rayures, chocs, pare-chocs et reprises peinture avec une approche de finition soignée. Le mieux est de décrire la zone touchée et d'ajouter des photos.",
+      "Oui, l'atelier traite les rayures, chocs, pare-chocs et reprises peinture. Décrivez simplement la zone touchée et ajoutez des photos si vous en avez : ce sera plus facile pour vous répondre précisément.",
     action: { label: "Décrire les dégâts", type: "contact" },
   },
   {
@@ -30,7 +30,7 @@ export const assistantKnowledge: AssistantRule[] = [
     siteSlug: "carrosserie-mounier",
     keywords: ["assurance", "sinistre", "expert", "constat", "remboursement"],
     answer:
-      "En cas de sinistre, l'atelier peut vous accompagner dans les échanges avec l'assurance et l'expert. Indiquez votre situation, votre assureur et l'état du dossier dans votre message.",
+      "Après un sinistre, vous gardez le choix de votre réparateur. L'atelier peut vous accompagner dans les échanges avec l'assurance ou l'expert. Indiquez où en est le dossier, votre assureur et ce qui a été constaté.",
     action: { label: "Contacter l'atelier", type: "contact" },
   },
   {
@@ -38,7 +38,7 @@ export const assistantKnowledge: AssistantRule[] = [
     siteSlug: "carrosserie-mounier",
     keywords: ["horaire", "ouvert", "ferme", "samedi", "contact", "telephone"],
     answer:
-      "Pour les horaires et disponibilités, le plus fiable reste de joindre directement l'atelier. Vous pouvez appeler ou laisser une demande, l'équipe vous recontactera rapidement.",
+      "Pour les horaires du moment ou une disponibilité, le plus fiable est d'appeler l'atelier. Vous pouvez aussi laisser une demande si vous préférez être recontacté.",
     action: { label: "Appeler l'atelier", type: "phone" },
   },
   {
@@ -46,7 +46,7 @@ export const assistantKnowledge: AssistantRule[] = [
     siteSlug: "carrosserie-mounier",
     keywords: ["pare-brise", "vitrage", "impact", "fissure", "vitre"],
     answer:
-      "L'atelier peut vous orienter pour le vitrage, les impacts et les fissures. Précisez la zone concernée, le modèle du véhicule et si votre assurance bris de glace est activée.",
+      "Pour un impact, une fissure ou une vitre abîmée, précisez la zone concernée, le modèle du véhicule et si vous avez une garantie bris de glace. L'atelier pourra vous dire quoi faire ensuite.",
     action: { label: "Demander un avis", type: "contact" },
   },
   {
@@ -54,7 +54,7 @@ export const assistantKnowledge: AssistantRule[] = [
     siteSlug: "carrosserie-mounier",
     keywords: ["renovation", "optique", "phare", "phares", "terni"],
     answer:
-      "La rénovation d'optiques permet d'améliorer l'aspect et la visibilité lorsque les phares sont ternis. Envoyez une photo de face et de côté pour un premier avis.",
+      "Si vos phares sont ternis, une rénovation d'optiques peut améliorer l'aspect et la visibilité. Une photo de face et une de côté suffisent souvent pour un premier avis.",
     action: { label: "Envoyer une demande", type: "photo" },
   },
 ];

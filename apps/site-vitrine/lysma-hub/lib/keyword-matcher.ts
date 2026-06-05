@@ -2,7 +2,7 @@ import { assistantKnowledge } from "../data/assistant-knowledge";
 import type { AssistantRule } from "./site-types";
 
 const fallbackAnswer =
-  "Je ne suis pas certain de pouvoir répondre précisément. Le plus simple est de nous envoyer votre demande avec vos coordonnées, l'atelier vous recontactera rapidement.";
+  "Je n'ai pas assez d'éléments pour répondre correctement ici. Envoyez votre demande avec vos coordonnées, et l'atelier pourra reprendre le sujet avec vous.";
 
 export const normalizeMessage = (message: string) =>
   message

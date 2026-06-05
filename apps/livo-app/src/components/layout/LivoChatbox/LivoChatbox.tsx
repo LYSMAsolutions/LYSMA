@@ -11,11 +11,11 @@ type Message = {
 }
 
 const quickReplies = [
-  'A quoi sert LIVO ?',
-  'Conformite temps',
-  'Ordres de reparation',
+  'À quoi sert LIVO ?',
+  'Conformité temps',
+  'Ordres de réparation',
   'Pointage atelier',
-  'Rentabilite',
+  'Rentabilité',
   'Contacter LYSMA',
 ]
 
@@ -33,37 +33,37 @@ function getAnswer(message: string) {
   const text = normalize(message)
 
   if (text.includes('sert') || text.includes('livo')) {
-    return 'LIVO aide un atelier automobile a mieux suivre les ordres de reparation, le temps passe, les compagnons et les indicateurs utiles au quotidien.'
+    return 'LIVO sert à rendre le suivi atelier plus clair : ordres de réparation, temps passé, compagnons et indicateurs utiles au quotidien. L’objectif est d’avoir une vue fiable sans multiplier les fichiers à côté.'
   }
 
   if (
     (text.includes('legal') || text.includes('conformite') || text.includes('fliquer') || text.includes('surveillance')) &&
     (text.includes('pointage') || text.includes('vehicule') || text.includes('voiture') || text.includes('or') || text.includes('reparation'))
   ) {
-    return "Le pointage par vehicule peut etre presente comme un suivi d'atelier, pas comme un outil de surveillance individuelle. L'usage doit rester transparent, proportionne et explique aux collaborateurs : objectif, donnees suivies, duree de conservation et personnes autorisees a les consulter. LIVO sert surtout a relier le temps aux ordres de reparation pour mieux organiser l'atelier et comprendre la rentabilite."
+    return "Le point important, c’est la transparence. Le pointage par véhicule doit être présenté comme un suivi d’atelier, pas comme une surveillance individuelle. Il faut expliquer l’objectif, les données suivies, la durée de conservation et les personnes autorisées à les consulter. LIVO sert surtout à relier le temps aux ordres de réparation pour mieux organiser l’atelier et comprendre la rentabilité."
   }
 
   if (text.includes('conformite') || text.includes('legal') || text.includes('inspection') || text.includes('prud')) {
-    return "LIVO aide a conserver un historique horodate et consultable des temps de travail. Pour rester sain cote equipe, l'outil doit etre annonce clairement, utilise pour l'organisation de l'atelier et limite aux donnees utiles."
+    return "LIVO peut aider à garder un historique horodaté et consultable des temps de travail. Pour que ce soit propre côté équipe, l’usage doit être annoncé clairement, limité aux données utiles et relié à l’organisation de l’atelier."
   }
 
   if (text.includes('ordre') || text.includes('or') || text.includes('reparation') || text.includes('vehicule')) {
-    return 'La partie atelier centralise les fiches, les vehicules, les compagnons et les informations importantes autour des ordres de reparation.'
+    return 'La partie atelier rassemble les fiches, les véhicules, les compagnons et les informations importantes autour des ordres de réparation. Le but est de retrouver vite ce qui compte pour chaque dossier.'
   }
 
   if (text.includes('pointage') || text.includes('temps') || text.includes('compagnon') || text.includes('rh')) {
-    return "Le pointage aide a suivre le temps de travail et a mieux comprendre l'activite de l'atelier, sans multiplier les fichiers disperses."
+    return "Le pointage aide à suivre le temps de travail et à comprendre l’activité réelle de l’atelier. L’idée est d’avoir un suivi clair, sans ressaisie dans plusieurs fichiers."
   }
 
   if (text.includes('rentabilite') || text.includes('rapport') || text.includes('stat')) {
-    return "Les rapports donnent une lecture plus claire de l'activite : temps, suivi atelier et indicateurs utiles pour piloter plus sereinement."
+    return "Les rapports donnent une lecture plus simple de l’activité : temps passés, suivi atelier et indicateurs utiles. C’est fait pour piloter avec des chiffres lisibles, pas pour noyer l’équipe sous des tableaux."
   }
 
   if (text.includes('contact') || text.includes('mail') || text.includes('aide') || text.includes('support')) {
-    return 'Pour une question precise, le plus simple est d ecrire a LYSMA Solutions. Le bouton de contact prepare un email.'
+    return 'Pour un cas précis, le plus simple est d’écrire à LYSMA Solutions. Le bouton de contact prépare un email avec le bon sujet.'
   }
 
-  return "Nous pouvons vous orienter sur le suivi atelier, le pointage, les rapports ou l'usage general de LIVO. Pour une demande precise, vous pouvez aussi ecrire a LYSMA."
+  return "Je peux vous orienter sur le suivi atelier, le pointage, les rapports ou l’usage général de LIVO. Si votre question concerne votre propre atelier, ajoutez un exemple concret et ce sera plus facile à cadrer."
 }
 
 function createConversationId() {
@@ -99,7 +99,7 @@ export function LivoChatbox() {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: 'assistant',
-      content: 'Bonjour, nous pouvons vous orienter sur LIVO App et ses principales fonctions atelier.',
+      content: 'Bonjour. Posez votre question sur LIVO : pointage, ordres de réparation, conformité, rapports ou usage atelier.',
     },
   ])
   const hasUserMessage = messages.some((message) => message.role === 'user')

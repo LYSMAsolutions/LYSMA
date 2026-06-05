@@ -25,7 +25,7 @@ export function FloatingAssistant({ siteSlug }: { siteSlug: string }) {
     {
       role: "assistant",
       content:
-        "Bonjour, je peux vous orienter pour un devis, des photos, les horaires ou une question liée à l'assurance.",
+        "Bonjour. Dites-moi ce qu'il vous faut : devis, photos, horaires, assurance ou question atelier.",
     },
   ]);
   const hasUserMessage = messages.some((message) => message.role === "user");
@@ -51,7 +51,7 @@ export function FloatingAssistant({ siteSlug }: { siteSlug: string }) {
 
     setMessages((current) => [
       ...current,
-      { role: "assistant", content: result.answer || "Je vous invite à envoyer une demande à l'atelier." },
+      { role: "assistant", content: result.answer || "Je n'ai pas assez d'éléments pour répondre correctement ici. Le plus simple est d'envoyer une demande à l'atelier." },
     ]);
     setLoading(false);
   };
@@ -83,7 +83,7 @@ export function FloatingAssistant({ siteSlug }: { siteSlug: string }) {
                 {message.content}
               </p>
             ))}
-            {loading ? <p className="hub-message hub-message-assistant">Recherche de la meilleure réponse...</p> : null}
+            {loading ? <p className="hub-message hub-message-assistant">Je regarde la demande...</p> : null}
           </div>
           {!hasUserMessage ? (
             <div className="hub-pre-messages" aria-label="Pré-messages disponibles">
