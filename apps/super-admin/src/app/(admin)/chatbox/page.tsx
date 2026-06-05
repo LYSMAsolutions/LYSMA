@@ -1,5 +1,8 @@
 import Link from 'next/link'
+import { revalidatePath } from 'next/cache'
+import { redirect } from 'next/navigation'
 import { Prisma, type ChatQuality } from '@/generated/prisma'
+import { writeAuditLog } from '@/lib/audit'
 import { prisma } from '@/lib/prisma'
 import styles from './page.module.css'
 
@@ -119,6 +122,7 @@ export default async function ChatboxPage({
   const sourceCount = data?.sourceCounts.length ?? 0
   const qualityMap = new Map(data?.qualityCounts.map((item) => [item.quality, item._count.quality]) ?? [])
   const conversationMap = buildConversationMap(data?.conversationLogs ?? [])
+  const currentHref = filterHref(params)
 
   return (
     <main className={styles.page}>
@@ -237,6 +241,14 @@ export default async function ChatboxPage({
                     </div>
                   </div>
 
+                  {log.quality === 'BAD' && (
+                    <form className={styles.reviewActions} action={markChatLogImproved}>
+                      <input type="hidden" name="id" value={log.id} />
+                      <input type="hidden" name="returnTo" value={currentHref} />
+                      <button type="submit">valider l'amelioration</button>
+                    </form>
+                  )}
+
                   {duplicateOf && conversationLogs.length > 0 && (
                     <ConversationThread
                       logs={conversationLogs}
@@ -259,6 +271,45 @@ export default async function ChatboxPage({
       )}
     </main>
   )
+}
+
+async function markChatLogImproved(formData: FormData) {
+  'use server'
+
+  const id = String(formData.get('id') ?? '').trim()
+  const returnTo = safeReturnTo(String(formData.get('returnTo') ?? '/chatbox'))
+  if (!id) redirect(returnTo)
+
+  const current = await prisma.chatLog.findUnique({
+    where: { id },
+  })
+
+  if (!current || current.quality !== 'BAD') {
+    revalidatePath('/chatbox')
+    redirect(returnTo)
+  }
+
+  const updated = await prisma.chatLog.update({
+    where: { id },
+    data: {
+      quality: 'GOOD',
+      qualityNotes: appendQualityNote(current.qualityNotes),
+      metadata: markImprovedMetadata(current.metadata),
+    },
+  })
+
+  await writeAuditLog({
+    outil: current.source,
+    cibleType: 'chat_log',
+    cibleId: current.id,
+    action: 'chatbox_log_improvement_validated',
+    resume: current.userPrompt.slice(0, 180),
+    avant: current,
+    apres: updated,
+  })
+
+  revalidatePath('/chatbox')
+  redirect(returnTo)
 }
 
 function Stat({ label, value, tone }: { label: string; value: number; tone?: 'yellow' }) {
@@ -367,6 +418,34 @@ function getDuplicateOf(metadata: Prisma.JsonValue | null) {
   const flags = metadata.flags
   if (!flags || typeof flags !== 'object' || Array.isArray(flags)) return null
   return typeof flags.duplicateOf === 'string' ? flags.duplicateOf : null
+}
+
+function appendQualityNote(value: string | null) {
+  const note = `Amelioration validee le ${new Date().toISOString()}.`
+  return [value, note].filter(Boolean).join('\n')
+}
+
+function markImprovedMetadata(value: Prisma.JsonValue | null) {
+  const base: Record<string, unknown> = value && typeof value === 'object' && !Array.isArray(value)
+    ? value as Record<string, unknown>
+    : { value: value ?? null }
+  const existingFlags = base.flags
+  const flags = existingFlags && typeof existingFlags === 'object' && !Array.isArray(existingFlags)
+    ? existingFlags as Record<string, unknown>
+    : {}
+
+  return {
+    ...base,
+    flags: {
+      ...flags,
+      improvementValidated: true,
+      improvementValidatedAt: new Date().toISOString(),
+    },
+  } as Prisma.InputJsonValue
+}
+
+function safeReturnTo(value: string) {
+  return value.startsWith('/chatbox') && !value.startsWith('//') ? value : '/chatbox'
 }
 
 function formatDate(value: Date) {
