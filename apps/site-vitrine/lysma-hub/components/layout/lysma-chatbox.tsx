@@ -101,6 +101,7 @@ export function LysmaChatbox() {
       content: "Bonjour, nous pouvons vous orienter sur LYSMA Solutions, les sites premium et les outils web métier.",
     },
   ]);
+  const hasUserMessage = messages.some((message) => message.role === "user");
 
   const ask = (message: string) => {
     const cleanMessage = message.trim();
@@ -146,7 +147,7 @@ export function LysmaChatbox() {
           <header className="lysma-chatbox-header">
             <div>
               <strong>LYSMA Assistant</strong>
-              <span>Réponses rapides</span>
+              <span>Message libre</span>
             </div>
             <button type="button" onClick={() => setOpen(false)} aria-label="Fermer la chatbox">
               <X aria-hidden="true" />
@@ -161,13 +162,18 @@ export function LysmaChatbox() {
             ))}
           </div>
 
-          <div className="lysma-chatbox-quick">
-            {quickReplies.map((reply) => (
-              <button key={reply} type="button" onClick={() => ask(reply)}>
-                {reply}
-              </button>
-            ))}
-          </div>
+          {!hasUserMessage ? (
+            <div className="lysma-chatbox-pre-messages" aria-label="Pré-messages disponibles">
+              <span>Pré-messages</span>
+              <div className="lysma-chatbox-quick">
+                {quickReplies.map((reply) => (
+                  <button key={reply} type="button" onClick={() => ask(reply)}>
+                    {reply}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ) : null}
 
           <form className="lysma-chatbox-form" onSubmit={submit}>
             <input name="question" placeholder="Votre question" maxLength={260} />
@@ -182,7 +188,13 @@ export function LysmaChatbox() {
         </section>
       ) : null}
 
-      <button className="lysma-chatbox-bubble" type="button" onClick={() => setOpen(true)} aria-label="Ouvrir la chatbox">
+      <button
+        className="lysma-chatbox-bubble"
+        type="button"
+        onClick={() => setOpen((current) => !current)}
+        aria-expanded={open}
+        aria-label={open ? "Fermer la chatbox" : "Ouvrir la chatbox"}
+      >
         <MessageCircle aria-hidden="true" />
       </button>
     </div>

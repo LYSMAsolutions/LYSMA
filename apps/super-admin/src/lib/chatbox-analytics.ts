@@ -230,7 +230,14 @@ function getChatboxPagePathFromRecord(metadata?: Record<string, unknown> | null)
   if (analyticsPagePath) return analyticsPagePath
 
   const page = metadataRecord(metadata?.page)
-  return metadataString(page?.path) ?? metadataString(page?.pathname) ?? metadataString(page?.url)
+  return (
+    metadataString(page?.path) ??
+    metadataString(page?.pathname) ??
+    metadataString(page?.url) ??
+    metadataString(metadata?.path) ??
+    metadataString(metadata?.pathname) ??
+    metadataString(metadata?.url)
+  )
 }
 
 function metadataRecord(value: unknown): Record<string, unknown> | null {

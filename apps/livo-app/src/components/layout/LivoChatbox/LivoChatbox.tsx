@@ -2,6 +2,7 @@
 
 import { FormEvent, useRef, useState } from 'react'
 import { ChatCircleText, PaperPlaneTilt, X } from '@phosphor-icons/react'
+import { getChatboxPageMetadata } from '@/lib/chatbox-page-metadata'
 import styles from './LivoChatbox.module.css'
 
 type Message = {
@@ -86,6 +87,7 @@ function logChatExchange(conversationId: string, userPrompt: string, assistantRe
       conversationId,
       userPrompt,
       assistantResponse,
+      metadata: getChatboxPageMetadata(),
     }),
     keepalive: true,
   }).catch(() => undefined)
@@ -100,6 +102,7 @@ export function LivoChatbox() {
       content: 'Bonjour, nous pouvons vous orienter sur LIVO App et ses principales fonctions atelier.',
     },
   ])
+  const hasUserMessage = messages.some((message) => message.role === 'user')
 
   function ask(message: string) {
     const cleanMessage = message.trim()
@@ -130,7 +133,7 @@ export function LivoChatbox() {
           <header className={styles.header}>
             <div>
               <strong>LIVO Assistant</strong>
-              <span>Reponses rapides</span>
+              <span>Message libre</span>
             </div>
             <button type="button" onClick={() => setOpen(false)} aria-label="Fermer la chatbox">
               <X size={18} aria-hidden="true" />
@@ -150,13 +153,18 @@ export function LivoChatbox() {
             Ils ne sont pas vendus ni utilisés à des fins publicitaires.
           </p>
 
-          <div className={styles.quickReplies}>
-            {quickReplies.map((reply) => (
-              <button key={reply} type="button" onClick={() => ask(reply)}>
-                {reply}
-              </button>
-            ))}
-          </div>
+          {!hasUserMessage ? (
+            <div className={styles.preMessages} aria-label="Pre-messages disponibles">
+              <span>Pre-messages</span>
+              <div className={styles.quickReplies}>
+                {quickReplies.map((reply) => (
+                  <button key={reply} type="button" onClick={() => ask(reply)}>
+                    {reply}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ) : null}
 
           <form className={styles.form} onSubmit={submit}>
             <input name="question" placeholder="Votre question" maxLength={260} />
@@ -171,7 +179,13 @@ export function LivoChatbox() {
         </section>
       ) : null}
 
-      <button className={styles.bubble} type="button" onClick={() => setOpen(true)} aria-label="Ouvrir la chatbox">
+      <button
+        className={styles.bubble}
+        type="button"
+        onClick={() => setOpen((current) => !current)}
+        aria-expanded={open}
+        aria-label={open ? 'Fermer la chatbox' : 'Ouvrir la chatbox'}
+      >
         <ChatCircleText size={25} weight="duotone" aria-hidden="true" />
       </button>
     </div>

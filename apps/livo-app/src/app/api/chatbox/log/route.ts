@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import { getPrimaryGarageForUser } from '@/lib/garage'
 import { prisma } from '@/lib/prisma'
+import { buildChatboxLogMetadata } from '@/lib/chatbox-log-metadata'
 import { forwardChatLog } from '@/lib/super-admin-chat-log'
 
 const cleanText = (value: unknown, maxLength: number) =>
@@ -69,6 +70,7 @@ export async function POST(request: NextRequest) {
     conversationId?: unknown
     userPrompt?: unknown
     assistantResponse?: unknown
+    metadata?: unknown
   }
   const conversationId = cleanText(payload.conversationId, 160)
   const userPrompt = cleanText(payload.userPrompt, 320)
@@ -87,12 +89,12 @@ export async function POST(request: NextRequest) {
     userEmail: identity.userEmail,
     userPrompt,
     assistantResponse,
-    metadata: {
+    metadata: buildChatboxLogMetadata(payload.metadata, {
       app: 'livo-app',
       route: '/api/chatbox/log',
       userAgent: request.headers.get('user-agent'),
       ...identity.metadata,
-    },
+    }),
   })
 
   return NextResponse.json({ success: true })

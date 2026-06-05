@@ -28,6 +28,7 @@ export function FloatingAssistant({ siteSlug }: { siteSlug: string }) {
         "Bonjour, je peux vous orienter pour un devis, des photos, les horaires ou une question liée à l'assurance.",
     },
   ]);
+  const hasUserMessage = messages.some((message) => message.role === "user");
 
   const ask = async (message: string) => {
     const cleanMessage = message.trim();
@@ -70,7 +71,7 @@ export function FloatingAssistant({ siteSlug }: { siteSlug: string }) {
           <div className="hub-assistant-head">
             <div>
               <strong>Assistant atelier</strong>
-              <span>Réponses rapides</span>
+              <span>Message libre</span>
             </div>
             <button type="button" onClick={() => setOpen(false)} aria-label="Fermer l'assistant">
               ×
@@ -84,13 +85,18 @@ export function FloatingAssistant({ siteSlug }: { siteSlug: string }) {
             ))}
             {loading ? <p className="hub-message hub-message-assistant">Recherche de la meilleure réponse...</p> : null}
           </div>
-          <div className="hub-quick-actions">
-            {quickQuestions.map((question) => (
-              <button key={question} type="button" onClick={() => ask(question)}>
-                {question}
-              </button>
-            ))}
-          </div>
+          {!hasUserMessage ? (
+            <div className="hub-pre-messages" aria-label="Pré-messages disponibles">
+              <span>Pré-messages</span>
+              <div className="hub-quick-actions">
+                {quickQuestions.map((question) => (
+                  <button key={question} type="button" onClick={() => ask(question)}>
+                    {question}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ) : null}
           <form onSubmit={submit} className="hub-assistant-form">
             <input name="question" placeholder="Votre question" maxLength={320} />
             <Button type="submit" disabled={loading}>
@@ -99,7 +105,13 @@ export function FloatingAssistant({ siteSlug }: { siteSlug: string }) {
           </form>
         </div>
       ) : null}
-      <button className="hub-assistant-bubble" type="button" onClick={() => setOpen(true)} aria-label="Ouvrir l'assistant">
+      <button
+        className="hub-assistant-bubble"
+        type="button"
+        onClick={() => setOpen((current) => !current)}
+        aria-expanded={open}
+        aria-label={open ? "Fermer l'assistant" : "Ouvrir l'assistant"}
+      >
         ?
       </button>
     </div>

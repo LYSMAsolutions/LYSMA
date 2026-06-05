@@ -868,11 +868,23 @@ button, input, textarea { font: inherit; }
   font-weight: 800;
 }
 
+.lysma-chatbox-pre-messages {
+  display: grid;
+  gap: 8px;
+  padding: 0 14px 14px;
+}
+
+.lysma-chatbox-pre-messages > span {
+  color: rgba(248, 250, 252, .56);
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
 .lysma-chatbox-quick {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  padding: 0 14px 14px;
 }
 
 .lysma-chatbox-quick button {
@@ -1554,7 +1566,9 @@ button, input, textarea { font: inherit; }
 .hub-message { margin: 0; padding: 10px 12px; border-radius: 14px; font-size: 14px; line-height: 1.5; }
 .hub-message-assistant { background: #eef2f7; color: #18212a !important; }
 .hub-message-user { background: var(--hub-secondary); color: white !important; justify-self: end; }
-.hub-quick-actions { padding: 0 14px 12px; display: flex; flex-wrap: wrap; gap: 8px; }
+.hub-pre-messages { padding: 0 14px 12px; display: grid; gap: 8px; }
+.hub-pre-messages > span { color: rgba(24,33,42,.62); font-size: 11px; font-weight: 900; text-transform: uppercase; }
+.hub-quick-actions { display: flex; flex-wrap: wrap; gap: 8px; }
 .hub-quick-actions button { border: 1px solid var(--hub-border); background: white; color: var(--hub-text); border-radius: 999px; padding: 8px 10px; font-size: 12px; font-weight: 800; cursor: pointer; }
 .hub-assistant-form { display: grid; grid-template-columns: 1fr auto; gap: 8px; padding: 14px; border-top: 1px solid var(--hub-border); }
 .hub-assistant-form input { min-width: 0; border: 1px solid var(--hub-border); border-radius: 999px; padding: 0 14px; }
