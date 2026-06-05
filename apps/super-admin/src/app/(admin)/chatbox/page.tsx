@@ -15,6 +15,7 @@ type Search = {
 
 type ChatboxData = {
   logs: Awaited<ReturnType<typeof getLogs>>
+  conversationLogs: Awaited<ReturnType<typeof getConversationLogs>>
   sourceCounts: Array<{ source: string; _count: { source: number } }>
   qualityCounts: Array<{ quality: ChatQuality; _count: { quality: number } }>
   total: number
@@ -53,6 +54,32 @@ async function getLogs(where: Prisma.ChatLogWhereInput) {
   })
 }
 
+async function getConversationLogs(logs: Awaited<ReturnType<typeof getLogs>>) {
+  const pairs = new Map<string, { source: string; conversationId: string }>()
+
+  for (const log of logs) {
+    if (!log.conversationId || !getDuplicateOf(log.metadata)) continue
+    pairs.set(conversationKey(log.source, log.conversationId), {
+      source: log.source,
+      conversationId: log.conversationId,
+    })
+  }
+
+  const lookup = Array.from(pairs.values()).slice(0, 30)
+  if (lookup.length === 0) return []
+
+  return prisma.chatLog.findMany({
+    where: {
+      OR: lookup.map((item) => ({
+        source: item.source,
+        conversationId: item.conversationId,
+      })),
+    },
+    orderBy: { createdAt: 'asc' },
+    take: 800,
+  })
+}
+
 async function loadData(where: Prisma.ChatLogWhereInput): Promise<{ data: ChatboxData | null; error: string | null }> {
   try {
     const [logs, sourceCounts, qualityCounts, total] = await Promise.all([
@@ -68,8 +95,9 @@ async function loadData(where: Prisma.ChatLogWhereInput): Promise<{ data: Chatbo
       }),
       prisma.chatLog.count(),
     ])
+    const conversationLogs = await getConversationLogs(logs)
 
-    return { data: { logs, sourceCounts, qualityCounts, total }, error: null }
+    return { data: { logs, conversationLogs, sourceCounts, qualityCounts, total }, error: null }
   } catch (error) {
     return {
       data: null,
@@ -90,6 +118,7 @@ export default async function ChatboxPage({
   const logs = data?.logs ?? []
   const sourceCount = data?.sourceCounts.length ?? 0
   const qualityMap = new Map(data?.qualityCounts.map((item) => [item.quality, item._count.quality]) ?? [])
+  const conversationMap = buildConversationMap(data?.conversationLogs ?? [])
 
   return (
     <main className={styles.page}>
@@ -144,7 +173,7 @@ export default async function ChatboxPage({
         <form className={styles.searchForm} action="/chatbox">
           {query.source && <input type="hidden" name="source" value={query.source} />}
           {query.quality && <input type="hidden" name="quality" value={query.quality} />}
-          <input name="q" defaultValue={query.q ?? ''} placeholder="chercher question, reponse, email..." />
+          <input name="q" defaultValue={query.q ?? ''} placeholder="chercher question, reponse, email, conversation..." />
           <button type="submit">chercher</button>
         </form>
       </section>
@@ -165,43 +194,66 @@ export default async function ChatboxPage({
           {logs.length === 0 ? (
             <div className={styles.emptyCard}>Aucun log chatbox pour ces filtres.</div>
           ) : (
-            logs.map((log) => (
-              <article key={log.id} className={styles.chatCard}>
-                <header className={styles.chatHeader}>
-                  <div>
-                    <strong>{log.source}</strong>
-                    <span>{log.conversationId ?? 'conversation inconnue'}</span>
-                  </div>
-                  <div className={styles.chatMeta}>
-                    <span className={qualityClass(log.quality)}>{log.quality.toLowerCase()}</span>
-                    <time>{formatDate(log.createdAt)}</time>
-                  </div>
-                </header>
+            logs.map((log) => {
+              const duplicateOf = getDuplicateOf(log.metadata)
+              const conversationLogs = log.conversationId
+                ? conversationMap.get(conversationKey(log.source, log.conversationId)) ?? []
+                : []
 
-                <div className={styles.identity}>
-                  <span>{log.userName || 'utilisateur anonyme'}</span>
-                  <span>{log.userEmail || 'email absent'}</span>
-                </div>
+              return (
+                <article key={log.id} className={styles.chatCard}>
+                  <header className={styles.chatHeader}>
+                    <div>
+                      <strong>{log.source}</strong>
+                      <span>{log.conversationId ?? 'conversation inconnue'}</span>
+                      {log.conversationId && (
+                        <Link
+                          className={styles.threadLink}
+                          href={filterHref({ source: log.source, q: log.conversationId })}
+                        >
+                          voir le fil
+                        </Link>
+                      )}
+                    </div>
+                    <div className={styles.chatMeta}>
+                      <span className={qualityClass(log.quality)}>{log.quality.toLowerCase()}</span>
+                      <time>{formatDate(log.createdAt)}</time>
+                    </div>
+                  </header>
 
-                <div className={styles.exchange}>
-                  <div className={styles.messageBlock}>
-                    <span>question</span>
-                    <p>{log.userPrompt}</p>
+                  <div className={styles.identity}>
+                    <span>{log.userName || 'utilisateur anonyme'}</span>
+                    <span>{log.userEmail || 'email absent'}</span>
                   </div>
-                  <div className={styles.messageBlock}>
-                    <span>reponse</span>
-                    <p>{log.assistantResponse || 'Aucune reponse enregistree.'}</p>
-                  </div>
-                </div>
 
-                {(log.qualityNotes || log.metadata) && (
-                  <footer className={styles.cardFooter}>
-                    {log.qualityNotes && <p>{log.qualityNotes}</p>}
-                    {log.metadata && <pre>{formatJson(log.metadata)}</pre>}
-                  </footer>
-                )}
-              </article>
-            ))
+                  <div className={styles.exchange}>
+                    <div className={styles.messageBlock}>
+                      <span>question</span>
+                      <p>{log.userPrompt}</p>
+                    </div>
+                    <div className={styles.messageBlock}>
+                      <span>reponse</span>
+                      <p>{log.assistantResponse || 'Aucune reponse enregistree.'}</p>
+                    </div>
+                  </div>
+
+                  {duplicateOf && conversationLogs.length > 0 && (
+                    <ConversationThread
+                      logs={conversationLogs}
+                      currentId={log.id}
+                      duplicateOf={duplicateOf}
+                    />
+                  )}
+
+                  {(log.qualityNotes || log.metadata) && (
+                    <footer className={styles.cardFooter}>
+                      {log.qualityNotes && <p>{log.qualityNotes}</p>}
+                      {log.metadata && <pre>{formatJson(log.metadata)}</pre>}
+                    </footer>
+                  )}
+                </article>
+              )
+            })
           )}
         </section>
       )}
@@ -231,6 +283,90 @@ function qualityClass(quality: ChatQuality) {
   if (quality === 'GOOD') return styles.good
   if (quality === 'BAD') return styles.bad
   return styles.unknown
+}
+
+function ConversationThread({
+  logs,
+  currentId,
+  duplicateOf,
+}: {
+  logs: Awaited<ReturnType<typeof getLogs>>
+  currentId: string
+  duplicateOf: string
+}) {
+  const originalIndex = logs.findIndex((log) => log.id === duplicateOf)
+
+  return (
+    <section className={styles.threadPanel}>
+      <div className={styles.threadHeader}>
+        <div>
+          <span>fil complet de cette conversation</span>
+          <strong>{logs.length} echange{logs.length > 1 ? 's' : ''}</strong>
+        </div>
+        {originalIndex >= 0 && (
+          <em>reponse deja donnee au message #{originalIndex + 1}</em>
+        )}
+      </div>
+
+      <ol className={styles.timeline}>
+        {logs.map((log, index) => {
+          const isOriginal = log.id === duplicateOf
+          const isCurrent = log.id === currentId
+          const itemClass = [
+            styles.timelineItem,
+            isOriginal ? styles.originalItem : '',
+            isCurrent ? styles.currentItem : '',
+          ].filter(Boolean).join(' ')
+
+          return (
+            <li key={log.id} className={itemClass}>
+              <div className={styles.timelineTop}>
+                <span>#{index + 1}</span>
+                <time>{formatDate(log.createdAt)}</time>
+                {isOriginal && <em>reponse originale</em>}
+                {isCurrent && <em>doublon detecte</em>}
+              </div>
+              <div className={styles.timelineExchange}>
+                <div className={styles.timelineMessage}>
+                  <b>question</b>
+                  <p>{log.userPrompt}</p>
+                </div>
+                <div className={styles.timelineMessage}>
+                  <b>reponse</b>
+                  <p>{log.assistantResponse || 'Aucune reponse enregistree.'}</p>
+                </div>
+              </div>
+            </li>
+          )
+        })}
+      </ol>
+    </section>
+  )
+}
+
+function buildConversationMap(logs: Awaited<ReturnType<typeof getConversationLogs>>) {
+  const map = new Map<string, Awaited<ReturnType<typeof getLogs>>>()
+
+  for (const log of logs) {
+    if (!log.conversationId) continue
+    const key = conversationKey(log.source, log.conversationId)
+    const current = map.get(key) ?? []
+    current.push(log)
+    map.set(key, current)
+  }
+
+  return map
+}
+
+function conversationKey(source: string, conversationId: string) {
+  return `${source}\u0000${conversationId}`
+}
+
+function getDuplicateOf(metadata: Prisma.JsonValue | null) {
+  if (!metadata || typeof metadata !== 'object' || Array.isArray(metadata)) return null
+  const flags = metadata.flags
+  if (!flags || typeof flags !== 'object' || Array.isArray(flags)) return null
+  return typeof flags.duplicateOf === 'string' ? flags.duplicateOf : null
 }
 
 function formatDate(value: Date) {
