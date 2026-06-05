@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useRef, useState } from "react";
+import { getChatboxPageMetadata } from "../../lib/chatbox-page-metadata";
 import { Button } from "../ui/Button";
 
 type Message = {
@@ -38,7 +39,12 @@ export function FloatingAssistant({ siteSlug }: { siteSlug: string }) {
     const response = await fetch("/api/assistant", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ siteSlug, message: cleanMessage, conversationId: conversationId.current }),
+      body: JSON.stringify({
+        siteSlug,
+        message: cleanMessage,
+        conversationId: conversationId.current,
+        metadata: getChatboxPageMetadata(),
+      }),
     });
     const result = (await response.json()) as { answer?: string };
 

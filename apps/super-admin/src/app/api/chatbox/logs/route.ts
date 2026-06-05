@@ -3,6 +3,7 @@ import { z } from 'zod'
 import { Prisma } from '@/generated/prisma'
 import { prisma } from '@/lib/prisma'
 import { writeAuditLog } from '@/lib/audit'
+import { enrichChatboxMetadata } from '@/lib/chatbox-analytics'
 import { sendChatboxBadAlertEmail } from '@/lib/chatbox-bad-alert-email'
 
 const MAX_BODY_SIZE = 32_000
@@ -93,7 +94,7 @@ export async function POST(req: NextRequest) {
       assistantResponse: parsed.data.assistantResponse,
       quality: duplicate ? 'BAD' : parsed.data.quality,
       qualityNotes: [parsed.data.qualityNotes, duplicateNote].filter(Boolean).join('\n') || undefined,
-      metadata: buildMetadata(parsed.data.metadata, duplicate?.id),
+      metadata: buildMetadata(parsed.data.metadata, parsed.data.userPrompt, duplicate?.id),
     },
   })
 
@@ -229,18 +230,17 @@ async function findDuplicateAnswer(source: string, conversationId?: string | nul
   return recent.find((log) => normalizeAnswer(log.assistantResponse) === normalized) ?? null
 }
 
-function buildMetadata(value: unknown, duplicateOf?: string) {
+function buildMetadata(value: unknown, userPrompt: string, duplicateOf?: string) {
   const jsonValue = value === undefined ? undefined : JSON.parse(JSON.stringify(value))
+  const enrichedValue = enrichChatboxMetadata(userPrompt, jsonValue)
 
   if (!duplicateOf) {
-    if (jsonValue === undefined) return undefined
-    if (jsonValue === null) return Prisma.JsonNull
-    return jsonValue as Prisma.InputJsonValue
+    return enrichedValue as Prisma.InputJsonValue
   }
 
-  const base: Record<string, unknown> = jsonValue && typeof jsonValue === 'object' && !Array.isArray(jsonValue)
-    ? jsonValue as Record<string, unknown>
-    : { value: jsonValue ?? null }
+  const base: Record<string, unknown> = enrichedValue && typeof enrichedValue === 'object' && !Array.isArray(enrichedValue)
+    ? enrichedValue as Record<string, unknown>
+    : { value: enrichedValue ?? null }
   const existingFlags = base.flags
   const flags = existingFlags && typeof existingFlags === 'object' && !Array.isArray(existingFlags)
     ? existingFlags as Record<string, unknown>

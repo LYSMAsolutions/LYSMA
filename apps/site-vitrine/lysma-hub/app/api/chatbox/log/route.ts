@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { buildChatboxLogMetadata } from "../../../../lib/chatbox-log-metadata";
 import { forwardChatLog } from "../../../../lib/super-admin-chat-log";
 
 const cleanText = (value: unknown, maxLength: number) =>
@@ -20,6 +21,7 @@ export async function POST(request: Request) {
     userPrompt?: unknown;
     assistantResponse?: unknown;
     source?: unknown;
+    metadata?: unknown;
   };
   const conversationId = cleanText(payload.conversationId, 160);
   const userPrompt = cleanText(payload.userPrompt, 320);
@@ -35,10 +37,10 @@ export async function POST(request: Request) {
     conversationId: conversationId || null,
     userPrompt,
     assistantResponse,
-    metadata: {
+    metadata: buildChatboxLogMetadata(payload.metadata, {
       app: "lysma-hub",
       route: "/api/chatbox/log",
-    },
+    }),
   });
 
   return NextResponse.json({ success: true });

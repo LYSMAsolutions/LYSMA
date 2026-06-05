@@ -2,6 +2,7 @@
 
 import { FormEvent, useRef, useState } from "react";
 import { MessageCircle, Send, X } from "lucide-react";
+import { getChatboxPageMetadata } from "../../lib/chatbox-page-metadata";
 
 type ChatMessage = {
   role: "assistant" | "user";
@@ -123,6 +124,7 @@ export function LysmaChatbox() {
         conversationId: conversationId.current,
         userPrompt: cleanMessage,
         assistantResponse: answer,
+        metadata: getChatboxPageMetadata(),
       }),
     }).catch((error) => {
       console.error("Chatbox log error:", error);

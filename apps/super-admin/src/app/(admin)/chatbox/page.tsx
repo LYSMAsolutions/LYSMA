@@ -3,6 +3,7 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { Prisma, type ChatQuality } from '@/generated/prisma'
 import { writeAuditLog } from '@/lib/audit'
+import { buildChatboxInsights, getChatboxAnalyticsTags, type ChatboxInsights } from '@/lib/chatbox-analytics'
 import { buildCodexContext, conversationKey, formatChatLogDate, getDuplicateOf } from '@/lib/chatbox-review'
 import { prisma } from '@/lib/prisma'
 import { CopyChatContextButton } from './CopyChatContextButton'
@@ -20,6 +21,7 @@ type Search = {
 
 type ChatboxData = {
   logs: Awaited<ReturnType<typeof getLogs>>
+  analyticsLogs: Awaited<ReturnType<typeof getAnalyticsLogs>>
   conversationLogs: Awaited<ReturnType<typeof getConversationLogs>>
   sourceCounts: Array<{ source: string; _count: { source: number } }>
   qualityCounts: Array<{ quality: ChatQuality; _count: { quality: number } }>
@@ -59,6 +61,18 @@ async function getLogs(where: Prisma.ChatLogWhereInput) {
   })
 }
 
+async function getAnalyticsLogs(where: Prisma.ChatLogWhereInput) {
+  return prisma.chatLog.findMany({
+    where,
+    select: {
+      userPrompt: true,
+      metadata: true,
+    },
+    orderBy: { createdAt: 'desc' },
+    take: 1000,
+  })
+}
+
 async function getConversationLogs(logs: Awaited<ReturnType<typeof getLogs>>) {
   const pairs = new Map<string, { source: string; conversationId: string }>()
 
@@ -87,8 +101,9 @@ async function getConversationLogs(logs: Awaited<ReturnType<typeof getLogs>>) {
 
 async function loadData(where: Prisma.ChatLogWhereInput): Promise<{ data: ChatboxData | null; error: string | null }> {
   try {
-    const [logs, sourceCounts, qualityCounts, total] = await Promise.all([
+    const [logs, analyticsLogs, sourceCounts, qualityCounts, total] = await Promise.all([
       getLogs(where),
+      getAnalyticsLogs(where),
       prisma.chatLog.groupBy({
         by: ['source'],
         _count: { source: true },
@@ -102,7 +117,7 @@ async function loadData(where: Prisma.ChatLogWhereInput): Promise<{ data: Chatbo
     ])
     const conversationLogs = await getConversationLogs(logs)
 
-    return { data: { logs, conversationLogs, sourceCounts, qualityCounts, total }, error: null }
+    return { data: { logs, analyticsLogs, conversationLogs, sourceCounts, qualityCounts, total }, error: null }
   } catch (error) {
     return {
       data: null,
@@ -123,6 +138,7 @@ export default async function ChatboxPage({
   const logs = data?.logs ?? []
   const sourceCount = data?.sourceCounts.length ?? 0
   const qualityMap = new Map(data?.qualityCounts.map((item) => [item.quality, item._count.quality]) ?? [])
+  const insights = buildChatboxInsights(data?.analyticsLogs ?? [])
   const conversationMap = buildConversationMap(data?.conversationLogs ?? [])
   const currentHref = filterHref(params)
 
@@ -146,6 +162,8 @@ export default async function ChatboxPage({
           <Stat label="a_revoir" value={(qualityMap.get('UNKNOWN') ?? 0) + (qualityMap.get('BAD') ?? 0)} tone="yellow" />
         </div>
       </section>
+
+      {!error && <InsightsPanel insights={insights} />}
 
       <section className={styles.filters}>
         <div className={styles.filterGroup}>
@@ -205,7 +223,7 @@ export default async function ChatboxPage({
               const conversationLogs = log.conversationId
                 ? conversationMap.get(conversationKey(log.source, log.conversationId)) ?? []
                 : []
-              const supportMeta = chatSupportMeta(log.metadata)
+              const supportMeta = [...chatSupportMeta(log.metadata), ...getChatboxAnalyticsTags(log.metadata)]
 
               return (
                 <article key={log.id} className={styles.chatCard}>
@@ -282,6 +300,40 @@ export default async function ChatboxPage({
         </section>
       )}
     </main>
+  )
+}
+
+function InsightsPanel({ insights }: { insights: ChatboxInsights }) {
+  return (
+    <section className={styles.insights}>
+      <InsightCard title="questions frequentes" items={insights.topQuestions} />
+      <InsightCard title="fonctionnalites demandees" items={insights.requestedFeatures} />
+      <InsightCard title="pages chatbox" items={insights.chatPages} />
+      <InsightCard title="mots-cles" items={insights.keywords} />
+    </section>
+  )
+}
+
+function InsightCard({ title, items }: { title: string; items: Array<{ label: string; count: number }> }) {
+  return (
+    <article className={styles.insightCard}>
+      <header>
+        <span>{title}</span>
+        <strong>{items.reduce((total, item) => total + item.count, 0)}</strong>
+      </header>
+      {items.length > 0 ? (
+        <ol className={styles.insightList}>
+          {items.map((item) => (
+            <li key={item.label}>
+              <span>{item.label}</span>
+              <b>{item.count}</b>
+            </li>
+          ))}
+        </ol>
+      ) : (
+        <p>Aucune donnee pour ces filtres.</p>
+      )}
+    </article>
   )
 }
 

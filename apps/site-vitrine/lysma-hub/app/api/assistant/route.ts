@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { matchAssistantAnswer } from "../../../lib/keyword-matcher";
+import { buildChatboxLogMetadata } from "../../../lib/chatbox-log-metadata";
 import { forwardChatLog } from "../../../lib/super-admin-chat-log";
 
 const cleanText = (value: unknown, maxLength: number) =>
@@ -16,7 +17,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "JSON invalide." }, { status: 400 });
   }
 
-  const payload = body as { siteSlug?: unknown; message?: unknown; conversationId?: unknown };
+  const payload = body as { siteSlug?: unknown; message?: unknown; conversationId?: unknown; metadata?: unknown };
   const siteSlug = cleanText(payload.siteSlug, 80);
   const message = cleanText(payload.message, 320);
   const conversationId = cleanText(payload.conversationId, 160);
@@ -32,11 +33,11 @@ export async function POST(request: Request) {
     conversationId: conversationId || null,
     userPrompt: message,
     assistantResponse: result.answer,
-    metadata: {
+    metadata: buildChatboxLogMetadata(payload.metadata, {
       app: "lysma-hub",
       route: "/api/assistant",
       siteSlug,
-    },
+    }),
   });
 
   return NextResponse.json(result);
