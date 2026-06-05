@@ -35,8 +35,15 @@ function getAnswer(message: string) {
     return 'LIVO aide un atelier automobile a mieux suivre les ordres de reparation, le temps passe, les compagnons et les indicateurs utiles au quotidien.'
   }
 
+  if (
+    (text.includes('legal') || text.includes('conformite') || text.includes('fliquer') || text.includes('surveillance')) &&
+    (text.includes('pointage') || text.includes('vehicule') || text.includes('voiture') || text.includes('or') || text.includes('reparation'))
+  ) {
+    return "Le pointage par vehicule peut etre presente comme un suivi d'atelier, pas comme un outil de surveillance individuelle. L'usage doit rester transparent, proportionne et explique aux collaborateurs : objectif, donnees suivies, duree de conservation et personnes autorisees a les consulter. LIVO sert surtout a relier le temps aux ordres de reparation pour mieux organiser l'atelier et comprendre la rentabilite."
+  }
+
   if (text.includes('conformite') || text.includes('legal') || text.includes('inspection') || text.includes('prud')) {
-    return 'LIVO aide a conserver un historique horodate et consultable des temps de travail. Une page dediee explique les enjeux de conformite du temps de travail.'
+    return "LIVO aide a conserver un historique horodate et consultable des temps de travail. Pour rester sain cote equipe, l'outil doit etre annonce clairement, utilise pour l'organisation de l'atelier et limite aux donnees utiles."
   }
 
   if (text.includes('ordre') || text.includes('or') || text.includes('reparation') || text.includes('vehicule')) {

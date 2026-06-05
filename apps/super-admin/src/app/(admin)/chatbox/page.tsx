@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation'
 import { Prisma, type ChatQuality } from '@/generated/prisma'
 import { writeAuditLog } from '@/lib/audit'
 import { prisma } from '@/lib/prisma'
+import { CopyChatContextButton } from './CopyChatContextButton'
 import styles from './page.module.css'
 
 export const dynamic = 'force-dynamic'
@@ -242,11 +243,14 @@ export default async function ChatboxPage({
                   </div>
 
                   {log.quality === 'BAD' && (
-                    <form className={styles.reviewActions} action={markChatLogImproved}>
-                      <input type="hidden" name="id" value={log.id} />
-                      <input type="hidden" name="returnTo" value={currentHref} />
-                      <button type="submit">valider l'amelioration</button>
-                    </form>
+                    <div className={styles.reviewActions}>
+                      <CopyChatContextButton text={buildCodexContext(log, conversationLogs, duplicateOf)} />
+                      <form action={markChatLogImproved}>
+                        <input type="hidden" name="id" value={log.id} />
+                        <input type="hidden" name="returnTo" value={currentHref} />
+                        <button type="submit">valider l'amelioration</button>
+                      </form>
+                    </div>
                   )}
 
                   {duplicateOf && conversationLogs.length > 0 && (
@@ -446,6 +450,49 @@ function markImprovedMetadata(value: Prisma.JsonValue | null) {
 
 function safeReturnTo(value: string) {
   return value.startsWith('/chatbox') && !value.startsWith('//') ? value : '/chatbox'
+}
+
+function buildCodexContext(
+  log: Awaited<ReturnType<typeof getLogs>>[number],
+  conversationLogs: Awaited<ReturnType<typeof getLogs>>,
+  duplicateOf: string | null,
+) {
+  const logs = conversationLogs.length > 0 ? conversationLogs : [log]
+  const originalIndex = duplicateOf ? logs.findIndex((item) => item.id === duplicateOf) : -1
+  const currentIndex = logs.findIndex((item) => item.id === log.id)
+  const thread = logs.map((item, index) => {
+    const labels = [
+      item.id === duplicateOf ? 'reponse originale' : '',
+      item.id === log.id ? 'doublon detecte / BAD' : '',
+    ].filter(Boolean)
+    const suffix = labels.length > 0 ? ` (${labels.join(', ')})` : ''
+
+    return [
+      `#${index + 1}${suffix}`,
+      formatDate(item.createdAt),
+      'question',
+      item.userPrompt,
+      '',
+      'reponse',
+      item.assistantResponse || 'Aucune reponse enregistree.',
+    ].join('\n')
+  }).join('\n\n')
+
+  return [
+    `Site : ${log.source}`,
+    `Conversation : ${log.conversationId ?? 'inconnue'}`,
+    `Log BAD : ${log.id}`,
+    duplicateOf ? `Doublon de : ${duplicateOf}` : 'Doublon de : non detecte',
+    originalIndex >= 0 ? `Reponse originale : #${originalIndex + 1}` : null,
+    currentIndex >= 0 ? `Message a corriger : #${currentIndex + 1}` : null,
+    log.qualityNotes ? `Note super-admin : ${log.qualityNotes}` : null,
+    '',
+    'Contexte de conversation :',
+    thread,
+    '',
+    'Ce que je veux :',
+    "Ameliorer la reponse pour eviter ce doublon et rendre l'experience utilisateur plus utile, precise et rassurante.",
+  ].filter((line) => line !== null).join('\n')
 }
 
 function formatDate(value: Date) {

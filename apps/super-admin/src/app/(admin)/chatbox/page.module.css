@@ -352,9 +352,15 @@
 .reviewActions {
   display: flex;
   justify-content: flex-end;
+  gap: 8px;
+  flex-wrap: wrap;
   padding: 10px 14px;
   border-top: 1px solid var(--border-subtle);
   background: rgba(63, 185, 80, 0.045);
+}
+
+.reviewActions form {
+  display: contents;
 }
 
 .reviewActions button {
@@ -371,6 +377,16 @@
 
 .reviewActions button:hover {
   background: rgba(63, 185, 80, 0.16);
+}
+
+.reviewActions .copyButton {
+  border-color: rgba(121, 192, 255, 0.3);
+  background: rgba(88, 166, 255, 0.08);
+  color: var(--cyan);
+}
+
+.reviewActions .copyButton:hover {
+  background: rgba(88, 166, 255, 0.14);
 }
 
 .threadPanel {
