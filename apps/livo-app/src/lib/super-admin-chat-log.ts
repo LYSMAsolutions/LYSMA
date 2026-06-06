@@ -1,10 +1,16 @@
 type ChatLogInput = {
   source: string
   conversationId?: string | null
+  visitorId?: string | null
+  sessionId?: string | null
+  questionSignature?: string | null
   userName?: string | null
   userEmail?: string | null
   userPrompt: string
   assistantResponse?: string | null
+  quality?: 'UNKNOWN' | 'GOOD' | 'BAD'
+  qualityNotes?: string | null
+  problemType?: 'DUPLICATE' | 'USER_REPORTED' | 'MISUNDERSTANDING' | 'LOST_CONTEXT' | 'USER_NEGATIVE_FEEDBACK' | 'FALLBACK' | 'OTHER'
   metadata?: Record<string, unknown>
 }
 
@@ -27,10 +33,16 @@ export async function forwardChatLog(input: ChatLogInput) {
       body: JSON.stringify({
         source: input.source,
         conversationId: input.conversationId,
+        visitorId: input.visitorId,
+        sessionId: input.sessionId,
+        questionSignature: input.questionSignature,
         userName: input.userName,
         userEmail: input.userEmail,
         userPrompt: input.userPrompt,
         assistantResponse: input.assistantResponse,
+        quality: input.quality,
+        qualityNotes: input.qualityNotes,
+        problemType: input.problemType,
         metadata: input.metadata,
       }),
       cache: 'no-store',

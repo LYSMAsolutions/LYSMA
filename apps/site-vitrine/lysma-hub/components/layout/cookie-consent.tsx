@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-const COOKIE_CONSENT_KEY = "lysma:cookie-consent";
+const COOKIE_CONSENT_KEY = "lysma:cookie-consent:v3";
 
 export function CookieConsent() {
   const [visible, setVisible] = useState(false);
@@ -31,8 +31,7 @@ export function CookieConsent() {
       <div>
         <strong>Gestion des cookies</strong>
         <p>
-          Nous utilisons uniquement les cookies nécessaires au fonctionnement de LYSMA Hub. Les
-          mesures d’audience ou services externes seront activés seulement après votre accord.
+          Nous utilisons uniquement les cookies nécessaires au fonctionnement de LYSMA Hub. Les échanges avec la chatbox peuvent être enregistrés afin d'améliorer la qualité des réponses. Un identifiant anonyme peut vous signaler qu'une réponse a été améliorée, sans usage publicitaire.
         </p>
       </div>
       <div className="lysma-cookie-actions">

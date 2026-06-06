@@ -4,9 +4,14 @@ export type ChatReviewLog = {
   id: string
   source: string
   conversationId: string | null
+  visitorId?: string | null
+  sessionId?: string | null
+  questionSignature?: string | null
   userPrompt: string
   assistantResponse: string | null
   qualityNotes: string | null
+  problemType?: string
+  reviewStatus?: string
   metadata: Prisma.JsonValue | null
   createdAt: Date
 }
@@ -63,6 +68,10 @@ export function buildCodexContext(
     `Conversation : ${log.conversationId ?? 'inconnue'}`,
     `Log BAD : ${log.id}`,
     duplicateOf ? `Doublon de : ${duplicateOf}` : 'Doublon de : non detecte',
+    log.problemType ? `Type de probleme : ${log.problemType}` : null,
+    log.reviewStatus ? `Statut : ${log.reviewStatus}` : null,
+    log.visitorId ? `VisitorId anonyme : ${log.visitorId}` : null,
+    log.questionSignature ? `Signature question : ${log.questionSignature}` : null,
     originalIndex >= 0 ? `Reponse originale : #${originalIndex + 1}` : null,
     currentIndex >= 0 ? `Message a corriger : #${currentIndex + 1}` : null,
     log.qualityNotes ? `Note super-admin : ${log.qualityNotes}` : null,

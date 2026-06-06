@@ -54,7 +54,7 @@ export default function CookiesPage() {
         <p>
           LIVO-APP utilise des cookies nécessaires pour créer un compte, sécuriser la session,
           rester connecté et protéger l'accès à votre espace garage. Aucun cookie publicitaire
-          n'est utilisé et les données ne sont pas vendues.
+          n'est utilisé et les données ne sont pas vendues. Les échanges avec la chatbox peuvent être enregistrés afin d'améliorer la qualité des réponses.
         </p>
 
         <div className={styles.status} data-state={consent === 'accepted' ? 'accepted' : 'blocked'}>
@@ -71,18 +71,16 @@ export default function CookiesPage() {
             </p>
           </article>
           <article>
-            <h2>Espace connecté V2</h2>
+            <h2>Espace connecté V3</h2>
             <p>
-              Le cookie <code>livo_connected_data_notice_v2</code> sert uniquement à mémoriser
+              Le cookie <code>livo_connected_data_notice_v3</code> sert uniquement à mémoriser
               que l'information sur les données support et la chatbox a été affichée.
             </p>
           </article>
           <article>
             <h2>Chatbox</h2>
             <p>
-              Un identifiant temporaire de conversation peut être conservé dans le navigateur
-              pendant la session. Les échanges peuvent être enregistrés côté serveur pour le
-              support et l'amélioration de l'expérience.
+              Les échanges avec la chatbox peuvent être enregistrés afin d'améliorer la qualité des réponses. Un identifiant anonyme peut être utilisé pour vous signaler, lors d'une prochaine visite, qu'une réponse à votre question a été améliorée. Cet identifiant ne permet pas de vous identifier personnellement et n'est pas utilisé à des fins publicitaires. Vous pouvez supprimer cet identifiant depuis la chatbox avec l'action "Ne pas conserver ma conversation".
             </p>
           </article>
           <article>

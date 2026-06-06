@@ -30,6 +30,16 @@ export default function PrivacyCookiesPage() {
         </article>
 
         <article className="lysma-ui-card">
+          <h2>Chatbox V3</h2>
+          <p>
+            Les échanges avec la chatbox peuvent être enregistrés afin d’améliorer la qualité des réponses. Un identifiant anonyme peut être utilisé pour vous signaler, lors d’une prochaine visite, qu’une réponse à votre question a été améliorée. Cet identifiant ne permet pas de vous identifier personnellement et n’est pas utilisé à des fins publicitaires.
+          </p>
+          <p>
+            Depuis la chatbox, vous pouvez choisir de ne pas conserver votre conversation. Cela supprime l’identifiant anonyme local et désactive les notifications de réponse améliorée pour ce navigateur.
+          </p>
+        </article>
+
+        <article className="lysma-ui-card">
           <h2>Cookies optionnels</h2>
           <p>
             Les outils d’audience, pixels publicitaires ou services externes de suivi ne doivent

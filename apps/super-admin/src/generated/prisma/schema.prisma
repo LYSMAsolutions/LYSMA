@@ -74,23 +74,54 @@ model Message {
 }
 
 model ChatLog {
-  id                String      @id @default(cuid())
+  id                String           @id @default(cuid())
   source            String
   conversationId    String?
+  visitorId         String?
+  sessionId         String?
+  questionSignature String?
   userName          String?
   userEmail         String?
   userPrompt        String
   assistantResponse String?
-  quality           ChatQuality @default(UNKNOWN)
+  quality           ChatQuality      @default(UNKNOWN)
   qualityNotes      String?
+  problemType       ChatProblemType  @default(OTHER)
+  reviewStatus      ChatReviewStatus @default(UNTREATED)
   metadata          Json?
-  createdAt         DateTime    @default(now())
-  updatedAt         DateTime    @updatedAt
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
 
   @@index([source])
   @@index([conversationId])
+  @@index([source, visitorId])
+  @@index([source, reviewStatus])
+  @@index([problemType])
+  @@index([questionSignature])
   @@index([createdAt])
   @@map("chat_logs")
+}
+
+model ChatboxUpdateNotification {
+  id                String           @id @default(cuid())
+  source            String
+  visitorId         String?
+  conversationId    String?
+  questionSignature String?
+  originalLogId     String?
+  userPrompt        String
+  improvedResponse  String
+  status            ChatUpdateStatus @default(ANSWER_UPDATED)
+  seen              Boolean          @default(false)
+  seenAt            DateTime?
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+
+  @@index([source, visitorId, seen])
+  @@index([conversationId])
+  @@index([questionSignature])
+  @@index([createdAt])
+  @@map("chatbox_update_notifications")
 }
 
 model AuditLog {
@@ -294,6 +325,25 @@ enum ChatQuality {
   UNKNOWN
   GOOD
   BAD
+}
+
+enum ChatProblemType {
+  DUPLICATE
+  USER_REPORTED
+  MISUNDERSTANDING
+  LOST_CONTEXT
+  USER_NEGATIVE_FEEDBACK
+  FALLBACK
+  OTHER
+}
+
+enum ChatReviewStatus {
+  UNTREATED
+  TREATED
+}
+
+enum ChatUpdateStatus {
+  ANSWER_UPDATED
 }
 
 enum FinanceTool {

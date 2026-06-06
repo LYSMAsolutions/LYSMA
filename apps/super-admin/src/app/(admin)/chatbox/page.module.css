@@ -355,7 +355,9 @@
 
 .good,
 .bad,
-.unknown {
+.unknown,
+.problemType,
+.reviewStatus {
   display: inline-flex;
   border-radius: var(--radius-sm);
   padding: 2px 7px;
@@ -376,6 +378,16 @@
 .unknown {
   color: var(--yellow);
   background: rgba(210, 153, 34, 0.1);
+}
+
+.problemType {
+  color: var(--cyan);
+  background: rgba(88, 166, 255, 0.08);
+}
+
+.reviewStatus {
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .identity {
@@ -444,7 +456,8 @@
 
 .reviewActions {
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-start;
+  align-items: flex-start;
   gap: 8px;
   flex-wrap: wrap;
   padding: 10px 14px;
@@ -453,7 +466,24 @@
 }
 
 .reviewActions form {
-  display: contents;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.reviewActions textarea {
+  width: min(520px, 100%);
+  min-height: 72px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 9px 10px;
+  background: rgba(0, 0, 0, 0.22);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  line-height: 1.45;
+  resize: vertical;
 }
 
 .reviewActions button {

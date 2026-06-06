@@ -176,13 +176,34 @@ exports.Prisma.ChatLogScalarFieldEnum = {
   id: 'id',
   source: 'source',
   conversationId: 'conversationId',
+  visitorId: 'visitorId',
+  sessionId: 'sessionId',
+  questionSignature: 'questionSignature',
   userName: 'userName',
   userEmail: 'userEmail',
   userPrompt: 'userPrompt',
   assistantResponse: 'assistantResponse',
   quality: 'quality',
   qualityNotes: 'qualityNotes',
+  problemType: 'problemType',
+  reviewStatus: 'reviewStatus',
   metadata: 'metadata',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ChatboxUpdateNotificationScalarFieldEnum = {
+  id: 'id',
+  source: 'source',
+  visitorId: 'visitorId',
+  conversationId: 'conversationId',
+  questionSignature: 'questionSignature',
+  originalLogId: 'originalLogId',
+  userPrompt: 'userPrompt',
+  improvedResponse: 'improvedResponse',
+  status: 'status',
+  seen: 'seen',
+  seenAt: 'seenAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -382,6 +403,25 @@ exports.ChatQuality = exports.$Enums.ChatQuality = {
   BAD: 'BAD'
 };
 
+exports.ChatProblemType = exports.$Enums.ChatProblemType = {
+  DUPLICATE: 'DUPLICATE',
+  USER_REPORTED: 'USER_REPORTED',
+  MISUNDERSTANDING: 'MISUNDERSTANDING',
+  LOST_CONTEXT: 'LOST_CONTEXT',
+  USER_NEGATIVE_FEEDBACK: 'USER_NEGATIVE_FEEDBACK',
+  FALLBACK: 'FALLBACK',
+  OTHER: 'OTHER'
+};
+
+exports.ChatReviewStatus = exports.$Enums.ChatReviewStatus = {
+  UNTREATED: 'UNTREATED',
+  TREATED: 'TREATED'
+};
+
+exports.ChatUpdateStatus = exports.$Enums.ChatUpdateStatus = {
+  ANSWER_UPDATED: 'ANSWER_UPDATED'
+};
+
 exports.FinanceVatStatus = exports.$Enums.FinanceVatStatus = {
   FRANCHISE: 'FRANCHISE',
   ASSUJETTI: 'ASSUJETTI'
@@ -477,6 +517,7 @@ exports.Prisma.ModelName = {
   Acces: 'Acces',
   Message: 'Message',
   ChatLog: 'ChatLog',
+  ChatboxUpdateNotification: 'ChatboxUpdateNotification',
   AuditLog: 'AuditLog',
   ErrorReport: 'ErrorReport',
   FinanceSettings: 'FinanceSettings',

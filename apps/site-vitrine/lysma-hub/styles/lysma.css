@@ -758,6 +758,7 @@ button, input, textarea { font: inherit; }
 }
 
 .lysma-chatbox-bubble {
+  position: relative;
   width: 54px;
   height: 54px;
   display: grid;
@@ -781,6 +782,17 @@ button, input, textarea { font: inherit; }
 .lysma-chatbox-bubble svg {
   width: 23px;
   height: 23px;
+}
+
+.lysma-chatbox-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 11px;
+  height: 11px;
+  border: 2px solid #06182d;
+  border-radius: 999px;
+  background: #ff7a2a;
 }
 
 .lysma-chatbox-panel {
@@ -846,6 +858,40 @@ button, input, textarea { font: inherit; }
   padding: 14px;
 }
 
+.lysma-chatbox-updates {
+  display: grid;
+  gap: 8px;
+  margin: 12px 14px 0;
+  padding: 12px;
+  border: 1px solid rgba(255, 122, 42, .24);
+  border-radius: 14px;
+  background: rgba(255, 122, 42, .1);
+}
+
+.lysma-chatbox-updates strong,
+.lysma-chatbox-updates span {
+  color: #f8fafc;
+  font-size: 12px;
+}
+
+.lysma-chatbox-updates span {
+  color: rgba(248, 250, 252, .58);
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.lysma-chatbox-updates p {
+  margin: 0 0 6px;
+  color: rgba(248, 250, 252, .78);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.lysma-chatbox-message-row {
+  display: grid;
+  gap: 5px;
+}
+
 .lysma-chatbox-message {
   width: fit-content;
   max-width: 88%;
@@ -866,6 +912,45 @@ button, input, textarea { font: inherit; }
   background: #f8fafc;
   color: #06182d;
   font-weight: 800;
+}
+
+.lysma-chatbox-report {
+  width: fit-content;
+  min-height: 28px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 0;
+  background: transparent;
+  color: rgba(248, 250, 252, .56);
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.lysma-chatbox-report svg {
+  width: 13px;
+  height: 13px;
+}
+
+.lysma-chatbox-report:hover {
+  color: #ffb27a;
+}
+
+.lysma-chatbox-feedback,
+.lysma-chatbox-notice {
+  margin: 0 14px 12px;
+  color: rgba(248, 250, 252, .64);
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.lysma-chatbox-feedback {
+  padding: 9px 10px;
+  border: 1px solid rgba(119, 183, 255, .2);
+  border-radius: 12px;
+  background: rgba(119, 183, 255, .08);
+  color: rgba(248, 250, 252, .8);
 }
 
 .lysma-chatbox-pre-messages {
@@ -931,10 +1016,29 @@ button, input, textarea { font: inherit; }
 .lysma-chatbox-mail {
   display: flex;
   justify-content: center;
-  padding: 0 14px 14px;
   color: #77b7ff;
   font-size: 13px;
   font-weight: 950;
+}
+
+.lysma-chatbox-footer-actions {
+  display: grid;
+  gap: 8px;
+  padding: 0 14px 14px;
+}
+
+.lysma-chatbox-footer-actions button {
+  border: 0;
+  background: transparent;
+  color: rgba(248, 250, 252, .54);
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.lysma-chatbox-footer-actions button:disabled {
+  cursor: default;
+  opacity: .72;
 }
 
 .lysma-presentation-hero,

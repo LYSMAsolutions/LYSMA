@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { ShieldCheck, X } from '@phosphor-icons/react'
 import styles from './AppShell.module.css'
 
-const NOTICE_COOKIE = 'livo_connected_data_notice_v2'
+const NOTICE_COOKIE = 'livo_connected_data_notice_v3'
 const ONE_YEAR = 60 * 60 * 24 * 365
 
 function getNoticeCookie() {
@@ -39,11 +39,9 @@ export function ConnectedDataNotice() {
         <ShieldCheck size={20} weight="duotone" aria-hidden />
       </div>
       <div className={styles.privacyNoticeText}>
-        <strong>Information confidentialité V2</strong>
+        <strong>Information confidentialité V3</strong>
         <p>
-          Dans l'espace connecté, LIVO conserve les identifiants techniques nécessaires au support
-          et peut enregistrer les échanges avec l'assistant afin d'assurer le suivi, corriger les erreurs
-          et améliorer votre expérience. Ces données ne sont pas vendues et ne servent pas à la publicité.
+          Les échanges avec la chatbox peuvent être enregistrés afin d'améliorer la qualité des réponses. Un identifiant anonyme peut être utilisé pour vous signaler, lors d'une prochaine visite, qu'une réponse à votre question a été améliorée. Cet identifiant ne permet pas de vous identifier personnellement et n'est pas utilisé à des fins publicitaires.
         </p>
         <div>
           <Link href="/politique-confidentialite">Confidentialité</Link>

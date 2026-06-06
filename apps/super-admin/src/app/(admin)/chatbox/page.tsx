@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
-import { Prisma, type ChatQuality } from '@/generated/prisma'
+import { Prisma, type ChatProblemType, type ChatQuality, type ChatReviewStatus } from '@/generated/prisma'
 import { writeAuditLog } from '@/lib/audit'
 import { buildChatboxInsights, getChatboxAnalyticsTags, type ChatboxInsights } from '@/lib/chatbox-analytics'
 import { buildCodexContext, conversationKey, formatChatLogDate, getDuplicateOf } from '@/lib/chatbox-review'
@@ -12,10 +12,22 @@ import styles from './page.module.css'
 export const dynamic = 'force-dynamic'
 
 const QUALITIES: ChatQuality[] = ['UNKNOWN', 'GOOD', 'BAD']
+const PROBLEM_TYPES: ChatProblemType[] = [
+  'DUPLICATE',
+  'USER_REPORTED',
+  'MISUNDERSTANDING',
+  'LOST_CONTEXT',
+  'USER_NEGATIVE_FEEDBACK',
+  'FALLBACK',
+  'OTHER',
+]
+const REVIEW_STATUSES: ChatReviewStatus[] = ['UNTREATED', 'TREATED']
 
 type Search = {
   source?: string
   quality?: string
+  problemType?: string
+  reviewStatus?: string
   q?: string
 }
 
@@ -25,6 +37,8 @@ type ChatboxData = {
   conversationLogs: Awaited<ReturnType<typeof getConversationLogs>>
   sourceCounts: Array<{ source: string; _count: { source: number } }>
   qualityCounts: Array<{ quality: ChatQuality; _count: { quality: number } }>
+  problemTypeCounts: Array<{ problemType: ChatProblemType; _count: { problemType: number } }>
+  reviewStatusCounts: Array<{ reviewStatus: ChatReviewStatus; _count: { reviewStatus: number } }>
   total: number
 }
 
@@ -32,13 +46,25 @@ function isQuality(value?: string): value is ChatQuality {
   return Boolean(value && QUALITIES.includes(value as ChatQuality))
 }
 
+function isProblemType(value?: string): value is ChatProblemType {
+  return Boolean(value && PROBLEM_TYPES.includes(value as ChatProblemType))
+}
+
+function isReviewStatus(value?: string): value is ChatReviewStatus {
+  return Boolean(value && REVIEW_STATUSES.includes(value as ChatReviewStatus))
+}
+
 function buildQuery(params: Search) {
   const source = params.source?.trim() || undefined
   const quality = isQuality(params.quality) ? params.quality : undefined
+  const problemType = isProblemType(params.problemType) ? params.problemType : undefined
+  const reviewStatus = isReviewStatus(params.reviewStatus) ? params.reviewStatus : undefined
   const q = params.q?.trim() || undefined
   const where: Prisma.ChatLogWhereInput = {
     source,
     quality,
+    problemType,
+    reviewStatus,
     OR: q
       ? [
           { userPrompt: { contains: q, mode: 'insensitive' } },
@@ -46,11 +72,13 @@ function buildQuery(params: Search) {
           { userName: { contains: q, mode: 'insensitive' } },
           { userEmail: { contains: q, mode: 'insensitive' } },
           { conversationId: { contains: q, mode: 'insensitive' } },
+          { visitorId: { contains: q, mode: 'insensitive' } },
+          { questionSignature: { contains: q, mode: 'insensitive' } },
         ]
       : undefined,
   }
 
-  return { where, source, quality, q }
+  return { where, source, quality, problemType, reviewStatus, q }
 }
 
 async function getLogs(where: Prisma.ChatLogWhereInput) {
@@ -101,7 +129,15 @@ async function getConversationLogs(logs: Awaited<ReturnType<typeof getLogs>>) {
 
 async function loadData(where: Prisma.ChatLogWhereInput): Promise<{ data: ChatboxData | null; error: string | null }> {
   try {
-    const [logs, analyticsLogs, sourceCounts, qualityCounts, total] = await Promise.all([
+    const [
+      logs,
+      analyticsLogs,
+      sourceCounts,
+      qualityCounts,
+      problemTypeCounts,
+      reviewStatusCounts,
+      total,
+    ] = await Promise.all([
       getLogs(where),
       getAnalyticsLogs(where),
       prisma.chatLog.groupBy({
@@ -113,11 +149,31 @@ async function loadData(where: Prisma.ChatLogWhereInput): Promise<{ data: Chatbo
         by: ['quality'],
         _count: { quality: true },
       }),
+      prisma.chatLog.groupBy({
+        by: ['problemType'],
+        _count: { problemType: true },
+      }),
+      prisma.chatLog.groupBy({
+        by: ['reviewStatus'],
+        _count: { reviewStatus: true },
+      }),
       prisma.chatLog.count(),
     ])
     const conversationLogs = await getConversationLogs(logs)
 
-    return { data: { logs, analyticsLogs, conversationLogs, sourceCounts, qualityCounts, total }, error: null }
+    return {
+      data: {
+        logs,
+        analyticsLogs,
+        conversationLogs,
+        sourceCounts,
+        qualityCounts,
+        problemTypeCounts,
+        reviewStatusCounts,
+        total,
+      },
+      error: null,
+    }
   } catch (error) {
     return {
       data: null,
@@ -138,6 +194,8 @@ export default async function ChatboxPage({
   const logs = data?.logs ?? []
   const sourceCount = data?.sourceCounts.length ?? 0
   const qualityMap = new Map(data?.qualityCounts.map((item) => [item.quality, item._count.quality]) ?? [])
+  const problemTypeMap = new Map(data?.problemTypeCounts.map((item) => [item.problemType, item._count.problemType]) ?? [])
+  const reviewStatusMap = new Map(data?.reviewStatusCounts.map((item) => [item.reviewStatus, item._count.reviewStatus]) ?? [])
   const insights = buildChatboxInsights(data?.analyticsLogs ?? [])
   const conversationMap = buildConversationMap(data?.conversationLogs ?? [])
   const currentHref = filterHref(params)
@@ -159,7 +217,7 @@ export default async function ChatboxPage({
         <div className={styles.statGrid}>
           <Stat label="logs_total" value={data?.total ?? 0} />
           <Stat label="sources" value={sourceCount} />
-          <Stat label="a_revoir" value={(qualityMap.get('UNKNOWN') ?? 0) + (qualityMap.get('BAD') ?? 0)} tone="yellow" />
+          <Stat label="a_traiter" value={reviewStatusMap.get('UNTREATED') ?? 0} tone="yellow" />
         </div>
       </section>
 
@@ -194,9 +252,39 @@ export default async function ChatboxPage({
             </Link>
           ))}
         </div>
+        <div className={styles.filterGroup}>
+          <span>type</span>
+          <Link className={!query.problemType ? styles.activeFilter : styles.filterLink} href={filterHref({ ...params, problemType: undefined })}>tous</Link>
+          {PROBLEM_TYPES.map((problemType) => (
+            <Link
+              key={problemType}
+              className={query.problemType === problemType ? styles.activeFilter : styles.filterLink}
+              href={filterHref({ ...params, problemType })}
+            >
+              {problemType.toLowerCase()}
+              <em>{problemTypeMap.get(problemType) ?? 0}</em>
+            </Link>
+          ))}
+        </div>
+        <div className={styles.filterGroup}>
+          <span>statut</span>
+          <Link className={!query.reviewStatus ? styles.activeFilter : styles.filterLink} href={filterHref({ ...params, reviewStatus: undefined })}>tous</Link>
+          {REVIEW_STATUSES.map((reviewStatus) => (
+            <Link
+              key={reviewStatus}
+              className={query.reviewStatus === reviewStatus ? styles.activeFilter : styles.filterLink}
+              href={filterHref({ ...params, reviewStatus })}
+            >
+              {reviewStatus === 'UNTREATED' ? 'non traite' : 'traite'}
+              <em>{reviewStatusMap.get(reviewStatus) ?? 0}</em>
+            </Link>
+          ))}
+        </div>
         <form className={styles.searchForm} action="/chatbox">
           {query.source && <input type="hidden" name="source" value={query.source} />}
           {query.quality && <input type="hidden" name="quality" value={query.quality} />}
+          {query.problemType && <input type="hidden" name="problemType" value={query.problemType} />}
+          {query.reviewStatus && <input type="hidden" name="reviewStatus" value={query.reviewStatus} />}
           <input name="q" defaultValue={query.q ?? ''} placeholder="chercher question, reponse, email, conversation..." />
           <button type="submit">chercher</button>
         </form>
@@ -242,13 +330,29 @@ export default async function ChatboxPage({
                     </div>
                     <div className={styles.chatMeta}>
                       <span className={qualityClass(log.quality)}>{log.quality.toLowerCase()}</span>
-                    <time>{formatChatLogDate(log.createdAt)}</time>
+                      <span className={styles.problemType}>{log.problemType.toLowerCase()}</span>
+                      <span className={styles.reviewStatus}>
+                        {log.reviewStatus === 'UNTREATED' ? 'non traite' : 'traite'}
+                      </span>
+                      <time>{formatChatLogDate(log.createdAt)}</time>
                     </div>
                   </header>
 
                   <div className={styles.identity}>
                     <span>{log.userName || 'utilisateur anonyme'}</span>
                     <span>{log.userEmail || 'email absent'}</span>
+                    {log.visitorId && (
+                      <span>
+                        <b>visitor</b>
+                        {log.visitorId}
+                      </span>
+                    )}
+                    {log.questionSignature && (
+                      <span>
+                        <b>signature</b>
+                        {log.questionSignature}
+                      </span>
+                    )}
                     {supportMeta.map((item) => (
                       <span key={item.label}>
                         <b>{item.label}</b>
@@ -274,7 +378,16 @@ export default async function ChatboxPage({
                       <form action={markChatLogImproved}>
                         <input type="hidden" name="id" value={log.id} />
                         <input type="hidden" name="returnTo" value={currentHref} />
-                        <button type="submit">valider l'amelioration</button>
+                        <textarea
+                          name="improvedResponse"
+                          placeholder="Nouvelle reponse a afficher a l'utilisateur lors de sa prochaine visite."
+                        />
+                        <button type="submit">valider et notifier</button>
+                      </form>
+                      <form action={markChatLogTreated}>
+                        <input type="hidden" name="id" value={log.id} />
+                        <input type="hidden" name="returnTo" value={currentHref} />
+                        <button type="submit">marquer traite</button>
                       </form>
                     </div>
                   )}
@@ -342,6 +455,7 @@ async function markChatLogImproved(formData: FormData) {
 
   const id = String(formData.get('id') ?? '').trim()
   const returnTo = safeReturnTo(String(formData.get('returnTo') ?? '/chatbox'))
+  const improvedResponse = cleanTextarea(String(formData.get('improvedResponse') ?? ''))
   if (!id) redirect(returnTo)
 
   const current = await prisma.chatLog.findUnique({
@@ -358,7 +472,60 @@ async function markChatLogImproved(formData: FormData) {
     data: {
       quality: 'GOOD',
       qualityNotes: appendQualityNote(current.qualityNotes),
+      reviewStatus: 'TREATED',
       metadata: markImprovedMetadata(current.metadata),
+    },
+  })
+
+  if (improvedResponse && current.visitorId) {
+    await prisma.chatboxUpdateNotification.create({
+      data: {
+        source: current.source,
+        visitorId: current.visitorId,
+        conversationId: current.conversationId,
+        questionSignature: current.questionSignature,
+        originalLogId: current.id,
+        userPrompt: current.userPrompt,
+        improvedResponse,
+      },
+    })
+  }
+
+  await writeAuditLog({
+    outil: current.source,
+    cibleType: 'chat_log',
+    cibleId: current.id,
+    action: 'chatbox_log_improvement_validated',
+    resume: current.userPrompt.slice(0, 180),
+    avant: current,
+    apres: updated,
+  })
+
+  revalidatePath('/chatbox')
+  redirect(returnTo)
+}
+
+async function markChatLogTreated(formData: FormData) {
+  'use server'
+
+  const id = String(formData.get('id') ?? '').trim()
+  const returnTo = safeReturnTo(String(formData.get('returnTo') ?? '/chatbox'))
+  if (!id) redirect(returnTo)
+
+  const current = await prisma.chatLog.findUnique({
+    where: { id },
+  })
+
+  if (!current) {
+    revalidatePath('/chatbox')
+    redirect(returnTo)
+  }
+
+  const updated = await prisma.chatLog.update({
+    where: { id },
+    data: {
+      reviewStatus: 'TREATED',
+      qualityNotes: appendTreatedNote(current.qualityNotes),
     },
   })
 
@@ -366,7 +533,7 @@ async function markChatLogImproved(formData: FormData) {
     outil: current.source,
     cibleType: 'chat_log',
     cibleId: current.id,
-    action: 'chatbox_log_improvement_validated',
+    action: 'chatbox_log_marked_treated',
     resume: current.userPrompt.slice(0, 180),
     avant: current,
     apres: updated,
@@ -389,6 +556,8 @@ function filterHref(params: Search) {
   const search = new URLSearchParams()
   if (params.source) search.set('source', params.source)
   if (params.quality) search.set('quality', params.quality)
+  if (params.problemType) search.set('problemType', params.problemType)
+  if (params.reviewStatus) search.set('reviewStatus', params.reviewStatus)
   if (params.q) search.set('q', params.q)
   const suffix = search.toString()
   return suffix ? `/chatbox?${suffix}` : '/chatbox'
@@ -495,6 +664,20 @@ function buildConversationMap(logs: Awaited<ReturnType<typeof getConversationLog
 function appendQualityNote(value: string | null) {
   const note = `Amelioration validee le ${new Date().toISOString()}.`
   return [value, note].filter(Boolean).join('\n')
+}
+
+function appendTreatedNote(value: string | null) {
+  const note = `Marque traite le ${new Date().toISOString()}.`
+  return [value, note].filter(Boolean).join('\n')
+}
+
+function cleanTextarea(value: string) {
+  return value
+    .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, '')
+    .replace(/[<>]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, 16000)
 }
 
 function markImprovedMetadata(value: Prisma.JsonValue | null) {

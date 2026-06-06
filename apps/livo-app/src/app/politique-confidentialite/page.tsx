@@ -35,7 +35,7 @@ export default function PolitiqueConfidentialitePage() {
             <li>Données atelier et RH : compagnons, horaires de pointage, pauses, absences, fiches de travail.</li>
             <li>Données véhicules et clients : immatriculation, véhicule, client, interventions à effectuer.</li>
             <li>Identifiants techniques nécessaires au support : userId, garageId, compagnonId, ficheId, OR externe et IDs de pointage.</li>
-            <li>Chatbox : question posée, réponse affichée, identifiant de conversation, utilisateur et garage lorsque la personne est connectée.</li>
+            <li>Chatbox : question posée, réponse affichée, identifiant anonyme de visiteur, identifiant de session, identifiant de conversation, utilisateur et garage lorsque la personne est connectée.</li>
           </ul>
         </section>
 
@@ -61,13 +61,23 @@ export default function PolitiqueConfidentialitePage() {
             <li className={styles.text}><code className={styles.code}>atelier-garage-id</code> - accès espace atelier.</li>
             <li className={styles.text}><code className={styles.code}>atelier-compagnon-id</code> - session compagnon atelier.</li>
             <li className={styles.text}><code className={styles.code}>livo_trusted_device</code> - appareil reconnu après double authentification.</li>
-            <li className={styles.text}><code className={styles.code}>livo_connected_data_notice_v2</code> - mémorisation de l'information V2 dans l'espace connecté.</li>
+            <li className={styles.text}><code className={styles.code}>livo_connected_data_notice_v3</code> - mémorisation de l'information V3 dans l'espace connecté.</li>
           </ul>
           <p className={styles.text}>Ces cookies ne sont pas utilisés à des fins publicitaires ou analytiques.</p>
         </section>
 
         <section className={styles.section}>
-          <h2 className={styles.h2}>5. Conservation des données</h2>
+          <h2 className={styles.h2}>5. Chatbox V3</h2>
+          <p className={styles.text}>
+            Les échanges avec la chatbox peuvent être enregistrés afin d'améliorer la qualité des réponses. Un identifiant anonyme peut être utilisé pour vous signaler, lors d'une prochaine visite, qu'une réponse à votre question a été améliorée. Cet identifiant ne permet pas de vous identifier personnellement et n'est pas utilisé à des fins publicitaires.
+          </p>
+          <p className={styles.text}>
+            Cet identifiant est propre à LIVO et ne sert pas à suivre une personne entre plusieurs clients ou sites. Il peut être supprimé depuis la chatbox avec l'action "Ne pas conserver ma conversation".
+          </p>
+        </section>
+
+        <section className={styles.section}>
+          <h2 className={styles.h2}>6. Conservation des données</h2>
           <p>
             Les données du compte, du garage et de l'atelier sont conservées pendant la durée de l'abonnement actif,
             puis selon les obligations légales, sociales et comptables applicables. Les relevés de pointage peuvent
@@ -80,12 +90,12 @@ export default function PolitiqueConfidentialitePage() {
         </section>
 
         <section className={styles.section}>
-          <h2 className={styles.h2}>6. Hébergement</h2>
+          <h2 className={styles.h2}>7. Hébergement</h2>
           <p>Les données sont hébergées sur Supabase et Vercel, dans des datacenters situés en Europe lorsque les services le permettent.</p>
         </section>
 
         <section className={styles.section}>
-          <h2 className={styles.h2}>7. Vos droits</h2>
+          <h2 className={styles.h2}>8. Vos droits</h2>
           <p>Conformément au RGPD, vous disposez des droits suivants :</p>
           <ul className={styles.list}>
             <li>Droit d'accès à vos données.</li>
@@ -98,7 +108,7 @@ export default function PolitiqueConfidentialitePage() {
         </section>
 
         <section className={styles.section}>
-          <h2 className={styles.h2}>8. Contact</h2>
+          <h2 className={styles.h2}>9. Contact</h2>
           <p>Pour toute question relative à la protection de vos données : <a href="mailto:lysmasolutions@gmail.com" className={styles.link}>lysmasolutions@gmail.com</a></p>
         </section>
       </div>
