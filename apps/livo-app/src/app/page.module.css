@@ -4,8 +4,19 @@
   grid-template-columns: 78px minmax(0, 1fr);
 }
 
+.desktopSidebar {
+  min-width: 0;
+}
+
 .publicPage {
   min-width: 0;
+}
+
+.mobileHeader,
+.mobileBackdrop,
+.mobileDrawer,
+.mobileClose {
+  display: none;
 }
 
 .page {
@@ -1110,101 +1121,199 @@ summary.navItem::-webkit-details-marker {
   color: var(--color-cyan);
 }
 
-@media (max-width: 1180px) {
+@media (max-width: 1024px) {
   .publicShell {
-    grid-template-columns: 1fr;
+    display: block;
   }
 
-  .sidebar {
+  .desktopSidebar {
+    display: none;
+  }
+
+  .mobileHeader {
     position: sticky;
-    width: 100%;
-    height: auto;
-    padding: var(--space-4);
-    border-right: 0;
+    top: 0;
+    z-index: 45;
+    display: grid;
+    grid-template-columns: 42px minmax(0, 1fr) 42px;
+    align-items: center;
+    min-height: 64px;
+    padding: 10px 14px;
     border-bottom: 1px solid var(--color-border-subtle);
-    box-shadow: none;
+    background: rgba(5, 10, 24, 0.92);
+    box-shadow: 0 12px 34px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(20px);
+  }
+
+  .mobileMenuButton,
+  .mobileClose {
+    display: grid;
+    width: 40px;
+    height: 40px;
+    place-items: center;
+    border: 1px solid rgba(64, 192, 255, 0.16);
+    border-radius: 12px;
+    background: rgba(13, 21, 48, 0.82);
+    color: var(--color-text-primary);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    transition:
+      border-color var(--duration-fast) var(--ease-out),
+      background var(--duration-fast) var(--ease-out),
+      color var(--duration-fast) var(--ease-out);
+  }
+
+  .mobileMenuButton:hover,
+  .mobileClose:hover {
+    border-color: rgba(64, 192, 255, 0.34);
+    background: rgba(26, 111, 255, 0.14);
+    color: var(--color-cyan);
+  }
+
+  .mobileHeaderBrand {
+    display: inline-flex;
+    align-items: center;
+    justify-self: center;
+    gap: 9px;
+    color: var(--color-text-primary);
+    font-size: var(--text-sm);
+    font-weight: var(--font-bold);
+    letter-spacing: 0.1em;
+  }
+
+  .mobileHeaderBrand img {
+    width: 30px;
+    height: 30px;
+  }
+
+  .mobileHeaderSpacer {
+    width: 40px;
+    height: 40px;
+  }
+
+  .mobileBackdrop {
+    position: fixed;
+    z-index: 55;
+    inset: 0;
+    display: block;
+    background: rgba(1, 4, 12, 0.68);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    backdrop-filter: blur(2px);
+    transition:
+      opacity 220ms ease-out,
+      visibility 0s linear 220ms;
+  }
+
+  .mobileBackdrop[data-open='true'] {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transition-delay: 0s;
+  }
+
+  .mobileDrawer {
+    position: fixed;
+    z-index: 60;
+    inset: 0 auto 0 0;
+    display: block;
+    width: min(320px, calc(100vw - 44px));
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateX(-100%);
+    transition:
+      transform 240ms ease-out,
+      opacity 180ms ease-out,
+      visibility 0s linear 240ms;
+  }
+
+  .mobileDrawer[data-open='true'] {
+    visibility: visible;
+    pointer-events: auto;
+    opacity: 1;
+    transform: translateX(0);
+    transition-delay: 0s;
+  }
+
+  .mobileSidebar,
+  .mobileSidebar:hover,
+  .mobileSidebar:focus-within {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding: 20px 13px 16px;
+    border-right: 1px solid rgba(64, 192, 255, 0.18);
+    border-bottom: 0;
+    box-shadow: 24px 0 72px rgba(0, 0, 0, 0.48);
     transition: none;
     will-change: auto;
   }
 
-  .sidebar:hover,
-  .sidebar:focus-within {
-    width: 100%;
-    box-shadow: none;
+  .mobileSidebar .mobileClose {
+    position: absolute;
+    top: 21px;
+    right: 15px;
+    z-index: 2;
   }
 
-  .sidebar {
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr) auto;
-    align-items: center;
-    gap: var(--space-4);
+  .mobileSidebar .brand,
+  .mobileSidebar:hover .brand,
+  .mobileSidebar:focus-within .brand {
+    width: 230px;
   }
 
-  .sidebar:hover .nav,
-  .sidebar:focus-within .nav,
-  .nav {
-    display: flex;
-    width: auto;
-    gap: var(--space-2);
-    overflow: visible;
-    padding-bottom: 2px;
+  .mobileSidebar .brandCopy,
+  .mobileSidebar .navHeading,
+  .mobileSidebar .navLabel,
+  .mobileSidebar .navCaret,
+  .mobileSidebar .sidebarButtonLabel,
+  .mobileSidebar .sidebarNote {
+    opacity: 1;
+    pointer-events: auto;
+    transform: none;
     transition: none;
   }
 
-  .sidebar:hover .navItem,
-  .sidebar:focus-within .navItem,
-  .navItem {
-    width: auto;
-    flex: 0 0 auto;
+  .mobileSidebar .nav,
+  .mobileSidebar:hover .nav,
+  .mobileSidebar:focus-within .nav {
+    display: grid;
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .mobileSidebar .navItem,
+  .mobileSidebar:hover .navItem,
+  .mobileSidebar:focus-within .navItem,
+  .mobileSidebar .navGroup,
+  .mobileSidebar:hover .navGroup,
+  .mobileSidebar:focus-within .navGroup {
+    width: 100%;
+  }
+
+  .mobileSidebar .navItem,
+  .mobileSidebar:hover .navItem,
+  .mobileSidebar:focus-within .navItem {
     gap: 11px;
     padding-inline: 12px;
   }
 
-  .sidebar:hover .navGroup,
-  .sidebar:focus-within .navGroup,
-  .navGroup {
-    position: relative;
-    width: auto;
-    flex: 0 0 auto;
-    transition: none;
-  }
-
-  .navCaret {
-    opacity: 1;
-  }
-
-  .subNav {
-    position: absolute;
-    top: calc(100% + 8px);
-    left: 0;
-    z-index: 40;
-    width: 220px;
-    padding: 8px;
-    border: 1px solid var(--color-border-default);
-    border-radius: var(--radius-lg);
-    background: rgba(8, 14, 30, 0.98);
-    box-shadow: var(--shadow-xl);
-    transform: translateY(-5px);
-    transition:
-      max-height 220ms var(--ease-out),
-      opacity 150ms var(--ease-out),
-      transform 220ms var(--ease-out);
-  }
-
-  .sidebar:hover .navGroup[open] .subNav,
-  .sidebar:focus-within .navGroup[open] .subNav,
-  .navGroup[open] .subNav {
-    max-height: 320px;
-    padding: 8px;
+  .mobileSidebar .navGroup[open] .subNav {
+    width: 100%;
+    max-height: 280px;
+    padding-block: 4px;
     opacity: 1;
     pointer-events: auto;
-    transform: translateY(0);
   }
 
-  .sidebarActions {
-    display: flex;
-    width: auto;
-    margin-top: 0;
+  .mobileSidebar .sidebarActions,
+  .mobileSidebar:hover .sidebarActions,
+  .mobileSidebar:focus-within .sidebarActions {
+    display: grid;
+    width: 100%;
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
@@ -1212,36 +1321,12 @@ summary.navItem::-webkit-details-marker {
     transition: none;
   }
 
-  .sidebar:hover .brand,
-  .sidebar:focus-within .brand,
-  .brand {
-    width: auto;
-    margin-bottom: 0;
-    transition: none;
-  }
-
-  .brandCopy,
-  .navLabel,
-  .sidebarButtonLabel {
-    opacity: 1;
-    pointer-events: auto;
-    transform: none;
-    transition: none;
-  }
-
-  .sidebarButton {
-    width: auto;
-    justify-content: center;
-    padding-inline: var(--space-5);
-  }
-
-  .navHeading,
-  .sidebarNote {
-    display: none;
+  .mobileSidebar .sidebarButton {
+    width: 100%;
   }
 
   .content section[id] {
-    scroll-margin-top: 128px;
+    scroll-margin-top: 88px;
   }
 
   .hero {
@@ -1272,39 +1357,6 @@ summary.navItem::-webkit-details-marker {
 }
 
 @media (max-width: 720px) {
-  .sidebar {
-    grid-template-columns: 1fr;
-  }
-
-  .sidebar:hover .nav,
-  .sidebar:focus-within .nav,
-  .nav {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    overflow: visible;
-  }
-
-  .sidebar:hover .navGroup,
-  .sidebar:focus-within .navGroup,
-  .navGroup,
-  .sidebar:hover .navItem,
-  .sidebar:focus-within .navItem,
-  .navItem {
-    width: 100%;
-  }
-
-  .subNav {
-    position: static;
-    width: 100%;
-    margin-top: 4px;
-    transform: none;
-  }
-
-  .sidebarActions {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-  }
-
   .hero,
   .section,
   .highlightSection,
@@ -1340,7 +1392,7 @@ summary.navItem::-webkit-details-marker {
 }
 
 @media (max-width: 460px) {
-  .sidebarActions {
+  .mobileSidebar .sidebarActions {
     grid-template-columns: 1fr;
   }
 
@@ -1369,7 +1421,9 @@ summary.navItem::-webkit-details-marker {
   .navItem::before,
   .navDot,
   .navCaret,
-  .subNav {
+  .subNav,
+  .mobileBackdrop,
+  .mobileDrawer {
     transition: none;
   }
 

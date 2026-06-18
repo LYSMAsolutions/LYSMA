@@ -14,6 +14,7 @@ import {
   SignIn,
   Sparkle,
   SquaresFour,
+  X,
 } from '@phosphor-icons/react'
 import {
   useEffect,
@@ -92,7 +93,17 @@ function hrefParts(href: string) {
   return { path: path || '/', hash: hash ? `#${hash}` : null }
 }
 
-export function PublicSidebar() {
+type PublicSidebarProps = {
+  mobile?: boolean
+  onNavigate?: () => void
+  onRequestClose?: () => void
+}
+
+export function PublicSidebar({
+  mobile = false,
+  onNavigate,
+  onRequestClose,
+}: PublicSidebarProps = {}) {
   const sidebarRef = useRef<HTMLElement>(null)
   const pathname = usePathname()
   const [activeHref, setActiveHref] = useState('#accueil')
@@ -165,12 +176,12 @@ export function PublicSidebar() {
   return (
     <aside
       ref={sidebarRef}
-      className={styles.sidebar}
+      className={`${styles.sidebar} ${mobile ? styles.mobileSidebar : ''}`}
       aria-label="Navigation LIVO"
       onPointerMove={handlePointerMove}
       onPointerLeave={handlePointerLeave}
     >
-      <Link href="/" className={styles.brand} aria-label="Accueil LIVO">
+      <Link href="/" className={styles.brand} aria-label="Accueil LIVO" onClick={onNavigate}>
         <span className={styles.brandMark}>
           <Image src="/logo/livo-app-logo.png" alt="" width={42} height={42} priority />
         </span>
@@ -179,6 +190,18 @@ export function PublicSidebar() {
           <small>Pointage atelier</small>
         </span>
       </Link>
+
+      {mobile && (
+        <button
+          type="button"
+          className={styles.mobileClose}
+          aria-label="Fermer le menu"
+          data-mobile-close
+          onClick={onRequestClose}
+        >
+          <X size={20} weight="bold" aria-hidden="true" />
+        </button>
+      )}
 
       <div className={styles.navHeading}>
         <span>Découvrir LIVO</span>
@@ -191,7 +214,10 @@ export function PublicSidebar() {
           className={styles.navItem}
           title="Accueil"
           aria-current={pathname === '/' && activeHref === '#accueil' ? 'page' : undefined}
-          onClick={() => setActiveHref('#accueil')}
+          onClick={() => {
+            setActiveHref('#accueil')
+            onNavigate?.()
+          }}
         >
           <span className={styles.navIcon} aria-hidden="true">
             <House size={19} weight="duotone" />
@@ -229,7 +255,10 @@ export function PublicSidebar() {
                       href={item.href as Route}
                       className={styles.subNavItem}
                       aria-current={active ? (hash ? 'location' : 'page') : undefined}
-                      onClick={() => hash && setActiveHref(hash)}
+                      onClick={() => {
+                        if (hash) setActiveHref(hash)
+                        onNavigate?.()
+                      }}
                     >
                       <span aria-hidden="true" />
                       {item.label}
@@ -253,7 +282,10 @@ export function PublicSidebar() {
               className={styles.navItem}
               title={item.label}
               aria-current={active ? 'location' : undefined}
-              onClick={() => hash && setActiveHref(hash)}
+              onClick={() => {
+                if (hash) setActiveHref(hash)
+                onNavigate?.()
+              }}
             >
               <span className={styles.navIcon} aria-hidden="true">
                 <Icon size={19} weight="duotone" />
@@ -270,6 +302,7 @@ export function PublicSidebar() {
           href="/connexion"
           className={`${styles.secondaryButton} ${styles.sidebarButton}`}
           title="Connexion"
+          onClick={onNavigate}
         >
           <SignIn
             className={styles.sidebarButtonIcon}
@@ -283,6 +316,7 @@ export function PublicSidebar() {
           href="/inscription"
           className={`${styles.primaryButton} ${styles.sidebarButton}`}
           title="Essai gratuit"
+          onClick={onNavigate}
         >
           <Sparkle
             className={styles.sidebarButtonIcon}
