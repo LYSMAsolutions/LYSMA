@@ -73,30 +73,30 @@ export function RapportsClient({ fichesMois, compagnonStats, fichesRecentes, caT
       <div className={styles.kpisGrid}>
         <KpiCard
           icon={<CurrencyEur weight="fill" />}
-          label="CA ce mois"
+          label="Valeur vendue — mois"
           value={formatEur(moisActuel?.ca ?? 0)}
-          sub={` Gain : ${formatEur(moisActuel?.rentabilite ?? 0)}`}
+          sub={`Écart valorisé : ${formatEur(moisActuel?.rentabilite ?? 0)}`}
           trend={(moisActuel?.rentabilite ?? 0) >= 0 ? 'up' : 'down'}
         />
         <KpiCard
           icon={<TrendUp weight="fill" />}
-          label="CA année facturé"
+          label="Valeur vendue — année"
           value={formatEur(caAnnee)}
-          sub={`Gain : ${formatEur(rentabiliteAnnee)}`}
+          sub={`Écart valorisé : ${formatEur(rentabiliteAnnee)}`}
           trend={rentabiliteAnnee >= 0 ? 'up' : 'down'}
         />
         <KpiCard
           icon={<TrendUp weight="fill" />}
-          label="Gain annuel"
+          label="Écart opérationnel — année"
           value={formatEur(rentabiliteAnnee)}
-          sub="Surplus temps facturé vs réel"
+          sub="Valeur vendue moins temps réel valorisé"
           trend={rentabiliteAnnee >= 0 ? 'up' : 'down'}
         />
         <KpiCard
           icon={<Wrench weight="fill" />}
           label="Fiches ce mois"
           value={String(moisActuel?.nbFiches ?? 0)}
-          sub={`Gain : ${formatEur(moisActuel?.rentabilite ?? 0)}`}
+          sub={`Écart valorisé : ${formatEur(moisActuel?.rentabilite ?? 0)}`}
           trend={(moisActuel?.rentabilite ?? 0) >= 0 ? 'up' : 'down'}
         />
       </div>
@@ -104,7 +104,7 @@ export function RapportsClient({ fichesMois, compagnonStats, fichesRecentes, caT
       {/* ── Graphique CA par mois ─────────────────────────── */}
       <div className={styles.card}>
         <div className={styles.cardHeader}>
-          <h2 className={styles.cardTitle}>Chiffre d'affaires mensuel</h2>
+          <h2 className={styles.cardTitle}>Valeur vendue mensuelle</h2>
           <div className={styles.tabs}>
             <button className={`${styles.tab} ${periode === 'mois' ? styles.tabActive : ''}`} onClick={() => setPeriode('mois')}>6 mois</button>
             <button className={`${styles.tab} ${periode === 'annee' ? styles.tabActive : ''}`} onClick={() => setPeriode('annee')}>Année</button>
@@ -118,7 +118,7 @@ export function RapportsClient({ fichesMois, compagnonStats, fichesRecentes, caT
               <YAxis tick={{ fill: 'var(--color-text-muted)', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={v => `${(v/1000).toFixed(0)}k€`} />
               <Tooltip
                 contentStyle={{ background: 'var(--color-bg-elevated)', border: '1px solid var(--color-border-default)', borderRadius: 8, fontSize: 12 }}
-                formatter={(value: any) => [formatEur(value as number), 'CA']}                cursor={{ fill: 'rgba(26,111,255,0.06)' }}
+                formatter={(value: any) => [formatEur(value as number), 'Valeur vendue']}                cursor={{ fill: 'rgba(26,111,255,0.06)' }}
               />
               <Bar dataKey="ca" radius={[4,4,0,0]}>
                 {fichesMois.slice(periode === 'mois' ? -6 : -12).map((_, i, arr) => (

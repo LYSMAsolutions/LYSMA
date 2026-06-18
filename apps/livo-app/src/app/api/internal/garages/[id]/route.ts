@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { z } from 'zod'
 import { isInternalApiAuthorized } from '@/lib/security/internal-api'
+import bcrypt from 'bcryptjs'
 
 const patchSchema = z.object({
   garage: z.object({
@@ -12,7 +13,7 @@ const patchSchema = z.object({
     telephone: z.string().trim().nullable().optional(),
     email: z.string().trim().email().nullable().optional(),
     siret: z.string().trim().nullable().optional(),
-    passwordAtelier: z.string().trim().nullable().optional(),
+    passwordAtelier: z.string().trim().min(8).nullable().optional(),
   }).optional(),
   owner: z.object({
     nom: z.string().trim().min(1).optional(),
@@ -29,7 +30,7 @@ const patchSchema = z.object({
     prenom: z.string().trim().optional(),
     poste: z.string().trim().nullable().optional(),
     matricule: z.string().trim().nullable().optional(),
-    pin: z.string().trim().nullable().optional(),
+    pin: z.string().trim().regex(/^\d{4}$/).nullable().optional(),
     actif: z.boolean().optional(),
   }).optional(),
   vehicule: z.object({
@@ -227,10 +228,18 @@ export async function PATCH(
   }
 
   await prisma.$transaction(async (tx) => {
+    const garageData = parsed.data.garage ? { ...parsed.data.garage } : {}
+
+    if (parsed.data.garage && 'passwordAtelier' in parsed.data.garage) {
+      garageData.passwordAtelier = parsed.data.garage.passwordAtelier
+        ? await bcrypt.hash(parsed.data.garage.passwordAtelier, 12)
+        : null
+    }
+
     await tx.garage.update({
       where: { id },
       data: {
-        ...parsed.data.garage,
+        ...garageData,
         abonnementActif: parsed.data.abonnementActif,
         actif: parsed.data.actif,
         trialEndsAt: parsed.data.trialEndsAt ? new Date(parsed.data.trialEndsAt) : undefined,
@@ -245,10 +254,17 @@ export async function PATCH(
     }
 
     if (parsed.data.compagnon) {
-      const { id: compagnonId, ...data } = parsed.data.compagnon
+      const { id: compagnonId, pin, ...data } = parsed.data.compagnon
+      const compagnonData = {
+        ...data,
+        ...(pin !== undefined
+          ? { pin: pin ? await bcrypt.hash(pin, 10) : null }
+          : {}),
+      }
+
       await tx.compagnon.updateMany({
         where: { id: compagnonId, garageId: id },
-        data,
+        data: compagnonData,
       })
     }
 

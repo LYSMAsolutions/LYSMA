@@ -42,6 +42,8 @@ type Props = {
   }
 }
 
+const ATELIER_PASSWORD_MIN_LENGTH = 8
+
 export function ParametresClient({ garage, taux: tauxInit, compagnons, security }: Props) {
   const router = useRouter()
 
@@ -111,7 +113,10 @@ export function ParametresClient({ garage, taux: tauxInit, compagnons, security 
 
   async function savePasswordAtelier() {
     setErrorPasswordAtelier('')
-    if (passwordAtelier.length < 4) { setErrorPasswordAtelier('Minimum 4 caractères'); return }
+    if (passwordAtelier.length < ATELIER_PASSWORD_MIN_LENGTH) {
+      setErrorPasswordAtelier(`Minimum ${ATELIER_PASSWORD_MIN_LENGTH} caractères`)
+      return
+    }
     if (passwordAtelier !== confirmPasswordAtelier) { setErrorPasswordAtelier('Les mots de passe ne correspondent pas'); return }
     setSavingPasswordAtelier(true)
     try {
@@ -120,11 +125,15 @@ export function ParametresClient({ garage, taux: tauxInit, compagnons, security 
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ garageId: garage.id, type: 'password-atelier', data: { password: passwordAtelier } }),
       })
+      const data = await res.json().catch(() => null)
+
       if (res.ok) {
         setSavedPasswordAtelier(true)
         setPasswordAtelier('')
         setConfirmPasswordAtelier('')
         setTimeout(() => setSavedPasswordAtelier(false), 2000)
+      } else {
+        setErrorPasswordAtelier(data?.error ?? 'Impossible de définir le mot de passe atelier')
       }
     } finally { setSavingPasswordAtelier(false) }
   }
@@ -366,7 +375,7 @@ export function ParametresClient({ garage, taux: tauxInit, compagnons, security 
                   value={passwordAtelier}
                   onChange={e => setPasswordAtelier(e.target.value)}
                   type={showPasswordAtelier ? 'text' : 'password'}
-                  placeholder="Min. 4 caractères"
+                  placeholder={`Min. ${ATELIER_PASSWORD_MIN_LENGTH} caractères`}
                   iconRight={
                     <button type="button" onClick={() => setShowPasswordAtelier(v => !v)} style={{ cursor: 'pointer', display: 'flex', color: 'var(--color-text-muted)' }}>
                       {showPasswordAtelier ? <EyeSlash size={16} /> : <Eye size={16} />}

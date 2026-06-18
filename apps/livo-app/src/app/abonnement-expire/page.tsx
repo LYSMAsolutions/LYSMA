@@ -1,3 +1,4 @@
+import { LIVO_PRICING } from '@/lib/pricing'
 import styles from './page.module.css'
 
 export const metadata = { title: 'Abonnement expiré — LIVO-APP' }
@@ -20,20 +21,20 @@ export default function AbonnementExpirePage() {
         </div>
         <div className={styles.tarifs}>
           <div className={styles.tarif}>
-            <span className={styles.tarifNom}>Starter</span>
-            <span className={styles.tarifPrix}>49€<span>/mois</span></span>
-            <span className={styles.tarifDesc}>1 garage · 5 compagnons</span>
+            <span className={styles.tarifNom}>Essai</span>
+            <span className={styles.tarifPrix}>0€<span>/{LIVO_PRICING.trialDays} jours</span></span>
+            <span className={styles.tarifDesc}>Découverte complète de LIVO</span>
           </div>
           <div className={`${styles.tarif} ${styles.tarifPopulaire}`}>
-            <span className={styles.tarifBadge}>Populaire</span>
-            <span className={styles.tarifNom}>Pro</span>
-            <span className={styles.tarifPrix}>99€<span>/mois</span></span>
-            <span className={styles.tarifDesc}>1 garage · compagnons illimités</span>
+            <span className={styles.tarifBadge}>Offre active</span>
+            <span className={styles.tarifNom}>{LIVO_PRICING.primaryPlan.name}</span>
+            <span className={styles.tarifPrix}>{LIVO_PRICING.primaryPlan.priceMonthly}€<span>/mois</span></span>
+            <span className={styles.tarifDesc}>{LIVO_PRICING.primaryPlan.included}</span>
           </div>
           <div className={styles.tarif}>
-            <span className={styles.tarifNom}>Entreprise</span>
-            <span className={styles.tarifPrix}>199€<span>/mois</span></span>
-            <span className={styles.tarifDesc}>Multi-garages · tout inclus</span>
+            <span className={styles.tarifNom}>Multi-garages</span>
+            <span className={styles.tarifPrix}>{LIVO_PRICING.enterpriseLabel}</span>
+            <span className={styles.tarifDesc}>Accompagnement adapté au réseau</span>
           </div>
         </div>
         <a href="/connexion" className={styles.link}>← Retour à la connexion</a>

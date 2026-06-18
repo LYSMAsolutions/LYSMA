@@ -3,6 +3,7 @@
 import { FormEvent, useEffect, useRef, useState } from 'react'
 import { ChatCircleText, Flag, PaperPlaneTilt, X } from '@phosphor-icons/react'
 import { getChatboxPageMetadata } from '@/lib/chatbox-page-metadata'
+import { LIVO_PRICING } from '@/lib/pricing'
 import styles from './LivoChatbox.module.css'
 
 type ProblemType =
@@ -60,7 +61,7 @@ function getAnswer(message: string) {
   const text = normalize(message)
 
   if (hasAny(text, ['prix', 'tarif', 'combien', 'cout', 'coût', 'abonnement', 'mensuel', 'mois'])) {
-    return "LIVO est affiché à 89 € par mois, avec 30 jours d'essai gratuit."
+    return `LIVO est affiché à ${LIVO_PRICING.primaryPlan.priceMonthly} € par mois, avec ${LIVO_PRICING.trialDays} jours d'essai gratuit.`
   }
 
   if (hasAny(text, ['telephone', 'smartphone', 'mobile', 'tablette', 'ordinateur', 'pc'])) {

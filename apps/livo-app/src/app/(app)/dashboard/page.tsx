@@ -67,14 +67,14 @@ export default async function DashboardPage() {
       <div className={styles.content}>
         <div className={styles.kpiGrid}>
           <KpiCard
-            label="CA du jour"
+            label="Valeur vendue du jour"
             value={formatEur(data.caJour)}
             sub={`${data.fichesTermineesJour} fiche${data.fichesTermineesJour > 1 ? 's' : ''} clôturée${data.fichesTermineesJour > 1 ? 's' : ''}`}
             color="gold"
             icon={<TrendUp weight="bold" />}
           />
-          <KpiCard label="CA semaine" value={formatEur(data.caSemaine)} sub="Semaine en cours" color="blue" icon={<TrendUp weight="bold" />} />
-          <KpiCard label="CA mois" value={formatEur(data.caMois)} sub={new Date().toLocaleDateString('fr-FR', { month: 'long' })} color="cyan" icon={<TrendUp weight="bold" />} />
+          <KpiCard label="Valeur vendue — semaine" value={formatEur(data.caSemaine)} sub="Semaine en cours" color="blue" icon={<TrendUp weight="bold" />} />
+          <KpiCard label="Valeur vendue — mois" value={formatEur(data.caMois)} sub={new Date().toLocaleDateString('fr-FR', { month: 'long' })} color="cyan" icon={<TrendUp weight="bold" />} />
           <RentabiliteCard value={data.rentabiliteJour} semaine={data.rentabiliteSemaine} mois={data.rentabiliteMois} />
         </div>
 
@@ -166,7 +166,7 @@ export default async function DashboardPage() {
 
         {data.rentabiliteFichesJour.length > 0 && (
           <section className={styles.section}>
-            <h2 className={styles.sectionTitle}>Rentabilité — Fiches du jour</h2>
+            <h2 className={styles.sectionTitle}>Écart opérationnel — Fiches du jour</h2>
             <div className={styles.rentabiliteList}>
               {data.rentabiliteFichesJour.map((f) => (
                 <div key={f.id} className={styles.rentabiliteItem}>
@@ -193,7 +193,7 @@ export default async function DashboardPage() {
           <section className={styles.section}>
             <div className={styles.sectionHeader}>
               <h2 className={styles.sectionTitle}>
-                Rentabilité par compagnon
+                Écart opérationnel par compagnon
                 <span className={styles.sectionSub}>— {new Date().toLocaleDateString('fr-FR', { month: 'long' })}</span>
               </h2>
             </div>
@@ -373,7 +373,7 @@ function RentabiliteCard({ value, semaine, mois }: { value: number; semaine: num
   return (
     <div className={`${styles.kpiCard} ${isGain ? styles.kpi_success : styles.kpi_error}`}>
       <div className={styles.kpiTop}>
-        <span className={styles.kpiLabel}>Rentabilité jour</span>
+        <span className={styles.kpiLabel}>Écart opérationnel — jour</span>
         <span className={styles.kpiIcon}>{isGain ? <TrendUp weight="bold" /> : <TrendDown weight="bold" />}</span>
       </div>
       <span className={styles.kpiValue}>{fmt(value)}</span>

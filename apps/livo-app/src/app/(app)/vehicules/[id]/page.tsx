@@ -188,7 +188,7 @@ export default async function VehiculeFichePage({
                 <span className={styles.statVal} style={{ color: 'var(--color-gold)' }}>
                   {formatEur(caTotal)}
                 </span>
-                <span className={styles.statLabel}>CA total</span>
+                <span className={styles.statLabel}>Montant HT suivi</span>
               </div>
 
               <div className={styles.stat}>
@@ -209,7 +209,7 @@ export default async function VehiculeFichePage({
                   {rentabiliteTotal >= 0 ? '+' : ''}
                   {formatEur(rentabiliteTotal)}
                 </span>
-                <span className={styles.statLabel}>Rentabilité</span>
+                <span className={styles.statLabel}>Écart opérationnel</span>
               </div>
 
               <div className={styles.stat}>

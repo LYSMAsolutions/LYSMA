@@ -5,8 +5,8 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import {
-  CalendarCheck,
   Car,
+  ChartBar,
   ClipboardText,
   Gauge,
   Gear,
@@ -21,7 +21,7 @@ const NAV_ITEMS = [
   { href: '/or-externes', label: 'OR externes', icon: ClipboardText },
   { href: '/compagnons', label: 'Compagnons', icon: Users },
   { href: '/vehicules', label: 'Véhicules', icon: Car },
-  { href: '/rapports', label: 'RH', icon: CalendarCheck },
+  { href: '/rapports', label: 'Rapports', icon: ChartBar },
 ] as const
 
 const BOTTOM_ITEMS = [

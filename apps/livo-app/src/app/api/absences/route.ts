@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { requireSecureSession } from '@/lib/security/secure-session'
+import { verifSolde } from '@/lib/rh'
 import { z } from 'zod'
 
 const createSchema = z.object({
@@ -76,6 +77,14 @@ export async function POST(req: NextRequest) {
 
   const nbJours = countBusinessDays(debut, fin)
 
+  if (compagnon.dateEntree) {
+    const solde = await verifSolde(compagnon.id, compagnon.dateEntree, type, nbJours)
+
+    if (!solde.ok) {
+      return NextResponse.json({ error: solde.message ?? 'Solde de congés insuffisant' }, { status: 400 })
+    }
+  }
+
   const absence = await prisma.absence.create({
     data: {
       compagnonId,
@@ -121,10 +130,30 @@ export async function PATCH(req: NextRequest) {
         },
       },
     },
+    include: {
+      compagnon: {
+        select: {
+          dateEntree: true,
+        },
+      },
+    },
   })
 
   if (!absence) {
     return NextResponse.json({ error: 'Absence introuvable ou non autorisée' }, { status: 404 })
+  }
+
+  if (approuve && !absence.approuve && absence.compagnon.dateEntree) {
+    const solde = await verifSolde(
+      absence.compagnonId,
+      absence.compagnon.dateEntree,
+      absence.type,
+      Number(absence.nbJours ?? 0)
+    )
+
+    if (!solde.ok) {
+      return NextResponse.json({ error: solde.message ?? 'Solde de congés insuffisant' }, { status: 400 })
+    }
   }
 
   const updated = await prisma.absence.update({

@@ -248,25 +248,29 @@ export async function getDashboardData(garageId: string) {
   const rentabiliteParCompagnon = fichesMois.reduce(
     (acc, fiche) => {
       const rentabilite = calcRentabilite(fiche)
-      const compagnonsUniques = [...new Set(fiche.pointagesFiche.map((p) => p.compagnonId))]
+      const repartition = new Map<string, {
+        pointage: (typeof fiche.pointagesFiche)[number]
+        minutes: number
+      }>()
 
-      if (compagnonsUniques.length === 0) {
+      for (const pointage of fiche.pointagesFiche) {
+        const existing = repartition.get(pointage.compagnonId)
+        repartition.set(pointage.compagnonId, {
+          pointage,
+          minutes: (existing?.minutes ?? 0) + (pointage.dureeMinutes ?? 0),
+        })
+      }
+
+      if (repartition.size === 0) {
         return acc
       }
 
-      const deltaParCompagnon = rentabilite.delta / compagnonsUniques.length
-      const tReelParCompagnon = rentabilite.tReel / compagnonsUniques.length
-      const tFactureParCompagnon = rentabilite.tFacture / compagnonsUniques.length
+      const totalMinutes = Array.from(repartition.values()).reduce((sum, item) => sum + item.minutes, 0)
 
-      for (const compagnonId of compagnonsUniques) {
-        const pointageFiche = fiche.pointagesFiche.find((p) => p.compagnonId === compagnonId)
-
-        if (!pointageFiche) {
-          continue
-        }
-
-        const compagnon = pointageFiche.compagnon
+      for (const [compagnonId, item] of repartition) {
+        const compagnon = item.pointage.compagnon
         const nom = `${compagnon.user?.prenom ?? compagnon.prenom ?? ''} ${compagnon.user?.nom ?? compagnon.nom ?? ''}`.trim()
+        const weight = totalMinutes > 0 ? item.minutes / totalMinutes : 1 / repartition.size
 
         if (!acc[compagnonId]) {
           acc[compagnonId] = {
@@ -279,9 +283,9 @@ export async function getDashboardData(garageId: string) {
           }
         }
 
-        acc[compagnonId].delta += deltaParCompagnon
-        acc[compagnonId].tFacture += tFactureParCompagnon
-        acc[compagnonId].tReel += tReelParCompagnon
+        acc[compagnonId].delta += rentabilite.delta * weight
+        acc[compagnonId].tFacture += rentabilite.tFacture * weight
+        acc[compagnonId].tReel += rentabilite.tReel * weight
         acc[compagnonId].nbFiches += 1
       }
 
