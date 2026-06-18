@@ -1,7 +1,7 @@
 .page {
   min-height: 100dvh;
   display: grid;
-  grid-template-columns: 264px minmax(0, 1fr);
+  grid-template-columns: 78px minmax(0, 1fr);
   background:
     radial-gradient(circle at 12% 8%, rgba(26, 111, 255, 0.28), transparent 30rem),
     radial-gradient(circle at 82% 12%, rgba(64, 192, 255, 0.15), transparent 28rem),
@@ -16,12 +16,13 @@
   position: sticky;
   top: 0;
   z-index: 30;
+  width: 78px;
   height: 100dvh;
   display: flex;
   flex-direction: column;
   gap: var(--space-6);
   overflow: hidden;
-  padding: 22px 18px 18px;
+  padding: 22px 17px 18px;
   border-right: 1px solid var(--color-border-subtle);
   background:
     linear-gradient(180deg, rgba(9, 16, 36, 0.94), rgba(4, 8, 20, 0.9)),
@@ -29,6 +30,16 @@
   box-shadow: 18px 0 60px rgba(0, 0, 0, 0.18);
   backdrop-filter: blur(24px);
   isolation: isolate;
+  transition:
+    width 320ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 320ms var(--ease-out);
+  will-change: width;
+}
+
+.sidebar:hover,
+.sidebar:focus-within {
+  width: 264px;
+  box-shadow: 24px 0 72px rgba(0, 0, 0, 0.42);
 }
 
 .sidebar::before {
@@ -52,7 +63,7 @@
   display: inline-flex;
   align-items: center;
   gap: 11px;
-  width: fit-content;
+  width: 230px;
   color: var(--color-text-primary);
 }
 
@@ -87,6 +98,7 @@
 .brandCopy {
   display: grid;
   gap: 2px;
+  white-space: nowrap;
 }
 
 .brand strong {
@@ -111,6 +123,7 @@
   font-weight: var(--font-bold);
   letter-spacing: 0.14em;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .navHeadingLine {
@@ -122,6 +135,7 @@
 .nav {
   display: grid;
   gap: 5px;
+  width: 230px;
 }
 
 .nav a {
@@ -130,6 +144,7 @@
   align-items: center;
   gap: 11px;
   min-height: 41px;
+  width: 230px;
   padding: 0 12px;
   overflow: hidden;
   border: 1px solid transparent;
@@ -170,25 +185,27 @@
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.025), 0 8px 26px rgba(0, 0, 0, 0.16);
 }
 
-.navIndex,
+.navIcon,
 .navLabel,
 .navDot {
   position: relative;
   z-index: 1;
 }
 
-.navIndex {
+.navIcon {
+  display: grid;
+  width: 20px;
+  height: 20px;
+  flex: 0 0 20px;
+  place-items: center;
   color: var(--color-text-muted);
-  font-family: var(--font-mono);
-  font-size: 0.62rem;
-  font-weight: var(--font-medium);
-  letter-spacing: 0.03em;
   transition: color var(--duration-base) var(--ease-out);
 }
 
 .navLabel {
   min-width: 0;
   flex: 1;
+  white-space: nowrap;
 }
 
 .navDot {
@@ -203,8 +220,8 @@
   transition: opacity var(--duration-base) var(--ease-out), transform 240ms var(--ease-spring);
 }
 
-.nav a:hover .navIndex,
-.nav a[aria-current='location'] .navIndex {
+.nav a:hover .navIcon,
+.nav a[aria-current='location'] .navIcon {
   color: var(--color-cyan);
 }
 
@@ -215,8 +232,53 @@
 
 .sidebarActions {
   display: grid;
+  width: 230px;
   gap: var(--space-3);
   margin-top: auto;
+}
+
+.brandCopy,
+.navHeading,
+.navLabel,
+.sidebarButtonLabel,
+.sidebarNote {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-8px);
+  transition:
+    opacity 150ms var(--ease-out),
+    transform 220ms var(--ease-out);
+}
+
+.sidebar:hover .brandCopy,
+.sidebar:focus-within .brandCopy,
+.sidebar:hover .navHeading,
+.sidebar:focus-within .navHeading,
+.sidebar:hover .navLabel,
+.sidebar:focus-within .navLabel,
+.sidebar:hover .sidebarButtonLabel,
+.sidebar:focus-within .sidebarButtonLabel,
+.sidebar:hover .sidebarNote,
+.sidebar:focus-within .sidebarNote {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(0);
+  transition-delay: 80ms;
+}
+
+.sidebarButton {
+  width: 230px;
+  justify-content: flex-start;
+  gap: 11px;
+  overflow: hidden;
+  padding-inline: 12px;
+  white-space: nowrap;
+}
+
+.sidebarButtonIcon {
+  width: 20px;
+  height: 20px;
+  flex: 0 0 20px;
 }
 
 .sidebarNote {
@@ -782,10 +844,20 @@
 
   .sidebar {
     position: sticky;
+    width: 100%;
     height: auto;
     padding: var(--space-4);
     border-right: 0;
     border-bottom: 1px solid var(--color-border-subtle);
+    box-shadow: none;
+    transition: none;
+    will-change: auto;
+  }
+
+  .sidebar:hover,
+  .sidebar:focus-within {
+    width: 100%;
+    box-shadow: none;
   }
 
   .sidebar {
@@ -797,18 +869,40 @@
 
   .nav {
     display: flex;
+    width: auto;
     gap: var(--space-2);
     overflow-x: auto;
     padding-bottom: 2px;
   }
 
   .nav a {
+    width: auto;
     flex: 0 0 auto;
   }
 
   .sidebarActions {
     display: flex;
+    width: auto;
     margin-top: 0;
+  }
+
+  .brand {
+    width: auto;
+  }
+
+  .brandCopy,
+  .navLabel,
+  .sidebarButtonLabel {
+    opacity: 1;
+    pointer-events: auto;
+    transform: none;
+    transition: none;
+  }
+
+  .sidebarButton {
+    width: auto;
+    justify-content: center;
+    padding-inline: var(--space-5);
   }
 
   .navHeading,
@@ -909,7 +1003,13 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .sidebar,
   .sidebar::before,
+  .brandCopy,
+  .navHeading,
+  .navLabel,
+  .sidebarButtonLabel,
+  .sidebarNote,
   .nav a,
   .nav a::before,
   .navDot {

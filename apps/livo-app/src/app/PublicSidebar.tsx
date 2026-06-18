@@ -2,18 +2,30 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
+import {
+  CalendarCheck,
+  ChartLineUp,
+  CreditCard,
+  House,
+  ListChecks,
+  Question,
+  SignIn,
+  Sparkle,
+  Timer,
+  TrendUp,
+} from '@phosphor-icons/react'
 import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react'
 import styles from './page.module.css'
 
 const navItems = [
-  { label: 'Accueil', href: '#accueil' },
-  { label: 'Pointage atelier', href: '#pointage-atelier' },
-  { label: 'Temps vendu vs temps réel', href: '#temps-reel' },
-  { label: 'Rentabilité atelier', href: '#rentabilite' },
-  { label: 'Relevés mensuels', href: '#releves' },
-  { label: 'Fonctionnement', href: '#fonctionnement' },
-  { label: 'Tarifs', href: '#tarifs' },
-  { label: 'FAQ', href: '#faq' },
+  { label: 'Accueil', href: '#accueil', icon: House },
+  { label: 'Pointage atelier', href: '#pointage-atelier', icon: Timer },
+  { label: 'Temps vendu vs temps réel', href: '#temps-reel', icon: ChartLineUp },
+  { label: 'Rentabilité atelier', href: '#rentabilite', icon: TrendUp },
+  { label: 'Relevés mensuels', href: '#releves', icon: CalendarCheck },
+  { label: 'Fonctionnement', href: '#fonctionnement', icon: ListChecks },
+  { label: 'Tarifs', href: '#tarifs', icon: CreditCard },
+  { label: 'FAQ', href: '#faq', icon: Question },
 ]
 
 export function PublicSidebar() {
@@ -100,26 +112,53 @@ export function PublicSidebar() {
       </div>
 
       <nav className={styles.nav} aria-label="Navigation principale">
-        {navItems.map((item, index) => (
-          <a
-            key={item.href}
-            href={item.href}
-            aria-current={activeHref === item.href ? 'location' : undefined}
-            onClick={() => setActiveHref(item.href)}
-          >
-            <span className={styles.navIndex}>{String(index + 1).padStart(2, '0')}</span>
-            <span className={styles.navLabel}>{item.label}</span>
-            <span className={styles.navDot} aria-hidden="true" />
-          </a>
-        ))}
+        {navItems.map((item) => {
+          const Icon = item.icon
+
+          return (
+            <a
+              key={item.href}
+              href={item.href}
+              title={item.label}
+              aria-current={activeHref === item.href ? 'location' : undefined}
+              onClick={() => setActiveHref(item.href)}
+            >
+              <span className={styles.navIcon} aria-hidden="true">
+                <Icon size={19} weight="duotone" />
+              </span>
+              <span className={styles.navLabel}>{item.label}</span>
+              <span className={styles.navDot} aria-hidden="true" />
+            </a>
+          )
+        })}
       </nav>
 
       <div className={styles.sidebarActions}>
-        <Link href="/connexion" className={styles.secondaryButton}>
-          Connexion
+        <Link
+          href="/connexion"
+          className={`${styles.secondaryButton} ${styles.sidebarButton}`}
+          title="Connexion"
+        >
+          <SignIn
+            className={styles.sidebarButtonIcon}
+            size={20}
+            weight="duotone"
+            aria-hidden="true"
+          />
+          <span className={styles.sidebarButtonLabel}>Connexion</span>
         </Link>
-        <Link href="/inscription" className={styles.primaryButton}>
-          Essai gratuit
+        <Link
+          href="/inscription"
+          className={`${styles.primaryButton} ${styles.sidebarButton}`}
+          title="Essai gratuit"
+        >
+          <Sparkle
+            className={styles.sidebarButtonIcon}
+            size={20}
+            weight="duotone"
+            aria-hidden="true"
+          />
+          <span className={styles.sidebarButtonLabel}>Essai gratuit</span>
         </Link>
         <small className={styles.sidebarNote}>30 jours · Sans engagement</small>
       </div>
