@@ -20,9 +20,9 @@
   height: 100dvh;
   display: flex;
   flex-direction: column;
-  gap: var(--space-6);
+  gap: 0;
   overflow: hidden;
-  padding: 22px 17px 18px;
+  padding: 20px 13px 16px;
   border-right: 1px solid var(--color-border-subtle);
   background:
     linear-gradient(180deg, rgba(9, 16, 36, 0.94), rgba(4, 8, 20, 0.9)),
@@ -63,8 +63,15 @@
   display: inline-flex;
   align-items: center;
   gap: 11px;
-  width: 230px;
+  width: 52px;
+  margin-bottom: 24px;
   color: var(--color-text-primary);
+  transition: width 320ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.sidebar:hover .brand,
+.sidebar:focus-within .brand {
+  width: 230px;
 }
 
 .brandMark {
@@ -72,6 +79,7 @@
   display: grid;
   width: 42px;
   height: 42px;
+  flex: 0 0 42px;
   place-items: center;
   border: 1px solid rgba(64, 192, 255, 0.16);
   border-radius: 13px;
@@ -117,7 +125,8 @@
   display: flex;
   align-items: center;
   gap: var(--space-3);
-  margin-top: var(--space-2);
+  min-height: 14px;
+  margin: 0 10px 12px;
   color: var(--color-text-muted);
   font-size: 0.64rem;
   font-weight: var(--font-bold);
@@ -135,6 +144,12 @@
 .nav {
   display: grid;
   gap: 5px;
+  width: 52px;
+  transition: width 320ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.sidebar:hover .nav,
+.sidebar:focus-within .nav {
   width: 230px;
 }
 
@@ -142,10 +157,10 @@
   position: relative;
   display: flex;
   align-items: center;
-  gap: 11px;
+  gap: 0;
   min-height: 41px;
-  width: 230px;
-  padding: 0 12px;
+  width: 52px;
+  padding: 0 16px;
   overflow: hidden;
   border: 1px solid transparent;
   border-radius: 12px;
@@ -154,10 +169,20 @@
   font-weight: var(--font-semibold);
   transition:
     transform 220ms var(--ease-spring),
+    width 320ms cubic-bezier(0.22, 1, 0.36, 1),
+    gap 220ms var(--ease-out),
+    padding 220ms var(--ease-out),
     background var(--duration-base) var(--ease-out),
     border-color var(--duration-base) var(--ease-out),
     color var(--duration-base) var(--ease-out),
     box-shadow var(--duration-base) var(--ease-out);
+}
+
+.sidebar:hover .nav a,
+.sidebar:focus-within .nav a {
+  width: 230px;
+  gap: 11px;
+  padding-inline: 12px;
 }
 
 .nav a::before {
@@ -173,7 +198,11 @@
 .nav a[aria-current='location'] {
   border-color: rgba(64, 192, 255, 0.18);
   color: var(--color-text-primary);
-  transform: translateX(4px);
+}
+
+.sidebar:hover .nav a:hover,
+.sidebar:focus-within .nav a:hover {
+  transform: translateX(3px);
 }
 
 .nav a:hover::before,
@@ -235,6 +264,23 @@
   width: 230px;
   gap: var(--space-3);
   margin-top: auto;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(8px);
+  transition:
+    opacity 150ms var(--ease-out),
+    transform 220ms var(--ease-out),
+    visibility 0s linear 180ms;
+}
+
+.sidebar:hover .sidebarActions,
+.sidebar:focus-within .sidebarActions {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
+  transition-delay: 150ms, 150ms, 0s;
 }
 
 .brandCopy,
@@ -958,27 +1004,43 @@
     gap: var(--space-4);
   }
 
+  .sidebar:hover .nav,
+  .sidebar:focus-within .nav,
   .nav {
     display: flex;
     width: auto;
     gap: var(--space-2);
     overflow-x: auto;
     padding-bottom: 2px;
+    transition: none;
   }
 
+  .sidebar:hover .nav a,
+  .sidebar:focus-within .nav a,
   .nav a {
     width: auto;
     flex: 0 0 auto;
+    gap: 11px;
+    padding-inline: 12px;
   }
 
   .sidebarActions {
     display: flex;
     width: auto;
     margin-top: 0;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: none;
+    transition: none;
   }
 
+  .sidebar:hover .brand,
+  .sidebar:focus-within .brand,
   .brand {
     width: auto;
+    margin-bottom: 0;
+    transition: none;
   }
 
   .brandCopy,
