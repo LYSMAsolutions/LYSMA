@@ -10,9 +10,10 @@ import {
   Timer,
   Wrench,
 } from '@phosphor-icons/react/dist/ssr'
-import Image from 'next/image'
 import Link from 'next/link'
+import { LIVO_PRICING } from '@/lib/pricing'
 import { canonical } from '@/lib/seo'
+import { PublicSidebar } from './PublicSidebar'
 import styles from './page.module.css'
 
 const pageTitle = 'LIVO — Logiciel de pointage atelier pour garages et carrosseries'
@@ -51,17 +52,6 @@ export const metadata: Metadata = {
     url: canonical('/'),
   },
 }
-
-const navItems = [
-  { label: 'Accueil', href: '#accueil' },
-  { label: 'Pointage atelier', href: '#pointage-atelier' },
-  { label: 'Temps vendu vs temps réel', href: '#temps-reel' },
-  { label: 'Rentabilité atelier', href: '#rentabilite' },
-  { label: 'Relevés mensuels', href: '#releves' },
-  { label: 'Fonctionnement', href: '#fonctionnement' },
-  { label: 'Tarifs', href: '#tarifs' },
-  { label: 'FAQ', href: '#faq' },
-]
 
 const dashboardStats = [
   { label: 'Compagnons actifs', value: '6', detail: 'présents atelier' },
@@ -193,7 +183,7 @@ const faqItems = [
   {
     question: 'Quel est le prix de LIVO ?',
     answer:
-      'LIVO est proposé à 89 € par mois, avec 30 jours d’essai gratuit, sans engagement et sans matériel spécifique obligatoire.',
+      `LIVO est proposé à ${LIVO_PRICING.primaryPlan.priceMonthly} € par mois, avec ${LIVO_PRICING.trialDays} jours d’essai gratuit, sans engagement et sans matériel spécifique obligatoire.`,
   },
 ]
 
@@ -207,7 +197,7 @@ const softwareJsonLd = {
   description: pageDescription,
   offers: {
     '@type': 'Offer',
-    price: '89',
+    price: String(LIVO_PRICING.primaryPlan.priceMonthly),
     priceCurrency: 'EUR',
     availability: 'https://schema.org/InStock',
   },
@@ -250,32 +240,7 @@ export default function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
 
-      <aside className={styles.sidebar} aria-label="Navigation LIVO">
-        <Link href="/" className={styles.brand} aria-label="Accueil LIVO">
-          <Image src="/logo/livo-app-logo.png" alt="" width={46} height={46} priority />
-          <span>
-            <strong>LIVO</strong>
-            <small>Pointage atelier</small>
-          </span>
-        </Link>
-
-        <nav className={styles.nav} aria-label="Navigation principale">
-          {navItems.map((item) => (
-            <a key={item.href} href={item.href}>
-              {item.label}
-            </a>
-          ))}
-        </nav>
-
-        <div className={styles.sidebarActions}>
-          <Link href="/connexion" className={styles.secondaryButton}>
-            Connexion
-          </Link>
-          <Link href="/inscription" className={styles.primaryButton}>
-            Essai gratuit
-          </Link>
-        </div>
-      </aside>
+      <PublicSidebar />
 
       <main className={styles.content}>
         <section id="accueil" className={styles.hero}>
@@ -295,7 +260,7 @@ export default function HomePage() {
               </Link>
             </div>
             <p className={styles.reassurance}>
-              89 € / mois après l’essai. Sans engagement. Aucun matériel spécifique obligatoire.
+              {LIVO_PRICING.primaryPlan.priceMonthly} € / mois après l’essai. Sans engagement. Aucun matériel spécifique obligatoire.
             </p>
           </div>
 
@@ -509,9 +474,9 @@ export default function HomePage() {
             </p>
           </div>
           <div className={styles.priceCard}>
-            <span className={styles.trialBadge}>30 jours d’essai gratuit</span>
+            <span className={styles.trialBadge}>{LIVO_PRICING.trialDays} jours d’essai gratuit</span>
             <div className={styles.price}>
-              <strong>89 €</strong>
+              <strong>{LIVO_PRICING.primaryPlan.priceMonthly} €</strong>
               <span>/ mois</span>
             </div>
             <ul>
