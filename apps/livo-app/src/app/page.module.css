@@ -398,6 +398,7 @@
 .problemCard,
 .positionCard,
 .featureCard,
+.scopeCard,
 .highlightSection,
 .workflowGrid article,
 .securitySection,
@@ -682,7 +683,7 @@
 
 .workflowGrid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: var(--space-4);
 }
 
@@ -701,6 +702,96 @@
   background: rgba(26, 111, 255, 0.16);
   color: var(--color-cyan);
   font-weight: var(--font-bold);
+}
+
+.workflowIcon svg {
+  display: block;
+}
+
+.definitionNote {
+  padding: var(--space-4);
+  border-left: 3px solid var(--color-cyan);
+  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+  background: rgba(64, 192, 255, 0.07);
+  color: var(--color-ice) !important;
+  font-size: var(--text-sm);
+}
+
+.timeExample div:last-child strong {
+  font-size: clamp(1.25rem, 2.2vw, 1.8rem);
+  line-height: 1.15;
+}
+
+.scopeGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-5);
+}
+
+.scopeCard {
+  display: grid;
+  gap: var(--space-5);
+  padding: var(--space-6);
+  border-radius: var(--radius-xl);
+}
+
+.scopeCard h3 {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--text-xl);
+}
+
+.scopeCard ul {
+  display: grid;
+  gap: var(--space-3);
+  list-style: none;
+}
+
+.scopeCard li {
+  position: relative;
+  padding-left: var(--space-5);
+  color: var(--color-text-secondary);
+  line-height: 1.65;
+}
+
+.scopeCard li::before {
+  position: absolute;
+  top: 0.62em;
+  left: 0;
+  width: 7px;
+  height: 7px;
+  border-radius: var(--radius-full);
+  content: '';
+}
+
+.scopeIncluded {
+  border-color: rgba(32, 192, 96, 0.24);
+}
+
+.scopeIncluded h3 {
+  color: var(--color-success);
+}
+
+.scopeIncluded li::before {
+  background: var(--color-success);
+}
+
+.scopeExcluded {
+  border-color: rgba(240, 160, 32, 0.22);
+}
+
+.scopeExcluded h3 {
+  color: var(--color-warning);
+}
+
+.scopeExcluded li::before {
+  background: var(--color-warning);
+}
+
+.securitySection .secondaryButton {
+  width: fit-content;
+  justify-self: start;
 }
 
 .securitySection {
@@ -935,7 +1026,8 @@
   }
 
   .positionGrid,
-  .workflowGrid {
+  .workflowGrid,
+  .scopeGrid {
     grid-template-columns: 1fr;
   }
 }

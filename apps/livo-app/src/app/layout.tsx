@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     template: '%s - LIVO',
   },
   description:
-    "Logiciel premium de pointage garage, suivi OR, fiches de travail, compagnons, véhicules et rentabilité atelier pour garages, MRA et carrosseries.",
+    "Application web de pointage atelier, suivi des fiches, compagnons, véhicules, temps réel et écarts opérationnels pour garages et carrosseries.",
   icons: {
     icon: '/logo/livo-app-logo.png',
     apple: '/logo/livo-app-logo.png',
@@ -44,7 +44,7 @@ export const metadata: Metadata = {
     siteName: 'Livo-app',
     title: 'LIVO - Logiciel pointage garage et atelier',
     description:
-      'Pointage atelier, OR par QR code, fiches de travail, compagnons, véhicules et rentabilité pour garages et carrosseries.',
+      'Pointage atelier, fiches de travail, compagnons, véhicules, temps réel et rapports pour garages et carrosseries.',
   },
   robots: {
     index: true,

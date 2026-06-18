@@ -11,6 +11,7 @@ const PUBLIC_ROUTES = new Set([
   '/demo-admin',
   '/demo-atelier',
   '/abonnement-expire',
+  '/a-propos',
   '/logiciel-pointage-garage-dordogne',
   '/api-qr-ordre-reparation-garage',
   '/conformite-temps-travail',

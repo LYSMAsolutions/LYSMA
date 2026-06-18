@@ -27,7 +27,7 @@ export default function LivoDemoPage() {
           <Link href="/demo-admin" className={styles.demoChoice}>
             <span className={styles.demoChoiceIcon}>01</span>
             <strong>Espace admin</strong>
-            <small>Dashboard, véhicules, fiches, compagnons, rentabilité et suivi atelier.</small>
+            <small>Tableau de bord, véhicules, fiches, compagnons et écarts de temps atelier.</small>
             <span className={styles.demoChoiceCta}>Ouvrir l’espace admin</span>
           </Link>
 

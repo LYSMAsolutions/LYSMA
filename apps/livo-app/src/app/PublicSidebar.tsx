@@ -3,27 +3,27 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import {
-  CalendarCheck,
   ChartLineUp,
   CreditCard,
   House,
   ListChecks,
   Question,
+  QrCode,
+  ShieldCheck,
   SignIn,
   Sparkle,
   Timer,
-  TrendUp,
 } from '@phosphor-icons/react'
 import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react'
 import styles from './page.module.css'
 
 const navItems = [
   { label: 'Accueil', href: '#accueil', icon: House },
-  { label: 'Pointage atelier', href: '#pointage-atelier', icon: Timer },
-  { label: 'Temps vendu vs temps réel', href: '#temps-reel', icon: ChartLineUp },
-  { label: 'Rentabilité atelier', href: '#rentabilite', icon: TrendUp },
-  { label: 'Relevés mensuels', href: '#releves', icon: CalendarCheck },
+  { label: 'Fonctionnalités', href: '#fonctionnalites', icon: Timer },
   { label: 'Fonctionnement', href: '#fonctionnement', icon: ListChecks },
+  { label: 'Pilotage', href: '#pilotage', icon: ChartLineUp },
+  { label: 'OR externes', href: '#or-externes', icon: QrCode },
+  { label: 'Périmètre', href: '#perimetre', icon: ShieldCheck },
   { label: 'Tarifs', href: '#tarifs', icon: CreditCard },
   { label: 'FAQ', href: '#faq', icon: Question },
 ]

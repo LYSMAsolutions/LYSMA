@@ -23,7 +23,7 @@ export default function PolitiqueConfidentialitePage() {
 
         <section className={styles.section}>
           <h2 className={styles.h2}>1. Responsable du traitement</h2>
-          <p>LYSMA Solutions - contact : lysmasolutions@gmail.com</p>
+          <p>LYSMA Solutions — contact : contact@lysmasolutions.fr</p>
         </section>
 
         <section className={styles.section}>
@@ -45,7 +45,7 @@ export default function PolitiqueConfidentialitePage() {
           <ul className={styles.list}>
             <li>Faire fonctionner l'application de gestion d'atelier.</li>
             <li>Générer les fiches de travaux, documents RH et relevés de pointage.</li>
-            <li>Suivre le temps de travail et conserver une preuve des heures travaillées.</li>
+            <li>Suivre le temps de travail et conserver un historique des pointages enregistrés.</li>
             <li>Assurer le support, retrouver une information perdue et corriger les erreurs.</li>
             <li>Améliorer l'expérience LIVO et préparer des connexions avec d'autres outils demandées par les garages.</li>
           </ul>
@@ -81,7 +81,7 @@ export default function PolitiqueConfidentialitePage() {
           <p>
             Les données du compte, du garage et de l'atelier sont conservées pendant la durée de l'abonnement actif,
             puis selon les obligations légales, sociales et comptables applicables. Les relevés de pointage peuvent
-            être conservés plus longtemps lorsqu'ils servent à la preuve du temps de travail.
+            être conservés plus longtemps lorsqu'ils servent à documenter le temps de travail.
           </p>
           <p className={styles.text}>
             Les échanges chatbox et données support sont conservés le temps nécessaire au support, à la correction
@@ -104,12 +104,12 @@ export default function PolitiqueConfidentialitePage() {
             <li>Droit à la portabilité.</li>
             <li>Droit d'opposition lorsque le droit applicable le permet.</li>
           </ul>
-          <p>Pour exercer ces droits : <a href="mailto:lysmasolutions@gmail.com" className={styles.link}>lysmasolutions@gmail.com</a></p>
+          <p>Pour exercer ces droits : <a href="mailto:contact@lysmasolutions.fr" className={styles.link}>contact@lysmasolutions.fr</a></p>
         </section>
 
         <section className={styles.section}>
           <h2 className={styles.h2}>9. Contact</h2>
-          <p>Pour toute question relative à la protection de vos données : <a href="mailto:lysmasolutions@gmail.com" className={styles.link}>lysmasolutions@gmail.com</a></p>
+          <p>Pour toute question relative à la protection de vos données : <a href="mailto:contact@lysmasolutions.fr" className={styles.link}>contact@lysmasolutions.fr</a></p>
         </section>
       </div>
     </div>

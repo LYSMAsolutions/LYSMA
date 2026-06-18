@@ -1,14 +1,21 @@
-import type { Metadata } from 'next'
+import type { Metadata, Route } from 'next'
 import {
+  Buildings,
   CalendarCheck,
   CarProfile,
   ChartLineUp,
+  CheckCircle,
+  ClipboardText,
   Clock,
+  DeviceMobile,
+  FilePdf,
+  Gauge,
   LockKey,
   QrCode,
   ShieldCheck,
   Timer,
   Wrench,
+  XCircle,
 } from '@phosphor-icons/react/dist/ssr'
 import Link from 'next/link'
 import { LIVO_PRICING } from '@/lib/pricing'
@@ -16,9 +23,9 @@ import { canonical } from '@/lib/seo'
 import { PublicSidebar } from './PublicSidebar'
 import styles from './page.module.css'
 
-const pageTitle = 'LIVO — Logiciel de pointage atelier pour garages et carrosseries'
+const pageTitle = 'LIVO — Pointage et pilotage du temps pour ateliers automobiles'
 const pageDescription =
-  'LIVO aide les garages et carrosseries à suivre le pointage des compagnons, les véhicules, les ordres de réparation, le temps vendu vs temps réel et la rentabilité atelier.'
+  'LIVO relie le pointage des compagnons aux fiches de travail, aux véhicules et aux ordres de réparation afin de suivre le temps réel de l’atelier.'
 
 export const metadata: Metadata = {
   title: pageTitle,
@@ -26,24 +33,17 @@ export const metadata: Metadata = {
   keywords: [
     'logiciel de pointage atelier',
     'logiciel pointage garage',
+    'pointage compagnon garage',
+    'suivi temps réel atelier',
+    'temps vendu temps réel',
+    'fiche de travail garage',
+    'ordre de réparation QR code',
+    'relevé mensuel pointage',
+    'rentabilité opérationnelle atelier',
     'logiciel carrosserie',
-    'pointage compagnon',
-    'pointage atelier',
-    'temps vendu vs temps réel',
-    'rentabilité atelier',
-    'rentabilité compagnon',
-    'suivi véhicules atelier',
-    'ordre de réparation garage',
-    'relevés mensuels atelier',
-    'logiciel garage indépendant',
   ],
-  robots: {
-    index: true,
-    follow: true,
-  },
-  alternates: {
-    canonical: canonical('/'),
-  },
+  robots: { index: true, follow: true },
+  alternates: { canonical: canonical('/') },
   openGraph: {
     title: pageTitle,
     description: pageDescription,
@@ -54,136 +54,154 @@ export const metadata: Metadata = {
 }
 
 const dashboardStats = [
-  { label: 'Compagnons actifs', value: '6', detail: 'présents atelier' },
-  { label: 'Véhicules suivis', value: '14', detail: 'en production' },
-  { label: 'OR en cours', value: '18', detail: 'à piloter' },
-  { label: 'Rentabilité atelier', value: '87 %', detail: 'lecture du jour' },
-]
-
-const painPoints = [
-  'Les heures réelles sont parfois estimées trop tard.',
-  'Les fiches papier se dispersent entre le bureau et l’atelier.',
-  'Le temps perdu sur une intervention n’est pas toujours mesuré.',
-  'Les véhicules en attente manquent de visibilité.',
-  'Les écarts entre temps vendu et temps réel restent invisibles.',
-]
-
-const positioningCards = [
-  {
-    title: 'Badgeuse RH',
-    text: 'Elle suit la présence, mais ne rattache pas le temps aux véhicules, aux OR et à la rentabilité atelier.',
-  },
-  {
-    title: 'DMS complet',
-    text: 'Il peut être puissant, mais souvent trop lourd si le garage veut seulement mieux suivre son temps réel.',
-  },
-  {
-    title: 'LIVO',
-    text: 'LIVO complète votre organisation avec une couche simple de pointage, de preuve et de pilotage atelier.',
-  },
+  { label: 'Compagnons présents', value: '4', detail: 'sur 6 actifs' },
+  { label: 'Fiches en cours', value: '7', detail: 'dans l’atelier' },
+  { label: 'Temps vendu', value: '18 h 30', detail: 'fiches clôturées' },
+  { label: 'Temps réel', value: '16 h 42', detail: 'temps pointé' },
 ]
 
 const features = [
   {
     icon: Timer,
-    title: 'Pointage compagnon',
-    text: 'Arrivée, pause, reprise, intervention et fin de journée depuis une interface lisible.',
+    title: 'Pointage de la journée',
+    text: 'Le compagnon enregistre son arrivée, ses pauses, ses reprises et son départ depuis l’espace atelier.',
   },
   {
     icon: Wrench,
-    title: 'Pointage par OR ou véhicule',
-    text: 'Le temps peut être rattaché à une fiche, un véhicule ou un ordre de réparation externe.',
+    title: 'Pointage sur les travaux',
+    text: 'Le temps passé est rattaché à une fiche LIVO ou à un ordre de réparation externe présent dans LIVO.',
   },
   {
-    icon: Clock,
-    title: 'Temps vendu vs temps réel',
-    text: 'Comparez le temps facturé avec le temps réellement passé à l’atelier.',
+    icon: ClipboardText,
+    title: 'Fiches de travail',
+    text: 'Créez une fiche avec le véhicule, le client, les travaux, les notes et les informations nécessaires à la clôture.',
+  },
+  {
+    icon: DeviceMobile,
+    title: 'Espace atelier séparé',
+    text: 'Une tablette ou un autre appareil connecté donne accès aux compagnons par code PIN, sans ouvrir le compte administrateur.',
+  },
+  {
+    icon: Gauge,
+    title: 'Atelier en direct',
+    text: 'Le tableau de bord indique les présences, les pauses, les fiches actives, les véhicules suivis et les points d’attention.',
   },
   {
     icon: ChartLineUp,
-    title: 'Rentabilité par compagnon',
-    text: 'Repérez les écarts, les temps improductifs et les interventions à surveiller.',
-  },
-  {
-    icon: CarProfile,
-    title: 'Suivi véhicules atelier',
-    text: 'Gardez une vision claire des véhicules présents, en cours, en attente ou à clôturer.',
+    title: 'Écarts de temps',
+    text: 'Les fiches clôturées comparent le temps vendu au temps réellement pointé et valorisent l’écart avec le taux configuré.',
   },
   {
     icon: CalendarCheck,
-    title: 'Relevés mensuels',
-    text: 'Générez des relevés propres pour le suivi du temps de travail et les contrôles internes.',
+    title: 'Rapports et absences',
+    text: 'Consultez les tendances atelier, les indicateurs par compagnon, les absences et les relevés mensuels.',
   },
   {
-    icon: QrCode,
-    title: 'API QR code OR',
-    text: 'Préparez la connexion avec vos OR existants via QR code ou API partenaire.',
+    icon: FilePdf,
+    title: 'Documents PDF',
+    text: 'Téléchargez les fiches de travail et les relevés mensuels de pointage produits à partir des données enregistrées.',
+  },
+  {
+    icon: CarProfile,
+    title: 'Historique des véhicules',
+    text: 'Retrouvez les véhicules, leurs clients, leurs fiches précédentes et les indicateurs issus des dossiers clôturés.',
   },
   {
     icon: ShieldCheck,
-    title: 'Sécurité renforcée',
-    text: 'Email validé, double authentification et protections serveur pour les accès sensibles.',
+    title: 'Accès administrateur protégé',
+    text: 'L’adresse email est vérifiée et le compte administrateur utilise une double authentification par application TOTP.',
   },
 ]
 
-const targets = [
-  'Garages de 2 à 10 compagnons',
-  'Carrosseries indépendantes',
-  'Ateliers mécaniques',
-  'MRA et agents de marque',
-  'Petits ateliers qui ne veulent pas installer une usine à gaz',
+const workflowSteps = [
+  {
+    icon: Buildings,
+    title: 'Configurer le garage',
+    text: 'Renseignez le garage, les taux horaires, le mot de passe de l’espace atelier et les codes PIN des compagnons.',
+  },
+  {
+    icon: ClipboardText,
+    title: 'Préparer le travail',
+    text: 'Créez une fiche LIVO ou utilisez un OR externe déjà importé, scanné ou saisi dans l’application.',
+  },
+  {
+    icon: Timer,
+    title: 'Pointer au fil de la journée',
+    text: 'Chaque compagnon enregistre sa présence puis démarre et arrête le travail auquel il consacre du temps.',
+  },
+  {
+    icon: ChartLineUp,
+    title: 'Clôturer et analyser',
+    text: 'Le responsable renseigne le temps vendu et le taux, puis consulte les écarts et les rapports disponibles.',
+  },
+]
+
+const includedScope = [
+  'Suivi des présences, pauses et départs.',
+  'Temps réellement passé sur les fiches et OR présents dans LIVO.',
+  'Création de fiches, suivi des véhicules et historique client associé.',
+  'Clôture, temps vendu, taux horaire et indicateurs d’écart.',
+  'Rapports atelier, absences et relevés mensuels PDF.',
+]
+
+const excludedScope = [
+  'LIVO ne remplace pas un DMS, un logiciel de facturation ou un logiciel de comptabilité.',
+  'LIVO ne gère pas les stocks, les achats de pièces, les devis ni les factures clients.',
+  'Les indicateurs LIVO ne constituent pas une marge comptable complète.',
+  'La connexion à un logiciel métier n’est pas automatique : elle doit être configurée et validée.',
+  'LIVO est une application web connectée ; aucun mode hors ligne ni application mobile native n’est proposé.',
 ]
 
 const faqItems = [
   {
-    question: 'LIVO remplace-t-il mon logiciel de garage ?',
+    question: 'Que fait précisément LIVO dans un garage ?',
     answer:
-      'Non. LIVO ne remplace pas votre DMS, votre logiciel de facturation ou votre outil métier. Il ajoute une couche de pointage, de temps réel et de rentabilité atelier.',
+      'LIVO suit la journée des compagnons et le temps passé sur les fiches ou OR disponibles dans l’application. Il centralise aussi les véhicules, les dossiers de travail, les clôtures, les rapports et les relevés mensuels.',
   },
   {
-    question: 'Le pointage se fait-il par ordre de réparation ?',
+    question: 'LIVO remplace-t-il mon logiciel de garage ou de facturation ?',
     answer:
-      'Oui. Le compagnon peut pointer sur une fiche LIVO, un véhicule ou un numéro d’ordre de réparation externe selon l’organisation du garage.',
+      'Non. LIVO ne produit ni devis ni facture et ne gère pas les stocks. Il complète l’organisation existante avec le pointage et le suivi opérationnel du temps atelier.',
   },
   {
-    question: 'Peut-on utiliser LIVO sur tablette ?',
+    question: 'Comment LIVO calcule-t-il la rentabilité affichée ?',
     answer:
-      'Oui. LIVO fonctionne sur ordinateur, tablette et smartphone. L’atelier peut donc pointer depuis un écran partagé ou depuis un téléphone.',
+      'LIVO calcule un écart opérationnel entre la valeur vendue de la fiche et le temps réel valorisé avec le taux horaire configuré. Cet indicateur aide au pilotage, mais il ne remplace pas une marge comptable intégrant les pièces, les charges et tous les coûts du garage.',
   },
   {
-    question: 'LIVO compare-t-il le temps vendu et le temps réel ?',
+    question: 'Peut-on utiliser LIVO sur une tablette ou un smartphone ?',
     answer:
-      'Oui. LIVO permet de comparer le temps vendu, le temps réellement pointé et l’écart entre les deux pour mieux comprendre la rentabilité.',
+      'Oui, depuis un navigateur web et avec une connexion internet. L’espace atelier est prévu pour un écran partagé, une tablette, un ordinateur ou un téléphone. LIVO ne propose pas de mode hors ligne.',
   },
   {
-    question: 'LIVO calcule-t-il la rentabilité par compagnon ?',
+    question: 'Les compagnons doivent-ils utiliser le compte administrateur ?',
     answer:
-      'Oui. Les temps pointés permettent d’analyser la productivité et la rentabilité par compagnon, par véhicule ou par intervention.',
+      'Non. Le garage dispose d’un espace atelier séparé. Chaque compagnon actif peut être identifié par son code PIN avant de pointer sa journée ou une intervention.',
   },
   {
-    question: 'LIVO génère-t-il des relevés mensuels ?',
+    question: 'LIVO peut-il récupérer les ordres de réparation de mon logiciel métier ?',
     answer:
-      'Oui. LIVO permet de générer des relevés mensuels de pointage avec les heures, les pauses, les absences et les éléments de suivi utiles.',
+      'LIVO possède des routes d’intégration et un flux QR pour les OR externes. Leur utilisation suppose toutefois une configuration technique avec le logiciel concerné. Aucun connecteur universel n’est activé automatiquement.',
   },
   {
-    question: 'LIVO est-il adapté aux petits garages ?',
+    question: 'Que se passe-t-il sans intégration avec mon logiciel métier ?',
     answer:
-      'Oui. LIVO est pensé pour les garages indépendants qui veulent un outil simple, sans matériel spécifique et sans déployer une solution lourde.',
+      'Le garage peut créer ses propres fiches de travail dans LIVO. Un OR miroir peut aussi être saisi manuellement comme solution de secours, avec moins d’informations qu’un OR importé.',
   },
   {
-    question: 'LIVO fonctionne-t-il pour une carrosserie ?',
+    question: 'Quels documents peut-on télécharger ?',
     answer:
-      'Oui. LIVO convient aux carrosseries qui veulent suivre les compagnons, les véhicules, les travaux en cours et les écarts entre temps prévu et temps réel.',
-  },
-  {
-    question: 'Existe-t-il une API ou un QR code pour les OR ?',
-    answer:
-      'Oui. LIVO prévoit une architecture API et QR code pour rattacher le pointage aux OR créés dans un logiciel métier existant.',
+      'LIVO génère des fiches de travail PDF et des relevés mensuels de pointage PDF à partir des informations enregistrées dans l’application.',
   },
   {
     question: 'Quel est le prix de LIVO ?',
     answer:
-      `LIVO est proposé à ${LIVO_PRICING.primaryPlan.priceMonthly} € par mois, avec ${LIVO_PRICING.trialDays} jours d’essai gratuit, sans engagement et sans matériel spécifique obligatoire.`,
+      `L’offre affichée est de ${LIVO_PRICING.primaryPlan.priceMonthly} € par mois pour un garage, avec des compagnons illimités et ${LIVO_PRICING.trialDays} jours d’essai. L’activation de l’abonnement est accompagnée ; le paiement autonome en ligne n’est pas proposé dans l’application à ce jour.`,
+  },
+  {
+    question: 'LIVO fonctionne-t-il sans matériel dédié ?',
+    answer:
+      'Oui. Aucun terminal propriétaire n’est imposé. Il faut toutefois disposer d’un appareil compatible avec un navigateur web récent et d’une connexion internet.',
   },
 ]
 
@@ -192,9 +210,11 @@ const softwareJsonLd = {
   '@type': 'SoftwareApplication',
   name: 'LIVO',
   applicationCategory: 'BusinessApplication',
-  operatingSystem: 'Web',
+  applicationSubCategory: 'Gestion du temps atelier automobile',
+  operatingSystem: 'Application web',
   url: canonical('/'),
   description: pageDescription,
+  featureList: features.map((feature) => feature.title),
   offers: {
     '@type': 'Offer',
     price: String(LIVO_PRICING.primaryPlan.priceMonthly),
@@ -208,7 +228,10 @@ const organizationJsonLd = {
   '@type': 'Organization',
   name: 'LYSMA Solutions',
   url: 'https://lysmasolutions.fr',
-  email: 'lysmasolutions@gmail.com',
+  brand: {
+    '@type': 'Brand',
+    name: 'LIVO',
+  },
 }
 
 const faqJsonLd = {
@@ -217,62 +240,50 @@ const faqJsonLd = {
   mainEntity: faqItems.map((item) => ({
     '@type': 'Question',
     name: item.question,
-    acceptedAnswer: {
-      '@type': 'Answer',
-      text: item.answer,
-    },
+    acceptedAnswer: { '@type': 'Answer', text: item.answer },
   })),
 }
 
 export default function HomePage() {
   return (
     <div className={styles.page}>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareJsonLd) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
 
       <PublicSidebar />
 
       <main className={styles.content}>
         <section id="accueil" className={styles.hero}>
           <div className={styles.heroCopy}>
-            <span className={styles.eyebrow}>Logiciel français pour ateliers automobiles</span>
-            <h1>Le logiciel de pointage atelier pensé pour les garages et carrosseries</h1>
+            <span className={styles.eyebrow}>Application web pour garages et carrosseries</span>
+            <h1>Le temps réellement passé dans l’atelier, relié au travail effectué.</h1>
             <p className={styles.lead}>
-              LIVO aide les ateliers à suivre les compagnons, les véhicules, les ordres de
-              réparation et la rentabilité en temps réel, sans remplacer votre logiciel de garage.
+              LIVO relie la présence des compagnons aux fiches, aux véhicules et aux ordres de
+              réparation disponibles dans l’application. Le responsable suit ainsi l’activité en
+              cours et compare le temps vendu au temps pointé.
             </p>
             <div className={styles.heroActions}>
               <Link href="/inscription" className={styles.primaryButton}>
-                Essayer 30 jours gratuitement
+                Essayer LIVO pendant {LIVO_PRICING.trialDays} jours
               </Link>
               <Link href="/demo" className={styles.secondaryButton}>
-                Voir la démo
+                Explorer la démonstration
               </Link>
             </div>
             <p className={styles.reassurance}>
-              {LIVO_PRICING.primaryPlan.priceMonthly} € / mois après l’essai. Sans engagement. Aucun matériel spécifique obligatoire.
+              Application web · Connexion internet requise · Aucun terminal propriétaire imposé
             </p>
           </div>
 
-          <div className={styles.dashboardCard} aria-label="Aperçu du tableau de bord atelier">
+          <div className={styles.dashboardCard} aria-label="Exemple fictif de tableau de bord atelier">
             <div className={styles.dashboardHeader}>
               <div>
                 <strong>Tableau de bord atelier</strong>
-                <span>Temps réel, OR, véhicules et rentabilité</span>
+                <span>Exemple de présentation avec données fictives</span>
               </div>
-              <span className={styles.liveBadge}>En direct</span>
+              <span className={styles.liveBadge}>Exemple</span>
             </div>
-
             <div className={styles.dashboardStats}>
               {dashboardStats.map((stat) => (
                 <div key={stat.label}>
@@ -282,66 +293,24 @@ export default function HomePage() {
                 </div>
               ))}
             </div>
-
             <div className={styles.comparisonPanel}>
               <div>
-                <span>Temps vendu vs temps réel</span>
-                <strong>2h00 / 2h35</strong>
+                <span>Temps vendu comparé au temps réel</span>
+                <strong>18 h 30 / 16 h 42</strong>
               </div>
-              <div className={styles.progressBar} aria-hidden="true">
-                <span />
-              </div>
-              <small>Écart détecté : +35 min</small>
+              <div className={styles.progressBar} aria-hidden="true"><span /></div>
+              <small>Ces chiffres illustrent l’interface ; ils ne proviennent pas d’un garage réel.</small>
             </div>
           </div>
         </section>
 
-        <section className={styles.section} aria-labelledby="probleme-title">
+        <section id="fonctionnalites" className={styles.section} aria-labelledby="features-title">
           <div className={styles.sectionIntro}>
-            <span className={styles.sectionKicker}>Problème terrain</span>
-            <h2 id="probleme-title">Sans suivi précis, la rentabilité atelier reste floue</h2>
+            <span className={styles.sectionKicker}>Fonctionnalités disponibles</span>
+            <h2 id="features-title">Ce qu’un garage peut réellement faire avec LIVO</h2>
             <p>
-              Dans un garage ou une carrosserie, quelques minutes mal suivies sur chaque
-              intervention finissent par peser lourd. LIVO rend le temps atelier lisible,
-              exploitable et rattaché aux véhicules ou aux OR.
-            </p>
-          </div>
-          <div className={styles.problemGrid}>
-            {painPoints.map((point) => (
-              <article key={point} className={styles.problemCard}>
-                <span />
-                <p>{point}</p>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section className={styles.section} aria-labelledby="positionnement-title">
-          <div className={styles.sectionIntro}>
-            <span className={styles.sectionKicker}>Positionnement</span>
-            <h2 id="positionnement-title">Ni badgeuse RH, ni DMS complet</h2>
-            <p>
-              LIVO ne cherche pas à remplacer votre organisation. Il complète votre logiciel de
-              garage en mesurant ce qui manque souvent : le temps réel atelier.
-            </p>
-          </div>
-          <div className={styles.positionGrid}>
-            {positioningCards.map((card) => (
-              <article key={card.title} className={styles.positionCard}>
-                <h3>{card.title}</h3>
-                <p>{card.text}</p>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section id="pointage-atelier" className={styles.section} aria-labelledby="features-title">
-          <div className={styles.sectionIntro}>
-            <span className={styles.sectionKicker}>Fonctionnalités clés</span>
-            <h2 id="features-title">Tout ce qu’il faut pour piloter le temps atelier</h2>
-            <p>
-              Les écrans restent simples pour les compagnons. Les données deviennent utiles pour
-              le responsable : présence, OR, véhicules, temps réel, relevés et rentabilité.
+              Les fonctions ci-dessous correspondent aux parcours présents dans l’application :
+              administration du garage, espace atelier, pointage, fiches, véhicules, rapports et documents.
             </p>
           </div>
           <div className={styles.featureGrid}>
@@ -349,9 +318,7 @@ export default function HomePage() {
               const Icon = feature.icon
               return (
                 <article key={feature.title} className={styles.featureCard}>
-                  <span className={styles.featureIcon}>
-                    <Icon size={24} weight="duotone" />
-                  </span>
+                  <span className={styles.featureIcon}><Icon size={24} weight="duotone" /></span>
                   <h3>{feature.title}</h3>
                   <p>{feature.text}</p>
                 </article>
@@ -360,145 +327,131 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section id="temps-reel" className={styles.highlightSection} aria-labelledby="temps-title">
-          <div className={styles.highlightCopy}>
-            <span className={styles.sectionKicker}>Temps vendu vs temps réel</span>
-            <h2 id="temps-title">Comparez enfin le temps facturé et le temps réellement passé</h2>
-            <p>
-              LIVO permet d’identifier les écarts, les interventions moins rentables et les pertes
-              de temps récurrentes.
-            </p>
-          </div>
-          <div className={styles.timeExample}>
-            <div>
-              <span>Temps vendu</span>
-              <strong>2h00</strong>
-            </div>
-            <div>
-              <span>Temps réel</span>
-              <strong>2h35</strong>
-            </div>
-            <div>
-              <span>Écart</span>
-              <strong>+35 min</strong>
-            </div>
-            <div>
-              <span>Productivité</span>
-              <strong>77 %</strong>
-            </div>
-          </div>
-        </section>
-
-        <section id="rentabilite" className={styles.section} aria-labelledby="target-title">
+        <section id="fonctionnement" className={styles.workflowSection} aria-labelledby="workflow-title">
           <div className={styles.sectionIntro}>
-            <span className={styles.sectionKicker}>Pour qui ?</span>
-            <h2 id="target-title">Conçu pour les garages et carrosseries indépendants</h2>
-            <p>
-              LIVO s’adresse aux ateliers qui veulent une lecture fiable du terrain sans alourdir
-              le quotidien des équipes.
-            </p>
-          </div>
-          <div className={styles.targetGrid}>
-            {targets.map((target) => (
-              <div key={target} className={styles.targetItem}>
-                <Wrench size={18} weight="duotone" />
-                <span>{target}</span>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section
-          id="fonctionnement"
-          className={styles.workflowSection}
-          aria-labelledby="fonctionnement-title"
-        >
-          <div className={styles.sectionIntro}>
-            <span className={styles.sectionKicker}>Fonctionnement</span>
-            <h2 id="fonctionnement-title">Un fonctionnement simple pour l’atelier</h2>
+            <span className={styles.sectionKicker}>Parcours quotidien</span>
+            <h2 id="workflow-title">Du paramétrage au rapport atelier</h2>
+            <p>Le fonctionnement suit le déroulement réel d’une journée de production.</p>
           </div>
           <div className={styles.workflowGrid}>
-            <article>
-              <span>1</span>
-              <h3>Le compagnon pointe</h3>
-              <p>Il utilise une tablette, un smartphone ou un PC depuis l’atelier.</p>
-            </article>
-            <article>
-              <span>2</span>
-              <h3>LIVO rattache le temps</h3>
-              <p>Le temps est lié au véhicule, à l’OR ou à la fiche de travail.</p>
-            </article>
-            <article>
-              <span>3</span>
-              <h3>Le responsable analyse</h3>
-              <p>Il suit les écarts, les relevés mensuels et la rentabilité atelier.</p>
-            </article>
+            {workflowSteps.map((step) => {
+              const Icon = step.icon
+              return (
+                <article key={step.title}>
+                  <span className={styles.workflowIcon}><Icon size={22} weight="duotone" /></span>
+                  <h3>{step.title}</h3>
+                  <p>{step.text}</p>
+                </article>
+              )
+            })}
           </div>
         </section>
 
-        <section id="releves" className={styles.securitySection} aria-labelledby="security-title">
-          <div>
-            <span className={styles.sectionKicker}>Relevés mensuels et sécurité</span>
-            <h2 id="security-title">Des données de pointage mieux structurées et mieux protégées</h2>
+        <section id="pilotage" className={styles.highlightSection} aria-labelledby="pilotage-title">
+          <div className={styles.highlightCopy}>
+            <span className={styles.sectionKicker}>Indicateur de pilotage</span>
+            <h2 id="pilotage-title">Comprendre l’écart entre le vendu et le réalisé</h2>
             <p>
-              LIVO aide à produire des relevés mensuels lisibles et protège les accès sensibles
-              avec email validé et double authentification compatible Google Authenticator.
+              À la clôture, LIVO compare le temps vendu au temps réel issu des pointages. Le taux
+              horaire du garage permet de valoriser cet écart pour repérer les dossiers à examiner.
             </p>
+            <p className={styles.definitionNote}>
+              Cet indicateur n’est pas une marge comptable : il n’intègre pas automatiquement les
+              pièces, les achats, les charges fixes ni tous les coûts de l’entreprise.
+            </p>
+          </div>
+          <div className={styles.timeExample} aria-label="Exemple fictif de comparaison de temps">
+            <div><span>Temps vendu</span><strong>2 h 00</strong></div>
+            <div><span>Temps réel</span><strong>2 h 35</strong></div>
+            <div><span>Écart de temps</span><strong>− 35 min</strong></div>
+            <div><span>Lecture</span><strong>À examiner</strong></div>
+          </div>
+        </section>
+
+        <section id="or-externes" className={styles.securitySection} aria-labelledby="external-orders-title">
+          <div>
+            <span className={styles.sectionKicker}>Ordres de réparation externes</span>
+            <h2 id="external-orders-title">Une intégration possible, jamais supposée</h2>
+            <p>
+              LIVO sait recevoir et suivre un OR externe, générer ou lire son identifiant QR et
+              enregistrer le temps du compagnon. Cette capacité technique doit être configurée avec
+              le logiciel métier concerné avant d’être utilisée dans un garage.
+            </p>
+            <Link href="/api-qr-ordre-reparation-garage" className={styles.secondaryButton}>
+              Comprendre le fonctionnement API et QR
+            </Link>
           </div>
           <div className={styles.securityGrid}>
             <article>
-              <CalendarCheck size={24} weight="duotone" />
-              <h3>Relevés mensuels</h3>
-              <p>Heures, pauses, absences et validations regroupées proprement.</p>
+              <QrCode size={24} weight="duotone" />
+              <h3>Avec intégration configurée</h3>
+              <p>L’OR peut être importé puis retrouvé par son numéro ou son QR code.</p>
             </article>
             <article>
-              <LockKey size={24} weight="duotone" />
-              <h3>Double authentification</h3>
-              <p>Connexion sécurisée avec un code généré sur téléphone.</p>
+              <ClipboardText size={24} weight="duotone" />
+              <h3>Sans connecteur</h3>
+              <p>Une fiche LIVO reste disponible ; un OR miroir peut aussi être saisi en secours.</p>
             </article>
             <article>
-              <ShieldCheck size={24} weight="duotone" />
-              <h3>Accès contrôlés</h3>
-              <p>Les règles importantes sont vérifiées côté serveur.</p>
+              <XCircle size={24} weight="duotone" />
+              <h3>Pas de compatibilité automatique</h3>
+              <p>La présence d’une API ne garantit pas la connexion immédiate à tous les logiciels du marché.</p>
+            </article>
+          </div>
+        </section>
+
+        <section id="perimetre" className={styles.section} aria-labelledby="scope-title">
+          <div className={styles.sectionIntro}>
+            <span className={styles.sectionKicker}>Périmètre du produit</span>
+            <h2 id="scope-title">Savoir ce que LIVO couvre avant de l’adopter</h2>
+            <p>
+              LIVO est un outil de pointage et de pilotage opérationnel. Il complète les logiciels
+              métier du garage au lieu de prétendre les remplacer.
+            </p>
+          </div>
+          <div className={styles.scopeGrid}>
+            <article className={`${styles.scopeCard} ${styles.scopeIncluded}`}>
+              <h3><CheckCircle size={22} weight="duotone" /> Ce que LIVO prend en charge</h3>
+              <ul>{includedScope.map((item) => <li key={item}>{item}</li>)}</ul>
+            </article>
+            <article className={`${styles.scopeCard} ${styles.scopeExcluded}`}>
+              <h3><XCircle size={22} weight="duotone" /> Ce que LIVO ne prétend pas faire</h3>
+              <ul>{excludedScope.map((item) => <li key={item}>{item}</li>)}</ul>
             </article>
           </div>
         </section>
 
         <section id="tarifs" className={styles.pricingSection} aria-labelledby="pricing-title">
           <div className={styles.pricingCopy}>
-            <span className={styles.sectionKicker}>Tarifs</span>
-            <h2 id="pricing-title">Un tarif simple pour démarrer sans matériel spécifique</h2>
+            <span className={styles.sectionKicker}>Tarif affiché</span>
+            <h2 id="pricing-title">Un garage, des compagnons illimités</h2>
             <p>
-              LIVO reste volontairement lisible : un abonnement mensuel, un essai gratuit et une
-              mise en route adaptée aux garages et carrosseries indépendants.
+              L’inscription ouvre une période d’essai. À son terme, l’activation de l’abonnement est
+              accompagnée par LYSMA Solutions ; aucun paiement autonome n’est actuellement proposé dans LIVO.
             </p>
           </div>
           <div className={styles.priceCard}>
-            <span className={styles.trialBadge}>{LIVO_PRICING.trialDays} jours d’essai gratuit</span>
+            <span className={styles.trialBadge}>{LIVO_PRICING.trialDays} jours d’essai</span>
             <div className={styles.price}>
               <strong>{LIVO_PRICING.primaryPlan.priceMonthly} €</strong>
               <span>/ mois</span>
             </div>
             <ul>
-              <li>Sans engagement</li>
-              <li>Pas de matériel spécifique obligatoire</li>
-              <li>Usage tablette, smartphone et PC</li>
-              <li>Pointage, OR, véhicules, relevés et rentabilité</li>
+              <li>Un garage</li>
+              <li>Compagnons illimités</li>
+              <li>Application web sans terminal propriétaire</li>
+              <li>Pointage, fiches, véhicules, rapports et PDF</li>
+              <li>Intégration OR externe sur configuration</li>
             </ul>
-            <Link href="/inscription" className={styles.primaryButton}>
-              Demander un accès LIVO
-            </Link>
+            <Link href="/inscription" className={styles.primaryButton}>Créer un compte d’essai</Link>
           </div>
         </section>
 
         <section id="faq" className={styles.section} aria-labelledby="faq-title">
           <div className={styles.sectionIntro}>
-            <span className={styles.sectionKicker}>FAQ</span>
+            <span className={styles.sectionKicker}>Réponses sans ambiguïté</span>
             <h2 id="faq-title">Questions fréquentes sur LIVO</h2>
-            <p>
-              Les réponses essentielles pour comprendre comment LIVO s’intègre dans un atelier
-              automobile sans remplacer votre logiciel métier.
-            </p>
+            <p>Chaque réponse décrit le fonctionnement actuel de l’application.</p>
           </div>
           <div className={styles.faqGrid}>
             {faqItems.map((item) => (
@@ -513,12 +466,13 @@ export default function HomePage() {
         <footer className={styles.footer}>
           <div>
             <strong>LIVO</strong>
-            <span>Logiciel français de pointage atelier pour garages et carrosseries.</span>
+            <span>Pointage et pilotage du temps pour ateliers automobiles.</span>
           </div>
           <nav aria-label="Navigation secondaire">
+            <Link href={'/a-propos' as Route}>À propos</Link>
+            <Link href="/demo">Démonstration</Link>
             <Link href="/connexion">Connexion</Link>
-            <Link href="/inscription">Essai gratuit</Link>
-            <Link href="/demo">Démo</Link>
+            <Link href="/inscription">Essai</Link>
             <Link href="/cookies">Cookies</Link>
             <Link href="/politique-confidentialite">Confidentialité</Link>
           </nav>

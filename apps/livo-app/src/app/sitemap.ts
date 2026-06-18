@@ -11,6 +11,12 @@ const staticRoutes: MetadataRoute.Sitemap = [
     priority: 1,
   },
   {
+    url: canonical('/a-propos'),
+    lastModified,
+    changeFrequency: 'monthly',
+    priority: 0.8,
+  },
+  {
     url: canonical('/cookies'),
     lastModified,
     changeFrequency: 'yearly',

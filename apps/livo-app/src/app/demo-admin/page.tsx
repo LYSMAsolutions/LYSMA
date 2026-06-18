@@ -6,7 +6,7 @@ import styles from '../demo/page.module.css'
 export const metadata: Metadata = {
   title: 'Démo admin LIVO',
   description:
-    'Démo publique de l’espace admin LIVO : dashboard atelier, compagnons, véhicules, fiches de travaux et rentabilité.',
+    'Démo publique de l’espace admin LIVO : tableau de bord, compagnons, véhicules, fiches de travaux et écarts opérationnels.',
   robots: {
     index: false,
     follow: true,
@@ -14,10 +14,10 @@ export const metadata: Metadata = {
 }
 
 const stats = [
-  { label: 'CA du jour', value: '1 240 €', hint: '+ 18 % vs moyenne' },
+  { label: 'Valeur vendue du jour', value: '1 240 €', hint: 'Données fictives' },
   { label: 'Fiches en cours', value: '8', hint: '3 urgentes' },
   { label: 'Compagnons actifs', value: '4', hint: '1 en pause' },
-  { label: 'Rentabilité atelier', value: '72 %', hint: 'Objectif 70 %' },
+  { label: 'Temps vendu consommé', value: '72 %', hint: '3 h 29 / 4 h 50' },
 ]
 
 const fiches = [
@@ -47,7 +47,7 @@ export default function LivoDemoAdminPage() {
           <a href="#fiches">Fiches</a>
           <a href="#compagnons">Compagnons</a>
           <a href="#vehicules">Véhicules</a>
-          <a href="#rentabilite">Rentabilité</a>
+          <a href="#ecarts">Écarts de temps</a>
         </nav>
         <Link href="/demo" className={styles.adminBack}>Changer d’espace</Link>
       </aside>
@@ -57,7 +57,7 @@ export default function LivoDemoAdminPage() {
           <div>
             <p className={styles.demoBadge}>Démo admin · données fictives</p>
             <h1 id="dashboard">Garage Morel Auto</h1>
-            <span>Pilotage atelier, pointage, fiches et rentabilité en temps réel.</span>
+            <span>Pilotage atelier, pointage, fiches et écarts entre temps vendu et temps réel.</span>
           </div>
           <Link href="/demo-atelier" className={styles.adminHeaderCta}>Voir l’espace atelier</Link>
         </header>
@@ -118,15 +118,15 @@ export default function LivoDemoAdminPage() {
             </div>
           </section>
 
-          <section className={styles.adminPanel} id="rentabilite">
+          <section className={styles.adminPanel} id="ecarts">
             <div className={styles.adminPanelHead}>
-              <h2>Rentabilité</h2>
-              <span>Estimation du jour</span>
+              <h2>Temps vendu consommé</h2>
+              <span>Exemple fictif</span>
             </div>
             <div className={styles.adminGauge}>
               <span style={{ width: '72%' }} />
             </div>
-            <p className={styles.adminNote}>4 h 50 facturables suivies aujourd’hui sur les fiches en cours.</p>
+            <p className={styles.adminNote}>3 h 29 réellement pointées sur 4 h 50 vendues dans cet exemple.</p>
           </section>
         </div>
       </section>
