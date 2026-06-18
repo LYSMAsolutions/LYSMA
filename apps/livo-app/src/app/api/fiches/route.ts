@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { requireSecureSession } from '@/lib/security/secure-session'
+import {
+  getInterventionsMetierByIds,
+  toFicheInterventionMetier,
+} from '@/lib/bibliotheque-metier'
 import { z } from 'zod'
 import { Prisma } from '@prisma/client'
 
@@ -20,6 +24,7 @@ const schema = z.object({
   }).optional(),
   travaux: z.string().min(1),
   notes: z.string().optional(),
+  interventionsMetier: z.array(z.object({ id: z.string().min(1) })).max(20).optional(),
 })
 
 async function getOwnedGarage(garageId: string, userId: string) {
@@ -46,7 +51,7 @@ export async function POST(req: NextRequest) {
   const parsed = schema.safeParse(await req.json())
   if (!parsed.success) return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 })
 
-  const { garageId, vehiculeId, vehicule, travaux, notes } = parsed.data
+  const { garageId, vehiculeId, vehicule, travaux, notes, interventionsMetier } = parsed.data
   const garage = await getOwnedGarage(garageId, session.user.id)
   if (!garage) return NextResponse.json({ error: 'Garage introuvable ou non autorise' }, { status: 403 })
 
@@ -69,6 +74,10 @@ export async function POST(req: NextRequest) {
 
   if (!finalVehiculeId) return NextResponse.json({ error: 'Vehicule requis' }, { status: 400 })
 
+  const selectedInterventions = getInterventionsMetierByIds(
+    interventionsMetier?.map(({ id }) => id) ?? []
+  ).map(toFicheInterventionMetier)
+
   for (let attempt = 0; attempt < 3; attempt++) {
     try {
       const numero = await generateFicheNumero(garageId)
@@ -78,6 +87,9 @@ export async function POST(req: NextRequest) {
           vehiculeId: finalVehiculeId,
           numero,
           travaux,
+          interventionsMetier: selectedInterventions.length > 0
+            ? selectedInterventions as Prisma.InputJsonValue
+            : undefined,
           notes,
           statut: 'EN_ATTENTE',
         },

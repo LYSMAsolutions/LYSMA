@@ -15,74 +15,94 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
 
 /**
  * Model AdminUser
- *
+ * 
  */
 export type AdminUser = $Result.DefaultSelection<Prisma.$AdminUserPayload>
 /**
  * Model Client
- *
+ * 
  */
 export type Client = $Result.DefaultSelection<Prisma.$ClientPayload>
 /**
  * Model Acces
- *
+ * 
  */
 export type Acces = $Result.DefaultSelection<Prisma.$AccesPayload>
 /**
  * Model Message
- *
+ * 
  */
 export type Message = $Result.DefaultSelection<Prisma.$MessagePayload>
 /**
  * Model ChatLog
- *
+ * 
  */
 export type ChatLog = $Result.DefaultSelection<Prisma.$ChatLogPayload>
 /**
  * Model ChatboxUpdateNotification
- *
+ * 
  */
 export type ChatboxUpdateNotification = $Result.DefaultSelection<Prisma.$ChatboxUpdateNotificationPayload>
 /**
  * Model AuditLog
- *
+ * 
  */
 export type AuditLog = $Result.DefaultSelection<Prisma.$AuditLogPayload>
 /**
  * Model ErrorReport
- *
+ * 
  */
 export type ErrorReport = $Result.DefaultSelection<Prisma.$ErrorReportPayload>
 /**
  * Model FinanceSettings
- *
+ * 
  */
 export type FinanceSettings = $Result.DefaultSelection<Prisma.$FinanceSettingsPayload>
 /**
  * Model ShowcaseSiteFinance
- *
+ * 
  */
 export type ShowcaseSiteFinance = $Result.DefaultSelection<Prisma.$ShowcaseSiteFinancePayload>
 /**
  * Model LysmaExpense
- *
+ * 
  */
 export type LysmaExpense = $Result.DefaultSelection<Prisma.$LysmaExpensePayload>
 /**
  * Model RevenueSubscription
- *
+ * 
  */
 export type RevenueSubscription = $Result.DefaultSelection<Prisma.$RevenueSubscriptionPayload>
 /**
  * Model FinanceInvoice
- *
+ * 
  */
 export type FinanceInvoice = $Result.DefaultSelection<Prisma.$FinanceInvoicePayload>
 /**
  * Model FinancePayment
- *
+ * 
  */
 export type FinancePayment = $Result.DefaultSelection<Prisma.$FinancePaymentPayload>
+/**
+ * Model EchoChatMessage
+ * 
+ */
+export type EchoChatMessage = $Result.DefaultSelection<Prisma.$EchoChatMessagePayload>
+/**
+ * Model EchoMemoryEntry
+ * 
+ */
+export type EchoMemoryEntry = $Result.DefaultSelection<Prisma.$EchoMemoryEntryPayload>
+/**
+ * Model EchoHypothesis
+ * 
+ */
+export type EchoHypothesis = $Result.DefaultSelection<Prisma.$EchoHypothesisPayload>
+/**
+ * Model EchoDecision
+ * 
+ */
+export type EchoDecision = $Result.DefaultSelection<Prisma.$EchoDecisionPayload>
 
 /**
  * Enums
@@ -448,7 +468,7 @@ export class PrismaClient<
    *   prisma.user.create({ data: { name: 'Alice' } }),
    * ])
    * ```
-   *
+   * 
    * Read more in our [docs](https://www.prisma.io/docs/concepts/components/prisma-client/transactions).
    */
   $transaction<P extends Prisma.PrismaPromise<any>[]>(arg: [...P], options?: { isolationLevel?: Prisma.TransactionIsolationLevel }): $Utils.JsPromise<runtime.Types.Utils.UnwrapTuple<P>>
@@ -599,6 +619,46 @@ export class PrismaClient<
     * ```
     */
   get financePayment(): Prisma.FinancePaymentDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.echoChatMessage`: Exposes CRUD operations for the **EchoChatMessage** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more EchoChatMessages
+    * const echoChatMessages = await prisma.echoChatMessage.findMany()
+    * ```
+    */
+  get echoChatMessage(): Prisma.EchoChatMessageDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.echoMemoryEntry`: Exposes CRUD operations for the **EchoMemoryEntry** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more EchoMemoryEntries
+    * const echoMemoryEntries = await prisma.echoMemoryEntry.findMany()
+    * ```
+    */
+  get echoMemoryEntry(): Prisma.EchoMemoryEntryDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.echoHypothesis`: Exposes CRUD operations for the **EchoHypothesis** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more EchoHypotheses
+    * const echoHypotheses = await prisma.echoHypothesis.findMany()
+    * ```
+    */
+  get echoHypothesis(): Prisma.EchoHypothesisDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.echoDecision`: Exposes CRUD operations for the **EchoDecision** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more EchoDecisions
+    * const echoDecisions = await prisma.echoDecision.findMany()
+    * ```
+    */
+  get echoDecision(): Prisma.EchoDecisionDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1053,7 +1113,11 @@ export namespace Prisma {
     LysmaExpense: 'LysmaExpense',
     RevenueSubscription: 'RevenueSubscription',
     FinanceInvoice: 'FinanceInvoice',
-    FinancePayment: 'FinancePayment'
+    FinancePayment: 'FinancePayment',
+    EchoChatMessage: 'EchoChatMessage',
+    EchoMemoryEntry: 'EchoMemoryEntry',
+    EchoHypothesis: 'EchoHypothesis',
+    EchoDecision: 'EchoDecision'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1072,7 +1136,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "adminUser" | "client" | "acces" | "message" | "chatLog" | "chatboxUpdateNotification" | "auditLog" | "errorReport" | "financeSettings" | "showcaseSiteFinance" | "lysmaExpense" | "revenueSubscription" | "financeInvoice" | "financePayment"
+      modelProps: "adminUser" | "client" | "acces" | "message" | "chatLog" | "chatboxUpdateNotification" | "auditLog" | "errorReport" | "financeSettings" | "showcaseSiteFinance" | "lysmaExpense" | "revenueSubscription" | "financeInvoice" | "financePayment" | "echoChatMessage" | "echoMemoryEntry" | "echoHypothesis" | "echoDecision"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2112,6 +2176,302 @@ export namespace Prisma {
           }
         }
       }
+      EchoChatMessage: {
+        payload: Prisma.$EchoChatMessagePayload<ExtArgs>
+        fields: Prisma.EchoChatMessageFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.EchoChatMessageFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EchoChatMessagePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.EchoChatMessageFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EchoChatMessagePayload>
+          }
+          findFirst: {
+            args: Prisma.EchoChatMessageFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EchoChatMessagePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.EchoChatMessageFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EchoChatMessagePayload>
+          }
+          findMany: {
+            args: Prisma.EchoChatMessageFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EchoChatMessagePayload>[]
+          }
+          create: {
+            args: Prisma.EchoChatMessageCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EchoChatMessagePayload>
+          }
+          createMany: {
+            args: Prisma.EchoChatMessageCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.EchoChatMessageCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EchoChatMessagePayload>[]
+          }
+          delete: {
+            args: Prisma.EchoChatMessageDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EchoChatMessagePayload>
+          }
+          update: {
+            args: Prisma.EchoChatMessageUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EchoChatMessagePayload>
+          }
+          deleteMany: {
+            args: Prisma.EchoChatMessageDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.EchoChatMessageUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.EchoChatMessageUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EchoChatMessagePayload>[]
+          }
+          upsert: {
+            args: Prisma.EchoChatMessageUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EchoChatMessagePayload>
+          }
+          aggregate: {
+            args: Prisma.EchoChatMessageAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateEchoChatMessage>
+          }
+          groupBy: {
+            args: Prisma.EchoChatMessageGroupByArgs<ExtArgs>
+            result: $Utils.Optional<EchoChatMessageGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.EchoChatMessageCountArgs<ExtArgs>
+            result: $Utils.Optional<EchoChatMessageCountAggregateOutputType> | number
+          }
+        }
+      }
+      EchoMemoryEntry: {
+        payload: Prisma.$EchoMemoryEntryPayload<ExtArgs>
+        fields: Prisma.EchoMemoryEntryFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.EchoMemoryEntryFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EchoMemoryEntryPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.EchoMemoryEntryFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EchoMemoryEntryPayload>
+          }
+          findFirst: {
+            args: Prisma.EchoMemoryEntryFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EchoMemoryEntryPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.EchoMemoryEntryFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EchoMemoryEntryPayload>
+          }
+          findMany: {
+            args: Prisma.EchoMemoryEntryFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EchoMemoryEntryPayload>[]
+          }
+          create: {
+            args: Prisma.EchoMemoryEntryCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EchoMemoryEntryPayload>
+          }
+          createMany: {
+            args: Prisma.EchoMemoryEntryCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.EchoMemoryEntryCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EchoMemoryEntryPayload>[]
+          }
+          delete: {
+            args: Prisma.EchoMemoryEntryDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EchoMemoryEntryPayload>
+          }
+          update: {
+            args: Prisma.EchoMemoryEntryUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EchoMemoryEntryPayload>
+          }
+          deleteMany: {
+            args: Prisma.EchoMemoryEntryDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.EchoMemoryEntryUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.EchoMemoryEntryUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EchoMemoryEntryPayload>[]
+          }
+          upsert: {
+            args: Prisma.EchoMemoryEntryUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EchoMemoryEntryPayload>
+          }
+          aggregate: {
+            args: Prisma.EchoMemoryEntryAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateEchoMemoryEntry>
+          }
+          groupBy: {
+            args: Prisma.EchoMemoryEntryGroupByArgs<ExtArgs>
+            result: $Utils.Optional<EchoMemoryEntryGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.EchoMemoryEntryCountArgs<ExtArgs>
+            result: $Utils.Optional<EchoMemoryEntryCountAggregateOutputType> | number
+          }
+        }
+      }
+      EchoHypothesis: {
+        payload: Prisma.$EchoHypothesisPayload<ExtArgs>
+        fields: Prisma.EchoHypothesisFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.EchoHypothesisFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EchoHypothesisPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.EchoHypothesisFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EchoHypothesisPayload>
+          }
+          findFirst: {
+            args: Prisma.EchoHypothesisFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EchoHypothesisPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.EchoHypothesisFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EchoHypothesisPayload>
+          }
+          findMany: {
+            args: Prisma.EchoHypothesisFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EchoHypothesisPayload>[]
+          }
+          create: {
+            args: Prisma.EchoHypothesisCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EchoHypothesisPayload>
+          }
+          createMany: {
+            args: Prisma.EchoHypothesisCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.EchoHypothesisCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EchoHypothesisPayload>[]
+          }
+          delete: {
+            args: Prisma.EchoHypothesisDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EchoHypothesisPayload>
+          }
+          update: {
+            args: Prisma.EchoHypothesisUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EchoHypothesisPayload>
+          }
+          deleteMany: {
+            args: Prisma.EchoHypothesisDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.EchoHypothesisUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.EchoHypothesisUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EchoHypothesisPayload>[]
+          }
+          upsert: {
+            args: Prisma.EchoHypothesisUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EchoHypothesisPayload>
+          }
+          aggregate: {
+            args: Prisma.EchoHypothesisAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateEchoHypothesis>
+          }
+          groupBy: {
+            args: Prisma.EchoHypothesisGroupByArgs<ExtArgs>
+            result: $Utils.Optional<EchoHypothesisGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.EchoHypothesisCountArgs<ExtArgs>
+            result: $Utils.Optional<EchoHypothesisCountAggregateOutputType> | number
+          }
+        }
+      }
+      EchoDecision: {
+        payload: Prisma.$EchoDecisionPayload<ExtArgs>
+        fields: Prisma.EchoDecisionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.EchoDecisionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EchoDecisionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.EchoDecisionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EchoDecisionPayload>
+          }
+          findFirst: {
+            args: Prisma.EchoDecisionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EchoDecisionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.EchoDecisionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EchoDecisionPayload>
+          }
+          findMany: {
+            args: Prisma.EchoDecisionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EchoDecisionPayload>[]
+          }
+          create: {
+            args: Prisma.EchoDecisionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EchoDecisionPayload>
+          }
+          createMany: {
+            args: Prisma.EchoDecisionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.EchoDecisionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EchoDecisionPayload>[]
+          }
+          delete: {
+            args: Prisma.EchoDecisionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EchoDecisionPayload>
+          }
+          update: {
+            args: Prisma.EchoDecisionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EchoDecisionPayload>
+          }
+          deleteMany: {
+            args: Prisma.EchoDecisionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.EchoDecisionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.EchoDecisionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EchoDecisionPayload>[]
+          }
+          upsert: {
+            args: Prisma.EchoDecisionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EchoDecisionPayload>
+          }
+          aggregate: {
+            args: Prisma.EchoDecisionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateEchoDecision>
+          }
+          groupBy: {
+            args: Prisma.EchoDecisionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<EchoDecisionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.EchoDecisionCountArgs<ExtArgs>
+            result: $Utils.Optional<EchoDecisionCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -2157,7 +2517,7 @@ export namespace Prisma {
      * ```
      * // Shorthand for `emit: 'stdout'`
      * log: ['query', 'info', 'warn', 'error']
-     *
+     * 
      * // Emit as events only
      * log: [
      *   { emit: 'event', level: 'query' },
@@ -2165,14 +2525,14 @@ export namespace Prisma {
      *   { emit: 'event', level: 'warn' }
      *   { emit: 'event', level: 'error' }
      * ]
-     *
+     * 
      * / Emit as events and log to stdout
      * og: [
      *  { emit: 'stdout', level: 'query' },
      *  { emit: 'stdout', level: 'info' },
      *  { emit: 'stdout', level: 'warn' }
      *  { emit: 'stdout', level: 'error' }
-     *
+     * 
      * ```
      * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/logging#the-log-option).
      */
@@ -2193,7 +2553,7 @@ export namespace Prisma {
     adapter?: runtime.SqlDriverAdapterFactory | null
     /**
      * Global configuration for omitting model fields by default.
-     *
+     * 
      * @example
      * ```
      * const prisma = new PrismaClient({
@@ -2222,6 +2582,10 @@ export namespace Prisma {
     revenueSubscription?: RevenueSubscriptionOmit
     financeInvoice?: FinanceInvoiceOmit
     financePayment?: FinancePaymentOmit
+    echoChatMessage?: EchoChatMessageOmit
+    echoMemoryEntry?: EchoMemoryEntryOmit
+    echoHypothesis?: EchoHypothesisOmit
+    echoDecision?: EchoDecisionOmit
   }
 
   /* Types for Logging */
@@ -2400,6 +2764,55 @@ export namespace Prisma {
 
 
   /**
+   * Count Type EchoChatMessageCountOutputType
+   */
+
+  export type EchoChatMessageCountOutputType = {
+    memoryEntries: number
+    hypotheses: number
+    decisions: number
+  }
+
+  export type EchoChatMessageCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    memoryEntries?: boolean | EchoChatMessageCountOutputTypeCountMemoryEntriesArgs
+    hypotheses?: boolean | EchoChatMessageCountOutputTypeCountHypothesesArgs
+    decisions?: boolean | EchoChatMessageCountOutputTypeCountDecisionsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * EchoChatMessageCountOutputType without action
+   */
+  export type EchoChatMessageCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EchoChatMessageCountOutputType
+     */
+    select?: EchoChatMessageCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * EchoChatMessageCountOutputType without action
+   */
+  export type EchoChatMessageCountOutputTypeCountMemoryEntriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EchoMemoryEntryWhereInput
+  }
+
+  /**
+   * EchoChatMessageCountOutputType without action
+   */
+  export type EchoChatMessageCountOutputTypeCountHypothesesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EchoHypothesisWhereInput
+  }
+
+  /**
+   * EchoChatMessageCountOutputType without action
+   */
+  export type EchoChatMessageCountOutputTypeCountDecisionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EchoDecisionWhereInput
+  }
+
+
+  /**
    * Models
    */
 
@@ -2477,43 +2890,43 @@ export namespace Prisma {
     where?: AdminUserWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
+     * 
      * Determine the order of AdminUsers to fetch.
      */
     orderBy?: AdminUserOrderByWithRelationInput | AdminUserOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
+     * 
      * Sets the start position
      */
     cursor?: AdminUserWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Take `±n` AdminUsers from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Skip the first `n` AdminUsers.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
+     * 
      * Count returned AdminUsers
     **/
     _count?: true | AdminUserCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: AdminUserMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
+     * 
      * Select which fields to find the maximum value
     **/
     _max?: AdminUserMaxAggregateInputType
@@ -2695,13 +3108,13 @@ export namespace Prisma {
      * @example
      * // Get all AdminUsers
      * const adminUsers = await prisma.adminUser.findMany()
-     *
+     * 
      * // Get first 10 AdminUsers
      * const adminUsers = await prisma.adminUser.findMany({ take: 10 })
-     *
+     * 
      * // Only select the `id`
      * const adminUserWithIdOnly = await prisma.adminUser.findMany({ select: { id: true } })
-     *
+     * 
      */
     findMany<T extends AdminUserFindManyArgs>(args?: SelectSubset<T, AdminUserFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminUserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
@@ -2715,7 +3128,7 @@ export namespace Prisma {
      *     // ... data to create a AdminUser
      *   }
      * })
-     *
+     * 
      */
     create<T extends AdminUserCreateArgs>(args: SelectSubset<T, AdminUserCreateArgs<ExtArgs>>): Prisma__AdminUserClient<$Result.GetResult<Prisma.$AdminUserPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -2729,7 +3142,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     *
+     *     
      */
     createMany<T extends AdminUserCreateManyArgs>(args?: SelectSubset<T, AdminUserCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -2743,7 +3156,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     *
+     * 
      * // Create many AdminUsers and only return the `id`
      * const adminUserWithIdOnly = await prisma.adminUser.createManyAndReturn({
      *   select: { id: true },
@@ -2753,7 +3166,7 @@ export namespace Prisma {
      * })
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     *
+     * 
      */
     createManyAndReturn<T extends AdminUserCreateManyAndReturnArgs>(args?: SelectSubset<T, AdminUserCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminUserPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
@@ -2767,7 +3180,7 @@ export namespace Prisma {
      *     // ... filter to delete one AdminUser
      *   }
      * })
-     *
+     * 
      */
     delete<T extends AdminUserDeleteArgs>(args: SelectSubset<T, AdminUserDeleteArgs<ExtArgs>>): Prisma__AdminUserClient<$Result.GetResult<Prisma.$AdminUserPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -2784,7 +3197,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   }
      * })
-     *
+     * 
      */
     update<T extends AdminUserUpdateArgs>(args: SelectSubset<T, AdminUserUpdateArgs<ExtArgs>>): Prisma__AdminUserClient<$Result.GetResult<Prisma.$AdminUserPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -2798,7 +3211,7 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     *
+     * 
      */
     deleteMany<T extends AdminUserDeleteManyArgs>(args?: SelectSubset<T, AdminUserDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -2817,7 +3230,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   }
      * })
-     *
+     * 
      */
     updateMany<T extends AdminUserUpdateManyArgs>(args: SelectSubset<T, AdminUserUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -2834,7 +3247,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     *
+     * 
      * // Update zero or more AdminUsers and only return the `id`
      * const adminUserWithIdOnly = await prisma.adminUser.updateManyAndReturn({
      *   select: { id: true },
@@ -2847,7 +3260,7 @@ export namespace Prisma {
      * })
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     *
+     * 
      */
     updateManyAndReturn<T extends AdminUserUpdateManyAndReturnArgs>(args: SelectSubset<T, AdminUserUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminUserPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
@@ -2936,7 +3349,7 @@ export namespace Prisma {
      *     _all: true
      *   },
      * })
-     *
+     * 
     **/
     groupBy<
       T extends AdminUserGroupByArgs,
@@ -3046,7 +3459,7 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"AdminUser", 'DateTime'>
     readonly updatedAt: FieldRef<"AdminUser", 'DateTime'>
   }
-
+    
 
   // Custom InputTypes
   /**
@@ -3103,31 +3516,31 @@ export namespace Prisma {
     where?: AdminUserWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
+     * 
      * Determine the order of AdminUsers to fetch.
      */
     orderBy?: AdminUserOrderByWithRelationInput | AdminUserOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
+     * 
      * Sets the position for searching for AdminUsers.
      */
     cursor?: AdminUserWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Take `±n` AdminUsers from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Skip the first `n` AdminUsers.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     *
+     * 
      * Filter by unique combinations of AdminUsers.
      */
     distinct?: AdminUserScalarFieldEnum | AdminUserScalarFieldEnum[]
@@ -3151,31 +3564,31 @@ export namespace Prisma {
     where?: AdminUserWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
+     * 
      * Determine the order of AdminUsers to fetch.
      */
     orderBy?: AdminUserOrderByWithRelationInput | AdminUserOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
+     * 
      * Sets the position for searching for AdminUsers.
      */
     cursor?: AdminUserWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Take `±n` AdminUsers from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Skip the first `n` AdminUsers.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     *
+     * 
      * Filter by unique combinations of AdminUsers.
      */
     distinct?: AdminUserScalarFieldEnum | AdminUserScalarFieldEnum[]
@@ -3199,25 +3612,25 @@ export namespace Prisma {
     where?: AdminUserWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
+     * 
      * Determine the order of AdminUsers to fetch.
      */
     orderBy?: AdminUserOrderByWithRelationInput | AdminUserOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
+     * 
      * Sets the position for listing AdminUsers.
      */
     cursor?: AdminUserWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Take `±n` AdminUsers from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Skip the first `n` AdminUsers.
      */
     skip?: number
@@ -3533,43 +3946,43 @@ export namespace Prisma {
     where?: ClientWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
+     * 
      * Determine the order of Clients to fetch.
      */
     orderBy?: ClientOrderByWithRelationInput | ClientOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
+     * 
      * Sets the start position
      */
     cursor?: ClientWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Take `±n` Clients from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Skip the first `n` Clients.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
+     * 
      * Count returned Clients
     **/
     _count?: true | ClientCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: ClientMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
+     * 
      * Select which fields to find the maximum value
     **/
     _max?: ClientMaxAggregateInputType
@@ -3812,13 +4225,13 @@ export namespace Prisma {
      * @example
      * // Get all Clients
      * const clients = await prisma.client.findMany()
-     *
+     * 
      * // Get first 10 Clients
      * const clients = await prisma.client.findMany({ take: 10 })
-     *
+     * 
      * // Only select the `id`
      * const clientWithIdOnly = await prisma.client.findMany({ select: { id: true } })
-     *
+     * 
      */
     findMany<T extends ClientFindManyArgs>(args?: SelectSubset<T, ClientFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClientPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
@@ -3832,7 +4245,7 @@ export namespace Prisma {
      *     // ... data to create a Client
      *   }
      * })
-     *
+     * 
      */
     create<T extends ClientCreateArgs>(args: SelectSubset<T, ClientCreateArgs<ExtArgs>>): Prisma__ClientClient<$Result.GetResult<Prisma.$ClientPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -3846,7 +4259,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     *
+     *     
      */
     createMany<T extends ClientCreateManyArgs>(args?: SelectSubset<T, ClientCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -3860,7 +4273,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     *
+     * 
      * // Create many Clients and only return the `id`
      * const clientWithIdOnly = await prisma.client.createManyAndReturn({
      *   select: { id: true },
@@ -3870,7 +4283,7 @@ export namespace Prisma {
      * })
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     *
+     * 
      */
     createManyAndReturn<T extends ClientCreateManyAndReturnArgs>(args?: SelectSubset<T, ClientCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClientPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
@@ -3884,7 +4297,7 @@ export namespace Prisma {
      *     // ... filter to delete one Client
      *   }
      * })
-     *
+     * 
      */
     delete<T extends ClientDeleteArgs>(args: SelectSubset<T, ClientDeleteArgs<ExtArgs>>): Prisma__ClientClient<$Result.GetResult<Prisma.$ClientPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -3901,7 +4314,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   }
      * })
-     *
+     * 
      */
     update<T extends ClientUpdateArgs>(args: SelectSubset<T, ClientUpdateArgs<ExtArgs>>): Prisma__ClientClient<$Result.GetResult<Prisma.$ClientPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -3915,7 +4328,7 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     *
+     * 
      */
     deleteMany<T extends ClientDeleteManyArgs>(args?: SelectSubset<T, ClientDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -3934,7 +4347,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   }
      * })
-     *
+     * 
      */
     updateMany<T extends ClientUpdateManyArgs>(args: SelectSubset<T, ClientUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -3951,7 +4364,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     *
+     * 
      * // Update zero or more Clients and only return the `id`
      * const clientWithIdOnly = await prisma.client.updateManyAndReturn({
      *   select: { id: true },
@@ -3964,7 +4377,7 @@ export namespace Prisma {
      * })
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     *
+     * 
      */
     updateManyAndReturn<T extends ClientUpdateManyAndReturnArgs>(args: SelectSubset<T, ClientUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClientPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
@@ -4053,7 +4466,7 @@ export namespace Prisma {
      *     _all: true
      *   },
      * })
-     *
+     * 
     **/
     groupBy<
       T extends ClientGroupByArgs,
@@ -4173,7 +4586,7 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"Client", 'DateTime'>
     readonly updatedAt: FieldRef<"Client", 'DateTime'>
   }
-
+    
 
   // Custom InputTypes
   /**
@@ -4242,31 +4655,31 @@ export namespace Prisma {
     where?: ClientWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
+     * 
      * Determine the order of Clients to fetch.
      */
     orderBy?: ClientOrderByWithRelationInput | ClientOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
+     * 
      * Sets the position for searching for Clients.
      */
     cursor?: ClientWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Take `±n` Clients from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Skip the first `n` Clients.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     *
+     * 
      * Filter by unique combinations of Clients.
      */
     distinct?: ClientScalarFieldEnum | ClientScalarFieldEnum[]
@@ -4294,31 +4707,31 @@ export namespace Prisma {
     where?: ClientWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
+     * 
      * Determine the order of Clients to fetch.
      */
     orderBy?: ClientOrderByWithRelationInput | ClientOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
+     * 
      * Sets the position for searching for Clients.
      */
     cursor?: ClientWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Take `±n` Clients from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Skip the first `n` Clients.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     *
+     * 
      * Filter by unique combinations of Clients.
      */
     distinct?: ClientScalarFieldEnum | ClientScalarFieldEnum[]
@@ -4346,25 +4759,25 @@ export namespace Prisma {
     where?: ClientWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
+     * 
      * Determine the order of Clients to fetch.
      */
     orderBy?: ClientOrderByWithRelationInput | ClientOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
+     * 
      * Sets the position for listing Clients.
      */
     cursor?: ClientWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Take `±n` Clients from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Skip the first `n` Clients.
      */
     skip?: number
@@ -4706,43 +5119,43 @@ export namespace Prisma {
     where?: AccesWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
+     * 
      * Determine the order of Acces to fetch.
      */
     orderBy?: AccesOrderByWithRelationInput | AccesOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
+     * 
      * Sets the start position
      */
     cursor?: AccesWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Take `±n` Acces from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Skip the first `n` Acces.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
+     * 
      * Count returned Acces
     **/
     _count?: true | AccesCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: AccesMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
+     * 
      * Select which fields to find the maximum value
     **/
     _max?: AccesMaxAggregateInputType
@@ -4944,13 +5357,13 @@ export namespace Prisma {
      * @example
      * // Get all Acces
      * const acces = await prisma.acces.findMany()
-     *
+     * 
      * // Get first 10 Acces
      * const acces = await prisma.acces.findMany({ take: 10 })
-     *
+     * 
      * // Only select the `id`
      * const accesWithIdOnly = await prisma.acces.findMany({ select: { id: true } })
-     *
+     * 
      */
     findMany<T extends AccesFindManyArgs>(args?: SelectSubset<T, AccesFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AccesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
@@ -4964,7 +5377,7 @@ export namespace Prisma {
      *     // ... data to create a Acces
      *   }
      * })
-     *
+     * 
      */
     create<T extends AccesCreateArgs>(args: SelectSubset<T, AccesCreateArgs<ExtArgs>>): Prisma__AccesClient<$Result.GetResult<Prisma.$AccesPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -4978,7 +5391,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     *
+     *     
      */
     createMany<T extends AccesCreateManyArgs>(args?: SelectSubset<T, AccesCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -4992,7 +5405,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     *
+     * 
      * // Create many Acces and only return the `id`
      * const accesWithIdOnly = await prisma.acces.createManyAndReturn({
      *   select: { id: true },
@@ -5002,7 +5415,7 @@ export namespace Prisma {
      * })
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     *
+     * 
      */
     createManyAndReturn<T extends AccesCreateManyAndReturnArgs>(args?: SelectSubset<T, AccesCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AccesPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
@@ -5016,7 +5429,7 @@ export namespace Prisma {
      *     // ... filter to delete one Acces
      *   }
      * })
-     *
+     * 
      */
     delete<T extends AccesDeleteArgs>(args: SelectSubset<T, AccesDeleteArgs<ExtArgs>>): Prisma__AccesClient<$Result.GetResult<Prisma.$AccesPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -5033,7 +5446,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   }
      * })
-     *
+     * 
      */
     update<T extends AccesUpdateArgs>(args: SelectSubset<T, AccesUpdateArgs<ExtArgs>>): Prisma__AccesClient<$Result.GetResult<Prisma.$AccesPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -5047,7 +5460,7 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     *
+     * 
      */
     deleteMany<T extends AccesDeleteManyArgs>(args?: SelectSubset<T, AccesDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -5066,7 +5479,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   }
      * })
-     *
+     * 
      */
     updateMany<T extends AccesUpdateManyArgs>(args: SelectSubset<T, AccesUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -5083,7 +5496,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     *
+     * 
      * // Update zero or more Acces and only return the `id`
      * const accesWithIdOnly = await prisma.acces.updateManyAndReturn({
      *   select: { id: true },
@@ -5096,7 +5509,7 @@ export namespace Prisma {
      * })
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     *
+     * 
      */
     updateManyAndReturn<T extends AccesUpdateManyAndReturnArgs>(args: SelectSubset<T, AccesUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AccesPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
@@ -5185,7 +5598,7 @@ export namespace Prisma {
      *     _all: true
      *   },
      * })
-     *
+     * 
     **/
     groupBy<
       T extends AccesGroupByArgs,
@@ -5297,7 +5710,7 @@ export namespace Prisma {
     readonly premiereConnexion: FieldRef<"Acces", 'Boolean'>
     readonly createdAt: FieldRef<"Acces", 'DateTime'>
   }
-
+    
 
   // Custom InputTypes
   /**
@@ -5366,31 +5779,31 @@ export namespace Prisma {
     where?: AccesWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
+     * 
      * Determine the order of Acces to fetch.
      */
     orderBy?: AccesOrderByWithRelationInput | AccesOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
+     * 
      * Sets the position for searching for Acces.
      */
     cursor?: AccesWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Take `±n` Acces from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Skip the first `n` Acces.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     *
+     * 
      * Filter by unique combinations of Acces.
      */
     distinct?: AccesScalarFieldEnum | AccesScalarFieldEnum[]
@@ -5418,31 +5831,31 @@ export namespace Prisma {
     where?: AccesWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
+     * 
      * Determine the order of Acces to fetch.
      */
     orderBy?: AccesOrderByWithRelationInput | AccesOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
+     * 
      * Sets the position for searching for Acces.
      */
     cursor?: AccesWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Take `±n` Acces from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Skip the first `n` Acces.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     *
+     * 
      * Filter by unique combinations of Acces.
      */
     distinct?: AccesScalarFieldEnum | AccesScalarFieldEnum[]
@@ -5470,25 +5883,25 @@ export namespace Prisma {
     where?: AccesWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
+     * 
      * Determine the order of Acces to fetch.
      */
     orderBy?: AccesOrderByWithRelationInput | AccesOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
+     * 
      * Sets the position for listing Acces.
      */
     cursor?: AccesWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Take `±n` Acces from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Skip the first `n` Acces.
      */
     skip?: number
@@ -5820,43 +6233,43 @@ export namespace Prisma {
     where?: MessageWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
+     * 
      * Determine the order of Messages to fetch.
      */
     orderBy?: MessageOrderByWithRelationInput | MessageOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
+     * 
      * Sets the start position
      */
     cursor?: MessageWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Take `±n` Messages from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Skip the first `n` Messages.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
+     * 
      * Count returned Messages
     **/
     _count?: true | MessageCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: MessageMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
+     * 
      * Select which fields to find the maximum value
     **/
     _max?: MessageMaxAggregateInputType
@@ -6088,13 +6501,13 @@ export namespace Prisma {
      * @example
      * // Get all Messages
      * const messages = await prisma.message.findMany()
-     *
+     * 
      * // Get first 10 Messages
      * const messages = await prisma.message.findMany({ take: 10 })
-     *
+     * 
      * // Only select the `id`
      * const messageWithIdOnly = await prisma.message.findMany({ select: { id: true } })
-     *
+     * 
      */
     findMany<T extends MessageFindManyArgs>(args?: SelectSubset<T, MessageFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
@@ -6108,7 +6521,7 @@ export namespace Prisma {
      *     // ... data to create a Message
      *   }
      * })
-     *
+     * 
      */
     create<T extends MessageCreateArgs>(args: SelectSubset<T, MessageCreateArgs<ExtArgs>>): Prisma__MessageClient<$Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -6122,7 +6535,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     *
+     *     
      */
     createMany<T extends MessageCreateManyArgs>(args?: SelectSubset<T, MessageCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -6136,7 +6549,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     *
+     * 
      * // Create many Messages and only return the `id`
      * const messageWithIdOnly = await prisma.message.createManyAndReturn({
      *   select: { id: true },
@@ -6146,7 +6559,7 @@ export namespace Prisma {
      * })
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     *
+     * 
      */
     createManyAndReturn<T extends MessageCreateManyAndReturnArgs>(args?: SelectSubset<T, MessageCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
@@ -6160,7 +6573,7 @@ export namespace Prisma {
      *     // ... filter to delete one Message
      *   }
      * })
-     *
+     * 
      */
     delete<T extends MessageDeleteArgs>(args: SelectSubset<T, MessageDeleteArgs<ExtArgs>>): Prisma__MessageClient<$Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -6177,7 +6590,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   }
      * })
-     *
+     * 
      */
     update<T extends MessageUpdateArgs>(args: SelectSubset<T, MessageUpdateArgs<ExtArgs>>): Prisma__MessageClient<$Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -6191,7 +6604,7 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     *
+     * 
      */
     deleteMany<T extends MessageDeleteManyArgs>(args?: SelectSubset<T, MessageDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -6210,7 +6623,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   }
      * })
-     *
+     * 
      */
     updateMany<T extends MessageUpdateManyArgs>(args: SelectSubset<T, MessageUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -6227,7 +6640,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     *
+     * 
      * // Update zero or more Messages and only return the `id`
      * const messageWithIdOnly = await prisma.message.updateManyAndReturn({
      *   select: { id: true },
@@ -6240,7 +6653,7 @@ export namespace Prisma {
      * })
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     *
+     * 
      */
     updateManyAndReturn<T extends MessageUpdateManyAndReturnArgs>(args: SelectSubset<T, MessageUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
@@ -6329,7 +6742,7 @@ export namespace Prisma {
      *     _all: true
      *   },
      * })
-     *
+     * 
     **/
     groupBy<
       T extends MessageGroupByArgs,
@@ -6446,7 +6859,7 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"Message", 'DateTime'>
     readonly updatedAt: FieldRef<"Message", 'DateTime'>
   }
-
+    
 
   // Custom InputTypes
   /**
@@ -6515,31 +6928,31 @@ export namespace Prisma {
     where?: MessageWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
+     * 
      * Determine the order of Messages to fetch.
      */
     orderBy?: MessageOrderByWithRelationInput | MessageOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
+     * 
      * Sets the position for searching for Messages.
      */
     cursor?: MessageWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Take `±n` Messages from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Skip the first `n` Messages.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     *
+     * 
      * Filter by unique combinations of Messages.
      */
     distinct?: MessageScalarFieldEnum | MessageScalarFieldEnum[]
@@ -6567,31 +6980,31 @@ export namespace Prisma {
     where?: MessageWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
+     * 
      * Determine the order of Messages to fetch.
      */
     orderBy?: MessageOrderByWithRelationInput | MessageOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
+     * 
      * Sets the position for searching for Messages.
      */
     cursor?: MessageWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Take `±n` Messages from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Skip the first `n` Messages.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     *
+     * 
      * Filter by unique combinations of Messages.
      */
     distinct?: MessageScalarFieldEnum | MessageScalarFieldEnum[]
@@ -6619,25 +7032,25 @@ export namespace Prisma {
     where?: MessageWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
+     * 
      * Determine the order of Messages to fetch.
      */
     orderBy?: MessageOrderByWithRelationInput | MessageOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
+     * 
      * Sets the position for listing Messages.
      */
     cursor?: MessageWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Take `±n` Messages from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Skip the first `n` Messages.
      */
     skip?: number
@@ -7014,43 +7427,43 @@ export namespace Prisma {
     where?: ChatLogWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
+     * 
      * Determine the order of ChatLogs to fetch.
      */
     orderBy?: ChatLogOrderByWithRelationInput | ChatLogOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
+     * 
      * Sets the start position
      */
     cursor?: ChatLogWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Take `±n` ChatLogs from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Skip the first `n` ChatLogs.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
+     * 
      * Count returned ChatLogs
     **/
     _count?: true | ChatLogCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: ChatLogMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
+     * 
      * Select which fields to find the maximum value
     **/
     _max?: ChatLogMaxAggregateInputType
@@ -7298,13 +7711,13 @@ export namespace Prisma {
      * @example
      * // Get all ChatLogs
      * const chatLogs = await prisma.chatLog.findMany()
-     *
+     * 
      * // Get first 10 ChatLogs
      * const chatLogs = await prisma.chatLog.findMany({ take: 10 })
-     *
+     * 
      * // Only select the `id`
      * const chatLogWithIdOnly = await prisma.chatLog.findMany({ select: { id: true } })
-     *
+     * 
      */
     findMany<T extends ChatLogFindManyArgs>(args?: SelectSubset<T, ChatLogFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChatLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
@@ -7318,7 +7731,7 @@ export namespace Prisma {
      *     // ... data to create a ChatLog
      *   }
      * })
-     *
+     * 
      */
     create<T extends ChatLogCreateArgs>(args: SelectSubset<T, ChatLogCreateArgs<ExtArgs>>): Prisma__ChatLogClient<$Result.GetResult<Prisma.$ChatLogPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -7332,7 +7745,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     *
+     *     
      */
     createMany<T extends ChatLogCreateManyArgs>(args?: SelectSubset<T, ChatLogCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -7346,7 +7759,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     *
+     * 
      * // Create many ChatLogs and only return the `id`
      * const chatLogWithIdOnly = await prisma.chatLog.createManyAndReturn({
      *   select: { id: true },
@@ -7356,7 +7769,7 @@ export namespace Prisma {
      * })
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     *
+     * 
      */
     createManyAndReturn<T extends ChatLogCreateManyAndReturnArgs>(args?: SelectSubset<T, ChatLogCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChatLogPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
@@ -7370,7 +7783,7 @@ export namespace Prisma {
      *     // ... filter to delete one ChatLog
      *   }
      * })
-     *
+     * 
      */
     delete<T extends ChatLogDeleteArgs>(args: SelectSubset<T, ChatLogDeleteArgs<ExtArgs>>): Prisma__ChatLogClient<$Result.GetResult<Prisma.$ChatLogPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -7387,7 +7800,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   }
      * })
-     *
+     * 
      */
     update<T extends ChatLogUpdateArgs>(args: SelectSubset<T, ChatLogUpdateArgs<ExtArgs>>): Prisma__ChatLogClient<$Result.GetResult<Prisma.$ChatLogPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -7401,7 +7814,7 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     *
+     * 
      */
     deleteMany<T extends ChatLogDeleteManyArgs>(args?: SelectSubset<T, ChatLogDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -7420,7 +7833,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   }
      * })
-     *
+     * 
      */
     updateMany<T extends ChatLogUpdateManyArgs>(args: SelectSubset<T, ChatLogUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -7437,7 +7850,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     *
+     * 
      * // Update zero or more ChatLogs and only return the `id`
      * const chatLogWithIdOnly = await prisma.chatLog.updateManyAndReturn({
      *   select: { id: true },
@@ -7450,7 +7863,7 @@ export namespace Prisma {
      * })
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     *
+     * 
      */
     updateManyAndReturn<T extends ChatLogUpdateManyAndReturnArgs>(args: SelectSubset<T, ChatLogUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChatLogPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
@@ -7539,7 +7952,7 @@ export namespace Prisma {
      *     _all: true
      *   },
      * })
-     *
+     * 
     **/
     groupBy<
       T extends ChatLogGroupByArgs,
@@ -7660,7 +8073,7 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"ChatLog", 'DateTime'>
     readonly updatedAt: FieldRef<"ChatLog", 'DateTime'>
   }
-
+    
 
   // Custom InputTypes
   /**
@@ -7717,31 +8130,31 @@ export namespace Prisma {
     where?: ChatLogWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
+     * 
      * Determine the order of ChatLogs to fetch.
      */
     orderBy?: ChatLogOrderByWithRelationInput | ChatLogOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
+     * 
      * Sets the position for searching for ChatLogs.
      */
     cursor?: ChatLogWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Take `±n` ChatLogs from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Skip the first `n` ChatLogs.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     *
+     * 
      * Filter by unique combinations of ChatLogs.
      */
     distinct?: ChatLogScalarFieldEnum | ChatLogScalarFieldEnum[]
@@ -7765,31 +8178,31 @@ export namespace Prisma {
     where?: ChatLogWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
+     * 
      * Determine the order of ChatLogs to fetch.
      */
     orderBy?: ChatLogOrderByWithRelationInput | ChatLogOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
+     * 
      * Sets the position for searching for ChatLogs.
      */
     cursor?: ChatLogWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Take `±n` ChatLogs from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Skip the first `n` ChatLogs.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     *
+     * 
      * Filter by unique combinations of ChatLogs.
      */
     distinct?: ChatLogScalarFieldEnum | ChatLogScalarFieldEnum[]
@@ -7813,25 +8226,25 @@ export namespace Prisma {
     where?: ChatLogWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
+     * 
      * Determine the order of ChatLogs to fetch.
      */
     orderBy?: ChatLogOrderByWithRelationInput | ChatLogOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
+     * 
      * Sets the position for listing ChatLogs.
      */
     cursor?: ChatLogWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Take `±n` ChatLogs from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Skip the first `n` ChatLogs.
      */
     skip?: number
@@ -8141,43 +8554,43 @@ export namespace Prisma {
     where?: ChatboxUpdateNotificationWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
+     * 
      * Determine the order of ChatboxUpdateNotifications to fetch.
      */
     orderBy?: ChatboxUpdateNotificationOrderByWithRelationInput | ChatboxUpdateNotificationOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
+     * 
      * Sets the start position
      */
     cursor?: ChatboxUpdateNotificationWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Take `±n` ChatboxUpdateNotifications from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Skip the first `n` ChatboxUpdateNotifications.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
+     * 
      * Count returned ChatboxUpdateNotifications
     **/
     _count?: true | ChatboxUpdateNotificationCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: ChatboxUpdateNotificationMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
+     * 
      * Select which fields to find the maximum value
     **/
     _max?: ChatboxUpdateNotificationMaxAggregateInputType
@@ -8401,13 +8814,13 @@ export namespace Prisma {
      * @example
      * // Get all ChatboxUpdateNotifications
      * const chatboxUpdateNotifications = await prisma.chatboxUpdateNotification.findMany()
-     *
+     * 
      * // Get first 10 ChatboxUpdateNotifications
      * const chatboxUpdateNotifications = await prisma.chatboxUpdateNotification.findMany({ take: 10 })
-     *
+     * 
      * // Only select the `id`
      * const chatboxUpdateNotificationWithIdOnly = await prisma.chatboxUpdateNotification.findMany({ select: { id: true } })
-     *
+     * 
      */
     findMany<T extends ChatboxUpdateNotificationFindManyArgs>(args?: SelectSubset<T, ChatboxUpdateNotificationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChatboxUpdateNotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
@@ -8421,7 +8834,7 @@ export namespace Prisma {
      *     // ... data to create a ChatboxUpdateNotification
      *   }
      * })
-     *
+     * 
      */
     create<T extends ChatboxUpdateNotificationCreateArgs>(args: SelectSubset<T, ChatboxUpdateNotificationCreateArgs<ExtArgs>>): Prisma__ChatboxUpdateNotificationClient<$Result.GetResult<Prisma.$ChatboxUpdateNotificationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -8435,7 +8848,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     *
+     *     
      */
     createMany<T extends ChatboxUpdateNotificationCreateManyArgs>(args?: SelectSubset<T, ChatboxUpdateNotificationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -8449,7 +8862,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     *
+     * 
      * // Create many ChatboxUpdateNotifications and only return the `id`
      * const chatboxUpdateNotificationWithIdOnly = await prisma.chatboxUpdateNotification.createManyAndReturn({
      *   select: { id: true },
@@ -8459,7 +8872,7 @@ export namespace Prisma {
      * })
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     *
+     * 
      */
     createManyAndReturn<T extends ChatboxUpdateNotificationCreateManyAndReturnArgs>(args?: SelectSubset<T, ChatboxUpdateNotificationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChatboxUpdateNotificationPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
@@ -8473,7 +8886,7 @@ export namespace Prisma {
      *     // ... filter to delete one ChatboxUpdateNotification
      *   }
      * })
-     *
+     * 
      */
     delete<T extends ChatboxUpdateNotificationDeleteArgs>(args: SelectSubset<T, ChatboxUpdateNotificationDeleteArgs<ExtArgs>>): Prisma__ChatboxUpdateNotificationClient<$Result.GetResult<Prisma.$ChatboxUpdateNotificationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -8490,7 +8903,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   }
      * })
-     *
+     * 
      */
     update<T extends ChatboxUpdateNotificationUpdateArgs>(args: SelectSubset<T, ChatboxUpdateNotificationUpdateArgs<ExtArgs>>): Prisma__ChatboxUpdateNotificationClient<$Result.GetResult<Prisma.$ChatboxUpdateNotificationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -8504,7 +8917,7 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     *
+     * 
      */
     deleteMany<T extends ChatboxUpdateNotificationDeleteManyArgs>(args?: SelectSubset<T, ChatboxUpdateNotificationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -8523,7 +8936,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   }
      * })
-     *
+     * 
      */
     updateMany<T extends ChatboxUpdateNotificationUpdateManyArgs>(args: SelectSubset<T, ChatboxUpdateNotificationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -8540,7 +8953,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     *
+     * 
      * // Update zero or more ChatboxUpdateNotifications and only return the `id`
      * const chatboxUpdateNotificationWithIdOnly = await prisma.chatboxUpdateNotification.updateManyAndReturn({
      *   select: { id: true },
@@ -8553,7 +8966,7 @@ export namespace Prisma {
      * })
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     *
+     * 
      */
     updateManyAndReturn<T extends ChatboxUpdateNotificationUpdateManyAndReturnArgs>(args: SelectSubset<T, ChatboxUpdateNotificationUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChatboxUpdateNotificationPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
@@ -8642,7 +9055,7 @@ export namespace Prisma {
      *     _all: true
      *   },
      * })
-     *
+     * 
     **/
     groupBy<
       T extends ChatboxUpdateNotificationGroupByArgs,
@@ -8759,7 +9172,7 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"ChatboxUpdateNotification", 'DateTime'>
     readonly updatedAt: FieldRef<"ChatboxUpdateNotification", 'DateTime'>
   }
-
+    
 
   // Custom InputTypes
   /**
@@ -8816,31 +9229,31 @@ export namespace Prisma {
     where?: ChatboxUpdateNotificationWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
+     * 
      * Determine the order of ChatboxUpdateNotifications to fetch.
      */
     orderBy?: ChatboxUpdateNotificationOrderByWithRelationInput | ChatboxUpdateNotificationOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
+     * 
      * Sets the position for searching for ChatboxUpdateNotifications.
      */
     cursor?: ChatboxUpdateNotificationWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Take `±n` ChatboxUpdateNotifications from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Skip the first `n` ChatboxUpdateNotifications.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     *
+     * 
      * Filter by unique combinations of ChatboxUpdateNotifications.
      */
     distinct?: ChatboxUpdateNotificationScalarFieldEnum | ChatboxUpdateNotificationScalarFieldEnum[]
@@ -8864,31 +9277,31 @@ export namespace Prisma {
     where?: ChatboxUpdateNotificationWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
+     * 
      * Determine the order of ChatboxUpdateNotifications to fetch.
      */
     orderBy?: ChatboxUpdateNotificationOrderByWithRelationInput | ChatboxUpdateNotificationOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
+     * 
      * Sets the position for searching for ChatboxUpdateNotifications.
      */
     cursor?: ChatboxUpdateNotificationWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Take `±n` ChatboxUpdateNotifications from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Skip the first `n` ChatboxUpdateNotifications.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     *
+     * 
      * Filter by unique combinations of ChatboxUpdateNotifications.
      */
     distinct?: ChatboxUpdateNotificationScalarFieldEnum | ChatboxUpdateNotificationScalarFieldEnum[]
@@ -8912,25 +9325,25 @@ export namespace Prisma {
     where?: ChatboxUpdateNotificationWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
+     * 
      * Determine the order of ChatboxUpdateNotifications to fetch.
      */
     orderBy?: ChatboxUpdateNotificationOrderByWithRelationInput | ChatboxUpdateNotificationOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
+     * 
      * Sets the position for listing ChatboxUpdateNotifications.
      */
     cursor?: ChatboxUpdateNotificationWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Take `±n` ChatboxUpdateNotifications from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Skip the first `n` ChatboxUpdateNotifications.
      */
     skip?: number
@@ -9232,43 +9645,43 @@ export namespace Prisma {
     where?: AuditLogWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
+     * 
      * Determine the order of AuditLogs to fetch.
      */
     orderBy?: AuditLogOrderByWithRelationInput | AuditLogOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
+     * 
      * Sets the start position
      */
     cursor?: AuditLogWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Take `±n` AuditLogs from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Skip the first `n` AuditLogs.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
+     * 
      * Count returned AuditLogs
     **/
     _count?: true | AuditLogCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: AuditLogMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
+     * 
      * Select which fields to find the maximum value
     **/
     _max?: AuditLogMaxAggregateInputType
@@ -9492,13 +9905,13 @@ export namespace Prisma {
      * @example
      * // Get all AuditLogs
      * const auditLogs = await prisma.auditLog.findMany()
-     *
+     * 
      * // Get first 10 AuditLogs
      * const auditLogs = await prisma.auditLog.findMany({ take: 10 })
-     *
+     * 
      * // Only select the `id`
      * const auditLogWithIdOnly = await prisma.auditLog.findMany({ select: { id: true } })
-     *
+     * 
      */
     findMany<T extends AuditLogFindManyArgs>(args?: SelectSubset<T, AuditLogFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
@@ -9512,7 +9925,7 @@ export namespace Prisma {
      *     // ... data to create a AuditLog
      *   }
      * })
-     *
+     * 
      */
     create<T extends AuditLogCreateArgs>(args: SelectSubset<T, AuditLogCreateArgs<ExtArgs>>): Prisma__AuditLogClient<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -9526,7 +9939,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     *
+     *     
      */
     createMany<T extends AuditLogCreateManyArgs>(args?: SelectSubset<T, AuditLogCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -9540,7 +9953,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     *
+     * 
      * // Create many AuditLogs and only return the `id`
      * const auditLogWithIdOnly = await prisma.auditLog.createManyAndReturn({
      *   select: { id: true },
@@ -9550,7 +9963,7 @@ export namespace Prisma {
      * })
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     *
+     * 
      */
     createManyAndReturn<T extends AuditLogCreateManyAndReturnArgs>(args?: SelectSubset<T, AuditLogCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
@@ -9564,7 +9977,7 @@ export namespace Prisma {
      *     // ... filter to delete one AuditLog
      *   }
      * })
-     *
+     * 
      */
     delete<T extends AuditLogDeleteArgs>(args: SelectSubset<T, AuditLogDeleteArgs<ExtArgs>>): Prisma__AuditLogClient<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -9581,7 +9994,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   }
      * })
-     *
+     * 
      */
     update<T extends AuditLogUpdateArgs>(args: SelectSubset<T, AuditLogUpdateArgs<ExtArgs>>): Prisma__AuditLogClient<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -9595,7 +10008,7 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     *
+     * 
      */
     deleteMany<T extends AuditLogDeleteManyArgs>(args?: SelectSubset<T, AuditLogDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -9614,7 +10027,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   }
      * })
-     *
+     * 
      */
     updateMany<T extends AuditLogUpdateManyArgs>(args: SelectSubset<T, AuditLogUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -9631,7 +10044,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     *
+     * 
      * // Update zero or more AuditLogs and only return the `id`
      * const auditLogWithIdOnly = await prisma.auditLog.updateManyAndReturn({
      *   select: { id: true },
@@ -9644,7 +10057,7 @@ export namespace Prisma {
      * })
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     *
+     * 
      */
     updateManyAndReturn<T extends AuditLogUpdateManyAndReturnArgs>(args: SelectSubset<T, AuditLogUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
@@ -9733,7 +10146,7 @@ export namespace Prisma {
      *     _all: true
      *   },
      * })
-     *
+     * 
     **/
     groupBy<
       T extends AuditLogGroupByArgs,
@@ -9850,7 +10263,7 @@ export namespace Prisma {
     readonly erreur: FieldRef<"AuditLog", 'String'>
     readonly createdAt: FieldRef<"AuditLog", 'DateTime'>
   }
-
+    
 
   // Custom InputTypes
   /**
@@ -9907,31 +10320,31 @@ export namespace Prisma {
     where?: AuditLogWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
+     * 
      * Determine the order of AuditLogs to fetch.
      */
     orderBy?: AuditLogOrderByWithRelationInput | AuditLogOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
+     * 
      * Sets the position for searching for AuditLogs.
      */
     cursor?: AuditLogWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Take `±n` AuditLogs from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Skip the first `n` AuditLogs.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     *
+     * 
      * Filter by unique combinations of AuditLogs.
      */
     distinct?: AuditLogScalarFieldEnum | AuditLogScalarFieldEnum[]
@@ -9955,31 +10368,31 @@ export namespace Prisma {
     where?: AuditLogWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
+     * 
      * Determine the order of AuditLogs to fetch.
      */
     orderBy?: AuditLogOrderByWithRelationInput | AuditLogOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
+     * 
      * Sets the position for searching for AuditLogs.
      */
     cursor?: AuditLogWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Take `±n` AuditLogs from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Skip the first `n` AuditLogs.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     *
+     * 
      * Filter by unique combinations of AuditLogs.
      */
     distinct?: AuditLogScalarFieldEnum | AuditLogScalarFieldEnum[]
@@ -10003,25 +10416,25 @@ export namespace Prisma {
     where?: AuditLogWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
+     * 
      * Determine the order of AuditLogs to fetch.
      */
     orderBy?: AuditLogOrderByWithRelationInput | AuditLogOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
+     * 
      * Sets the position for listing AuditLogs.
      */
     cursor?: AuditLogWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Take `±n` AuditLogs from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Skip the first `n` AuditLogs.
      */
     skip?: number
@@ -10339,43 +10752,43 @@ export namespace Prisma {
     where?: ErrorReportWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
+     * 
      * Determine the order of ErrorReports to fetch.
      */
     orderBy?: ErrorReportOrderByWithRelationInput | ErrorReportOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
+     * 
      * Sets the start position
      */
     cursor?: ErrorReportWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Take `±n` ErrorReports from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Skip the first `n` ErrorReports.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
+     * 
      * Count returned ErrorReports
     **/
     _count?: true | ErrorReportCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: ErrorReportMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
+     * 
      * Select which fields to find the maximum value
     **/
     _max?: ErrorReportMaxAggregateInputType
@@ -10611,13 +11024,13 @@ export namespace Prisma {
      * @example
      * // Get all ErrorReports
      * const errorReports = await prisma.errorReport.findMany()
-     *
+     * 
      * // Get first 10 ErrorReports
      * const errorReports = await prisma.errorReport.findMany({ take: 10 })
-     *
+     * 
      * // Only select the `id`
      * const errorReportWithIdOnly = await prisma.errorReport.findMany({ select: { id: true } })
-     *
+     * 
      */
     findMany<T extends ErrorReportFindManyArgs>(args?: SelectSubset<T, ErrorReportFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ErrorReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
@@ -10631,7 +11044,7 @@ export namespace Prisma {
      *     // ... data to create a ErrorReport
      *   }
      * })
-     *
+     * 
      */
     create<T extends ErrorReportCreateArgs>(args: SelectSubset<T, ErrorReportCreateArgs<ExtArgs>>): Prisma__ErrorReportClient<$Result.GetResult<Prisma.$ErrorReportPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -10645,7 +11058,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     *
+     *     
      */
     createMany<T extends ErrorReportCreateManyArgs>(args?: SelectSubset<T, ErrorReportCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -10659,7 +11072,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     *
+     * 
      * // Create many ErrorReports and only return the `id`
      * const errorReportWithIdOnly = await prisma.errorReport.createManyAndReturn({
      *   select: { id: true },
@@ -10669,7 +11082,7 @@ export namespace Prisma {
      * })
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     *
+     * 
      */
     createManyAndReturn<T extends ErrorReportCreateManyAndReturnArgs>(args?: SelectSubset<T, ErrorReportCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ErrorReportPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
@@ -10683,7 +11096,7 @@ export namespace Prisma {
      *     // ... filter to delete one ErrorReport
      *   }
      * })
-     *
+     * 
      */
     delete<T extends ErrorReportDeleteArgs>(args: SelectSubset<T, ErrorReportDeleteArgs<ExtArgs>>): Prisma__ErrorReportClient<$Result.GetResult<Prisma.$ErrorReportPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -10700,7 +11113,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   }
      * })
-     *
+     * 
      */
     update<T extends ErrorReportUpdateArgs>(args: SelectSubset<T, ErrorReportUpdateArgs<ExtArgs>>): Prisma__ErrorReportClient<$Result.GetResult<Prisma.$ErrorReportPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -10714,7 +11127,7 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     *
+     * 
      */
     deleteMany<T extends ErrorReportDeleteManyArgs>(args?: SelectSubset<T, ErrorReportDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -10733,7 +11146,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   }
      * })
-     *
+     * 
      */
     updateMany<T extends ErrorReportUpdateManyArgs>(args: SelectSubset<T, ErrorReportUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -10750,7 +11163,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     *
+     * 
      * // Update zero or more ErrorReports and only return the `id`
      * const errorReportWithIdOnly = await prisma.errorReport.updateManyAndReturn({
      *   select: { id: true },
@@ -10763,7 +11176,7 @@ export namespace Prisma {
      * })
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     *
+     * 
      */
     updateManyAndReturn<T extends ErrorReportUpdateManyAndReturnArgs>(args: SelectSubset<T, ErrorReportUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ErrorReportPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
@@ -10852,7 +11265,7 @@ export namespace Prisma {
      *     _all: true
      *   },
      * })
-     *
+     * 
     **/
     groupBy<
       T extends ErrorReportGroupByArgs,
@@ -10971,7 +11384,7 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"ErrorReport", 'DateTime'>
     readonly updatedAt: FieldRef<"ErrorReport", 'DateTime'>
   }
-
+    
 
   // Custom InputTypes
   /**
@@ -11028,31 +11441,31 @@ export namespace Prisma {
     where?: ErrorReportWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
+     * 
      * Determine the order of ErrorReports to fetch.
      */
     orderBy?: ErrorReportOrderByWithRelationInput | ErrorReportOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
+     * 
      * Sets the position for searching for ErrorReports.
      */
     cursor?: ErrorReportWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Take `±n` ErrorReports from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Skip the first `n` ErrorReports.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     *
+     * 
      * Filter by unique combinations of ErrorReports.
      */
     distinct?: ErrorReportScalarFieldEnum | ErrorReportScalarFieldEnum[]
@@ -11076,31 +11489,31 @@ export namespace Prisma {
     where?: ErrorReportWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
+     * 
      * Determine the order of ErrorReports to fetch.
      */
     orderBy?: ErrorReportOrderByWithRelationInput | ErrorReportOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
+     * 
      * Sets the position for searching for ErrorReports.
      */
     cursor?: ErrorReportWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Take `±n` ErrorReports from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Skip the first `n` ErrorReports.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     *
+     * 
      * Filter by unique combinations of ErrorReports.
      */
     distinct?: ErrorReportScalarFieldEnum | ErrorReportScalarFieldEnum[]
@@ -11124,25 +11537,25 @@ export namespace Prisma {
     where?: ErrorReportWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
+     * 
      * Determine the order of ErrorReports to fetch.
      */
     orderBy?: ErrorReportOrderByWithRelationInput | ErrorReportOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
+     * 
      * Sets the position for listing ErrorReports.
      */
     cursor?: ErrorReportWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Take `±n` ErrorReports from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Skip the first `n` ErrorReports.
      */
     skip?: number
@@ -11438,55 +11851,55 @@ export namespace Prisma {
     where?: FinanceSettingsWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
+     * 
      * Determine the order of FinanceSettings to fetch.
      */
     orderBy?: FinanceSettingsOrderByWithRelationInput | FinanceSettingsOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
+     * 
      * Sets the start position
      */
     cursor?: FinanceSettingsWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Take `±n` FinanceSettings from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Skip the first `n` FinanceSettings.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
+     * 
      * Count returned FinanceSettings
     **/
     _count?: true | FinanceSettingsCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
+     * 
      * Select which fields to average
     **/
     _avg?: FinanceSettingsAvgAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
+     * 
      * Select which fields to sum
     **/
     _sum?: FinanceSettingsSumAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: FinanceSettingsMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
+     * 
      * Select which fields to find the maximum value
     **/
     _max?: FinanceSettingsMaxAggregateInputType
@@ -11678,13 +12091,13 @@ export namespace Prisma {
      * @example
      * // Get all FinanceSettings
      * const financeSettings = await prisma.financeSettings.findMany()
-     *
+     * 
      * // Get first 10 FinanceSettings
      * const financeSettings = await prisma.financeSettings.findMany({ take: 10 })
-     *
+     * 
      * // Only select the `id`
      * const financeSettingsWithIdOnly = await prisma.financeSettings.findMany({ select: { id: true } })
-     *
+     * 
      */
     findMany<T extends FinanceSettingsFindManyArgs>(args?: SelectSubset<T, FinanceSettingsFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FinanceSettingsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
@@ -11698,7 +12111,7 @@ export namespace Prisma {
      *     // ... data to create a FinanceSettings
      *   }
      * })
-     *
+     * 
      */
     create<T extends FinanceSettingsCreateArgs>(args: SelectSubset<T, FinanceSettingsCreateArgs<ExtArgs>>): Prisma__FinanceSettingsClient<$Result.GetResult<Prisma.$FinanceSettingsPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -11712,7 +12125,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     *
+     *     
      */
     createMany<T extends FinanceSettingsCreateManyArgs>(args?: SelectSubset<T, FinanceSettingsCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -11726,7 +12139,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     *
+     * 
      * // Create many FinanceSettings and only return the `id`
      * const financeSettingsWithIdOnly = await prisma.financeSettings.createManyAndReturn({
      *   select: { id: true },
@@ -11736,7 +12149,7 @@ export namespace Prisma {
      * })
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     *
+     * 
      */
     createManyAndReturn<T extends FinanceSettingsCreateManyAndReturnArgs>(args?: SelectSubset<T, FinanceSettingsCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FinanceSettingsPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
@@ -11750,7 +12163,7 @@ export namespace Prisma {
      *     // ... filter to delete one FinanceSettings
      *   }
      * })
-     *
+     * 
      */
     delete<T extends FinanceSettingsDeleteArgs>(args: SelectSubset<T, FinanceSettingsDeleteArgs<ExtArgs>>): Prisma__FinanceSettingsClient<$Result.GetResult<Prisma.$FinanceSettingsPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -11767,7 +12180,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   }
      * })
-     *
+     * 
      */
     update<T extends FinanceSettingsUpdateArgs>(args: SelectSubset<T, FinanceSettingsUpdateArgs<ExtArgs>>): Prisma__FinanceSettingsClient<$Result.GetResult<Prisma.$FinanceSettingsPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -11781,7 +12194,7 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     *
+     * 
      */
     deleteMany<T extends FinanceSettingsDeleteManyArgs>(args?: SelectSubset<T, FinanceSettingsDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -11800,7 +12213,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   }
      * })
-     *
+     * 
      */
     updateMany<T extends FinanceSettingsUpdateManyArgs>(args: SelectSubset<T, FinanceSettingsUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -11817,7 +12230,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     *
+     * 
      * // Update zero or more FinanceSettings and only return the `id`
      * const financeSettingsWithIdOnly = await prisma.financeSettings.updateManyAndReturn({
      *   select: { id: true },
@@ -11830,7 +12243,7 @@ export namespace Prisma {
      * })
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     *
+     * 
      */
     updateManyAndReturn<T extends FinanceSettingsUpdateManyAndReturnArgs>(args: SelectSubset<T, FinanceSettingsUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FinanceSettingsPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
@@ -11919,7 +12332,7 @@ export namespace Prisma {
      *     _all: true
      *   },
      * })
-     *
+     * 
     **/
     groupBy<
       T extends FinanceSettingsGroupByArgs,
@@ -12030,7 +12443,7 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"FinanceSettings", 'DateTime'>
     readonly updatedAt: FieldRef<"FinanceSettings", 'DateTime'>
   }
-
+    
 
   // Custom InputTypes
   /**
@@ -12087,31 +12500,31 @@ export namespace Prisma {
     where?: FinanceSettingsWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
+     * 
      * Determine the order of FinanceSettings to fetch.
      */
     orderBy?: FinanceSettingsOrderByWithRelationInput | FinanceSettingsOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
+     * 
      * Sets the position for searching for FinanceSettings.
      */
     cursor?: FinanceSettingsWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Take `±n` FinanceSettings from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Skip the first `n` FinanceSettings.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     *
+     * 
      * Filter by unique combinations of FinanceSettings.
      */
     distinct?: FinanceSettingsScalarFieldEnum | FinanceSettingsScalarFieldEnum[]
@@ -12135,31 +12548,31 @@ export namespace Prisma {
     where?: FinanceSettingsWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
+     * 
      * Determine the order of FinanceSettings to fetch.
      */
     orderBy?: FinanceSettingsOrderByWithRelationInput | FinanceSettingsOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
+     * 
      * Sets the position for searching for FinanceSettings.
      */
     cursor?: FinanceSettingsWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Take `±n` FinanceSettings from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Skip the first `n` FinanceSettings.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     *
+     * 
      * Filter by unique combinations of FinanceSettings.
      */
     distinct?: FinanceSettingsScalarFieldEnum | FinanceSettingsScalarFieldEnum[]
@@ -12183,25 +12596,25 @@ export namespace Prisma {
     where?: FinanceSettingsWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
+     * 
      * Determine the order of FinanceSettings to fetch.
      */
     orderBy?: FinanceSettingsOrderByWithRelationInput | FinanceSettingsOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
+     * 
      * Sets the position for listing FinanceSettings.
      */
     cursor?: FinanceSettingsWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Take `±n` FinanceSettings from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Skip the first `n` FinanceSettings.
      */
     skip?: number
@@ -12609,55 +13022,55 @@ export namespace Prisma {
     where?: ShowcaseSiteFinanceWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
+     * 
      * Determine the order of ShowcaseSiteFinances to fetch.
      */
     orderBy?: ShowcaseSiteFinanceOrderByWithRelationInput | ShowcaseSiteFinanceOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
+     * 
      * Sets the start position
      */
     cursor?: ShowcaseSiteFinanceWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Take `±n` ShowcaseSiteFinances from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Skip the first `n` ShowcaseSiteFinances.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
+     * 
      * Count returned ShowcaseSiteFinances
     **/
     _count?: true | ShowcaseSiteFinanceCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
+     * 
      * Select which fields to average
     **/
     _avg?: ShowcaseSiteFinanceAvgAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
+     * 
      * Select which fields to sum
     **/
     _sum?: ShowcaseSiteFinanceSumAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: ShowcaseSiteFinanceMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
+     * 
      * Select which fields to find the maximum value
     **/
     _max?: ShowcaseSiteFinanceMaxAggregateInputType
@@ -12945,13 +13358,13 @@ export namespace Prisma {
      * @example
      * // Get all ShowcaseSiteFinances
      * const showcaseSiteFinances = await prisma.showcaseSiteFinance.findMany()
-     *
+     * 
      * // Get first 10 ShowcaseSiteFinances
      * const showcaseSiteFinances = await prisma.showcaseSiteFinance.findMany({ take: 10 })
-     *
+     * 
      * // Only select the `id`
      * const showcaseSiteFinanceWithIdOnly = await prisma.showcaseSiteFinance.findMany({ select: { id: true } })
-     *
+     * 
      */
     findMany<T extends ShowcaseSiteFinanceFindManyArgs>(args?: SelectSubset<T, ShowcaseSiteFinanceFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShowcaseSiteFinancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
@@ -12965,7 +13378,7 @@ export namespace Prisma {
      *     // ... data to create a ShowcaseSiteFinance
      *   }
      * })
-     *
+     * 
      */
     create<T extends ShowcaseSiteFinanceCreateArgs>(args: SelectSubset<T, ShowcaseSiteFinanceCreateArgs<ExtArgs>>): Prisma__ShowcaseSiteFinanceClient<$Result.GetResult<Prisma.$ShowcaseSiteFinancePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -12979,7 +13392,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     *
+     *     
      */
     createMany<T extends ShowcaseSiteFinanceCreateManyArgs>(args?: SelectSubset<T, ShowcaseSiteFinanceCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -12993,7 +13406,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     *
+     * 
      * // Create many ShowcaseSiteFinances and only return the `id`
      * const showcaseSiteFinanceWithIdOnly = await prisma.showcaseSiteFinance.createManyAndReturn({
      *   select: { id: true },
@@ -13003,7 +13416,7 @@ export namespace Prisma {
      * })
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     *
+     * 
      */
     createManyAndReturn<T extends ShowcaseSiteFinanceCreateManyAndReturnArgs>(args?: SelectSubset<T, ShowcaseSiteFinanceCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShowcaseSiteFinancePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
@@ -13017,7 +13430,7 @@ export namespace Prisma {
      *     // ... filter to delete one ShowcaseSiteFinance
      *   }
      * })
-     *
+     * 
      */
     delete<T extends ShowcaseSiteFinanceDeleteArgs>(args: SelectSubset<T, ShowcaseSiteFinanceDeleteArgs<ExtArgs>>): Prisma__ShowcaseSiteFinanceClient<$Result.GetResult<Prisma.$ShowcaseSiteFinancePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -13034,7 +13447,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   }
      * })
-     *
+     * 
      */
     update<T extends ShowcaseSiteFinanceUpdateArgs>(args: SelectSubset<T, ShowcaseSiteFinanceUpdateArgs<ExtArgs>>): Prisma__ShowcaseSiteFinanceClient<$Result.GetResult<Prisma.$ShowcaseSiteFinancePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -13048,7 +13461,7 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     *
+     * 
      */
     deleteMany<T extends ShowcaseSiteFinanceDeleteManyArgs>(args?: SelectSubset<T, ShowcaseSiteFinanceDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -13067,7 +13480,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   }
      * })
-     *
+     * 
      */
     updateMany<T extends ShowcaseSiteFinanceUpdateManyArgs>(args: SelectSubset<T, ShowcaseSiteFinanceUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -13084,7 +13497,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     *
+     * 
      * // Update zero or more ShowcaseSiteFinances and only return the `id`
      * const showcaseSiteFinanceWithIdOnly = await prisma.showcaseSiteFinance.updateManyAndReturn({
      *   select: { id: true },
@@ -13097,7 +13510,7 @@ export namespace Prisma {
      * })
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     *
+     * 
      */
     updateManyAndReturn<T extends ShowcaseSiteFinanceUpdateManyAndReturnArgs>(args: SelectSubset<T, ShowcaseSiteFinanceUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShowcaseSiteFinancePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
@@ -13186,7 +13599,7 @@ export namespace Prisma {
      *     _all: true
      *   },
      * })
-     *
+     * 
     **/
     groupBy<
       T extends ShowcaseSiteFinanceGroupByArgs,
@@ -13313,7 +13726,7 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"ShowcaseSiteFinance", 'DateTime'>
     readonly updatedAt: FieldRef<"ShowcaseSiteFinance", 'DateTime'>
   }
-
+    
 
   // Custom InputTypes
   /**
@@ -13370,31 +13783,31 @@ export namespace Prisma {
     where?: ShowcaseSiteFinanceWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
+     * 
      * Determine the order of ShowcaseSiteFinances to fetch.
      */
     orderBy?: ShowcaseSiteFinanceOrderByWithRelationInput | ShowcaseSiteFinanceOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
+     * 
      * Sets the position for searching for ShowcaseSiteFinances.
      */
     cursor?: ShowcaseSiteFinanceWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Take `±n` ShowcaseSiteFinances from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Skip the first `n` ShowcaseSiteFinances.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     *
+     * 
      * Filter by unique combinations of ShowcaseSiteFinances.
      */
     distinct?: ShowcaseSiteFinanceScalarFieldEnum | ShowcaseSiteFinanceScalarFieldEnum[]
@@ -13418,31 +13831,31 @@ export namespace Prisma {
     where?: ShowcaseSiteFinanceWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
+     * 
      * Determine the order of ShowcaseSiteFinances to fetch.
      */
     orderBy?: ShowcaseSiteFinanceOrderByWithRelationInput | ShowcaseSiteFinanceOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
+     * 
      * Sets the position for searching for ShowcaseSiteFinances.
      */
     cursor?: ShowcaseSiteFinanceWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Take `±n` ShowcaseSiteFinances from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Skip the first `n` ShowcaseSiteFinances.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     *
+     * 
      * Filter by unique combinations of ShowcaseSiteFinances.
      */
     distinct?: ShowcaseSiteFinanceScalarFieldEnum | ShowcaseSiteFinanceScalarFieldEnum[]
@@ -13466,25 +13879,25 @@ export namespace Prisma {
     where?: ShowcaseSiteFinanceWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
+     * 
      * Determine the order of ShowcaseSiteFinances to fetch.
      */
     orderBy?: ShowcaseSiteFinanceOrderByWithRelationInput | ShowcaseSiteFinanceOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
+     * 
      * Sets the position for listing ShowcaseSiteFinances.
      */
     cursor?: ShowcaseSiteFinanceWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Take `±n` ShowcaseSiteFinances from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Skip the first `n` ShowcaseSiteFinances.
      */
     skip?: number
@@ -13838,55 +14251,55 @@ export namespace Prisma {
     where?: LysmaExpenseWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
+     * 
      * Determine the order of LysmaExpenses to fetch.
      */
     orderBy?: LysmaExpenseOrderByWithRelationInput | LysmaExpenseOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
+     * 
      * Sets the start position
      */
     cursor?: LysmaExpenseWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Take `±n` LysmaExpenses from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Skip the first `n` LysmaExpenses.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
+     * 
      * Count returned LysmaExpenses
     **/
     _count?: true | LysmaExpenseCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
+     * 
      * Select which fields to average
     **/
     _avg?: LysmaExpenseAvgAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
+     * 
      * Select which fields to sum
     **/
     _sum?: LysmaExpenseSumAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: LysmaExpenseMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
+     * 
      * Select which fields to find the maximum value
     **/
     _max?: LysmaExpenseMaxAggregateInputType
@@ -14132,13 +14545,13 @@ export namespace Prisma {
      * @example
      * // Get all LysmaExpenses
      * const lysmaExpenses = await prisma.lysmaExpense.findMany()
-     *
+     * 
      * // Get first 10 LysmaExpenses
      * const lysmaExpenses = await prisma.lysmaExpense.findMany({ take: 10 })
-     *
+     * 
      * // Only select the `id`
      * const lysmaExpenseWithIdOnly = await prisma.lysmaExpense.findMany({ select: { id: true } })
-     *
+     * 
      */
     findMany<T extends LysmaExpenseFindManyArgs>(args?: SelectSubset<T, LysmaExpenseFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LysmaExpensePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
@@ -14152,7 +14565,7 @@ export namespace Prisma {
      *     // ... data to create a LysmaExpense
      *   }
      * })
-     *
+     * 
      */
     create<T extends LysmaExpenseCreateArgs>(args: SelectSubset<T, LysmaExpenseCreateArgs<ExtArgs>>): Prisma__LysmaExpenseClient<$Result.GetResult<Prisma.$LysmaExpensePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -14166,7 +14579,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     *
+     *     
      */
     createMany<T extends LysmaExpenseCreateManyArgs>(args?: SelectSubset<T, LysmaExpenseCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -14180,7 +14593,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     *
+     * 
      * // Create many LysmaExpenses and only return the `id`
      * const lysmaExpenseWithIdOnly = await prisma.lysmaExpense.createManyAndReturn({
      *   select: { id: true },
@@ -14190,7 +14603,7 @@ export namespace Prisma {
      * })
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     *
+     * 
      */
     createManyAndReturn<T extends LysmaExpenseCreateManyAndReturnArgs>(args?: SelectSubset<T, LysmaExpenseCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LysmaExpensePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
@@ -14204,7 +14617,7 @@ export namespace Prisma {
      *     // ... filter to delete one LysmaExpense
      *   }
      * })
-     *
+     * 
      */
     delete<T extends LysmaExpenseDeleteArgs>(args: SelectSubset<T, LysmaExpenseDeleteArgs<ExtArgs>>): Prisma__LysmaExpenseClient<$Result.GetResult<Prisma.$LysmaExpensePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -14221,7 +14634,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   }
      * })
-     *
+     * 
      */
     update<T extends LysmaExpenseUpdateArgs>(args: SelectSubset<T, LysmaExpenseUpdateArgs<ExtArgs>>): Prisma__LysmaExpenseClient<$Result.GetResult<Prisma.$LysmaExpensePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -14235,7 +14648,7 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     *
+     * 
      */
     deleteMany<T extends LysmaExpenseDeleteManyArgs>(args?: SelectSubset<T, LysmaExpenseDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -14254,7 +14667,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   }
      * })
-     *
+     * 
      */
     updateMany<T extends LysmaExpenseUpdateManyArgs>(args: SelectSubset<T, LysmaExpenseUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -14271,7 +14684,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     *
+     * 
      * // Update zero or more LysmaExpenses and only return the `id`
      * const lysmaExpenseWithIdOnly = await prisma.lysmaExpense.updateManyAndReturn({
      *   select: { id: true },
@@ -14284,7 +14697,7 @@ export namespace Prisma {
      * })
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     *
+     * 
      */
     updateManyAndReturn<T extends LysmaExpenseUpdateManyAndReturnArgs>(args: SelectSubset<T, LysmaExpenseUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LysmaExpensePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
@@ -14373,7 +14786,7 @@ export namespace Prisma {
      *     _all: true
      *   },
      * })
-     *
+     * 
     **/
     groupBy<
       T extends LysmaExpenseGroupByArgs,
@@ -14493,7 +14906,7 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"LysmaExpense", 'DateTime'>
     readonly updatedAt: FieldRef<"LysmaExpense", 'DateTime'>
   }
-
+    
 
   // Custom InputTypes
   /**
@@ -14550,31 +14963,31 @@ export namespace Prisma {
     where?: LysmaExpenseWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
+     * 
      * Determine the order of LysmaExpenses to fetch.
      */
     orderBy?: LysmaExpenseOrderByWithRelationInput | LysmaExpenseOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
+     * 
      * Sets the position for searching for LysmaExpenses.
      */
     cursor?: LysmaExpenseWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Take `±n` LysmaExpenses from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Skip the first `n` LysmaExpenses.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     *
+     * 
      * Filter by unique combinations of LysmaExpenses.
      */
     distinct?: LysmaExpenseScalarFieldEnum | LysmaExpenseScalarFieldEnum[]
@@ -14598,31 +15011,31 @@ export namespace Prisma {
     where?: LysmaExpenseWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
+     * 
      * Determine the order of LysmaExpenses to fetch.
      */
     orderBy?: LysmaExpenseOrderByWithRelationInput | LysmaExpenseOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
+     * 
      * Sets the position for searching for LysmaExpenses.
      */
     cursor?: LysmaExpenseWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Take `±n` LysmaExpenses from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Skip the first `n` LysmaExpenses.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     *
+     * 
      * Filter by unique combinations of LysmaExpenses.
      */
     distinct?: LysmaExpenseScalarFieldEnum | LysmaExpenseScalarFieldEnum[]
@@ -14646,25 +15059,25 @@ export namespace Prisma {
     where?: LysmaExpenseWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
+     * 
      * Determine the order of LysmaExpenses to fetch.
      */
     orderBy?: LysmaExpenseOrderByWithRelationInput | LysmaExpenseOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
+     * 
      * Sets the position for listing LysmaExpenses.
      */
     cursor?: LysmaExpenseWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Take `±n` LysmaExpenses from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Skip the first `n` LysmaExpenses.
      */
     skip?: number
@@ -15048,55 +15461,55 @@ export namespace Prisma {
     where?: RevenueSubscriptionWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
+     * 
      * Determine the order of RevenueSubscriptions to fetch.
      */
     orderBy?: RevenueSubscriptionOrderByWithRelationInput | RevenueSubscriptionOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
+     * 
      * Sets the start position
      */
     cursor?: RevenueSubscriptionWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Take `±n` RevenueSubscriptions from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Skip the first `n` RevenueSubscriptions.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
+     * 
      * Count returned RevenueSubscriptions
     **/
     _count?: true | RevenueSubscriptionCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
+     * 
      * Select which fields to average
     **/
     _avg?: RevenueSubscriptionAvgAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
+     * 
      * Select which fields to sum
     **/
     _sum?: RevenueSubscriptionSumAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: RevenueSubscriptionMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
+     * 
      * Select which fields to find the maximum value
     **/
     _max?: RevenueSubscriptionMaxAggregateInputType
@@ -15382,13 +15795,13 @@ export namespace Prisma {
      * @example
      * // Get all RevenueSubscriptions
      * const revenueSubscriptions = await prisma.revenueSubscription.findMany()
-     *
+     * 
      * // Get first 10 RevenueSubscriptions
      * const revenueSubscriptions = await prisma.revenueSubscription.findMany({ take: 10 })
-     *
+     * 
      * // Only select the `id`
      * const revenueSubscriptionWithIdOnly = await prisma.revenueSubscription.findMany({ select: { id: true } })
-     *
+     * 
      */
     findMany<T extends RevenueSubscriptionFindManyArgs>(args?: SelectSubset<T, RevenueSubscriptionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RevenueSubscriptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
@@ -15402,7 +15815,7 @@ export namespace Prisma {
      *     // ... data to create a RevenueSubscription
      *   }
      * })
-     *
+     * 
      */
     create<T extends RevenueSubscriptionCreateArgs>(args: SelectSubset<T, RevenueSubscriptionCreateArgs<ExtArgs>>): Prisma__RevenueSubscriptionClient<$Result.GetResult<Prisma.$RevenueSubscriptionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -15416,7 +15829,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     *
+     *     
      */
     createMany<T extends RevenueSubscriptionCreateManyArgs>(args?: SelectSubset<T, RevenueSubscriptionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -15430,7 +15843,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     *
+     * 
      * // Create many RevenueSubscriptions and only return the `id`
      * const revenueSubscriptionWithIdOnly = await prisma.revenueSubscription.createManyAndReturn({
      *   select: { id: true },
@@ -15440,7 +15853,7 @@ export namespace Prisma {
      * })
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     *
+     * 
      */
     createManyAndReturn<T extends RevenueSubscriptionCreateManyAndReturnArgs>(args?: SelectSubset<T, RevenueSubscriptionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RevenueSubscriptionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
@@ -15454,7 +15867,7 @@ export namespace Prisma {
      *     // ... filter to delete one RevenueSubscription
      *   }
      * })
-     *
+     * 
      */
     delete<T extends RevenueSubscriptionDeleteArgs>(args: SelectSubset<T, RevenueSubscriptionDeleteArgs<ExtArgs>>): Prisma__RevenueSubscriptionClient<$Result.GetResult<Prisma.$RevenueSubscriptionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -15471,7 +15884,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   }
      * })
-     *
+     * 
      */
     update<T extends RevenueSubscriptionUpdateArgs>(args: SelectSubset<T, RevenueSubscriptionUpdateArgs<ExtArgs>>): Prisma__RevenueSubscriptionClient<$Result.GetResult<Prisma.$RevenueSubscriptionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -15485,7 +15898,7 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     *
+     * 
      */
     deleteMany<T extends RevenueSubscriptionDeleteManyArgs>(args?: SelectSubset<T, RevenueSubscriptionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -15504,7 +15917,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   }
      * })
-     *
+     * 
      */
     updateMany<T extends RevenueSubscriptionUpdateManyArgs>(args: SelectSubset<T, RevenueSubscriptionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -15521,7 +15934,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     *
+     * 
      * // Update zero or more RevenueSubscriptions and only return the `id`
      * const revenueSubscriptionWithIdOnly = await prisma.revenueSubscription.updateManyAndReturn({
      *   select: { id: true },
@@ -15534,7 +15947,7 @@ export namespace Prisma {
      * })
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     *
+     * 
      */
     updateManyAndReturn<T extends RevenueSubscriptionUpdateManyAndReturnArgs>(args: SelectSubset<T, RevenueSubscriptionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RevenueSubscriptionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
@@ -15623,7 +16036,7 @@ export namespace Prisma {
      *     _all: true
      *   },
      * })
-     *
+     * 
     **/
     groupBy<
       T extends RevenueSubscriptionGroupByArgs,
@@ -15749,7 +16162,7 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"RevenueSubscription", 'DateTime'>
     readonly updatedAt: FieldRef<"RevenueSubscription", 'DateTime'>
   }
-
+    
 
   // Custom InputTypes
   /**
@@ -15818,31 +16231,31 @@ export namespace Prisma {
     where?: RevenueSubscriptionWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
+     * 
      * Determine the order of RevenueSubscriptions to fetch.
      */
     orderBy?: RevenueSubscriptionOrderByWithRelationInput | RevenueSubscriptionOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
+     * 
      * Sets the position for searching for RevenueSubscriptions.
      */
     cursor?: RevenueSubscriptionWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Take `±n` RevenueSubscriptions from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Skip the first `n` RevenueSubscriptions.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     *
+     * 
      * Filter by unique combinations of RevenueSubscriptions.
      */
     distinct?: RevenueSubscriptionScalarFieldEnum | RevenueSubscriptionScalarFieldEnum[]
@@ -15870,31 +16283,31 @@ export namespace Prisma {
     where?: RevenueSubscriptionWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
+     * 
      * Determine the order of RevenueSubscriptions to fetch.
      */
     orderBy?: RevenueSubscriptionOrderByWithRelationInput | RevenueSubscriptionOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
+     * 
      * Sets the position for searching for RevenueSubscriptions.
      */
     cursor?: RevenueSubscriptionWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Take `±n` RevenueSubscriptions from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Skip the first `n` RevenueSubscriptions.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     *
+     * 
      * Filter by unique combinations of RevenueSubscriptions.
      */
     distinct?: RevenueSubscriptionScalarFieldEnum | RevenueSubscriptionScalarFieldEnum[]
@@ -15922,25 +16335,25 @@ export namespace Prisma {
     where?: RevenueSubscriptionWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
+     * 
      * Determine the order of RevenueSubscriptions to fetch.
      */
     orderBy?: RevenueSubscriptionOrderByWithRelationInput | RevenueSubscriptionOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
+     * 
      * Sets the position for listing RevenueSubscriptions.
      */
     cursor?: RevenueSubscriptionWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Take `±n` RevenueSubscriptions from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Skip the first `n` RevenueSubscriptions.
      */
     skip?: number
@@ -16362,55 +16775,55 @@ export namespace Prisma {
     where?: FinanceInvoiceWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
+     * 
      * Determine the order of FinanceInvoices to fetch.
      */
     orderBy?: FinanceInvoiceOrderByWithRelationInput | FinanceInvoiceOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
+     * 
      * Sets the start position
      */
     cursor?: FinanceInvoiceWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Take `±n` FinanceInvoices from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Skip the first `n` FinanceInvoices.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
+     * 
      * Count returned FinanceInvoices
     **/
     _count?: true | FinanceInvoiceCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
+     * 
      * Select which fields to average
     **/
     _avg?: FinanceInvoiceAvgAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
+     * 
      * Select which fields to sum
     **/
     _sum?: FinanceInvoiceSumAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: FinanceInvoiceMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
+     * 
      * Select which fields to find the maximum value
     **/
     _max?: FinanceInvoiceMaxAggregateInputType
@@ -16690,13 +17103,13 @@ export namespace Prisma {
      * @example
      * // Get all FinanceInvoices
      * const financeInvoices = await prisma.financeInvoice.findMany()
-     *
+     * 
      * // Get first 10 FinanceInvoices
      * const financeInvoices = await prisma.financeInvoice.findMany({ take: 10 })
-     *
+     * 
      * // Only select the `id`
      * const financeInvoiceWithIdOnly = await prisma.financeInvoice.findMany({ select: { id: true } })
-     *
+     * 
      */
     findMany<T extends FinanceInvoiceFindManyArgs>(args?: SelectSubset<T, FinanceInvoiceFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FinanceInvoicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
@@ -16710,7 +17123,7 @@ export namespace Prisma {
      *     // ... data to create a FinanceInvoice
      *   }
      * })
-     *
+     * 
      */
     create<T extends FinanceInvoiceCreateArgs>(args: SelectSubset<T, FinanceInvoiceCreateArgs<ExtArgs>>): Prisma__FinanceInvoiceClient<$Result.GetResult<Prisma.$FinanceInvoicePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -16724,7 +17137,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     *
+     *     
      */
     createMany<T extends FinanceInvoiceCreateManyArgs>(args?: SelectSubset<T, FinanceInvoiceCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -16738,7 +17151,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     *
+     * 
      * // Create many FinanceInvoices and only return the `id`
      * const financeInvoiceWithIdOnly = await prisma.financeInvoice.createManyAndReturn({
      *   select: { id: true },
@@ -16748,7 +17161,7 @@ export namespace Prisma {
      * })
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     *
+     * 
      */
     createManyAndReturn<T extends FinanceInvoiceCreateManyAndReturnArgs>(args?: SelectSubset<T, FinanceInvoiceCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FinanceInvoicePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
@@ -16762,7 +17175,7 @@ export namespace Prisma {
      *     // ... filter to delete one FinanceInvoice
      *   }
      * })
-     *
+     * 
      */
     delete<T extends FinanceInvoiceDeleteArgs>(args: SelectSubset<T, FinanceInvoiceDeleteArgs<ExtArgs>>): Prisma__FinanceInvoiceClient<$Result.GetResult<Prisma.$FinanceInvoicePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -16779,7 +17192,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   }
      * })
-     *
+     * 
      */
     update<T extends FinanceInvoiceUpdateArgs>(args: SelectSubset<T, FinanceInvoiceUpdateArgs<ExtArgs>>): Prisma__FinanceInvoiceClient<$Result.GetResult<Prisma.$FinanceInvoicePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -16793,7 +17206,7 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     *
+     * 
      */
     deleteMany<T extends FinanceInvoiceDeleteManyArgs>(args?: SelectSubset<T, FinanceInvoiceDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -16812,7 +17225,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   }
      * })
-     *
+     * 
      */
     updateMany<T extends FinanceInvoiceUpdateManyArgs>(args: SelectSubset<T, FinanceInvoiceUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -16829,7 +17242,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     *
+     * 
      * // Update zero or more FinanceInvoices and only return the `id`
      * const financeInvoiceWithIdOnly = await prisma.financeInvoice.updateManyAndReturn({
      *   select: { id: true },
@@ -16842,7 +17255,7 @@ export namespace Prisma {
      * })
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     *
+     * 
      */
     updateManyAndReturn<T extends FinanceInvoiceUpdateManyAndReturnArgs>(args: SelectSubset<T, FinanceInvoiceUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FinanceInvoicePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
@@ -16931,7 +17344,7 @@ export namespace Prisma {
      *     _all: true
      *   },
      * })
-     *
+     * 
     **/
     groupBy<
       T extends FinanceInvoiceGroupByArgs,
@@ -17056,7 +17469,7 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"FinanceInvoice", 'DateTime'>
     readonly updatedAt: FieldRef<"FinanceInvoice", 'DateTime'>
   }
-
+    
 
   // Custom InputTypes
   /**
@@ -17125,31 +17538,31 @@ export namespace Prisma {
     where?: FinanceInvoiceWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
+     * 
      * Determine the order of FinanceInvoices to fetch.
      */
     orderBy?: FinanceInvoiceOrderByWithRelationInput | FinanceInvoiceOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
+     * 
      * Sets the position for searching for FinanceInvoices.
      */
     cursor?: FinanceInvoiceWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Take `±n` FinanceInvoices from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Skip the first `n` FinanceInvoices.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     *
+     * 
      * Filter by unique combinations of FinanceInvoices.
      */
     distinct?: FinanceInvoiceScalarFieldEnum | FinanceInvoiceScalarFieldEnum[]
@@ -17177,31 +17590,31 @@ export namespace Prisma {
     where?: FinanceInvoiceWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
+     * 
      * Determine the order of FinanceInvoices to fetch.
      */
     orderBy?: FinanceInvoiceOrderByWithRelationInput | FinanceInvoiceOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
+     * 
      * Sets the position for searching for FinanceInvoices.
      */
     cursor?: FinanceInvoiceWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Take `±n` FinanceInvoices from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Skip the first `n` FinanceInvoices.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     *
+     * 
      * Filter by unique combinations of FinanceInvoices.
      */
     distinct?: FinanceInvoiceScalarFieldEnum | FinanceInvoiceScalarFieldEnum[]
@@ -17229,25 +17642,25 @@ export namespace Prisma {
     where?: FinanceInvoiceWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
+     * 
      * Determine the order of FinanceInvoices to fetch.
      */
     orderBy?: FinanceInvoiceOrderByWithRelationInput | FinanceInvoiceOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
+     * 
      * Sets the position for listing FinanceInvoices.
      */
     cursor?: FinanceInvoiceWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Take `±n` FinanceInvoices from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Skip the first `n` FinanceInvoices.
      */
     skip?: number
@@ -17613,55 +18026,55 @@ export namespace Prisma {
     where?: FinancePaymentWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
+     * 
      * Determine the order of FinancePayments to fetch.
      */
     orderBy?: FinancePaymentOrderByWithRelationInput | FinancePaymentOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
+     * 
      * Sets the start position
      */
     cursor?: FinancePaymentWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Take `±n` FinancePayments from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Skip the first `n` FinancePayments.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
+     * 
      * Count returned FinancePayments
     **/
     _count?: true | FinancePaymentCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
+     * 
      * Select which fields to average
     **/
     _avg?: FinancePaymentAvgAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
+     * 
      * Select which fields to sum
     **/
     _sum?: FinancePaymentSumAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: FinancePaymentMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
+     * 
      * Select which fields to find the maximum value
     **/
     _max?: FinancePaymentMaxAggregateInputType
@@ -17904,13 +18317,13 @@ export namespace Prisma {
      * @example
      * // Get all FinancePayments
      * const financePayments = await prisma.financePayment.findMany()
-     *
+     * 
      * // Get first 10 FinancePayments
      * const financePayments = await prisma.financePayment.findMany({ take: 10 })
-     *
+     * 
      * // Only select the `id`
      * const financePaymentWithIdOnly = await prisma.financePayment.findMany({ select: { id: true } })
-     *
+     * 
      */
     findMany<T extends FinancePaymentFindManyArgs>(args?: SelectSubset<T, FinancePaymentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FinancePaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
@@ -17924,7 +18337,7 @@ export namespace Prisma {
      *     // ... data to create a FinancePayment
      *   }
      * })
-     *
+     * 
      */
     create<T extends FinancePaymentCreateArgs>(args: SelectSubset<T, FinancePaymentCreateArgs<ExtArgs>>): Prisma__FinancePaymentClient<$Result.GetResult<Prisma.$FinancePaymentPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -17938,7 +18351,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     *
+     *     
      */
     createMany<T extends FinancePaymentCreateManyArgs>(args?: SelectSubset<T, FinancePaymentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -17952,7 +18365,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     *
+     * 
      * // Create many FinancePayments and only return the `id`
      * const financePaymentWithIdOnly = await prisma.financePayment.createManyAndReturn({
      *   select: { id: true },
@@ -17962,7 +18375,7 @@ export namespace Prisma {
      * })
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     *
+     * 
      */
     createManyAndReturn<T extends FinancePaymentCreateManyAndReturnArgs>(args?: SelectSubset<T, FinancePaymentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FinancePaymentPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
@@ -17976,7 +18389,7 @@ export namespace Prisma {
      *     // ... filter to delete one FinancePayment
      *   }
      * })
-     *
+     * 
      */
     delete<T extends FinancePaymentDeleteArgs>(args: SelectSubset<T, FinancePaymentDeleteArgs<ExtArgs>>): Prisma__FinancePaymentClient<$Result.GetResult<Prisma.$FinancePaymentPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -17993,7 +18406,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   }
      * })
-     *
+     * 
      */
     update<T extends FinancePaymentUpdateArgs>(args: SelectSubset<T, FinancePaymentUpdateArgs<ExtArgs>>): Prisma__FinancePaymentClient<$Result.GetResult<Prisma.$FinancePaymentPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -18007,7 +18420,7 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     *
+     * 
      */
     deleteMany<T extends FinancePaymentDeleteManyArgs>(args?: SelectSubset<T, FinancePaymentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -18026,7 +18439,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   }
      * })
-     *
+     * 
      */
     updateMany<T extends FinancePaymentUpdateManyArgs>(args: SelectSubset<T, FinancePaymentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -18043,7 +18456,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     *
+     * 
      * // Update zero or more FinancePayments and only return the `id`
      * const financePaymentWithIdOnly = await prisma.financePayment.updateManyAndReturn({
      *   select: { id: true },
@@ -18056,7 +18469,7 @@ export namespace Prisma {
      * })
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     *
+     * 
      */
     updateManyAndReturn<T extends FinancePaymentUpdateManyAndReturnArgs>(args: SelectSubset<T, FinancePaymentUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FinancePaymentPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
@@ -18145,7 +18558,7 @@ export namespace Prisma {
      *     _all: true
      *   },
      * })
-     *
+     * 
     **/
     groupBy<
       T extends FinancePaymentGroupByArgs,
@@ -18263,7 +18676,7 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"FinancePayment", 'DateTime'>
     readonly updatedAt: FieldRef<"FinancePayment", 'DateTime'>
   }
-
+    
 
   // Custom InputTypes
   /**
@@ -18332,31 +18745,31 @@ export namespace Prisma {
     where?: FinancePaymentWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
+     * 
      * Determine the order of FinancePayments to fetch.
      */
     orderBy?: FinancePaymentOrderByWithRelationInput | FinancePaymentOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
+     * 
      * Sets the position for searching for FinancePayments.
      */
     cursor?: FinancePaymentWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Take `±n` FinancePayments from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Skip the first `n` FinancePayments.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     *
+     * 
      * Filter by unique combinations of FinancePayments.
      */
     distinct?: FinancePaymentScalarFieldEnum | FinancePaymentScalarFieldEnum[]
@@ -18384,31 +18797,31 @@ export namespace Prisma {
     where?: FinancePaymentWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
+     * 
      * Determine the order of FinancePayments to fetch.
      */
     orderBy?: FinancePaymentOrderByWithRelationInput | FinancePaymentOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
+     * 
      * Sets the position for searching for FinancePayments.
      */
     cursor?: FinancePaymentWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Take `±n` FinancePayments from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Skip the first `n` FinancePayments.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     *
+     * 
      * Filter by unique combinations of FinancePayments.
      */
     distinct?: FinancePaymentScalarFieldEnum | FinancePaymentScalarFieldEnum[]
@@ -18436,25 +18849,25 @@ export namespace Prisma {
     where?: FinancePaymentWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
+     * 
      * Determine the order of FinancePayments to fetch.
      */
     orderBy?: FinancePaymentOrderByWithRelationInput | FinancePaymentOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
+     * 
      * Sets the position for listing FinancePayments.
      */
     cursor?: FinancePaymentWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Take `±n` FinancePayments from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
+     * 
      * Skip the first `n` FinancePayments.
      */
     skip?: number
@@ -18711,6 +19124,4710 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: FinancePaymentInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model EchoChatMessage
+   */
+
+  export type AggregateEchoChatMessage = {
+    _count: EchoChatMessageCountAggregateOutputType | null
+    _min: EchoChatMessageMinAggregateOutputType | null
+    _max: EchoChatMessageMaxAggregateOutputType | null
+  }
+
+  export type EchoChatMessageMinAggregateOutputType = {
+    id: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    role: string | null
+    content: string | null
+    model: string | null
+    requestId: string | null
+  }
+
+  export type EchoChatMessageMaxAggregateOutputType = {
+    id: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    role: string | null
+    content: string | null
+    model: string | null
+    requestId: string | null
+  }
+
+  export type EchoChatMessageCountAggregateOutputType = {
+    id: number
+    createdAt: number
+    updatedAt: number
+    role: number
+    content: number
+    model: number
+    requestId: number
+    metadata: number
+    _all: number
+  }
+
+
+  export type EchoChatMessageMinAggregateInputType = {
+    id?: true
+    createdAt?: true
+    updatedAt?: true
+    role?: true
+    content?: true
+    model?: true
+    requestId?: true
+  }
+
+  export type EchoChatMessageMaxAggregateInputType = {
+    id?: true
+    createdAt?: true
+    updatedAt?: true
+    role?: true
+    content?: true
+    model?: true
+    requestId?: true
+  }
+
+  export type EchoChatMessageCountAggregateInputType = {
+    id?: true
+    createdAt?: true
+    updatedAt?: true
+    role?: true
+    content?: true
+    model?: true
+    requestId?: true
+    metadata?: true
+    _all?: true
+  }
+
+  export type EchoChatMessageAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which EchoChatMessage to aggregate.
+     */
+    where?: EchoChatMessageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EchoChatMessages to fetch.
+     */
+    orderBy?: EchoChatMessageOrderByWithRelationInput | EchoChatMessageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: EchoChatMessageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EchoChatMessages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EchoChatMessages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned EchoChatMessages
+    **/
+    _count?: true | EchoChatMessageCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: EchoChatMessageMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: EchoChatMessageMaxAggregateInputType
+  }
+
+  export type GetEchoChatMessageAggregateType<T extends EchoChatMessageAggregateArgs> = {
+        [P in keyof T & keyof AggregateEchoChatMessage]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateEchoChatMessage[P]>
+      : GetScalarType<T[P], AggregateEchoChatMessage[P]>
+  }
+
+
+
+
+  export type EchoChatMessageGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EchoChatMessageWhereInput
+    orderBy?: EchoChatMessageOrderByWithAggregationInput | EchoChatMessageOrderByWithAggregationInput[]
+    by: EchoChatMessageScalarFieldEnum[] | EchoChatMessageScalarFieldEnum
+    having?: EchoChatMessageScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: EchoChatMessageCountAggregateInputType | true
+    _min?: EchoChatMessageMinAggregateInputType
+    _max?: EchoChatMessageMaxAggregateInputType
+  }
+
+  export type EchoChatMessageGroupByOutputType = {
+    id: string
+    createdAt: Date
+    updatedAt: Date
+    role: string
+    content: string
+    model: string | null
+    requestId: string | null
+    metadata: JsonValue
+    _count: EchoChatMessageCountAggregateOutputType | null
+    _min: EchoChatMessageMinAggregateOutputType | null
+    _max: EchoChatMessageMaxAggregateOutputType | null
+  }
+
+  type GetEchoChatMessageGroupByPayload<T extends EchoChatMessageGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<EchoChatMessageGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof EchoChatMessageGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], EchoChatMessageGroupByOutputType[P]>
+            : GetScalarType<T[P], EchoChatMessageGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type EchoChatMessageSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    role?: boolean
+    content?: boolean
+    model?: boolean
+    requestId?: boolean
+    metadata?: boolean
+    memoryEntries?: boolean | EchoChatMessage$memoryEntriesArgs<ExtArgs>
+    hypotheses?: boolean | EchoChatMessage$hypothesesArgs<ExtArgs>
+    decisions?: boolean | EchoChatMessage$decisionsArgs<ExtArgs>
+    _count?: boolean | EchoChatMessageCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["echoChatMessage"]>
+
+  export type EchoChatMessageSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    role?: boolean
+    content?: boolean
+    model?: boolean
+    requestId?: boolean
+    metadata?: boolean
+  }, ExtArgs["result"]["echoChatMessage"]>
+
+  export type EchoChatMessageSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    role?: boolean
+    content?: boolean
+    model?: boolean
+    requestId?: boolean
+    metadata?: boolean
+  }, ExtArgs["result"]["echoChatMessage"]>
+
+  export type EchoChatMessageSelectScalar = {
+    id?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    role?: boolean
+    content?: boolean
+    model?: boolean
+    requestId?: boolean
+    metadata?: boolean
+  }
+
+  export type EchoChatMessageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "role" | "content" | "model" | "requestId" | "metadata", ExtArgs["result"]["echoChatMessage"]>
+  export type EchoChatMessageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    memoryEntries?: boolean | EchoChatMessage$memoryEntriesArgs<ExtArgs>
+    hypotheses?: boolean | EchoChatMessage$hypothesesArgs<ExtArgs>
+    decisions?: boolean | EchoChatMessage$decisionsArgs<ExtArgs>
+    _count?: boolean | EchoChatMessageCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type EchoChatMessageIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type EchoChatMessageIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $EchoChatMessagePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "EchoChatMessage"
+    objects: {
+      memoryEntries: Prisma.$EchoMemoryEntryPayload<ExtArgs>[]
+      hypotheses: Prisma.$EchoHypothesisPayload<ExtArgs>[]
+      decisions: Prisma.$EchoDecisionPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      createdAt: Date
+      updatedAt: Date
+      role: string
+      content: string
+      model: string | null
+      requestId: string | null
+      metadata: Prisma.JsonValue
+    }, ExtArgs["result"]["echoChatMessage"]>
+    composites: {}
+  }
+
+  type EchoChatMessageGetPayload<S extends boolean | null | undefined | EchoChatMessageDefaultArgs> = $Result.GetResult<Prisma.$EchoChatMessagePayload, S>
+
+  type EchoChatMessageCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<EchoChatMessageFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: EchoChatMessageCountAggregateInputType | true
+    }
+
+  export interface EchoChatMessageDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['EchoChatMessage'], meta: { name: 'EchoChatMessage' } }
+    /**
+     * Find zero or one EchoChatMessage that matches the filter.
+     * @param {EchoChatMessageFindUniqueArgs} args - Arguments to find a EchoChatMessage
+     * @example
+     * // Get one EchoChatMessage
+     * const echoChatMessage = await prisma.echoChatMessage.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends EchoChatMessageFindUniqueArgs>(args: SelectSubset<T, EchoChatMessageFindUniqueArgs<ExtArgs>>): Prisma__EchoChatMessageClient<$Result.GetResult<Prisma.$EchoChatMessagePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one EchoChatMessage that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {EchoChatMessageFindUniqueOrThrowArgs} args - Arguments to find a EchoChatMessage
+     * @example
+     * // Get one EchoChatMessage
+     * const echoChatMessage = await prisma.echoChatMessage.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends EchoChatMessageFindUniqueOrThrowArgs>(args: SelectSubset<T, EchoChatMessageFindUniqueOrThrowArgs<ExtArgs>>): Prisma__EchoChatMessageClient<$Result.GetResult<Prisma.$EchoChatMessagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first EchoChatMessage that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EchoChatMessageFindFirstArgs} args - Arguments to find a EchoChatMessage
+     * @example
+     * // Get one EchoChatMessage
+     * const echoChatMessage = await prisma.echoChatMessage.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends EchoChatMessageFindFirstArgs>(args?: SelectSubset<T, EchoChatMessageFindFirstArgs<ExtArgs>>): Prisma__EchoChatMessageClient<$Result.GetResult<Prisma.$EchoChatMessagePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first EchoChatMessage that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EchoChatMessageFindFirstOrThrowArgs} args - Arguments to find a EchoChatMessage
+     * @example
+     * // Get one EchoChatMessage
+     * const echoChatMessage = await prisma.echoChatMessage.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends EchoChatMessageFindFirstOrThrowArgs>(args?: SelectSubset<T, EchoChatMessageFindFirstOrThrowArgs<ExtArgs>>): Prisma__EchoChatMessageClient<$Result.GetResult<Prisma.$EchoChatMessagePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more EchoChatMessages that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EchoChatMessageFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all EchoChatMessages
+     * const echoChatMessages = await prisma.echoChatMessage.findMany()
+     * 
+     * // Get first 10 EchoChatMessages
+     * const echoChatMessages = await prisma.echoChatMessage.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const echoChatMessageWithIdOnly = await prisma.echoChatMessage.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends EchoChatMessageFindManyArgs>(args?: SelectSubset<T, EchoChatMessageFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EchoChatMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a EchoChatMessage.
+     * @param {EchoChatMessageCreateArgs} args - Arguments to create a EchoChatMessage.
+     * @example
+     * // Create one EchoChatMessage
+     * const EchoChatMessage = await prisma.echoChatMessage.create({
+     *   data: {
+     *     // ... data to create a EchoChatMessage
+     *   }
+     * })
+     * 
+     */
+    create<T extends EchoChatMessageCreateArgs>(args: SelectSubset<T, EchoChatMessageCreateArgs<ExtArgs>>): Prisma__EchoChatMessageClient<$Result.GetResult<Prisma.$EchoChatMessagePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many EchoChatMessages.
+     * @param {EchoChatMessageCreateManyArgs} args - Arguments to create many EchoChatMessages.
+     * @example
+     * // Create many EchoChatMessages
+     * const echoChatMessage = await prisma.echoChatMessage.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends EchoChatMessageCreateManyArgs>(args?: SelectSubset<T, EchoChatMessageCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many EchoChatMessages and returns the data saved in the database.
+     * @param {EchoChatMessageCreateManyAndReturnArgs} args - Arguments to create many EchoChatMessages.
+     * @example
+     * // Create many EchoChatMessages
+     * const echoChatMessage = await prisma.echoChatMessage.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many EchoChatMessages and only return the `id`
+     * const echoChatMessageWithIdOnly = await prisma.echoChatMessage.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends EchoChatMessageCreateManyAndReturnArgs>(args?: SelectSubset<T, EchoChatMessageCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EchoChatMessagePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a EchoChatMessage.
+     * @param {EchoChatMessageDeleteArgs} args - Arguments to delete one EchoChatMessage.
+     * @example
+     * // Delete one EchoChatMessage
+     * const EchoChatMessage = await prisma.echoChatMessage.delete({
+     *   where: {
+     *     // ... filter to delete one EchoChatMessage
+     *   }
+     * })
+     * 
+     */
+    delete<T extends EchoChatMessageDeleteArgs>(args: SelectSubset<T, EchoChatMessageDeleteArgs<ExtArgs>>): Prisma__EchoChatMessageClient<$Result.GetResult<Prisma.$EchoChatMessagePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one EchoChatMessage.
+     * @param {EchoChatMessageUpdateArgs} args - Arguments to update one EchoChatMessage.
+     * @example
+     * // Update one EchoChatMessage
+     * const echoChatMessage = await prisma.echoChatMessage.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends EchoChatMessageUpdateArgs>(args: SelectSubset<T, EchoChatMessageUpdateArgs<ExtArgs>>): Prisma__EchoChatMessageClient<$Result.GetResult<Prisma.$EchoChatMessagePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more EchoChatMessages.
+     * @param {EchoChatMessageDeleteManyArgs} args - Arguments to filter EchoChatMessages to delete.
+     * @example
+     * // Delete a few EchoChatMessages
+     * const { count } = await prisma.echoChatMessage.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends EchoChatMessageDeleteManyArgs>(args?: SelectSubset<T, EchoChatMessageDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more EchoChatMessages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EchoChatMessageUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many EchoChatMessages
+     * const echoChatMessage = await prisma.echoChatMessage.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends EchoChatMessageUpdateManyArgs>(args: SelectSubset<T, EchoChatMessageUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more EchoChatMessages and returns the data updated in the database.
+     * @param {EchoChatMessageUpdateManyAndReturnArgs} args - Arguments to update many EchoChatMessages.
+     * @example
+     * // Update many EchoChatMessages
+     * const echoChatMessage = await prisma.echoChatMessage.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more EchoChatMessages and only return the `id`
+     * const echoChatMessageWithIdOnly = await prisma.echoChatMessage.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends EchoChatMessageUpdateManyAndReturnArgs>(args: SelectSubset<T, EchoChatMessageUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EchoChatMessagePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one EchoChatMessage.
+     * @param {EchoChatMessageUpsertArgs} args - Arguments to update or create a EchoChatMessage.
+     * @example
+     * // Update or create a EchoChatMessage
+     * const echoChatMessage = await prisma.echoChatMessage.upsert({
+     *   create: {
+     *     // ... data to create a EchoChatMessage
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the EchoChatMessage we want to update
+     *   }
+     * })
+     */
+    upsert<T extends EchoChatMessageUpsertArgs>(args: SelectSubset<T, EchoChatMessageUpsertArgs<ExtArgs>>): Prisma__EchoChatMessageClient<$Result.GetResult<Prisma.$EchoChatMessagePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of EchoChatMessages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EchoChatMessageCountArgs} args - Arguments to filter EchoChatMessages to count.
+     * @example
+     * // Count the number of EchoChatMessages
+     * const count = await prisma.echoChatMessage.count({
+     *   where: {
+     *     // ... the filter for the EchoChatMessages we want to count
+     *   }
+     * })
+    **/
+    count<T extends EchoChatMessageCountArgs>(
+      args?: Subset<T, EchoChatMessageCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], EchoChatMessageCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a EchoChatMessage.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EchoChatMessageAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends EchoChatMessageAggregateArgs>(args: Subset<T, EchoChatMessageAggregateArgs>): Prisma.PrismaPromise<GetEchoChatMessageAggregateType<T>>
+
+    /**
+     * Group by EchoChatMessage.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EchoChatMessageGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends EchoChatMessageGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: EchoChatMessageGroupByArgs['orderBy'] }
+        : { orderBy?: EchoChatMessageGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, EchoChatMessageGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetEchoChatMessageGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the EchoChatMessage model
+   */
+  readonly fields: EchoChatMessageFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for EchoChatMessage.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__EchoChatMessageClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    memoryEntries<T extends EchoChatMessage$memoryEntriesArgs<ExtArgs> = {}>(args?: Subset<T, EchoChatMessage$memoryEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EchoMemoryEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    hypotheses<T extends EchoChatMessage$hypothesesArgs<ExtArgs> = {}>(args?: Subset<T, EchoChatMessage$hypothesesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EchoHypothesisPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    decisions<T extends EchoChatMessage$decisionsArgs<ExtArgs> = {}>(args?: Subset<T, EchoChatMessage$decisionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EchoDecisionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the EchoChatMessage model
+   */
+  interface EchoChatMessageFieldRefs {
+    readonly id: FieldRef<"EchoChatMessage", 'String'>
+    readonly createdAt: FieldRef<"EchoChatMessage", 'DateTime'>
+    readonly updatedAt: FieldRef<"EchoChatMessage", 'DateTime'>
+    readonly role: FieldRef<"EchoChatMessage", 'String'>
+    readonly content: FieldRef<"EchoChatMessage", 'String'>
+    readonly model: FieldRef<"EchoChatMessage", 'String'>
+    readonly requestId: FieldRef<"EchoChatMessage", 'String'>
+    readonly metadata: FieldRef<"EchoChatMessage", 'Json'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * EchoChatMessage findUnique
+   */
+  export type EchoChatMessageFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EchoChatMessage
+     */
+    select?: EchoChatMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EchoChatMessage
+     */
+    omit?: EchoChatMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EchoChatMessageInclude<ExtArgs> | null
+    /**
+     * Filter, which EchoChatMessage to fetch.
+     */
+    where: EchoChatMessageWhereUniqueInput
+  }
+
+  /**
+   * EchoChatMessage findUniqueOrThrow
+   */
+  export type EchoChatMessageFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EchoChatMessage
+     */
+    select?: EchoChatMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EchoChatMessage
+     */
+    omit?: EchoChatMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EchoChatMessageInclude<ExtArgs> | null
+    /**
+     * Filter, which EchoChatMessage to fetch.
+     */
+    where: EchoChatMessageWhereUniqueInput
+  }
+
+  /**
+   * EchoChatMessage findFirst
+   */
+  export type EchoChatMessageFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EchoChatMessage
+     */
+    select?: EchoChatMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EchoChatMessage
+     */
+    omit?: EchoChatMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EchoChatMessageInclude<ExtArgs> | null
+    /**
+     * Filter, which EchoChatMessage to fetch.
+     */
+    where?: EchoChatMessageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EchoChatMessages to fetch.
+     */
+    orderBy?: EchoChatMessageOrderByWithRelationInput | EchoChatMessageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for EchoChatMessages.
+     */
+    cursor?: EchoChatMessageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EchoChatMessages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EchoChatMessages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of EchoChatMessages.
+     */
+    distinct?: EchoChatMessageScalarFieldEnum | EchoChatMessageScalarFieldEnum[]
+  }
+
+  /**
+   * EchoChatMessage findFirstOrThrow
+   */
+  export type EchoChatMessageFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EchoChatMessage
+     */
+    select?: EchoChatMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EchoChatMessage
+     */
+    omit?: EchoChatMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EchoChatMessageInclude<ExtArgs> | null
+    /**
+     * Filter, which EchoChatMessage to fetch.
+     */
+    where?: EchoChatMessageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EchoChatMessages to fetch.
+     */
+    orderBy?: EchoChatMessageOrderByWithRelationInput | EchoChatMessageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for EchoChatMessages.
+     */
+    cursor?: EchoChatMessageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EchoChatMessages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EchoChatMessages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of EchoChatMessages.
+     */
+    distinct?: EchoChatMessageScalarFieldEnum | EchoChatMessageScalarFieldEnum[]
+  }
+
+  /**
+   * EchoChatMessage findMany
+   */
+  export type EchoChatMessageFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EchoChatMessage
+     */
+    select?: EchoChatMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EchoChatMessage
+     */
+    omit?: EchoChatMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EchoChatMessageInclude<ExtArgs> | null
+    /**
+     * Filter, which EchoChatMessages to fetch.
+     */
+    where?: EchoChatMessageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EchoChatMessages to fetch.
+     */
+    orderBy?: EchoChatMessageOrderByWithRelationInput | EchoChatMessageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing EchoChatMessages.
+     */
+    cursor?: EchoChatMessageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EchoChatMessages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EchoChatMessages.
+     */
+    skip?: number
+    distinct?: EchoChatMessageScalarFieldEnum | EchoChatMessageScalarFieldEnum[]
+  }
+
+  /**
+   * EchoChatMessage create
+   */
+  export type EchoChatMessageCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EchoChatMessage
+     */
+    select?: EchoChatMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EchoChatMessage
+     */
+    omit?: EchoChatMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EchoChatMessageInclude<ExtArgs> | null
+    /**
+     * The data needed to create a EchoChatMessage.
+     */
+    data: XOR<EchoChatMessageCreateInput, EchoChatMessageUncheckedCreateInput>
+  }
+
+  /**
+   * EchoChatMessage createMany
+   */
+  export type EchoChatMessageCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many EchoChatMessages.
+     */
+    data: EchoChatMessageCreateManyInput | EchoChatMessageCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * EchoChatMessage createManyAndReturn
+   */
+  export type EchoChatMessageCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EchoChatMessage
+     */
+    select?: EchoChatMessageSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the EchoChatMessage
+     */
+    omit?: EchoChatMessageOmit<ExtArgs> | null
+    /**
+     * The data used to create many EchoChatMessages.
+     */
+    data: EchoChatMessageCreateManyInput | EchoChatMessageCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * EchoChatMessage update
+   */
+  export type EchoChatMessageUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EchoChatMessage
+     */
+    select?: EchoChatMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EchoChatMessage
+     */
+    omit?: EchoChatMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EchoChatMessageInclude<ExtArgs> | null
+    /**
+     * The data needed to update a EchoChatMessage.
+     */
+    data: XOR<EchoChatMessageUpdateInput, EchoChatMessageUncheckedUpdateInput>
+    /**
+     * Choose, which EchoChatMessage to update.
+     */
+    where: EchoChatMessageWhereUniqueInput
+  }
+
+  /**
+   * EchoChatMessage updateMany
+   */
+  export type EchoChatMessageUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update EchoChatMessages.
+     */
+    data: XOR<EchoChatMessageUpdateManyMutationInput, EchoChatMessageUncheckedUpdateManyInput>
+    /**
+     * Filter which EchoChatMessages to update
+     */
+    where?: EchoChatMessageWhereInput
+    /**
+     * Limit how many EchoChatMessages to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * EchoChatMessage updateManyAndReturn
+   */
+  export type EchoChatMessageUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EchoChatMessage
+     */
+    select?: EchoChatMessageSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the EchoChatMessage
+     */
+    omit?: EchoChatMessageOmit<ExtArgs> | null
+    /**
+     * The data used to update EchoChatMessages.
+     */
+    data: XOR<EchoChatMessageUpdateManyMutationInput, EchoChatMessageUncheckedUpdateManyInput>
+    /**
+     * Filter which EchoChatMessages to update
+     */
+    where?: EchoChatMessageWhereInput
+    /**
+     * Limit how many EchoChatMessages to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * EchoChatMessage upsert
+   */
+  export type EchoChatMessageUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EchoChatMessage
+     */
+    select?: EchoChatMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EchoChatMessage
+     */
+    omit?: EchoChatMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EchoChatMessageInclude<ExtArgs> | null
+    /**
+     * The filter to search for the EchoChatMessage to update in case it exists.
+     */
+    where: EchoChatMessageWhereUniqueInput
+    /**
+     * In case the EchoChatMessage found by the `where` argument doesn't exist, create a new EchoChatMessage with this data.
+     */
+    create: XOR<EchoChatMessageCreateInput, EchoChatMessageUncheckedCreateInput>
+    /**
+     * In case the EchoChatMessage was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<EchoChatMessageUpdateInput, EchoChatMessageUncheckedUpdateInput>
+  }
+
+  /**
+   * EchoChatMessage delete
+   */
+  export type EchoChatMessageDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EchoChatMessage
+     */
+    select?: EchoChatMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EchoChatMessage
+     */
+    omit?: EchoChatMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EchoChatMessageInclude<ExtArgs> | null
+    /**
+     * Filter which EchoChatMessage to delete.
+     */
+    where: EchoChatMessageWhereUniqueInput
+  }
+
+  /**
+   * EchoChatMessage deleteMany
+   */
+  export type EchoChatMessageDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which EchoChatMessages to delete
+     */
+    where?: EchoChatMessageWhereInput
+    /**
+     * Limit how many EchoChatMessages to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * EchoChatMessage.memoryEntries
+   */
+  export type EchoChatMessage$memoryEntriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EchoMemoryEntry
+     */
+    select?: EchoMemoryEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EchoMemoryEntry
+     */
+    omit?: EchoMemoryEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EchoMemoryEntryInclude<ExtArgs> | null
+    where?: EchoMemoryEntryWhereInput
+    orderBy?: EchoMemoryEntryOrderByWithRelationInput | EchoMemoryEntryOrderByWithRelationInput[]
+    cursor?: EchoMemoryEntryWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: EchoMemoryEntryScalarFieldEnum | EchoMemoryEntryScalarFieldEnum[]
+  }
+
+  /**
+   * EchoChatMessage.hypotheses
+   */
+  export type EchoChatMessage$hypothesesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EchoHypothesis
+     */
+    select?: EchoHypothesisSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EchoHypothesis
+     */
+    omit?: EchoHypothesisOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EchoHypothesisInclude<ExtArgs> | null
+    where?: EchoHypothesisWhereInput
+    orderBy?: EchoHypothesisOrderByWithRelationInput | EchoHypothesisOrderByWithRelationInput[]
+    cursor?: EchoHypothesisWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: EchoHypothesisScalarFieldEnum | EchoHypothesisScalarFieldEnum[]
+  }
+
+  /**
+   * EchoChatMessage.decisions
+   */
+  export type EchoChatMessage$decisionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EchoDecision
+     */
+    select?: EchoDecisionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EchoDecision
+     */
+    omit?: EchoDecisionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EchoDecisionInclude<ExtArgs> | null
+    where?: EchoDecisionWhereInput
+    orderBy?: EchoDecisionOrderByWithRelationInput | EchoDecisionOrderByWithRelationInput[]
+    cursor?: EchoDecisionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: EchoDecisionScalarFieldEnum | EchoDecisionScalarFieldEnum[]
+  }
+
+  /**
+   * EchoChatMessage without action
+   */
+  export type EchoChatMessageDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EchoChatMessage
+     */
+    select?: EchoChatMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EchoChatMessage
+     */
+    omit?: EchoChatMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EchoChatMessageInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model EchoMemoryEntry
+   */
+
+  export type AggregateEchoMemoryEntry = {
+    _count: EchoMemoryEntryCountAggregateOutputType | null
+    _avg: EchoMemoryEntryAvgAggregateOutputType | null
+    _sum: EchoMemoryEntrySumAggregateOutputType | null
+    _min: EchoMemoryEntryMinAggregateOutputType | null
+    _max: EchoMemoryEntryMaxAggregateOutputType | null
+  }
+
+  export type EchoMemoryEntryAvgAggregateOutputType = {
+    confidence: Decimal | null
+  }
+
+  export type EchoMemoryEntrySumAggregateOutputType = {
+    confidence: Decimal | null
+  }
+
+  export type EchoMemoryEntryMinAggregateOutputType = {
+    id: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    sourceMessageId: string | null
+    source: string | null
+    category: string | null
+    type: string | null
+    sensitivity: string | null
+    confidence: Decimal | null
+    humanSummary: string | null
+    sourceContent: string | null
+    status: string | null
+    validated: boolean | null
+  }
+
+  export type EchoMemoryEntryMaxAggregateOutputType = {
+    id: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    sourceMessageId: string | null
+    source: string | null
+    category: string | null
+    type: string | null
+    sensitivity: string | null
+    confidence: Decimal | null
+    humanSummary: string | null
+    sourceContent: string | null
+    status: string | null
+    validated: boolean | null
+  }
+
+  export type EchoMemoryEntryCountAggregateOutputType = {
+    id: number
+    createdAt: number
+    updatedAt: number
+    sourceMessageId: number
+    source: number
+    category: number
+    type: number
+    sensitivity: number
+    confidence: number
+    humanSummary: number
+    sourceContent: number
+    status: number
+    validated: number
+    links: number
+    metadata: number
+    _all: number
+  }
+
+
+  export type EchoMemoryEntryAvgAggregateInputType = {
+    confidence?: true
+  }
+
+  export type EchoMemoryEntrySumAggregateInputType = {
+    confidence?: true
+  }
+
+  export type EchoMemoryEntryMinAggregateInputType = {
+    id?: true
+    createdAt?: true
+    updatedAt?: true
+    sourceMessageId?: true
+    source?: true
+    category?: true
+    type?: true
+    sensitivity?: true
+    confidence?: true
+    humanSummary?: true
+    sourceContent?: true
+    status?: true
+    validated?: true
+  }
+
+  export type EchoMemoryEntryMaxAggregateInputType = {
+    id?: true
+    createdAt?: true
+    updatedAt?: true
+    sourceMessageId?: true
+    source?: true
+    category?: true
+    type?: true
+    sensitivity?: true
+    confidence?: true
+    humanSummary?: true
+    sourceContent?: true
+    status?: true
+    validated?: true
+  }
+
+  export type EchoMemoryEntryCountAggregateInputType = {
+    id?: true
+    createdAt?: true
+    updatedAt?: true
+    sourceMessageId?: true
+    source?: true
+    category?: true
+    type?: true
+    sensitivity?: true
+    confidence?: true
+    humanSummary?: true
+    sourceContent?: true
+    status?: true
+    validated?: true
+    links?: true
+    metadata?: true
+    _all?: true
+  }
+
+  export type EchoMemoryEntryAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which EchoMemoryEntry to aggregate.
+     */
+    where?: EchoMemoryEntryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EchoMemoryEntries to fetch.
+     */
+    orderBy?: EchoMemoryEntryOrderByWithRelationInput | EchoMemoryEntryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: EchoMemoryEntryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EchoMemoryEntries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EchoMemoryEntries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned EchoMemoryEntries
+    **/
+    _count?: true | EchoMemoryEntryCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: EchoMemoryEntryAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: EchoMemoryEntrySumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: EchoMemoryEntryMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: EchoMemoryEntryMaxAggregateInputType
+  }
+
+  export type GetEchoMemoryEntryAggregateType<T extends EchoMemoryEntryAggregateArgs> = {
+        [P in keyof T & keyof AggregateEchoMemoryEntry]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateEchoMemoryEntry[P]>
+      : GetScalarType<T[P], AggregateEchoMemoryEntry[P]>
+  }
+
+
+
+
+  export type EchoMemoryEntryGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EchoMemoryEntryWhereInput
+    orderBy?: EchoMemoryEntryOrderByWithAggregationInput | EchoMemoryEntryOrderByWithAggregationInput[]
+    by: EchoMemoryEntryScalarFieldEnum[] | EchoMemoryEntryScalarFieldEnum
+    having?: EchoMemoryEntryScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: EchoMemoryEntryCountAggregateInputType | true
+    _avg?: EchoMemoryEntryAvgAggregateInputType
+    _sum?: EchoMemoryEntrySumAggregateInputType
+    _min?: EchoMemoryEntryMinAggregateInputType
+    _max?: EchoMemoryEntryMaxAggregateInputType
+  }
+
+  export type EchoMemoryEntryGroupByOutputType = {
+    id: string
+    createdAt: Date
+    updatedAt: Date
+    sourceMessageId: string | null
+    source: string
+    category: string
+    type: string
+    sensitivity: string
+    confidence: Decimal
+    humanSummary: string
+    sourceContent: string | null
+    status: string
+    validated: boolean
+    links: JsonValue
+    metadata: JsonValue
+    _count: EchoMemoryEntryCountAggregateOutputType | null
+    _avg: EchoMemoryEntryAvgAggregateOutputType | null
+    _sum: EchoMemoryEntrySumAggregateOutputType | null
+    _min: EchoMemoryEntryMinAggregateOutputType | null
+    _max: EchoMemoryEntryMaxAggregateOutputType | null
+  }
+
+  type GetEchoMemoryEntryGroupByPayload<T extends EchoMemoryEntryGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<EchoMemoryEntryGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof EchoMemoryEntryGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], EchoMemoryEntryGroupByOutputType[P]>
+            : GetScalarType<T[P], EchoMemoryEntryGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type EchoMemoryEntrySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    sourceMessageId?: boolean
+    source?: boolean
+    category?: boolean
+    type?: boolean
+    sensitivity?: boolean
+    confidence?: boolean
+    humanSummary?: boolean
+    sourceContent?: boolean
+    status?: boolean
+    validated?: boolean
+    links?: boolean
+    metadata?: boolean
+    sourceMessage?: boolean | EchoMemoryEntry$sourceMessageArgs<ExtArgs>
+  }, ExtArgs["result"]["echoMemoryEntry"]>
+
+  export type EchoMemoryEntrySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    sourceMessageId?: boolean
+    source?: boolean
+    category?: boolean
+    type?: boolean
+    sensitivity?: boolean
+    confidence?: boolean
+    humanSummary?: boolean
+    sourceContent?: boolean
+    status?: boolean
+    validated?: boolean
+    links?: boolean
+    metadata?: boolean
+    sourceMessage?: boolean | EchoMemoryEntry$sourceMessageArgs<ExtArgs>
+  }, ExtArgs["result"]["echoMemoryEntry"]>
+
+  export type EchoMemoryEntrySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    sourceMessageId?: boolean
+    source?: boolean
+    category?: boolean
+    type?: boolean
+    sensitivity?: boolean
+    confidence?: boolean
+    humanSummary?: boolean
+    sourceContent?: boolean
+    status?: boolean
+    validated?: boolean
+    links?: boolean
+    metadata?: boolean
+    sourceMessage?: boolean | EchoMemoryEntry$sourceMessageArgs<ExtArgs>
+  }, ExtArgs["result"]["echoMemoryEntry"]>
+
+  export type EchoMemoryEntrySelectScalar = {
+    id?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    sourceMessageId?: boolean
+    source?: boolean
+    category?: boolean
+    type?: boolean
+    sensitivity?: boolean
+    confidence?: boolean
+    humanSummary?: boolean
+    sourceContent?: boolean
+    status?: boolean
+    validated?: boolean
+    links?: boolean
+    metadata?: boolean
+  }
+
+  export type EchoMemoryEntryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "sourceMessageId" | "source" | "category" | "type" | "sensitivity" | "confidence" | "humanSummary" | "sourceContent" | "status" | "validated" | "links" | "metadata", ExtArgs["result"]["echoMemoryEntry"]>
+  export type EchoMemoryEntryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sourceMessage?: boolean | EchoMemoryEntry$sourceMessageArgs<ExtArgs>
+  }
+  export type EchoMemoryEntryIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sourceMessage?: boolean | EchoMemoryEntry$sourceMessageArgs<ExtArgs>
+  }
+  export type EchoMemoryEntryIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sourceMessage?: boolean | EchoMemoryEntry$sourceMessageArgs<ExtArgs>
+  }
+
+  export type $EchoMemoryEntryPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "EchoMemoryEntry"
+    objects: {
+      sourceMessage: Prisma.$EchoChatMessagePayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      createdAt: Date
+      updatedAt: Date
+      sourceMessageId: string | null
+      source: string
+      category: string
+      type: string
+      sensitivity: string
+      confidence: Prisma.Decimal
+      humanSummary: string
+      sourceContent: string | null
+      status: string
+      validated: boolean
+      links: Prisma.JsonValue
+      metadata: Prisma.JsonValue
+    }, ExtArgs["result"]["echoMemoryEntry"]>
+    composites: {}
+  }
+
+  type EchoMemoryEntryGetPayload<S extends boolean | null | undefined | EchoMemoryEntryDefaultArgs> = $Result.GetResult<Prisma.$EchoMemoryEntryPayload, S>
+
+  type EchoMemoryEntryCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<EchoMemoryEntryFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: EchoMemoryEntryCountAggregateInputType | true
+    }
+
+  export interface EchoMemoryEntryDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['EchoMemoryEntry'], meta: { name: 'EchoMemoryEntry' } }
+    /**
+     * Find zero or one EchoMemoryEntry that matches the filter.
+     * @param {EchoMemoryEntryFindUniqueArgs} args - Arguments to find a EchoMemoryEntry
+     * @example
+     * // Get one EchoMemoryEntry
+     * const echoMemoryEntry = await prisma.echoMemoryEntry.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends EchoMemoryEntryFindUniqueArgs>(args: SelectSubset<T, EchoMemoryEntryFindUniqueArgs<ExtArgs>>): Prisma__EchoMemoryEntryClient<$Result.GetResult<Prisma.$EchoMemoryEntryPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one EchoMemoryEntry that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {EchoMemoryEntryFindUniqueOrThrowArgs} args - Arguments to find a EchoMemoryEntry
+     * @example
+     * // Get one EchoMemoryEntry
+     * const echoMemoryEntry = await prisma.echoMemoryEntry.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends EchoMemoryEntryFindUniqueOrThrowArgs>(args: SelectSubset<T, EchoMemoryEntryFindUniqueOrThrowArgs<ExtArgs>>): Prisma__EchoMemoryEntryClient<$Result.GetResult<Prisma.$EchoMemoryEntryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first EchoMemoryEntry that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EchoMemoryEntryFindFirstArgs} args - Arguments to find a EchoMemoryEntry
+     * @example
+     * // Get one EchoMemoryEntry
+     * const echoMemoryEntry = await prisma.echoMemoryEntry.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends EchoMemoryEntryFindFirstArgs>(args?: SelectSubset<T, EchoMemoryEntryFindFirstArgs<ExtArgs>>): Prisma__EchoMemoryEntryClient<$Result.GetResult<Prisma.$EchoMemoryEntryPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first EchoMemoryEntry that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EchoMemoryEntryFindFirstOrThrowArgs} args - Arguments to find a EchoMemoryEntry
+     * @example
+     * // Get one EchoMemoryEntry
+     * const echoMemoryEntry = await prisma.echoMemoryEntry.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends EchoMemoryEntryFindFirstOrThrowArgs>(args?: SelectSubset<T, EchoMemoryEntryFindFirstOrThrowArgs<ExtArgs>>): Prisma__EchoMemoryEntryClient<$Result.GetResult<Prisma.$EchoMemoryEntryPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more EchoMemoryEntries that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EchoMemoryEntryFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all EchoMemoryEntries
+     * const echoMemoryEntries = await prisma.echoMemoryEntry.findMany()
+     * 
+     * // Get first 10 EchoMemoryEntries
+     * const echoMemoryEntries = await prisma.echoMemoryEntry.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const echoMemoryEntryWithIdOnly = await prisma.echoMemoryEntry.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends EchoMemoryEntryFindManyArgs>(args?: SelectSubset<T, EchoMemoryEntryFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EchoMemoryEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a EchoMemoryEntry.
+     * @param {EchoMemoryEntryCreateArgs} args - Arguments to create a EchoMemoryEntry.
+     * @example
+     * // Create one EchoMemoryEntry
+     * const EchoMemoryEntry = await prisma.echoMemoryEntry.create({
+     *   data: {
+     *     // ... data to create a EchoMemoryEntry
+     *   }
+     * })
+     * 
+     */
+    create<T extends EchoMemoryEntryCreateArgs>(args: SelectSubset<T, EchoMemoryEntryCreateArgs<ExtArgs>>): Prisma__EchoMemoryEntryClient<$Result.GetResult<Prisma.$EchoMemoryEntryPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many EchoMemoryEntries.
+     * @param {EchoMemoryEntryCreateManyArgs} args - Arguments to create many EchoMemoryEntries.
+     * @example
+     * // Create many EchoMemoryEntries
+     * const echoMemoryEntry = await prisma.echoMemoryEntry.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends EchoMemoryEntryCreateManyArgs>(args?: SelectSubset<T, EchoMemoryEntryCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many EchoMemoryEntries and returns the data saved in the database.
+     * @param {EchoMemoryEntryCreateManyAndReturnArgs} args - Arguments to create many EchoMemoryEntries.
+     * @example
+     * // Create many EchoMemoryEntries
+     * const echoMemoryEntry = await prisma.echoMemoryEntry.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many EchoMemoryEntries and only return the `id`
+     * const echoMemoryEntryWithIdOnly = await prisma.echoMemoryEntry.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends EchoMemoryEntryCreateManyAndReturnArgs>(args?: SelectSubset<T, EchoMemoryEntryCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EchoMemoryEntryPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a EchoMemoryEntry.
+     * @param {EchoMemoryEntryDeleteArgs} args - Arguments to delete one EchoMemoryEntry.
+     * @example
+     * // Delete one EchoMemoryEntry
+     * const EchoMemoryEntry = await prisma.echoMemoryEntry.delete({
+     *   where: {
+     *     // ... filter to delete one EchoMemoryEntry
+     *   }
+     * })
+     * 
+     */
+    delete<T extends EchoMemoryEntryDeleteArgs>(args: SelectSubset<T, EchoMemoryEntryDeleteArgs<ExtArgs>>): Prisma__EchoMemoryEntryClient<$Result.GetResult<Prisma.$EchoMemoryEntryPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one EchoMemoryEntry.
+     * @param {EchoMemoryEntryUpdateArgs} args - Arguments to update one EchoMemoryEntry.
+     * @example
+     * // Update one EchoMemoryEntry
+     * const echoMemoryEntry = await prisma.echoMemoryEntry.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends EchoMemoryEntryUpdateArgs>(args: SelectSubset<T, EchoMemoryEntryUpdateArgs<ExtArgs>>): Prisma__EchoMemoryEntryClient<$Result.GetResult<Prisma.$EchoMemoryEntryPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more EchoMemoryEntries.
+     * @param {EchoMemoryEntryDeleteManyArgs} args - Arguments to filter EchoMemoryEntries to delete.
+     * @example
+     * // Delete a few EchoMemoryEntries
+     * const { count } = await prisma.echoMemoryEntry.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends EchoMemoryEntryDeleteManyArgs>(args?: SelectSubset<T, EchoMemoryEntryDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more EchoMemoryEntries.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EchoMemoryEntryUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many EchoMemoryEntries
+     * const echoMemoryEntry = await prisma.echoMemoryEntry.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends EchoMemoryEntryUpdateManyArgs>(args: SelectSubset<T, EchoMemoryEntryUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more EchoMemoryEntries and returns the data updated in the database.
+     * @param {EchoMemoryEntryUpdateManyAndReturnArgs} args - Arguments to update many EchoMemoryEntries.
+     * @example
+     * // Update many EchoMemoryEntries
+     * const echoMemoryEntry = await prisma.echoMemoryEntry.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more EchoMemoryEntries and only return the `id`
+     * const echoMemoryEntryWithIdOnly = await prisma.echoMemoryEntry.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends EchoMemoryEntryUpdateManyAndReturnArgs>(args: SelectSubset<T, EchoMemoryEntryUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EchoMemoryEntryPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one EchoMemoryEntry.
+     * @param {EchoMemoryEntryUpsertArgs} args - Arguments to update or create a EchoMemoryEntry.
+     * @example
+     * // Update or create a EchoMemoryEntry
+     * const echoMemoryEntry = await prisma.echoMemoryEntry.upsert({
+     *   create: {
+     *     // ... data to create a EchoMemoryEntry
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the EchoMemoryEntry we want to update
+     *   }
+     * })
+     */
+    upsert<T extends EchoMemoryEntryUpsertArgs>(args: SelectSubset<T, EchoMemoryEntryUpsertArgs<ExtArgs>>): Prisma__EchoMemoryEntryClient<$Result.GetResult<Prisma.$EchoMemoryEntryPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of EchoMemoryEntries.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EchoMemoryEntryCountArgs} args - Arguments to filter EchoMemoryEntries to count.
+     * @example
+     * // Count the number of EchoMemoryEntries
+     * const count = await prisma.echoMemoryEntry.count({
+     *   where: {
+     *     // ... the filter for the EchoMemoryEntries we want to count
+     *   }
+     * })
+    **/
+    count<T extends EchoMemoryEntryCountArgs>(
+      args?: Subset<T, EchoMemoryEntryCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], EchoMemoryEntryCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a EchoMemoryEntry.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EchoMemoryEntryAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends EchoMemoryEntryAggregateArgs>(args: Subset<T, EchoMemoryEntryAggregateArgs>): Prisma.PrismaPromise<GetEchoMemoryEntryAggregateType<T>>
+
+    /**
+     * Group by EchoMemoryEntry.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EchoMemoryEntryGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends EchoMemoryEntryGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: EchoMemoryEntryGroupByArgs['orderBy'] }
+        : { orderBy?: EchoMemoryEntryGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, EchoMemoryEntryGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetEchoMemoryEntryGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the EchoMemoryEntry model
+   */
+  readonly fields: EchoMemoryEntryFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for EchoMemoryEntry.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__EchoMemoryEntryClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    sourceMessage<T extends EchoMemoryEntry$sourceMessageArgs<ExtArgs> = {}>(args?: Subset<T, EchoMemoryEntry$sourceMessageArgs<ExtArgs>>): Prisma__EchoChatMessageClient<$Result.GetResult<Prisma.$EchoChatMessagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the EchoMemoryEntry model
+   */
+  interface EchoMemoryEntryFieldRefs {
+    readonly id: FieldRef<"EchoMemoryEntry", 'String'>
+    readonly createdAt: FieldRef<"EchoMemoryEntry", 'DateTime'>
+    readonly updatedAt: FieldRef<"EchoMemoryEntry", 'DateTime'>
+    readonly sourceMessageId: FieldRef<"EchoMemoryEntry", 'String'>
+    readonly source: FieldRef<"EchoMemoryEntry", 'String'>
+    readonly category: FieldRef<"EchoMemoryEntry", 'String'>
+    readonly type: FieldRef<"EchoMemoryEntry", 'String'>
+    readonly sensitivity: FieldRef<"EchoMemoryEntry", 'String'>
+    readonly confidence: FieldRef<"EchoMemoryEntry", 'Decimal'>
+    readonly humanSummary: FieldRef<"EchoMemoryEntry", 'String'>
+    readonly sourceContent: FieldRef<"EchoMemoryEntry", 'String'>
+    readonly status: FieldRef<"EchoMemoryEntry", 'String'>
+    readonly validated: FieldRef<"EchoMemoryEntry", 'Boolean'>
+    readonly links: FieldRef<"EchoMemoryEntry", 'Json'>
+    readonly metadata: FieldRef<"EchoMemoryEntry", 'Json'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * EchoMemoryEntry findUnique
+   */
+  export type EchoMemoryEntryFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EchoMemoryEntry
+     */
+    select?: EchoMemoryEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EchoMemoryEntry
+     */
+    omit?: EchoMemoryEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EchoMemoryEntryInclude<ExtArgs> | null
+    /**
+     * Filter, which EchoMemoryEntry to fetch.
+     */
+    where: EchoMemoryEntryWhereUniqueInput
+  }
+
+  /**
+   * EchoMemoryEntry findUniqueOrThrow
+   */
+  export type EchoMemoryEntryFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EchoMemoryEntry
+     */
+    select?: EchoMemoryEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EchoMemoryEntry
+     */
+    omit?: EchoMemoryEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EchoMemoryEntryInclude<ExtArgs> | null
+    /**
+     * Filter, which EchoMemoryEntry to fetch.
+     */
+    where: EchoMemoryEntryWhereUniqueInput
+  }
+
+  /**
+   * EchoMemoryEntry findFirst
+   */
+  export type EchoMemoryEntryFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EchoMemoryEntry
+     */
+    select?: EchoMemoryEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EchoMemoryEntry
+     */
+    omit?: EchoMemoryEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EchoMemoryEntryInclude<ExtArgs> | null
+    /**
+     * Filter, which EchoMemoryEntry to fetch.
+     */
+    where?: EchoMemoryEntryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EchoMemoryEntries to fetch.
+     */
+    orderBy?: EchoMemoryEntryOrderByWithRelationInput | EchoMemoryEntryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for EchoMemoryEntries.
+     */
+    cursor?: EchoMemoryEntryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EchoMemoryEntries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EchoMemoryEntries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of EchoMemoryEntries.
+     */
+    distinct?: EchoMemoryEntryScalarFieldEnum | EchoMemoryEntryScalarFieldEnum[]
+  }
+
+  /**
+   * EchoMemoryEntry findFirstOrThrow
+   */
+  export type EchoMemoryEntryFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EchoMemoryEntry
+     */
+    select?: EchoMemoryEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EchoMemoryEntry
+     */
+    omit?: EchoMemoryEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EchoMemoryEntryInclude<ExtArgs> | null
+    /**
+     * Filter, which EchoMemoryEntry to fetch.
+     */
+    where?: EchoMemoryEntryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EchoMemoryEntries to fetch.
+     */
+    orderBy?: EchoMemoryEntryOrderByWithRelationInput | EchoMemoryEntryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for EchoMemoryEntries.
+     */
+    cursor?: EchoMemoryEntryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EchoMemoryEntries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EchoMemoryEntries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of EchoMemoryEntries.
+     */
+    distinct?: EchoMemoryEntryScalarFieldEnum | EchoMemoryEntryScalarFieldEnum[]
+  }
+
+  /**
+   * EchoMemoryEntry findMany
+   */
+  export type EchoMemoryEntryFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EchoMemoryEntry
+     */
+    select?: EchoMemoryEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EchoMemoryEntry
+     */
+    omit?: EchoMemoryEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EchoMemoryEntryInclude<ExtArgs> | null
+    /**
+     * Filter, which EchoMemoryEntries to fetch.
+     */
+    where?: EchoMemoryEntryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EchoMemoryEntries to fetch.
+     */
+    orderBy?: EchoMemoryEntryOrderByWithRelationInput | EchoMemoryEntryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing EchoMemoryEntries.
+     */
+    cursor?: EchoMemoryEntryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EchoMemoryEntries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EchoMemoryEntries.
+     */
+    skip?: number
+    distinct?: EchoMemoryEntryScalarFieldEnum | EchoMemoryEntryScalarFieldEnum[]
+  }
+
+  /**
+   * EchoMemoryEntry create
+   */
+  export type EchoMemoryEntryCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EchoMemoryEntry
+     */
+    select?: EchoMemoryEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EchoMemoryEntry
+     */
+    omit?: EchoMemoryEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EchoMemoryEntryInclude<ExtArgs> | null
+    /**
+     * The data needed to create a EchoMemoryEntry.
+     */
+    data: XOR<EchoMemoryEntryCreateInput, EchoMemoryEntryUncheckedCreateInput>
+  }
+
+  /**
+   * EchoMemoryEntry createMany
+   */
+  export type EchoMemoryEntryCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many EchoMemoryEntries.
+     */
+    data: EchoMemoryEntryCreateManyInput | EchoMemoryEntryCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * EchoMemoryEntry createManyAndReturn
+   */
+  export type EchoMemoryEntryCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EchoMemoryEntry
+     */
+    select?: EchoMemoryEntrySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the EchoMemoryEntry
+     */
+    omit?: EchoMemoryEntryOmit<ExtArgs> | null
+    /**
+     * The data used to create many EchoMemoryEntries.
+     */
+    data: EchoMemoryEntryCreateManyInput | EchoMemoryEntryCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EchoMemoryEntryIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * EchoMemoryEntry update
+   */
+  export type EchoMemoryEntryUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EchoMemoryEntry
+     */
+    select?: EchoMemoryEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EchoMemoryEntry
+     */
+    omit?: EchoMemoryEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EchoMemoryEntryInclude<ExtArgs> | null
+    /**
+     * The data needed to update a EchoMemoryEntry.
+     */
+    data: XOR<EchoMemoryEntryUpdateInput, EchoMemoryEntryUncheckedUpdateInput>
+    /**
+     * Choose, which EchoMemoryEntry to update.
+     */
+    where: EchoMemoryEntryWhereUniqueInput
+  }
+
+  /**
+   * EchoMemoryEntry updateMany
+   */
+  export type EchoMemoryEntryUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update EchoMemoryEntries.
+     */
+    data: XOR<EchoMemoryEntryUpdateManyMutationInput, EchoMemoryEntryUncheckedUpdateManyInput>
+    /**
+     * Filter which EchoMemoryEntries to update
+     */
+    where?: EchoMemoryEntryWhereInput
+    /**
+     * Limit how many EchoMemoryEntries to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * EchoMemoryEntry updateManyAndReturn
+   */
+  export type EchoMemoryEntryUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EchoMemoryEntry
+     */
+    select?: EchoMemoryEntrySelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the EchoMemoryEntry
+     */
+    omit?: EchoMemoryEntryOmit<ExtArgs> | null
+    /**
+     * The data used to update EchoMemoryEntries.
+     */
+    data: XOR<EchoMemoryEntryUpdateManyMutationInput, EchoMemoryEntryUncheckedUpdateManyInput>
+    /**
+     * Filter which EchoMemoryEntries to update
+     */
+    where?: EchoMemoryEntryWhereInput
+    /**
+     * Limit how many EchoMemoryEntries to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EchoMemoryEntryIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * EchoMemoryEntry upsert
+   */
+  export type EchoMemoryEntryUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EchoMemoryEntry
+     */
+    select?: EchoMemoryEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EchoMemoryEntry
+     */
+    omit?: EchoMemoryEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EchoMemoryEntryInclude<ExtArgs> | null
+    /**
+     * The filter to search for the EchoMemoryEntry to update in case it exists.
+     */
+    where: EchoMemoryEntryWhereUniqueInput
+    /**
+     * In case the EchoMemoryEntry found by the `where` argument doesn't exist, create a new EchoMemoryEntry with this data.
+     */
+    create: XOR<EchoMemoryEntryCreateInput, EchoMemoryEntryUncheckedCreateInput>
+    /**
+     * In case the EchoMemoryEntry was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<EchoMemoryEntryUpdateInput, EchoMemoryEntryUncheckedUpdateInput>
+  }
+
+  /**
+   * EchoMemoryEntry delete
+   */
+  export type EchoMemoryEntryDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EchoMemoryEntry
+     */
+    select?: EchoMemoryEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EchoMemoryEntry
+     */
+    omit?: EchoMemoryEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EchoMemoryEntryInclude<ExtArgs> | null
+    /**
+     * Filter which EchoMemoryEntry to delete.
+     */
+    where: EchoMemoryEntryWhereUniqueInput
+  }
+
+  /**
+   * EchoMemoryEntry deleteMany
+   */
+  export type EchoMemoryEntryDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which EchoMemoryEntries to delete
+     */
+    where?: EchoMemoryEntryWhereInput
+    /**
+     * Limit how many EchoMemoryEntries to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * EchoMemoryEntry.sourceMessage
+   */
+  export type EchoMemoryEntry$sourceMessageArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EchoChatMessage
+     */
+    select?: EchoChatMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EchoChatMessage
+     */
+    omit?: EchoChatMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EchoChatMessageInclude<ExtArgs> | null
+    where?: EchoChatMessageWhereInput
+  }
+
+  /**
+   * EchoMemoryEntry without action
+   */
+  export type EchoMemoryEntryDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EchoMemoryEntry
+     */
+    select?: EchoMemoryEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EchoMemoryEntry
+     */
+    omit?: EchoMemoryEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EchoMemoryEntryInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model EchoHypothesis
+   */
+
+  export type AggregateEchoHypothesis = {
+    _count: EchoHypothesisCountAggregateOutputType | null
+    _avg: EchoHypothesisAvgAggregateOutputType | null
+    _sum: EchoHypothesisSumAggregateOutputType | null
+    _min: EchoHypothesisMinAggregateOutputType | null
+    _max: EchoHypothesisMaxAggregateOutputType | null
+  }
+
+  export type EchoHypothesisAvgAggregateOutputType = {
+    confidence: Decimal | null
+  }
+
+  export type EchoHypothesisSumAggregateOutputType = {
+    confidence: Decimal | null
+  }
+
+  export type EchoHypothesisMinAggregateOutputType = {
+    id: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    sourceMessageId: string | null
+    hypothesis: string | null
+    confidence: Decimal | null
+    observedElements: string | null
+    validationQuestion: string | null
+    mathieuResponse: string | null
+    status: string | null
+  }
+
+  export type EchoHypothesisMaxAggregateOutputType = {
+    id: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    sourceMessageId: string | null
+    hypothesis: string | null
+    confidence: Decimal | null
+    observedElements: string | null
+    validationQuestion: string | null
+    mathieuResponse: string | null
+    status: string | null
+  }
+
+  export type EchoHypothesisCountAggregateOutputType = {
+    id: number
+    createdAt: number
+    updatedAt: number
+    sourceMessageId: number
+    hypothesis: number
+    confidence: number
+    observedElements: number
+    validationQuestion: number
+    mathieuResponse: number
+    status: number
+    metadata: number
+    _all: number
+  }
+
+
+  export type EchoHypothesisAvgAggregateInputType = {
+    confidence?: true
+  }
+
+  export type EchoHypothesisSumAggregateInputType = {
+    confidence?: true
+  }
+
+  export type EchoHypothesisMinAggregateInputType = {
+    id?: true
+    createdAt?: true
+    updatedAt?: true
+    sourceMessageId?: true
+    hypothesis?: true
+    confidence?: true
+    observedElements?: true
+    validationQuestion?: true
+    mathieuResponse?: true
+    status?: true
+  }
+
+  export type EchoHypothesisMaxAggregateInputType = {
+    id?: true
+    createdAt?: true
+    updatedAt?: true
+    sourceMessageId?: true
+    hypothesis?: true
+    confidence?: true
+    observedElements?: true
+    validationQuestion?: true
+    mathieuResponse?: true
+    status?: true
+  }
+
+  export type EchoHypothesisCountAggregateInputType = {
+    id?: true
+    createdAt?: true
+    updatedAt?: true
+    sourceMessageId?: true
+    hypothesis?: true
+    confidence?: true
+    observedElements?: true
+    validationQuestion?: true
+    mathieuResponse?: true
+    status?: true
+    metadata?: true
+    _all?: true
+  }
+
+  export type EchoHypothesisAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which EchoHypothesis to aggregate.
+     */
+    where?: EchoHypothesisWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EchoHypotheses to fetch.
+     */
+    orderBy?: EchoHypothesisOrderByWithRelationInput | EchoHypothesisOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: EchoHypothesisWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EchoHypotheses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EchoHypotheses.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned EchoHypotheses
+    **/
+    _count?: true | EchoHypothesisCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: EchoHypothesisAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: EchoHypothesisSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: EchoHypothesisMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: EchoHypothesisMaxAggregateInputType
+  }
+
+  export type GetEchoHypothesisAggregateType<T extends EchoHypothesisAggregateArgs> = {
+        [P in keyof T & keyof AggregateEchoHypothesis]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateEchoHypothesis[P]>
+      : GetScalarType<T[P], AggregateEchoHypothesis[P]>
+  }
+
+
+
+
+  export type EchoHypothesisGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EchoHypothesisWhereInput
+    orderBy?: EchoHypothesisOrderByWithAggregationInput | EchoHypothesisOrderByWithAggregationInput[]
+    by: EchoHypothesisScalarFieldEnum[] | EchoHypothesisScalarFieldEnum
+    having?: EchoHypothesisScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: EchoHypothesisCountAggregateInputType | true
+    _avg?: EchoHypothesisAvgAggregateInputType
+    _sum?: EchoHypothesisSumAggregateInputType
+    _min?: EchoHypothesisMinAggregateInputType
+    _max?: EchoHypothesisMaxAggregateInputType
+  }
+
+  export type EchoHypothesisGroupByOutputType = {
+    id: string
+    createdAt: Date
+    updatedAt: Date
+    sourceMessageId: string | null
+    hypothesis: string
+    confidence: Decimal
+    observedElements: string | null
+    validationQuestion: string | null
+    mathieuResponse: string | null
+    status: string
+    metadata: JsonValue
+    _count: EchoHypothesisCountAggregateOutputType | null
+    _avg: EchoHypothesisAvgAggregateOutputType | null
+    _sum: EchoHypothesisSumAggregateOutputType | null
+    _min: EchoHypothesisMinAggregateOutputType | null
+    _max: EchoHypothesisMaxAggregateOutputType | null
+  }
+
+  type GetEchoHypothesisGroupByPayload<T extends EchoHypothesisGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<EchoHypothesisGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof EchoHypothesisGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], EchoHypothesisGroupByOutputType[P]>
+            : GetScalarType<T[P], EchoHypothesisGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type EchoHypothesisSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    sourceMessageId?: boolean
+    hypothesis?: boolean
+    confidence?: boolean
+    observedElements?: boolean
+    validationQuestion?: boolean
+    mathieuResponse?: boolean
+    status?: boolean
+    metadata?: boolean
+    sourceMessage?: boolean | EchoHypothesis$sourceMessageArgs<ExtArgs>
+  }, ExtArgs["result"]["echoHypothesis"]>
+
+  export type EchoHypothesisSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    sourceMessageId?: boolean
+    hypothesis?: boolean
+    confidence?: boolean
+    observedElements?: boolean
+    validationQuestion?: boolean
+    mathieuResponse?: boolean
+    status?: boolean
+    metadata?: boolean
+    sourceMessage?: boolean | EchoHypothesis$sourceMessageArgs<ExtArgs>
+  }, ExtArgs["result"]["echoHypothesis"]>
+
+  export type EchoHypothesisSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    sourceMessageId?: boolean
+    hypothesis?: boolean
+    confidence?: boolean
+    observedElements?: boolean
+    validationQuestion?: boolean
+    mathieuResponse?: boolean
+    status?: boolean
+    metadata?: boolean
+    sourceMessage?: boolean | EchoHypothesis$sourceMessageArgs<ExtArgs>
+  }, ExtArgs["result"]["echoHypothesis"]>
+
+  export type EchoHypothesisSelectScalar = {
+    id?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    sourceMessageId?: boolean
+    hypothesis?: boolean
+    confidence?: boolean
+    observedElements?: boolean
+    validationQuestion?: boolean
+    mathieuResponse?: boolean
+    status?: boolean
+    metadata?: boolean
+  }
+
+  export type EchoHypothesisOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "sourceMessageId" | "hypothesis" | "confidence" | "observedElements" | "validationQuestion" | "mathieuResponse" | "status" | "metadata", ExtArgs["result"]["echoHypothesis"]>
+  export type EchoHypothesisInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sourceMessage?: boolean | EchoHypothesis$sourceMessageArgs<ExtArgs>
+  }
+  export type EchoHypothesisIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sourceMessage?: boolean | EchoHypothesis$sourceMessageArgs<ExtArgs>
+  }
+  export type EchoHypothesisIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sourceMessage?: boolean | EchoHypothesis$sourceMessageArgs<ExtArgs>
+  }
+
+  export type $EchoHypothesisPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "EchoHypothesis"
+    objects: {
+      sourceMessage: Prisma.$EchoChatMessagePayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      createdAt: Date
+      updatedAt: Date
+      sourceMessageId: string | null
+      hypothesis: string
+      confidence: Prisma.Decimal
+      observedElements: string | null
+      validationQuestion: string | null
+      mathieuResponse: string | null
+      status: string
+      metadata: Prisma.JsonValue
+    }, ExtArgs["result"]["echoHypothesis"]>
+    composites: {}
+  }
+
+  type EchoHypothesisGetPayload<S extends boolean | null | undefined | EchoHypothesisDefaultArgs> = $Result.GetResult<Prisma.$EchoHypothesisPayload, S>
+
+  type EchoHypothesisCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<EchoHypothesisFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: EchoHypothesisCountAggregateInputType | true
+    }
+
+  export interface EchoHypothesisDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['EchoHypothesis'], meta: { name: 'EchoHypothesis' } }
+    /**
+     * Find zero or one EchoHypothesis that matches the filter.
+     * @param {EchoHypothesisFindUniqueArgs} args - Arguments to find a EchoHypothesis
+     * @example
+     * // Get one EchoHypothesis
+     * const echoHypothesis = await prisma.echoHypothesis.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends EchoHypothesisFindUniqueArgs>(args: SelectSubset<T, EchoHypothesisFindUniqueArgs<ExtArgs>>): Prisma__EchoHypothesisClient<$Result.GetResult<Prisma.$EchoHypothesisPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one EchoHypothesis that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {EchoHypothesisFindUniqueOrThrowArgs} args - Arguments to find a EchoHypothesis
+     * @example
+     * // Get one EchoHypothesis
+     * const echoHypothesis = await prisma.echoHypothesis.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends EchoHypothesisFindUniqueOrThrowArgs>(args: SelectSubset<T, EchoHypothesisFindUniqueOrThrowArgs<ExtArgs>>): Prisma__EchoHypothesisClient<$Result.GetResult<Prisma.$EchoHypothesisPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first EchoHypothesis that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EchoHypothesisFindFirstArgs} args - Arguments to find a EchoHypothesis
+     * @example
+     * // Get one EchoHypothesis
+     * const echoHypothesis = await prisma.echoHypothesis.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends EchoHypothesisFindFirstArgs>(args?: SelectSubset<T, EchoHypothesisFindFirstArgs<ExtArgs>>): Prisma__EchoHypothesisClient<$Result.GetResult<Prisma.$EchoHypothesisPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first EchoHypothesis that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EchoHypothesisFindFirstOrThrowArgs} args - Arguments to find a EchoHypothesis
+     * @example
+     * // Get one EchoHypothesis
+     * const echoHypothesis = await prisma.echoHypothesis.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends EchoHypothesisFindFirstOrThrowArgs>(args?: SelectSubset<T, EchoHypothesisFindFirstOrThrowArgs<ExtArgs>>): Prisma__EchoHypothesisClient<$Result.GetResult<Prisma.$EchoHypothesisPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more EchoHypotheses that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EchoHypothesisFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all EchoHypotheses
+     * const echoHypotheses = await prisma.echoHypothesis.findMany()
+     * 
+     * // Get first 10 EchoHypotheses
+     * const echoHypotheses = await prisma.echoHypothesis.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const echoHypothesisWithIdOnly = await prisma.echoHypothesis.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends EchoHypothesisFindManyArgs>(args?: SelectSubset<T, EchoHypothesisFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EchoHypothesisPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a EchoHypothesis.
+     * @param {EchoHypothesisCreateArgs} args - Arguments to create a EchoHypothesis.
+     * @example
+     * // Create one EchoHypothesis
+     * const EchoHypothesis = await prisma.echoHypothesis.create({
+     *   data: {
+     *     // ... data to create a EchoHypothesis
+     *   }
+     * })
+     * 
+     */
+    create<T extends EchoHypothesisCreateArgs>(args: SelectSubset<T, EchoHypothesisCreateArgs<ExtArgs>>): Prisma__EchoHypothesisClient<$Result.GetResult<Prisma.$EchoHypothesisPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many EchoHypotheses.
+     * @param {EchoHypothesisCreateManyArgs} args - Arguments to create many EchoHypotheses.
+     * @example
+     * // Create many EchoHypotheses
+     * const echoHypothesis = await prisma.echoHypothesis.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends EchoHypothesisCreateManyArgs>(args?: SelectSubset<T, EchoHypothesisCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many EchoHypotheses and returns the data saved in the database.
+     * @param {EchoHypothesisCreateManyAndReturnArgs} args - Arguments to create many EchoHypotheses.
+     * @example
+     * // Create many EchoHypotheses
+     * const echoHypothesis = await prisma.echoHypothesis.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many EchoHypotheses and only return the `id`
+     * const echoHypothesisWithIdOnly = await prisma.echoHypothesis.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends EchoHypothesisCreateManyAndReturnArgs>(args?: SelectSubset<T, EchoHypothesisCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EchoHypothesisPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a EchoHypothesis.
+     * @param {EchoHypothesisDeleteArgs} args - Arguments to delete one EchoHypothesis.
+     * @example
+     * // Delete one EchoHypothesis
+     * const EchoHypothesis = await prisma.echoHypothesis.delete({
+     *   where: {
+     *     // ... filter to delete one EchoHypothesis
+     *   }
+     * })
+     * 
+     */
+    delete<T extends EchoHypothesisDeleteArgs>(args: SelectSubset<T, EchoHypothesisDeleteArgs<ExtArgs>>): Prisma__EchoHypothesisClient<$Result.GetResult<Prisma.$EchoHypothesisPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one EchoHypothesis.
+     * @param {EchoHypothesisUpdateArgs} args - Arguments to update one EchoHypothesis.
+     * @example
+     * // Update one EchoHypothesis
+     * const echoHypothesis = await prisma.echoHypothesis.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends EchoHypothesisUpdateArgs>(args: SelectSubset<T, EchoHypothesisUpdateArgs<ExtArgs>>): Prisma__EchoHypothesisClient<$Result.GetResult<Prisma.$EchoHypothesisPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more EchoHypotheses.
+     * @param {EchoHypothesisDeleteManyArgs} args - Arguments to filter EchoHypotheses to delete.
+     * @example
+     * // Delete a few EchoHypotheses
+     * const { count } = await prisma.echoHypothesis.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends EchoHypothesisDeleteManyArgs>(args?: SelectSubset<T, EchoHypothesisDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more EchoHypotheses.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EchoHypothesisUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many EchoHypotheses
+     * const echoHypothesis = await prisma.echoHypothesis.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends EchoHypothesisUpdateManyArgs>(args: SelectSubset<T, EchoHypothesisUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more EchoHypotheses and returns the data updated in the database.
+     * @param {EchoHypothesisUpdateManyAndReturnArgs} args - Arguments to update many EchoHypotheses.
+     * @example
+     * // Update many EchoHypotheses
+     * const echoHypothesis = await prisma.echoHypothesis.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more EchoHypotheses and only return the `id`
+     * const echoHypothesisWithIdOnly = await prisma.echoHypothesis.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends EchoHypothesisUpdateManyAndReturnArgs>(args: SelectSubset<T, EchoHypothesisUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EchoHypothesisPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one EchoHypothesis.
+     * @param {EchoHypothesisUpsertArgs} args - Arguments to update or create a EchoHypothesis.
+     * @example
+     * // Update or create a EchoHypothesis
+     * const echoHypothesis = await prisma.echoHypothesis.upsert({
+     *   create: {
+     *     // ... data to create a EchoHypothesis
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the EchoHypothesis we want to update
+     *   }
+     * })
+     */
+    upsert<T extends EchoHypothesisUpsertArgs>(args: SelectSubset<T, EchoHypothesisUpsertArgs<ExtArgs>>): Prisma__EchoHypothesisClient<$Result.GetResult<Prisma.$EchoHypothesisPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of EchoHypotheses.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EchoHypothesisCountArgs} args - Arguments to filter EchoHypotheses to count.
+     * @example
+     * // Count the number of EchoHypotheses
+     * const count = await prisma.echoHypothesis.count({
+     *   where: {
+     *     // ... the filter for the EchoHypotheses we want to count
+     *   }
+     * })
+    **/
+    count<T extends EchoHypothesisCountArgs>(
+      args?: Subset<T, EchoHypothesisCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], EchoHypothesisCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a EchoHypothesis.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EchoHypothesisAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends EchoHypothesisAggregateArgs>(args: Subset<T, EchoHypothesisAggregateArgs>): Prisma.PrismaPromise<GetEchoHypothesisAggregateType<T>>
+
+    /**
+     * Group by EchoHypothesis.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EchoHypothesisGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends EchoHypothesisGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: EchoHypothesisGroupByArgs['orderBy'] }
+        : { orderBy?: EchoHypothesisGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, EchoHypothesisGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetEchoHypothesisGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the EchoHypothesis model
+   */
+  readonly fields: EchoHypothesisFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for EchoHypothesis.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__EchoHypothesisClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    sourceMessage<T extends EchoHypothesis$sourceMessageArgs<ExtArgs> = {}>(args?: Subset<T, EchoHypothesis$sourceMessageArgs<ExtArgs>>): Prisma__EchoChatMessageClient<$Result.GetResult<Prisma.$EchoChatMessagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the EchoHypothesis model
+   */
+  interface EchoHypothesisFieldRefs {
+    readonly id: FieldRef<"EchoHypothesis", 'String'>
+    readonly createdAt: FieldRef<"EchoHypothesis", 'DateTime'>
+    readonly updatedAt: FieldRef<"EchoHypothesis", 'DateTime'>
+    readonly sourceMessageId: FieldRef<"EchoHypothesis", 'String'>
+    readonly hypothesis: FieldRef<"EchoHypothesis", 'String'>
+    readonly confidence: FieldRef<"EchoHypothesis", 'Decimal'>
+    readonly observedElements: FieldRef<"EchoHypothesis", 'String'>
+    readonly validationQuestion: FieldRef<"EchoHypothesis", 'String'>
+    readonly mathieuResponse: FieldRef<"EchoHypothesis", 'String'>
+    readonly status: FieldRef<"EchoHypothesis", 'String'>
+    readonly metadata: FieldRef<"EchoHypothesis", 'Json'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * EchoHypothesis findUnique
+   */
+  export type EchoHypothesisFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EchoHypothesis
+     */
+    select?: EchoHypothesisSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EchoHypothesis
+     */
+    omit?: EchoHypothesisOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EchoHypothesisInclude<ExtArgs> | null
+    /**
+     * Filter, which EchoHypothesis to fetch.
+     */
+    where: EchoHypothesisWhereUniqueInput
+  }
+
+  /**
+   * EchoHypothesis findUniqueOrThrow
+   */
+  export type EchoHypothesisFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EchoHypothesis
+     */
+    select?: EchoHypothesisSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EchoHypothesis
+     */
+    omit?: EchoHypothesisOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EchoHypothesisInclude<ExtArgs> | null
+    /**
+     * Filter, which EchoHypothesis to fetch.
+     */
+    where: EchoHypothesisWhereUniqueInput
+  }
+
+  /**
+   * EchoHypothesis findFirst
+   */
+  export type EchoHypothesisFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EchoHypothesis
+     */
+    select?: EchoHypothesisSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EchoHypothesis
+     */
+    omit?: EchoHypothesisOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EchoHypothesisInclude<ExtArgs> | null
+    /**
+     * Filter, which EchoHypothesis to fetch.
+     */
+    where?: EchoHypothesisWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EchoHypotheses to fetch.
+     */
+    orderBy?: EchoHypothesisOrderByWithRelationInput | EchoHypothesisOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for EchoHypotheses.
+     */
+    cursor?: EchoHypothesisWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EchoHypotheses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EchoHypotheses.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of EchoHypotheses.
+     */
+    distinct?: EchoHypothesisScalarFieldEnum | EchoHypothesisScalarFieldEnum[]
+  }
+
+  /**
+   * EchoHypothesis findFirstOrThrow
+   */
+  export type EchoHypothesisFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EchoHypothesis
+     */
+    select?: EchoHypothesisSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EchoHypothesis
+     */
+    omit?: EchoHypothesisOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EchoHypothesisInclude<ExtArgs> | null
+    /**
+     * Filter, which EchoHypothesis to fetch.
+     */
+    where?: EchoHypothesisWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EchoHypotheses to fetch.
+     */
+    orderBy?: EchoHypothesisOrderByWithRelationInput | EchoHypothesisOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for EchoHypotheses.
+     */
+    cursor?: EchoHypothesisWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EchoHypotheses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EchoHypotheses.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of EchoHypotheses.
+     */
+    distinct?: EchoHypothesisScalarFieldEnum | EchoHypothesisScalarFieldEnum[]
+  }
+
+  /**
+   * EchoHypothesis findMany
+   */
+  export type EchoHypothesisFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EchoHypothesis
+     */
+    select?: EchoHypothesisSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EchoHypothesis
+     */
+    omit?: EchoHypothesisOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EchoHypothesisInclude<ExtArgs> | null
+    /**
+     * Filter, which EchoHypotheses to fetch.
+     */
+    where?: EchoHypothesisWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EchoHypotheses to fetch.
+     */
+    orderBy?: EchoHypothesisOrderByWithRelationInput | EchoHypothesisOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing EchoHypotheses.
+     */
+    cursor?: EchoHypothesisWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EchoHypotheses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EchoHypotheses.
+     */
+    skip?: number
+    distinct?: EchoHypothesisScalarFieldEnum | EchoHypothesisScalarFieldEnum[]
+  }
+
+  /**
+   * EchoHypothesis create
+   */
+  export type EchoHypothesisCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EchoHypothesis
+     */
+    select?: EchoHypothesisSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EchoHypothesis
+     */
+    omit?: EchoHypothesisOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EchoHypothesisInclude<ExtArgs> | null
+    /**
+     * The data needed to create a EchoHypothesis.
+     */
+    data: XOR<EchoHypothesisCreateInput, EchoHypothesisUncheckedCreateInput>
+  }
+
+  /**
+   * EchoHypothesis createMany
+   */
+  export type EchoHypothesisCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many EchoHypotheses.
+     */
+    data: EchoHypothesisCreateManyInput | EchoHypothesisCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * EchoHypothesis createManyAndReturn
+   */
+  export type EchoHypothesisCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EchoHypothesis
+     */
+    select?: EchoHypothesisSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the EchoHypothesis
+     */
+    omit?: EchoHypothesisOmit<ExtArgs> | null
+    /**
+     * The data used to create many EchoHypotheses.
+     */
+    data: EchoHypothesisCreateManyInput | EchoHypothesisCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EchoHypothesisIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * EchoHypothesis update
+   */
+  export type EchoHypothesisUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EchoHypothesis
+     */
+    select?: EchoHypothesisSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EchoHypothesis
+     */
+    omit?: EchoHypothesisOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EchoHypothesisInclude<ExtArgs> | null
+    /**
+     * The data needed to update a EchoHypothesis.
+     */
+    data: XOR<EchoHypothesisUpdateInput, EchoHypothesisUncheckedUpdateInput>
+    /**
+     * Choose, which EchoHypothesis to update.
+     */
+    where: EchoHypothesisWhereUniqueInput
+  }
+
+  /**
+   * EchoHypothesis updateMany
+   */
+  export type EchoHypothesisUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update EchoHypotheses.
+     */
+    data: XOR<EchoHypothesisUpdateManyMutationInput, EchoHypothesisUncheckedUpdateManyInput>
+    /**
+     * Filter which EchoHypotheses to update
+     */
+    where?: EchoHypothesisWhereInput
+    /**
+     * Limit how many EchoHypotheses to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * EchoHypothesis updateManyAndReturn
+   */
+  export type EchoHypothesisUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EchoHypothesis
+     */
+    select?: EchoHypothesisSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the EchoHypothesis
+     */
+    omit?: EchoHypothesisOmit<ExtArgs> | null
+    /**
+     * The data used to update EchoHypotheses.
+     */
+    data: XOR<EchoHypothesisUpdateManyMutationInput, EchoHypothesisUncheckedUpdateManyInput>
+    /**
+     * Filter which EchoHypotheses to update
+     */
+    where?: EchoHypothesisWhereInput
+    /**
+     * Limit how many EchoHypotheses to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EchoHypothesisIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * EchoHypothesis upsert
+   */
+  export type EchoHypothesisUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EchoHypothesis
+     */
+    select?: EchoHypothesisSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EchoHypothesis
+     */
+    omit?: EchoHypothesisOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EchoHypothesisInclude<ExtArgs> | null
+    /**
+     * The filter to search for the EchoHypothesis to update in case it exists.
+     */
+    where: EchoHypothesisWhereUniqueInput
+    /**
+     * In case the EchoHypothesis found by the `where` argument doesn't exist, create a new EchoHypothesis with this data.
+     */
+    create: XOR<EchoHypothesisCreateInput, EchoHypothesisUncheckedCreateInput>
+    /**
+     * In case the EchoHypothesis was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<EchoHypothesisUpdateInput, EchoHypothesisUncheckedUpdateInput>
+  }
+
+  /**
+   * EchoHypothesis delete
+   */
+  export type EchoHypothesisDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EchoHypothesis
+     */
+    select?: EchoHypothesisSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EchoHypothesis
+     */
+    omit?: EchoHypothesisOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EchoHypothesisInclude<ExtArgs> | null
+    /**
+     * Filter which EchoHypothesis to delete.
+     */
+    where: EchoHypothesisWhereUniqueInput
+  }
+
+  /**
+   * EchoHypothesis deleteMany
+   */
+  export type EchoHypothesisDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which EchoHypotheses to delete
+     */
+    where?: EchoHypothesisWhereInput
+    /**
+     * Limit how many EchoHypotheses to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * EchoHypothesis.sourceMessage
+   */
+  export type EchoHypothesis$sourceMessageArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EchoChatMessage
+     */
+    select?: EchoChatMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EchoChatMessage
+     */
+    omit?: EchoChatMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EchoChatMessageInclude<ExtArgs> | null
+    where?: EchoChatMessageWhereInput
+  }
+
+  /**
+   * EchoHypothesis without action
+   */
+  export type EchoHypothesisDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EchoHypothesis
+     */
+    select?: EchoHypothesisSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EchoHypothesis
+     */
+    omit?: EchoHypothesisOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EchoHypothesisInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model EchoDecision
+   */
+
+  export type AggregateEchoDecision = {
+    _count: EchoDecisionCountAggregateOutputType | null
+    _min: EchoDecisionMinAggregateOutputType | null
+    _max: EchoDecisionMaxAggregateOutputType | null
+  }
+
+  export type EchoDecisionMinAggregateOutputType = {
+    id: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    sourceMessageId: string | null
+    decision: string | null
+    reason: string | null
+    status: string | null
+    decidedAt: Date | null
+  }
+
+  export type EchoDecisionMaxAggregateOutputType = {
+    id: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    sourceMessageId: string | null
+    decision: string | null
+    reason: string | null
+    status: string | null
+    decidedAt: Date | null
+  }
+
+  export type EchoDecisionCountAggregateOutputType = {
+    id: number
+    createdAt: number
+    updatedAt: number
+    sourceMessageId: number
+    decision: number
+    reason: number
+    status: number
+    decidedAt: number
+    metadata: number
+    _all: number
+  }
+
+
+  export type EchoDecisionMinAggregateInputType = {
+    id?: true
+    createdAt?: true
+    updatedAt?: true
+    sourceMessageId?: true
+    decision?: true
+    reason?: true
+    status?: true
+    decidedAt?: true
+  }
+
+  export type EchoDecisionMaxAggregateInputType = {
+    id?: true
+    createdAt?: true
+    updatedAt?: true
+    sourceMessageId?: true
+    decision?: true
+    reason?: true
+    status?: true
+    decidedAt?: true
+  }
+
+  export type EchoDecisionCountAggregateInputType = {
+    id?: true
+    createdAt?: true
+    updatedAt?: true
+    sourceMessageId?: true
+    decision?: true
+    reason?: true
+    status?: true
+    decidedAt?: true
+    metadata?: true
+    _all?: true
+  }
+
+  export type EchoDecisionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which EchoDecision to aggregate.
+     */
+    where?: EchoDecisionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EchoDecisions to fetch.
+     */
+    orderBy?: EchoDecisionOrderByWithRelationInput | EchoDecisionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: EchoDecisionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EchoDecisions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EchoDecisions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned EchoDecisions
+    **/
+    _count?: true | EchoDecisionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: EchoDecisionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: EchoDecisionMaxAggregateInputType
+  }
+
+  export type GetEchoDecisionAggregateType<T extends EchoDecisionAggregateArgs> = {
+        [P in keyof T & keyof AggregateEchoDecision]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateEchoDecision[P]>
+      : GetScalarType<T[P], AggregateEchoDecision[P]>
+  }
+
+
+
+
+  export type EchoDecisionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EchoDecisionWhereInput
+    orderBy?: EchoDecisionOrderByWithAggregationInput | EchoDecisionOrderByWithAggregationInput[]
+    by: EchoDecisionScalarFieldEnum[] | EchoDecisionScalarFieldEnum
+    having?: EchoDecisionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: EchoDecisionCountAggregateInputType | true
+    _min?: EchoDecisionMinAggregateInputType
+    _max?: EchoDecisionMaxAggregateInputType
+  }
+
+  export type EchoDecisionGroupByOutputType = {
+    id: string
+    createdAt: Date
+    updatedAt: Date
+    sourceMessageId: string | null
+    decision: string
+    reason: string | null
+    status: string
+    decidedAt: Date | null
+    metadata: JsonValue
+    _count: EchoDecisionCountAggregateOutputType | null
+    _min: EchoDecisionMinAggregateOutputType | null
+    _max: EchoDecisionMaxAggregateOutputType | null
+  }
+
+  type GetEchoDecisionGroupByPayload<T extends EchoDecisionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<EchoDecisionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof EchoDecisionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], EchoDecisionGroupByOutputType[P]>
+            : GetScalarType<T[P], EchoDecisionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type EchoDecisionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    sourceMessageId?: boolean
+    decision?: boolean
+    reason?: boolean
+    status?: boolean
+    decidedAt?: boolean
+    metadata?: boolean
+    sourceMessage?: boolean | EchoDecision$sourceMessageArgs<ExtArgs>
+  }, ExtArgs["result"]["echoDecision"]>
+
+  export type EchoDecisionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    sourceMessageId?: boolean
+    decision?: boolean
+    reason?: boolean
+    status?: boolean
+    decidedAt?: boolean
+    metadata?: boolean
+    sourceMessage?: boolean | EchoDecision$sourceMessageArgs<ExtArgs>
+  }, ExtArgs["result"]["echoDecision"]>
+
+  export type EchoDecisionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    sourceMessageId?: boolean
+    decision?: boolean
+    reason?: boolean
+    status?: boolean
+    decidedAt?: boolean
+    metadata?: boolean
+    sourceMessage?: boolean | EchoDecision$sourceMessageArgs<ExtArgs>
+  }, ExtArgs["result"]["echoDecision"]>
+
+  export type EchoDecisionSelectScalar = {
+    id?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    sourceMessageId?: boolean
+    decision?: boolean
+    reason?: boolean
+    status?: boolean
+    decidedAt?: boolean
+    metadata?: boolean
+  }
+
+  export type EchoDecisionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "sourceMessageId" | "decision" | "reason" | "status" | "decidedAt" | "metadata", ExtArgs["result"]["echoDecision"]>
+  export type EchoDecisionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sourceMessage?: boolean | EchoDecision$sourceMessageArgs<ExtArgs>
+  }
+  export type EchoDecisionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sourceMessage?: boolean | EchoDecision$sourceMessageArgs<ExtArgs>
+  }
+  export type EchoDecisionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sourceMessage?: boolean | EchoDecision$sourceMessageArgs<ExtArgs>
+  }
+
+  export type $EchoDecisionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "EchoDecision"
+    objects: {
+      sourceMessage: Prisma.$EchoChatMessagePayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      createdAt: Date
+      updatedAt: Date
+      sourceMessageId: string | null
+      decision: string
+      reason: string | null
+      status: string
+      decidedAt: Date | null
+      metadata: Prisma.JsonValue
+    }, ExtArgs["result"]["echoDecision"]>
+    composites: {}
+  }
+
+  type EchoDecisionGetPayload<S extends boolean | null | undefined | EchoDecisionDefaultArgs> = $Result.GetResult<Prisma.$EchoDecisionPayload, S>
+
+  type EchoDecisionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<EchoDecisionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: EchoDecisionCountAggregateInputType | true
+    }
+
+  export interface EchoDecisionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['EchoDecision'], meta: { name: 'EchoDecision' } }
+    /**
+     * Find zero or one EchoDecision that matches the filter.
+     * @param {EchoDecisionFindUniqueArgs} args - Arguments to find a EchoDecision
+     * @example
+     * // Get one EchoDecision
+     * const echoDecision = await prisma.echoDecision.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends EchoDecisionFindUniqueArgs>(args: SelectSubset<T, EchoDecisionFindUniqueArgs<ExtArgs>>): Prisma__EchoDecisionClient<$Result.GetResult<Prisma.$EchoDecisionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one EchoDecision that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {EchoDecisionFindUniqueOrThrowArgs} args - Arguments to find a EchoDecision
+     * @example
+     * // Get one EchoDecision
+     * const echoDecision = await prisma.echoDecision.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends EchoDecisionFindUniqueOrThrowArgs>(args: SelectSubset<T, EchoDecisionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__EchoDecisionClient<$Result.GetResult<Prisma.$EchoDecisionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first EchoDecision that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EchoDecisionFindFirstArgs} args - Arguments to find a EchoDecision
+     * @example
+     * // Get one EchoDecision
+     * const echoDecision = await prisma.echoDecision.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends EchoDecisionFindFirstArgs>(args?: SelectSubset<T, EchoDecisionFindFirstArgs<ExtArgs>>): Prisma__EchoDecisionClient<$Result.GetResult<Prisma.$EchoDecisionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first EchoDecision that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EchoDecisionFindFirstOrThrowArgs} args - Arguments to find a EchoDecision
+     * @example
+     * // Get one EchoDecision
+     * const echoDecision = await prisma.echoDecision.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends EchoDecisionFindFirstOrThrowArgs>(args?: SelectSubset<T, EchoDecisionFindFirstOrThrowArgs<ExtArgs>>): Prisma__EchoDecisionClient<$Result.GetResult<Prisma.$EchoDecisionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more EchoDecisions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EchoDecisionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all EchoDecisions
+     * const echoDecisions = await prisma.echoDecision.findMany()
+     * 
+     * // Get first 10 EchoDecisions
+     * const echoDecisions = await prisma.echoDecision.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const echoDecisionWithIdOnly = await prisma.echoDecision.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends EchoDecisionFindManyArgs>(args?: SelectSubset<T, EchoDecisionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EchoDecisionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a EchoDecision.
+     * @param {EchoDecisionCreateArgs} args - Arguments to create a EchoDecision.
+     * @example
+     * // Create one EchoDecision
+     * const EchoDecision = await prisma.echoDecision.create({
+     *   data: {
+     *     // ... data to create a EchoDecision
+     *   }
+     * })
+     * 
+     */
+    create<T extends EchoDecisionCreateArgs>(args: SelectSubset<T, EchoDecisionCreateArgs<ExtArgs>>): Prisma__EchoDecisionClient<$Result.GetResult<Prisma.$EchoDecisionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many EchoDecisions.
+     * @param {EchoDecisionCreateManyArgs} args - Arguments to create many EchoDecisions.
+     * @example
+     * // Create many EchoDecisions
+     * const echoDecision = await prisma.echoDecision.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends EchoDecisionCreateManyArgs>(args?: SelectSubset<T, EchoDecisionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many EchoDecisions and returns the data saved in the database.
+     * @param {EchoDecisionCreateManyAndReturnArgs} args - Arguments to create many EchoDecisions.
+     * @example
+     * // Create many EchoDecisions
+     * const echoDecision = await prisma.echoDecision.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many EchoDecisions and only return the `id`
+     * const echoDecisionWithIdOnly = await prisma.echoDecision.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends EchoDecisionCreateManyAndReturnArgs>(args?: SelectSubset<T, EchoDecisionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EchoDecisionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a EchoDecision.
+     * @param {EchoDecisionDeleteArgs} args - Arguments to delete one EchoDecision.
+     * @example
+     * // Delete one EchoDecision
+     * const EchoDecision = await prisma.echoDecision.delete({
+     *   where: {
+     *     // ... filter to delete one EchoDecision
+     *   }
+     * })
+     * 
+     */
+    delete<T extends EchoDecisionDeleteArgs>(args: SelectSubset<T, EchoDecisionDeleteArgs<ExtArgs>>): Prisma__EchoDecisionClient<$Result.GetResult<Prisma.$EchoDecisionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one EchoDecision.
+     * @param {EchoDecisionUpdateArgs} args - Arguments to update one EchoDecision.
+     * @example
+     * // Update one EchoDecision
+     * const echoDecision = await prisma.echoDecision.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends EchoDecisionUpdateArgs>(args: SelectSubset<T, EchoDecisionUpdateArgs<ExtArgs>>): Prisma__EchoDecisionClient<$Result.GetResult<Prisma.$EchoDecisionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more EchoDecisions.
+     * @param {EchoDecisionDeleteManyArgs} args - Arguments to filter EchoDecisions to delete.
+     * @example
+     * // Delete a few EchoDecisions
+     * const { count } = await prisma.echoDecision.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends EchoDecisionDeleteManyArgs>(args?: SelectSubset<T, EchoDecisionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more EchoDecisions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EchoDecisionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many EchoDecisions
+     * const echoDecision = await prisma.echoDecision.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends EchoDecisionUpdateManyArgs>(args: SelectSubset<T, EchoDecisionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more EchoDecisions and returns the data updated in the database.
+     * @param {EchoDecisionUpdateManyAndReturnArgs} args - Arguments to update many EchoDecisions.
+     * @example
+     * // Update many EchoDecisions
+     * const echoDecision = await prisma.echoDecision.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more EchoDecisions and only return the `id`
+     * const echoDecisionWithIdOnly = await prisma.echoDecision.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends EchoDecisionUpdateManyAndReturnArgs>(args: SelectSubset<T, EchoDecisionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EchoDecisionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one EchoDecision.
+     * @param {EchoDecisionUpsertArgs} args - Arguments to update or create a EchoDecision.
+     * @example
+     * // Update or create a EchoDecision
+     * const echoDecision = await prisma.echoDecision.upsert({
+     *   create: {
+     *     // ... data to create a EchoDecision
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the EchoDecision we want to update
+     *   }
+     * })
+     */
+    upsert<T extends EchoDecisionUpsertArgs>(args: SelectSubset<T, EchoDecisionUpsertArgs<ExtArgs>>): Prisma__EchoDecisionClient<$Result.GetResult<Prisma.$EchoDecisionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of EchoDecisions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EchoDecisionCountArgs} args - Arguments to filter EchoDecisions to count.
+     * @example
+     * // Count the number of EchoDecisions
+     * const count = await prisma.echoDecision.count({
+     *   where: {
+     *     // ... the filter for the EchoDecisions we want to count
+     *   }
+     * })
+    **/
+    count<T extends EchoDecisionCountArgs>(
+      args?: Subset<T, EchoDecisionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], EchoDecisionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a EchoDecision.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EchoDecisionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends EchoDecisionAggregateArgs>(args: Subset<T, EchoDecisionAggregateArgs>): Prisma.PrismaPromise<GetEchoDecisionAggregateType<T>>
+
+    /**
+     * Group by EchoDecision.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EchoDecisionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends EchoDecisionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: EchoDecisionGroupByArgs['orderBy'] }
+        : { orderBy?: EchoDecisionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, EchoDecisionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetEchoDecisionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the EchoDecision model
+   */
+  readonly fields: EchoDecisionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for EchoDecision.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__EchoDecisionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    sourceMessage<T extends EchoDecision$sourceMessageArgs<ExtArgs> = {}>(args?: Subset<T, EchoDecision$sourceMessageArgs<ExtArgs>>): Prisma__EchoChatMessageClient<$Result.GetResult<Prisma.$EchoChatMessagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the EchoDecision model
+   */
+  interface EchoDecisionFieldRefs {
+    readonly id: FieldRef<"EchoDecision", 'String'>
+    readonly createdAt: FieldRef<"EchoDecision", 'DateTime'>
+    readonly updatedAt: FieldRef<"EchoDecision", 'DateTime'>
+    readonly sourceMessageId: FieldRef<"EchoDecision", 'String'>
+    readonly decision: FieldRef<"EchoDecision", 'String'>
+    readonly reason: FieldRef<"EchoDecision", 'String'>
+    readonly status: FieldRef<"EchoDecision", 'String'>
+    readonly decidedAt: FieldRef<"EchoDecision", 'DateTime'>
+    readonly metadata: FieldRef<"EchoDecision", 'Json'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * EchoDecision findUnique
+   */
+  export type EchoDecisionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EchoDecision
+     */
+    select?: EchoDecisionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EchoDecision
+     */
+    omit?: EchoDecisionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EchoDecisionInclude<ExtArgs> | null
+    /**
+     * Filter, which EchoDecision to fetch.
+     */
+    where: EchoDecisionWhereUniqueInput
+  }
+
+  /**
+   * EchoDecision findUniqueOrThrow
+   */
+  export type EchoDecisionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EchoDecision
+     */
+    select?: EchoDecisionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EchoDecision
+     */
+    omit?: EchoDecisionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EchoDecisionInclude<ExtArgs> | null
+    /**
+     * Filter, which EchoDecision to fetch.
+     */
+    where: EchoDecisionWhereUniqueInput
+  }
+
+  /**
+   * EchoDecision findFirst
+   */
+  export type EchoDecisionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EchoDecision
+     */
+    select?: EchoDecisionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EchoDecision
+     */
+    omit?: EchoDecisionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EchoDecisionInclude<ExtArgs> | null
+    /**
+     * Filter, which EchoDecision to fetch.
+     */
+    where?: EchoDecisionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EchoDecisions to fetch.
+     */
+    orderBy?: EchoDecisionOrderByWithRelationInput | EchoDecisionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for EchoDecisions.
+     */
+    cursor?: EchoDecisionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EchoDecisions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EchoDecisions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of EchoDecisions.
+     */
+    distinct?: EchoDecisionScalarFieldEnum | EchoDecisionScalarFieldEnum[]
+  }
+
+  /**
+   * EchoDecision findFirstOrThrow
+   */
+  export type EchoDecisionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EchoDecision
+     */
+    select?: EchoDecisionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EchoDecision
+     */
+    omit?: EchoDecisionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EchoDecisionInclude<ExtArgs> | null
+    /**
+     * Filter, which EchoDecision to fetch.
+     */
+    where?: EchoDecisionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EchoDecisions to fetch.
+     */
+    orderBy?: EchoDecisionOrderByWithRelationInput | EchoDecisionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for EchoDecisions.
+     */
+    cursor?: EchoDecisionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EchoDecisions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EchoDecisions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of EchoDecisions.
+     */
+    distinct?: EchoDecisionScalarFieldEnum | EchoDecisionScalarFieldEnum[]
+  }
+
+  /**
+   * EchoDecision findMany
+   */
+  export type EchoDecisionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EchoDecision
+     */
+    select?: EchoDecisionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EchoDecision
+     */
+    omit?: EchoDecisionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EchoDecisionInclude<ExtArgs> | null
+    /**
+     * Filter, which EchoDecisions to fetch.
+     */
+    where?: EchoDecisionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EchoDecisions to fetch.
+     */
+    orderBy?: EchoDecisionOrderByWithRelationInput | EchoDecisionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing EchoDecisions.
+     */
+    cursor?: EchoDecisionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EchoDecisions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EchoDecisions.
+     */
+    skip?: number
+    distinct?: EchoDecisionScalarFieldEnum | EchoDecisionScalarFieldEnum[]
+  }
+
+  /**
+   * EchoDecision create
+   */
+  export type EchoDecisionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EchoDecision
+     */
+    select?: EchoDecisionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EchoDecision
+     */
+    omit?: EchoDecisionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EchoDecisionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a EchoDecision.
+     */
+    data: XOR<EchoDecisionCreateInput, EchoDecisionUncheckedCreateInput>
+  }
+
+  /**
+   * EchoDecision createMany
+   */
+  export type EchoDecisionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many EchoDecisions.
+     */
+    data: EchoDecisionCreateManyInput | EchoDecisionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * EchoDecision createManyAndReturn
+   */
+  export type EchoDecisionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EchoDecision
+     */
+    select?: EchoDecisionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the EchoDecision
+     */
+    omit?: EchoDecisionOmit<ExtArgs> | null
+    /**
+     * The data used to create many EchoDecisions.
+     */
+    data: EchoDecisionCreateManyInput | EchoDecisionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EchoDecisionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * EchoDecision update
+   */
+  export type EchoDecisionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EchoDecision
+     */
+    select?: EchoDecisionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EchoDecision
+     */
+    omit?: EchoDecisionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EchoDecisionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a EchoDecision.
+     */
+    data: XOR<EchoDecisionUpdateInput, EchoDecisionUncheckedUpdateInput>
+    /**
+     * Choose, which EchoDecision to update.
+     */
+    where: EchoDecisionWhereUniqueInput
+  }
+
+  /**
+   * EchoDecision updateMany
+   */
+  export type EchoDecisionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update EchoDecisions.
+     */
+    data: XOR<EchoDecisionUpdateManyMutationInput, EchoDecisionUncheckedUpdateManyInput>
+    /**
+     * Filter which EchoDecisions to update
+     */
+    where?: EchoDecisionWhereInput
+    /**
+     * Limit how many EchoDecisions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * EchoDecision updateManyAndReturn
+   */
+  export type EchoDecisionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EchoDecision
+     */
+    select?: EchoDecisionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the EchoDecision
+     */
+    omit?: EchoDecisionOmit<ExtArgs> | null
+    /**
+     * The data used to update EchoDecisions.
+     */
+    data: XOR<EchoDecisionUpdateManyMutationInput, EchoDecisionUncheckedUpdateManyInput>
+    /**
+     * Filter which EchoDecisions to update
+     */
+    where?: EchoDecisionWhereInput
+    /**
+     * Limit how many EchoDecisions to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EchoDecisionIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * EchoDecision upsert
+   */
+  export type EchoDecisionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EchoDecision
+     */
+    select?: EchoDecisionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EchoDecision
+     */
+    omit?: EchoDecisionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EchoDecisionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the EchoDecision to update in case it exists.
+     */
+    where: EchoDecisionWhereUniqueInput
+    /**
+     * In case the EchoDecision found by the `where` argument doesn't exist, create a new EchoDecision with this data.
+     */
+    create: XOR<EchoDecisionCreateInput, EchoDecisionUncheckedCreateInput>
+    /**
+     * In case the EchoDecision was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<EchoDecisionUpdateInput, EchoDecisionUncheckedUpdateInput>
+  }
+
+  /**
+   * EchoDecision delete
+   */
+  export type EchoDecisionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EchoDecision
+     */
+    select?: EchoDecisionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EchoDecision
+     */
+    omit?: EchoDecisionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EchoDecisionInclude<ExtArgs> | null
+    /**
+     * Filter which EchoDecision to delete.
+     */
+    where: EchoDecisionWhereUniqueInput
+  }
+
+  /**
+   * EchoDecision deleteMany
+   */
+  export type EchoDecisionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which EchoDecisions to delete
+     */
+    where?: EchoDecisionWhereInput
+    /**
+     * Limit how many EchoDecisions to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * EchoDecision.sourceMessage
+   */
+  export type EchoDecision$sourceMessageArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EchoChatMessage
+     */
+    select?: EchoChatMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EchoChatMessage
+     */
+    omit?: EchoChatMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EchoChatMessageInclude<ExtArgs> | null
+    where?: EchoChatMessageWhereInput
+  }
+
+  /**
+   * EchoDecision without action
+   */
+  export type EchoDecisionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EchoDecision
+     */
+    select?: EchoDecisionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EchoDecision
+     */
+    omit?: EchoDecisionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EchoDecisionInclude<ExtArgs> | null
   }
 
 
@@ -19008,6 +24125,73 @@ export namespace Prisma {
   export type FinancePaymentScalarFieldEnum = (typeof FinancePaymentScalarFieldEnum)[keyof typeof FinancePaymentScalarFieldEnum]
 
 
+  export const EchoChatMessageScalarFieldEnum: {
+    id: 'id',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    role: 'role',
+    content: 'content',
+    model: 'model',
+    requestId: 'requestId',
+    metadata: 'metadata'
+  };
+
+  export type EchoChatMessageScalarFieldEnum = (typeof EchoChatMessageScalarFieldEnum)[keyof typeof EchoChatMessageScalarFieldEnum]
+
+
+  export const EchoMemoryEntryScalarFieldEnum: {
+    id: 'id',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    sourceMessageId: 'sourceMessageId',
+    source: 'source',
+    category: 'category',
+    type: 'type',
+    sensitivity: 'sensitivity',
+    confidence: 'confidence',
+    humanSummary: 'humanSummary',
+    sourceContent: 'sourceContent',
+    status: 'status',
+    validated: 'validated',
+    links: 'links',
+    metadata: 'metadata'
+  };
+
+  export type EchoMemoryEntryScalarFieldEnum = (typeof EchoMemoryEntryScalarFieldEnum)[keyof typeof EchoMemoryEntryScalarFieldEnum]
+
+
+  export const EchoHypothesisScalarFieldEnum: {
+    id: 'id',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    sourceMessageId: 'sourceMessageId',
+    hypothesis: 'hypothesis',
+    confidence: 'confidence',
+    observedElements: 'observedElements',
+    validationQuestion: 'validationQuestion',
+    mathieuResponse: 'mathieuResponse',
+    status: 'status',
+    metadata: 'metadata'
+  };
+
+  export type EchoHypothesisScalarFieldEnum = (typeof EchoHypothesisScalarFieldEnum)[keyof typeof EchoHypothesisScalarFieldEnum]
+
+
+  export const EchoDecisionScalarFieldEnum: {
+    id: 'id',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    sourceMessageId: 'sourceMessageId',
+    decision: 'decision',
+    reason: 'reason',
+    status: 'status',
+    decidedAt: 'decidedAt',
+    metadata: 'metadata'
+  };
+
+  export type EchoDecisionScalarFieldEnum = (typeof EchoDecisionScalarFieldEnum)[keyof typeof EchoDecisionScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -19022,6 +24206,13 @@ export namespace Prisma {
   };
 
   export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
+  export const JsonNullValueInput: {
+    JsonNull: typeof JsonNull
+  };
+
+  export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
   export const QueryMode: {
@@ -19058,329 +24249,329 @@ export namespace Prisma {
    * Reference to a field of type 'String'
    */
   export type StringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String'>
-
+    
 
 
   /**
    * Reference to a field of type 'String[]'
    */
   export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String[]'>
-
+    
 
 
   /**
    * Reference to a field of type 'DateTime'
    */
   export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
-
+    
 
 
   /**
    * Reference to a field of type 'DateTime[]'
    */
   export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
-
+    
 
 
   /**
    * Reference to a field of type 'ClientStatut'
    */
   export type EnumClientStatutFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ClientStatut'>
-
+    
 
 
   /**
    * Reference to a field of type 'ClientStatut[]'
    */
   export type ListEnumClientStatutFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ClientStatut[]'>
-
+    
 
 
   /**
    * Reference to a field of type 'Boolean'
    */
   export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
-
+    
 
 
   /**
    * Reference to a field of type 'MessageStatut'
    */
   export type EnumMessageStatutFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MessageStatut'>
-
+    
 
 
   /**
    * Reference to a field of type 'MessageStatut[]'
    */
   export type ListEnumMessageStatutFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MessageStatut[]'>
-
+    
 
 
   /**
    * Reference to a field of type 'ChatQuality'
    */
   export type EnumChatQualityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ChatQuality'>
-
+    
 
 
   /**
    * Reference to a field of type 'ChatQuality[]'
    */
   export type ListEnumChatQualityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ChatQuality[]'>
-
+    
 
 
   /**
    * Reference to a field of type 'ChatProblemType'
    */
   export type EnumChatProblemTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ChatProblemType'>
-
+    
 
 
   /**
    * Reference to a field of type 'ChatProblemType[]'
    */
   export type ListEnumChatProblemTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ChatProblemType[]'>
-
+    
 
 
   /**
    * Reference to a field of type 'ChatReviewStatus'
    */
   export type EnumChatReviewStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ChatReviewStatus'>
-
+    
 
 
   /**
    * Reference to a field of type 'ChatReviewStatus[]'
    */
   export type ListEnumChatReviewStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ChatReviewStatus[]'>
-
+    
 
 
   /**
    * Reference to a field of type 'Json'
    */
   export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
-
+    
 
 
   /**
    * Reference to a field of type 'QueryMode'
    */
   export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
-
+    
 
 
   /**
    * Reference to a field of type 'ChatUpdateStatus'
    */
   export type EnumChatUpdateStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ChatUpdateStatus'>
-
+    
 
 
   /**
    * Reference to a field of type 'ChatUpdateStatus[]'
    */
   export type ListEnumChatUpdateStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ChatUpdateStatus[]'>
-
+    
 
 
   /**
    * Reference to a field of type 'Decimal'
    */
   export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
-
+    
 
 
   /**
    * Reference to a field of type 'Decimal[]'
    */
   export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
-
+    
 
 
   /**
    * Reference to a field of type 'FinanceVatStatus'
    */
   export type EnumFinanceVatStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FinanceVatStatus'>
-
+    
 
 
   /**
    * Reference to a field of type 'FinanceVatStatus[]'
    */
   export type ListEnumFinanceVatStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FinanceVatStatus[]'>
-
+    
 
 
   /**
    * Reference to a field of type 'FinanceDeclarationFrequency'
    */
   export type EnumFinanceDeclarationFrequencyFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FinanceDeclarationFrequency'>
-
+    
 
 
   /**
    * Reference to a field of type 'FinanceDeclarationFrequency[]'
    */
   export type ListEnumFinanceDeclarationFrequencyFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FinanceDeclarationFrequency[]'>
-
+    
 
 
   /**
    * Reference to a field of type 'ShowcaseCreationStatus'
    */
   export type EnumShowcaseCreationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ShowcaseCreationStatus'>
-
+    
 
 
   /**
    * Reference to a field of type 'ShowcaseCreationStatus[]'
    */
   export type ListEnumShowcaseCreationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ShowcaseCreationStatus[]'>
-
+    
 
 
   /**
    * Reference to a field of type 'ShowcaseMaintenanceStatus'
    */
   export type EnumShowcaseMaintenanceStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ShowcaseMaintenanceStatus'>
-
+    
 
 
   /**
    * Reference to a field of type 'ShowcaseMaintenanceStatus[]'
    */
   export type ListEnumShowcaseMaintenanceStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ShowcaseMaintenanceStatus[]'>
-
+    
 
 
   /**
    * Reference to a field of type 'ElectronicInvoiceStatus'
    */
   export type EnumElectronicInvoiceStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ElectronicInvoiceStatus'>
-
+    
 
 
   /**
    * Reference to a field of type 'ElectronicInvoiceStatus[]'
    */
   export type ListEnumElectronicInvoiceStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ElectronicInvoiceStatus[]'>
-
+    
 
 
   /**
    * Reference to a field of type 'FinancePaymentStatus'
    */
   export type EnumFinancePaymentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FinancePaymentStatus'>
-
+    
 
 
   /**
    * Reference to a field of type 'FinancePaymentStatus[]'
    */
   export type ListEnumFinancePaymentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FinancePaymentStatus[]'>
-
+    
 
 
   /**
    * Reference to a field of type 'ExpenseCategory'
    */
   export type EnumExpenseCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ExpenseCategory'>
-
+    
 
 
   /**
    * Reference to a field of type 'ExpenseCategory[]'
    */
   export type ListEnumExpenseCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ExpenseCategory[]'>
-
+    
 
 
   /**
    * Reference to a field of type 'FinanceTool'
    */
   export type EnumFinanceToolFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FinanceTool'>
-
+    
 
 
   /**
    * Reference to a field of type 'FinanceTool[]'
    */
   export type ListEnumFinanceToolFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FinanceTool[]'>
-
+    
 
 
   /**
    * Reference to a field of type 'FinanceFrequency'
    */
   export type EnumFinanceFrequencyFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FinanceFrequency'>
-
+    
 
 
   /**
    * Reference to a field of type 'FinanceFrequency[]'
    */
   export type ListEnumFinanceFrequencyFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FinanceFrequency[]'>
-
+    
 
 
   /**
    * Reference to a field of type 'ExpenseStatus'
    */
   export type EnumExpenseStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ExpenseStatus'>
-
+    
 
 
   /**
    * Reference to a field of type 'ExpenseStatus[]'
    */
   export type ListEnumExpenseStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ExpenseStatus[]'>
-
+    
 
 
   /**
    * Reference to a field of type 'RevenueStatus'
    */
   export type EnumRevenueStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RevenueStatus'>
-
+    
 
 
   /**
    * Reference to a field of type 'RevenueStatus[]'
    */
   export type ListEnumRevenueStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RevenueStatus[]'>
-
+    
 
 
   /**
    * Reference to a field of type 'FinanceInvoiceStatus'
    */
   export type EnumFinanceInvoiceStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FinanceInvoiceStatus'>
-
+    
 
 
   /**
    * Reference to a field of type 'FinanceInvoiceStatus[]'
    */
   export type ListEnumFinanceInvoiceStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FinanceInvoiceStatus[]'>
-
+    
 
 
   /**
    * Reference to a field of type 'Int'
    */
   export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
-
+    
 
 
   /**
    * Reference to a field of type 'Int[]'
    */
   export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
-
+    
   /**
    * Deep Input Types
    */
@@ -20778,6 +25969,351 @@ export namespace Prisma {
     failureReason?: StringNullableWithAggregatesFilter<"FinancePayment"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"FinancePayment"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"FinancePayment"> | Date | string
+  }
+
+  export type EchoChatMessageWhereInput = {
+    AND?: EchoChatMessageWhereInput | EchoChatMessageWhereInput[]
+    OR?: EchoChatMessageWhereInput[]
+    NOT?: EchoChatMessageWhereInput | EchoChatMessageWhereInput[]
+    id?: UuidFilter<"EchoChatMessage"> | string
+    createdAt?: DateTimeFilter<"EchoChatMessage"> | Date | string
+    updatedAt?: DateTimeFilter<"EchoChatMessage"> | Date | string
+    role?: StringFilter<"EchoChatMessage"> | string
+    content?: StringFilter<"EchoChatMessage"> | string
+    model?: StringNullableFilter<"EchoChatMessage"> | string | null
+    requestId?: StringNullableFilter<"EchoChatMessage"> | string | null
+    metadata?: JsonFilter<"EchoChatMessage">
+    memoryEntries?: EchoMemoryEntryListRelationFilter
+    hypotheses?: EchoHypothesisListRelationFilter
+    decisions?: EchoDecisionListRelationFilter
+  }
+
+  export type EchoChatMessageOrderByWithRelationInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    role?: SortOrder
+    content?: SortOrder
+    model?: SortOrderInput | SortOrder
+    requestId?: SortOrderInput | SortOrder
+    metadata?: SortOrder
+    memoryEntries?: EchoMemoryEntryOrderByRelationAggregateInput
+    hypotheses?: EchoHypothesisOrderByRelationAggregateInput
+    decisions?: EchoDecisionOrderByRelationAggregateInput
+  }
+
+  export type EchoChatMessageWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: EchoChatMessageWhereInput | EchoChatMessageWhereInput[]
+    OR?: EchoChatMessageWhereInput[]
+    NOT?: EchoChatMessageWhereInput | EchoChatMessageWhereInput[]
+    createdAt?: DateTimeFilter<"EchoChatMessage"> | Date | string
+    updatedAt?: DateTimeFilter<"EchoChatMessage"> | Date | string
+    role?: StringFilter<"EchoChatMessage"> | string
+    content?: StringFilter<"EchoChatMessage"> | string
+    model?: StringNullableFilter<"EchoChatMessage"> | string | null
+    requestId?: StringNullableFilter<"EchoChatMessage"> | string | null
+    metadata?: JsonFilter<"EchoChatMessage">
+    memoryEntries?: EchoMemoryEntryListRelationFilter
+    hypotheses?: EchoHypothesisListRelationFilter
+    decisions?: EchoDecisionListRelationFilter
+  }, "id">
+
+  export type EchoChatMessageOrderByWithAggregationInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    role?: SortOrder
+    content?: SortOrder
+    model?: SortOrderInput | SortOrder
+    requestId?: SortOrderInput | SortOrder
+    metadata?: SortOrder
+    _count?: EchoChatMessageCountOrderByAggregateInput
+    _max?: EchoChatMessageMaxOrderByAggregateInput
+    _min?: EchoChatMessageMinOrderByAggregateInput
+  }
+
+  export type EchoChatMessageScalarWhereWithAggregatesInput = {
+    AND?: EchoChatMessageScalarWhereWithAggregatesInput | EchoChatMessageScalarWhereWithAggregatesInput[]
+    OR?: EchoChatMessageScalarWhereWithAggregatesInput[]
+    NOT?: EchoChatMessageScalarWhereWithAggregatesInput | EchoChatMessageScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"EchoChatMessage"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"EchoChatMessage"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"EchoChatMessage"> | Date | string
+    role?: StringWithAggregatesFilter<"EchoChatMessage"> | string
+    content?: StringWithAggregatesFilter<"EchoChatMessage"> | string
+    model?: StringNullableWithAggregatesFilter<"EchoChatMessage"> | string | null
+    requestId?: StringNullableWithAggregatesFilter<"EchoChatMessage"> | string | null
+    metadata?: JsonWithAggregatesFilter<"EchoChatMessage">
+  }
+
+  export type EchoMemoryEntryWhereInput = {
+    AND?: EchoMemoryEntryWhereInput | EchoMemoryEntryWhereInput[]
+    OR?: EchoMemoryEntryWhereInput[]
+    NOT?: EchoMemoryEntryWhereInput | EchoMemoryEntryWhereInput[]
+    id?: UuidFilter<"EchoMemoryEntry"> | string
+    createdAt?: DateTimeFilter<"EchoMemoryEntry"> | Date | string
+    updatedAt?: DateTimeFilter<"EchoMemoryEntry"> | Date | string
+    sourceMessageId?: UuidNullableFilter<"EchoMemoryEntry"> | string | null
+    source?: StringFilter<"EchoMemoryEntry"> | string
+    category?: StringFilter<"EchoMemoryEntry"> | string
+    type?: StringFilter<"EchoMemoryEntry"> | string
+    sensitivity?: StringFilter<"EchoMemoryEntry"> | string
+    confidence?: DecimalFilter<"EchoMemoryEntry"> | Decimal | DecimalJsLike | number | string
+    humanSummary?: StringFilter<"EchoMemoryEntry"> | string
+    sourceContent?: StringNullableFilter<"EchoMemoryEntry"> | string | null
+    status?: StringFilter<"EchoMemoryEntry"> | string
+    validated?: BoolFilter<"EchoMemoryEntry"> | boolean
+    links?: JsonFilter<"EchoMemoryEntry">
+    metadata?: JsonFilter<"EchoMemoryEntry">
+    sourceMessage?: XOR<EchoChatMessageNullableScalarRelationFilter, EchoChatMessageWhereInput> | null
+  }
+
+  export type EchoMemoryEntryOrderByWithRelationInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    sourceMessageId?: SortOrderInput | SortOrder
+    source?: SortOrder
+    category?: SortOrder
+    type?: SortOrder
+    sensitivity?: SortOrder
+    confidence?: SortOrder
+    humanSummary?: SortOrder
+    sourceContent?: SortOrderInput | SortOrder
+    status?: SortOrder
+    validated?: SortOrder
+    links?: SortOrder
+    metadata?: SortOrder
+    sourceMessage?: EchoChatMessageOrderByWithRelationInput
+  }
+
+  export type EchoMemoryEntryWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: EchoMemoryEntryWhereInput | EchoMemoryEntryWhereInput[]
+    OR?: EchoMemoryEntryWhereInput[]
+    NOT?: EchoMemoryEntryWhereInput | EchoMemoryEntryWhereInput[]
+    createdAt?: DateTimeFilter<"EchoMemoryEntry"> | Date | string
+    updatedAt?: DateTimeFilter<"EchoMemoryEntry"> | Date | string
+    sourceMessageId?: UuidNullableFilter<"EchoMemoryEntry"> | string | null
+    source?: StringFilter<"EchoMemoryEntry"> | string
+    category?: StringFilter<"EchoMemoryEntry"> | string
+    type?: StringFilter<"EchoMemoryEntry"> | string
+    sensitivity?: StringFilter<"EchoMemoryEntry"> | string
+    confidence?: DecimalFilter<"EchoMemoryEntry"> | Decimal | DecimalJsLike | number | string
+    humanSummary?: StringFilter<"EchoMemoryEntry"> | string
+    sourceContent?: StringNullableFilter<"EchoMemoryEntry"> | string | null
+    status?: StringFilter<"EchoMemoryEntry"> | string
+    validated?: BoolFilter<"EchoMemoryEntry"> | boolean
+    links?: JsonFilter<"EchoMemoryEntry">
+    metadata?: JsonFilter<"EchoMemoryEntry">
+    sourceMessage?: XOR<EchoChatMessageNullableScalarRelationFilter, EchoChatMessageWhereInput> | null
+  }, "id">
+
+  export type EchoMemoryEntryOrderByWithAggregationInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    sourceMessageId?: SortOrderInput | SortOrder
+    source?: SortOrder
+    category?: SortOrder
+    type?: SortOrder
+    sensitivity?: SortOrder
+    confidence?: SortOrder
+    humanSummary?: SortOrder
+    sourceContent?: SortOrderInput | SortOrder
+    status?: SortOrder
+    validated?: SortOrder
+    links?: SortOrder
+    metadata?: SortOrder
+    _count?: EchoMemoryEntryCountOrderByAggregateInput
+    _avg?: EchoMemoryEntryAvgOrderByAggregateInput
+    _max?: EchoMemoryEntryMaxOrderByAggregateInput
+    _min?: EchoMemoryEntryMinOrderByAggregateInput
+    _sum?: EchoMemoryEntrySumOrderByAggregateInput
+  }
+
+  export type EchoMemoryEntryScalarWhereWithAggregatesInput = {
+    AND?: EchoMemoryEntryScalarWhereWithAggregatesInput | EchoMemoryEntryScalarWhereWithAggregatesInput[]
+    OR?: EchoMemoryEntryScalarWhereWithAggregatesInput[]
+    NOT?: EchoMemoryEntryScalarWhereWithAggregatesInput | EchoMemoryEntryScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"EchoMemoryEntry"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"EchoMemoryEntry"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"EchoMemoryEntry"> | Date | string
+    sourceMessageId?: UuidNullableWithAggregatesFilter<"EchoMemoryEntry"> | string | null
+    source?: StringWithAggregatesFilter<"EchoMemoryEntry"> | string
+    category?: StringWithAggregatesFilter<"EchoMemoryEntry"> | string
+    type?: StringWithAggregatesFilter<"EchoMemoryEntry"> | string
+    sensitivity?: StringWithAggregatesFilter<"EchoMemoryEntry"> | string
+    confidence?: DecimalWithAggregatesFilter<"EchoMemoryEntry"> | Decimal | DecimalJsLike | number | string
+    humanSummary?: StringWithAggregatesFilter<"EchoMemoryEntry"> | string
+    sourceContent?: StringNullableWithAggregatesFilter<"EchoMemoryEntry"> | string | null
+    status?: StringWithAggregatesFilter<"EchoMemoryEntry"> | string
+    validated?: BoolWithAggregatesFilter<"EchoMemoryEntry"> | boolean
+    links?: JsonWithAggregatesFilter<"EchoMemoryEntry">
+    metadata?: JsonWithAggregatesFilter<"EchoMemoryEntry">
+  }
+
+  export type EchoHypothesisWhereInput = {
+    AND?: EchoHypothesisWhereInput | EchoHypothesisWhereInput[]
+    OR?: EchoHypothesisWhereInput[]
+    NOT?: EchoHypothesisWhereInput | EchoHypothesisWhereInput[]
+    id?: UuidFilter<"EchoHypothesis"> | string
+    createdAt?: DateTimeFilter<"EchoHypothesis"> | Date | string
+    updatedAt?: DateTimeFilter<"EchoHypothesis"> | Date | string
+    sourceMessageId?: UuidNullableFilter<"EchoHypothesis"> | string | null
+    hypothesis?: StringFilter<"EchoHypothesis"> | string
+    confidence?: DecimalFilter<"EchoHypothesis"> | Decimal | DecimalJsLike | number | string
+    observedElements?: StringNullableFilter<"EchoHypothesis"> | string | null
+    validationQuestion?: StringNullableFilter<"EchoHypothesis"> | string | null
+    mathieuResponse?: StringNullableFilter<"EchoHypothesis"> | string | null
+    status?: StringFilter<"EchoHypothesis"> | string
+    metadata?: JsonFilter<"EchoHypothesis">
+    sourceMessage?: XOR<EchoChatMessageNullableScalarRelationFilter, EchoChatMessageWhereInput> | null
+  }
+
+  export type EchoHypothesisOrderByWithRelationInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    sourceMessageId?: SortOrderInput | SortOrder
+    hypothesis?: SortOrder
+    confidence?: SortOrder
+    observedElements?: SortOrderInput | SortOrder
+    validationQuestion?: SortOrderInput | SortOrder
+    mathieuResponse?: SortOrderInput | SortOrder
+    status?: SortOrder
+    metadata?: SortOrder
+    sourceMessage?: EchoChatMessageOrderByWithRelationInput
+  }
+
+  export type EchoHypothesisWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: EchoHypothesisWhereInput | EchoHypothesisWhereInput[]
+    OR?: EchoHypothesisWhereInput[]
+    NOT?: EchoHypothesisWhereInput | EchoHypothesisWhereInput[]
+    createdAt?: DateTimeFilter<"EchoHypothesis"> | Date | string
+    updatedAt?: DateTimeFilter<"EchoHypothesis"> | Date | string
+    sourceMessageId?: UuidNullableFilter<"EchoHypothesis"> | string | null
+    hypothesis?: StringFilter<"EchoHypothesis"> | string
+    confidence?: DecimalFilter<"EchoHypothesis"> | Decimal | DecimalJsLike | number | string
+    observedElements?: StringNullableFilter<"EchoHypothesis"> | string | null
+    validationQuestion?: StringNullableFilter<"EchoHypothesis"> | string | null
+    mathieuResponse?: StringNullableFilter<"EchoHypothesis"> | string | null
+    status?: StringFilter<"EchoHypothesis"> | string
+    metadata?: JsonFilter<"EchoHypothesis">
+    sourceMessage?: XOR<EchoChatMessageNullableScalarRelationFilter, EchoChatMessageWhereInput> | null
+  }, "id">
+
+  export type EchoHypothesisOrderByWithAggregationInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    sourceMessageId?: SortOrderInput | SortOrder
+    hypothesis?: SortOrder
+    confidence?: SortOrder
+    observedElements?: SortOrderInput | SortOrder
+    validationQuestion?: SortOrderInput | SortOrder
+    mathieuResponse?: SortOrderInput | SortOrder
+    status?: SortOrder
+    metadata?: SortOrder
+    _count?: EchoHypothesisCountOrderByAggregateInput
+    _avg?: EchoHypothesisAvgOrderByAggregateInput
+    _max?: EchoHypothesisMaxOrderByAggregateInput
+    _min?: EchoHypothesisMinOrderByAggregateInput
+    _sum?: EchoHypothesisSumOrderByAggregateInput
+  }
+
+  export type EchoHypothesisScalarWhereWithAggregatesInput = {
+    AND?: EchoHypothesisScalarWhereWithAggregatesInput | EchoHypothesisScalarWhereWithAggregatesInput[]
+    OR?: EchoHypothesisScalarWhereWithAggregatesInput[]
+    NOT?: EchoHypothesisScalarWhereWithAggregatesInput | EchoHypothesisScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"EchoHypothesis"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"EchoHypothesis"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"EchoHypothesis"> | Date | string
+    sourceMessageId?: UuidNullableWithAggregatesFilter<"EchoHypothesis"> | string | null
+    hypothesis?: StringWithAggregatesFilter<"EchoHypothesis"> | string
+    confidence?: DecimalWithAggregatesFilter<"EchoHypothesis"> | Decimal | DecimalJsLike | number | string
+    observedElements?: StringNullableWithAggregatesFilter<"EchoHypothesis"> | string | null
+    validationQuestion?: StringNullableWithAggregatesFilter<"EchoHypothesis"> | string | null
+    mathieuResponse?: StringNullableWithAggregatesFilter<"EchoHypothesis"> | string | null
+    status?: StringWithAggregatesFilter<"EchoHypothesis"> | string
+    metadata?: JsonWithAggregatesFilter<"EchoHypothesis">
+  }
+
+  export type EchoDecisionWhereInput = {
+    AND?: EchoDecisionWhereInput | EchoDecisionWhereInput[]
+    OR?: EchoDecisionWhereInput[]
+    NOT?: EchoDecisionWhereInput | EchoDecisionWhereInput[]
+    id?: UuidFilter<"EchoDecision"> | string
+    createdAt?: DateTimeFilter<"EchoDecision"> | Date | string
+    updatedAt?: DateTimeFilter<"EchoDecision"> | Date | string
+    sourceMessageId?: UuidNullableFilter<"EchoDecision"> | string | null
+    decision?: StringFilter<"EchoDecision"> | string
+    reason?: StringNullableFilter<"EchoDecision"> | string | null
+    status?: StringFilter<"EchoDecision"> | string
+    decidedAt?: DateTimeNullableFilter<"EchoDecision"> | Date | string | null
+    metadata?: JsonFilter<"EchoDecision">
+    sourceMessage?: XOR<EchoChatMessageNullableScalarRelationFilter, EchoChatMessageWhereInput> | null
+  }
+
+  export type EchoDecisionOrderByWithRelationInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    sourceMessageId?: SortOrderInput | SortOrder
+    decision?: SortOrder
+    reason?: SortOrderInput | SortOrder
+    status?: SortOrder
+    decidedAt?: SortOrderInput | SortOrder
+    metadata?: SortOrder
+    sourceMessage?: EchoChatMessageOrderByWithRelationInput
+  }
+
+  export type EchoDecisionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: EchoDecisionWhereInput | EchoDecisionWhereInput[]
+    OR?: EchoDecisionWhereInput[]
+    NOT?: EchoDecisionWhereInput | EchoDecisionWhereInput[]
+    createdAt?: DateTimeFilter<"EchoDecision"> | Date | string
+    updatedAt?: DateTimeFilter<"EchoDecision"> | Date | string
+    sourceMessageId?: UuidNullableFilter<"EchoDecision"> | string | null
+    decision?: StringFilter<"EchoDecision"> | string
+    reason?: StringNullableFilter<"EchoDecision"> | string | null
+    status?: StringFilter<"EchoDecision"> | string
+    decidedAt?: DateTimeNullableFilter<"EchoDecision"> | Date | string | null
+    metadata?: JsonFilter<"EchoDecision">
+    sourceMessage?: XOR<EchoChatMessageNullableScalarRelationFilter, EchoChatMessageWhereInput> | null
+  }, "id">
+
+  export type EchoDecisionOrderByWithAggregationInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    sourceMessageId?: SortOrderInput | SortOrder
+    decision?: SortOrder
+    reason?: SortOrderInput | SortOrder
+    status?: SortOrder
+    decidedAt?: SortOrderInput | SortOrder
+    metadata?: SortOrder
+    _count?: EchoDecisionCountOrderByAggregateInput
+    _max?: EchoDecisionMaxOrderByAggregateInput
+    _min?: EchoDecisionMinOrderByAggregateInput
+  }
+
+  export type EchoDecisionScalarWhereWithAggregatesInput = {
+    AND?: EchoDecisionScalarWhereWithAggregatesInput | EchoDecisionScalarWhereWithAggregatesInput[]
+    OR?: EchoDecisionScalarWhereWithAggregatesInput[]
+    NOT?: EchoDecisionScalarWhereWithAggregatesInput | EchoDecisionScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"EchoDecision"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"EchoDecision"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"EchoDecision"> | Date | string
+    sourceMessageId?: UuidNullableWithAggregatesFilter<"EchoDecision"> | string | null
+    decision?: StringWithAggregatesFilter<"EchoDecision"> | string
+    reason?: StringNullableWithAggregatesFilter<"EchoDecision"> | string | null
+    status?: StringWithAggregatesFilter<"EchoDecision"> | string
+    decidedAt?: DateTimeNullableWithAggregatesFilter<"EchoDecision"> | Date | string | null
+    metadata?: JsonWithAggregatesFilter<"EchoDecision">
   }
 
   export type AdminUserCreateInput = {
@@ -22458,6 +27994,400 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type EchoChatMessageCreateInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role: string
+    content: string
+    model?: string | null
+    requestId?: string | null
+    metadata?: JsonNullValueInput | InputJsonValue
+    memoryEntries?: EchoMemoryEntryCreateNestedManyWithoutSourceMessageInput
+    hypotheses?: EchoHypothesisCreateNestedManyWithoutSourceMessageInput
+    decisions?: EchoDecisionCreateNestedManyWithoutSourceMessageInput
+  }
+
+  export type EchoChatMessageUncheckedCreateInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role: string
+    content: string
+    model?: string | null
+    requestId?: string | null
+    metadata?: JsonNullValueInput | InputJsonValue
+    memoryEntries?: EchoMemoryEntryUncheckedCreateNestedManyWithoutSourceMessageInput
+    hypotheses?: EchoHypothesisUncheckedCreateNestedManyWithoutSourceMessageInput
+    decisions?: EchoDecisionUncheckedCreateNestedManyWithoutSourceMessageInput
+  }
+
+  export type EchoChatMessageUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    model?: NullableStringFieldUpdateOperationsInput | string | null
+    requestId?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: JsonNullValueInput | InputJsonValue
+    memoryEntries?: EchoMemoryEntryUpdateManyWithoutSourceMessageNestedInput
+    hypotheses?: EchoHypothesisUpdateManyWithoutSourceMessageNestedInput
+    decisions?: EchoDecisionUpdateManyWithoutSourceMessageNestedInput
+  }
+
+  export type EchoChatMessageUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    model?: NullableStringFieldUpdateOperationsInput | string | null
+    requestId?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: JsonNullValueInput | InputJsonValue
+    memoryEntries?: EchoMemoryEntryUncheckedUpdateManyWithoutSourceMessageNestedInput
+    hypotheses?: EchoHypothesisUncheckedUpdateManyWithoutSourceMessageNestedInput
+    decisions?: EchoDecisionUncheckedUpdateManyWithoutSourceMessageNestedInput
+  }
+
+  export type EchoChatMessageCreateManyInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role: string
+    content: string
+    model?: string | null
+    requestId?: string | null
+    metadata?: JsonNullValueInput | InputJsonValue
+  }
+
+  export type EchoChatMessageUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    model?: NullableStringFieldUpdateOperationsInput | string | null
+    requestId?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: JsonNullValueInput | InputJsonValue
+  }
+
+  export type EchoChatMessageUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    model?: NullableStringFieldUpdateOperationsInput | string | null
+    requestId?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: JsonNullValueInput | InputJsonValue
+  }
+
+  export type EchoMemoryEntryCreateInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    source?: string
+    category?: string
+    type: string
+    sensitivity: string
+    confidence?: Decimal | DecimalJsLike | number | string
+    humanSummary: string
+    sourceContent?: string | null
+    status?: string
+    validated?: boolean
+    links?: JsonNullValueInput | InputJsonValue
+    metadata?: JsonNullValueInput | InputJsonValue
+    sourceMessage?: EchoChatMessageCreateNestedOneWithoutMemoryEntriesInput
+  }
+
+  export type EchoMemoryEntryUncheckedCreateInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sourceMessageId?: string | null
+    source?: string
+    category?: string
+    type: string
+    sensitivity: string
+    confidence?: Decimal | DecimalJsLike | number | string
+    humanSummary: string
+    sourceContent?: string | null
+    status?: string
+    validated?: boolean
+    links?: JsonNullValueInput | InputJsonValue
+    metadata?: JsonNullValueInput | InputJsonValue
+  }
+
+  export type EchoMemoryEntryUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    source?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    sensitivity?: StringFieldUpdateOperationsInput | string
+    confidence?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    humanSummary?: StringFieldUpdateOperationsInput | string
+    sourceContent?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    validated?: BoolFieldUpdateOperationsInput | boolean
+    links?: JsonNullValueInput | InputJsonValue
+    metadata?: JsonNullValueInput | InputJsonValue
+    sourceMessage?: EchoChatMessageUpdateOneWithoutMemoryEntriesNestedInput
+  }
+
+  export type EchoMemoryEntryUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sourceMessageId?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    sensitivity?: StringFieldUpdateOperationsInput | string
+    confidence?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    humanSummary?: StringFieldUpdateOperationsInput | string
+    sourceContent?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    validated?: BoolFieldUpdateOperationsInput | boolean
+    links?: JsonNullValueInput | InputJsonValue
+    metadata?: JsonNullValueInput | InputJsonValue
+  }
+
+  export type EchoMemoryEntryCreateManyInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sourceMessageId?: string | null
+    source?: string
+    category?: string
+    type: string
+    sensitivity: string
+    confidence?: Decimal | DecimalJsLike | number | string
+    humanSummary: string
+    sourceContent?: string | null
+    status?: string
+    validated?: boolean
+    links?: JsonNullValueInput | InputJsonValue
+    metadata?: JsonNullValueInput | InputJsonValue
+  }
+
+  export type EchoMemoryEntryUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    source?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    sensitivity?: StringFieldUpdateOperationsInput | string
+    confidence?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    humanSummary?: StringFieldUpdateOperationsInput | string
+    sourceContent?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    validated?: BoolFieldUpdateOperationsInput | boolean
+    links?: JsonNullValueInput | InputJsonValue
+    metadata?: JsonNullValueInput | InputJsonValue
+  }
+
+  export type EchoMemoryEntryUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sourceMessageId?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    sensitivity?: StringFieldUpdateOperationsInput | string
+    confidence?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    humanSummary?: StringFieldUpdateOperationsInput | string
+    sourceContent?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    validated?: BoolFieldUpdateOperationsInput | boolean
+    links?: JsonNullValueInput | InputJsonValue
+    metadata?: JsonNullValueInput | InputJsonValue
+  }
+
+  export type EchoHypothesisCreateInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    hypothesis: string
+    confidence?: Decimal | DecimalJsLike | number | string
+    observedElements?: string | null
+    validationQuestion?: string | null
+    mathieuResponse?: string | null
+    status?: string
+    metadata?: JsonNullValueInput | InputJsonValue
+    sourceMessage?: EchoChatMessageCreateNestedOneWithoutHypothesesInput
+  }
+
+  export type EchoHypothesisUncheckedCreateInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sourceMessageId?: string | null
+    hypothesis: string
+    confidence?: Decimal | DecimalJsLike | number | string
+    observedElements?: string | null
+    validationQuestion?: string | null
+    mathieuResponse?: string | null
+    status?: string
+    metadata?: JsonNullValueInput | InputJsonValue
+  }
+
+  export type EchoHypothesisUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    hypothesis?: StringFieldUpdateOperationsInput | string
+    confidence?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    observedElements?: NullableStringFieldUpdateOperationsInput | string | null
+    validationQuestion?: NullableStringFieldUpdateOperationsInput | string | null
+    mathieuResponse?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    metadata?: JsonNullValueInput | InputJsonValue
+    sourceMessage?: EchoChatMessageUpdateOneWithoutHypothesesNestedInput
+  }
+
+  export type EchoHypothesisUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sourceMessageId?: NullableStringFieldUpdateOperationsInput | string | null
+    hypothesis?: StringFieldUpdateOperationsInput | string
+    confidence?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    observedElements?: NullableStringFieldUpdateOperationsInput | string | null
+    validationQuestion?: NullableStringFieldUpdateOperationsInput | string | null
+    mathieuResponse?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    metadata?: JsonNullValueInput | InputJsonValue
+  }
+
+  export type EchoHypothesisCreateManyInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sourceMessageId?: string | null
+    hypothesis: string
+    confidence?: Decimal | DecimalJsLike | number | string
+    observedElements?: string | null
+    validationQuestion?: string | null
+    mathieuResponse?: string | null
+    status?: string
+    metadata?: JsonNullValueInput | InputJsonValue
+  }
+
+  export type EchoHypothesisUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    hypothesis?: StringFieldUpdateOperationsInput | string
+    confidence?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    observedElements?: NullableStringFieldUpdateOperationsInput | string | null
+    validationQuestion?: NullableStringFieldUpdateOperationsInput | string | null
+    mathieuResponse?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    metadata?: JsonNullValueInput | InputJsonValue
+  }
+
+  export type EchoHypothesisUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sourceMessageId?: NullableStringFieldUpdateOperationsInput | string | null
+    hypothesis?: StringFieldUpdateOperationsInput | string
+    confidence?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    observedElements?: NullableStringFieldUpdateOperationsInput | string | null
+    validationQuestion?: NullableStringFieldUpdateOperationsInput | string | null
+    mathieuResponse?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    metadata?: JsonNullValueInput | InputJsonValue
+  }
+
+  export type EchoDecisionCreateInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    decision: string
+    reason?: string | null
+    status?: string
+    decidedAt?: Date | string | null
+    metadata?: JsonNullValueInput | InputJsonValue
+    sourceMessage?: EchoChatMessageCreateNestedOneWithoutDecisionsInput
+  }
+
+  export type EchoDecisionUncheckedCreateInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sourceMessageId?: string | null
+    decision: string
+    reason?: string | null
+    status?: string
+    decidedAt?: Date | string | null
+    metadata?: JsonNullValueInput | InputJsonValue
+  }
+
+  export type EchoDecisionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    decision?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    decidedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    metadata?: JsonNullValueInput | InputJsonValue
+    sourceMessage?: EchoChatMessageUpdateOneWithoutDecisionsNestedInput
+  }
+
+  export type EchoDecisionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sourceMessageId?: NullableStringFieldUpdateOperationsInput | string | null
+    decision?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    decidedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    metadata?: JsonNullValueInput | InputJsonValue
+  }
+
+  export type EchoDecisionCreateManyInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sourceMessageId?: string | null
+    decision: string
+    reason?: string | null
+    status?: string
+    decidedAt?: Date | string | null
+    metadata?: JsonNullValueInput | InputJsonValue
+  }
+
+  export type EchoDecisionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    decision?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    decidedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    metadata?: JsonNullValueInput | InputJsonValue
+  }
+
+  export type EchoDecisionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sourceMessageId?: NullableStringFieldUpdateOperationsInput | string | null
+    decision?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    decidedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    metadata?: JsonNullValueInput | InputJsonValue
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -23802,6 +29732,315 @@ export namespace Prisma {
     amount?: SortOrder
   }
 
+  export type UuidFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel>
+    in?: string[] | ListStringFieldRefInput<$PrismaModel>
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedUuidFilter<$PrismaModel> | string
+  }
+  export type JsonFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type EchoMemoryEntryListRelationFilter = {
+    every?: EchoMemoryEntryWhereInput
+    some?: EchoMemoryEntryWhereInput
+    none?: EchoMemoryEntryWhereInput
+  }
+
+  export type EchoHypothesisListRelationFilter = {
+    every?: EchoHypothesisWhereInput
+    some?: EchoHypothesisWhereInput
+    none?: EchoHypothesisWhereInput
+  }
+
+  export type EchoDecisionListRelationFilter = {
+    every?: EchoDecisionWhereInput
+    some?: EchoDecisionWhereInput
+    none?: EchoDecisionWhereInput
+  }
+
+  export type EchoMemoryEntryOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type EchoHypothesisOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type EchoDecisionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type EchoChatMessageCountOrderByAggregateInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    role?: SortOrder
+    content?: SortOrder
+    model?: SortOrder
+    requestId?: SortOrder
+    metadata?: SortOrder
+  }
+
+  export type EchoChatMessageMaxOrderByAggregateInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    role?: SortOrder
+    content?: SortOrder
+    model?: SortOrder
+    requestId?: SortOrder
+  }
+
+  export type EchoChatMessageMinOrderByAggregateInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    role?: SortOrder
+    content?: SortOrder
+    model?: SortOrder
+    requestId?: SortOrder
+  }
+
+  export type UuidWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel>
+    in?: string[] | ListStringFieldRefInput<$PrismaModel>
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedUuidWithAggregatesFilter<$PrismaModel> | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedStringFilter<$PrismaModel>
+    _max?: NestedStringFilter<$PrismaModel>
+  }
+  export type JsonWithAggregatesFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedJsonFilter<$PrismaModel>
+    _max?: NestedJsonFilter<$PrismaModel>
+  }
+
+  export type UuidNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedUuidNullableFilter<$PrismaModel> | string | null
+  }
+
+  export type EchoChatMessageNullableScalarRelationFilter = {
+    is?: EchoChatMessageWhereInput | null
+    isNot?: EchoChatMessageWhereInput | null
+  }
+
+  export type EchoMemoryEntryCountOrderByAggregateInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    sourceMessageId?: SortOrder
+    source?: SortOrder
+    category?: SortOrder
+    type?: SortOrder
+    sensitivity?: SortOrder
+    confidence?: SortOrder
+    humanSummary?: SortOrder
+    sourceContent?: SortOrder
+    status?: SortOrder
+    validated?: SortOrder
+    links?: SortOrder
+    metadata?: SortOrder
+  }
+
+  export type EchoMemoryEntryAvgOrderByAggregateInput = {
+    confidence?: SortOrder
+  }
+
+  export type EchoMemoryEntryMaxOrderByAggregateInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    sourceMessageId?: SortOrder
+    source?: SortOrder
+    category?: SortOrder
+    type?: SortOrder
+    sensitivity?: SortOrder
+    confidence?: SortOrder
+    humanSummary?: SortOrder
+    sourceContent?: SortOrder
+    status?: SortOrder
+    validated?: SortOrder
+  }
+
+  export type EchoMemoryEntryMinOrderByAggregateInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    sourceMessageId?: SortOrder
+    source?: SortOrder
+    category?: SortOrder
+    type?: SortOrder
+    sensitivity?: SortOrder
+    confidence?: SortOrder
+    humanSummary?: SortOrder
+    sourceContent?: SortOrder
+    status?: SortOrder
+    validated?: SortOrder
+  }
+
+  export type EchoMemoryEntrySumOrderByAggregateInput = {
+    confidence?: SortOrder
+  }
+
+  export type UuidNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedUuidNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type EchoHypothesisCountOrderByAggregateInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    sourceMessageId?: SortOrder
+    hypothesis?: SortOrder
+    confidence?: SortOrder
+    observedElements?: SortOrder
+    validationQuestion?: SortOrder
+    mathieuResponse?: SortOrder
+    status?: SortOrder
+    metadata?: SortOrder
+  }
+
+  export type EchoHypothesisAvgOrderByAggregateInput = {
+    confidence?: SortOrder
+  }
+
+  export type EchoHypothesisMaxOrderByAggregateInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    sourceMessageId?: SortOrder
+    hypothesis?: SortOrder
+    confidence?: SortOrder
+    observedElements?: SortOrder
+    validationQuestion?: SortOrder
+    mathieuResponse?: SortOrder
+    status?: SortOrder
+  }
+
+  export type EchoHypothesisMinOrderByAggregateInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    sourceMessageId?: SortOrder
+    hypothesis?: SortOrder
+    confidence?: SortOrder
+    observedElements?: SortOrder
+    validationQuestion?: SortOrder
+    mathieuResponse?: SortOrder
+    status?: SortOrder
+  }
+
+  export type EchoHypothesisSumOrderByAggregateInput = {
+    confidence?: SortOrder
+  }
+
+  export type EchoDecisionCountOrderByAggregateInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    sourceMessageId?: SortOrder
+    decision?: SortOrder
+    reason?: SortOrder
+    status?: SortOrder
+    decidedAt?: SortOrder
+    metadata?: SortOrder
+  }
+
+  export type EchoDecisionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    sourceMessageId?: SortOrder
+    decision?: SortOrder
+    reason?: SortOrder
+    status?: SortOrder
+    decidedAt?: SortOrder
+  }
+
+  export type EchoDecisionMinOrderByAggregateInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    sourceMessageId?: SortOrder
+    decision?: SortOrder
+    reason?: SortOrder
+    status?: SortOrder
+    decidedAt?: SortOrder
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
@@ -24130,6 +30369,180 @@ export namespace Prisma {
     delete?: RevenueSubscriptionWhereInput | boolean
     connect?: RevenueSubscriptionWhereUniqueInput
     update?: XOR<XOR<RevenueSubscriptionUpdateToOneWithWhereWithoutPaymentsInput, RevenueSubscriptionUpdateWithoutPaymentsInput>, RevenueSubscriptionUncheckedUpdateWithoutPaymentsInput>
+  }
+
+  export type EchoMemoryEntryCreateNestedManyWithoutSourceMessageInput = {
+    create?: XOR<EchoMemoryEntryCreateWithoutSourceMessageInput, EchoMemoryEntryUncheckedCreateWithoutSourceMessageInput> | EchoMemoryEntryCreateWithoutSourceMessageInput[] | EchoMemoryEntryUncheckedCreateWithoutSourceMessageInput[]
+    connectOrCreate?: EchoMemoryEntryCreateOrConnectWithoutSourceMessageInput | EchoMemoryEntryCreateOrConnectWithoutSourceMessageInput[]
+    createMany?: EchoMemoryEntryCreateManySourceMessageInputEnvelope
+    connect?: EchoMemoryEntryWhereUniqueInput | EchoMemoryEntryWhereUniqueInput[]
+  }
+
+  export type EchoHypothesisCreateNestedManyWithoutSourceMessageInput = {
+    create?: XOR<EchoHypothesisCreateWithoutSourceMessageInput, EchoHypothesisUncheckedCreateWithoutSourceMessageInput> | EchoHypothesisCreateWithoutSourceMessageInput[] | EchoHypothesisUncheckedCreateWithoutSourceMessageInput[]
+    connectOrCreate?: EchoHypothesisCreateOrConnectWithoutSourceMessageInput | EchoHypothesisCreateOrConnectWithoutSourceMessageInput[]
+    createMany?: EchoHypothesisCreateManySourceMessageInputEnvelope
+    connect?: EchoHypothesisWhereUniqueInput | EchoHypothesisWhereUniqueInput[]
+  }
+
+  export type EchoDecisionCreateNestedManyWithoutSourceMessageInput = {
+    create?: XOR<EchoDecisionCreateWithoutSourceMessageInput, EchoDecisionUncheckedCreateWithoutSourceMessageInput> | EchoDecisionCreateWithoutSourceMessageInput[] | EchoDecisionUncheckedCreateWithoutSourceMessageInput[]
+    connectOrCreate?: EchoDecisionCreateOrConnectWithoutSourceMessageInput | EchoDecisionCreateOrConnectWithoutSourceMessageInput[]
+    createMany?: EchoDecisionCreateManySourceMessageInputEnvelope
+    connect?: EchoDecisionWhereUniqueInput | EchoDecisionWhereUniqueInput[]
+  }
+
+  export type EchoMemoryEntryUncheckedCreateNestedManyWithoutSourceMessageInput = {
+    create?: XOR<EchoMemoryEntryCreateWithoutSourceMessageInput, EchoMemoryEntryUncheckedCreateWithoutSourceMessageInput> | EchoMemoryEntryCreateWithoutSourceMessageInput[] | EchoMemoryEntryUncheckedCreateWithoutSourceMessageInput[]
+    connectOrCreate?: EchoMemoryEntryCreateOrConnectWithoutSourceMessageInput | EchoMemoryEntryCreateOrConnectWithoutSourceMessageInput[]
+    createMany?: EchoMemoryEntryCreateManySourceMessageInputEnvelope
+    connect?: EchoMemoryEntryWhereUniqueInput | EchoMemoryEntryWhereUniqueInput[]
+  }
+
+  export type EchoHypothesisUncheckedCreateNestedManyWithoutSourceMessageInput = {
+    create?: XOR<EchoHypothesisCreateWithoutSourceMessageInput, EchoHypothesisUncheckedCreateWithoutSourceMessageInput> | EchoHypothesisCreateWithoutSourceMessageInput[] | EchoHypothesisUncheckedCreateWithoutSourceMessageInput[]
+    connectOrCreate?: EchoHypothesisCreateOrConnectWithoutSourceMessageInput | EchoHypothesisCreateOrConnectWithoutSourceMessageInput[]
+    createMany?: EchoHypothesisCreateManySourceMessageInputEnvelope
+    connect?: EchoHypothesisWhereUniqueInput | EchoHypothesisWhereUniqueInput[]
+  }
+
+  export type EchoDecisionUncheckedCreateNestedManyWithoutSourceMessageInput = {
+    create?: XOR<EchoDecisionCreateWithoutSourceMessageInput, EchoDecisionUncheckedCreateWithoutSourceMessageInput> | EchoDecisionCreateWithoutSourceMessageInput[] | EchoDecisionUncheckedCreateWithoutSourceMessageInput[]
+    connectOrCreate?: EchoDecisionCreateOrConnectWithoutSourceMessageInput | EchoDecisionCreateOrConnectWithoutSourceMessageInput[]
+    createMany?: EchoDecisionCreateManySourceMessageInputEnvelope
+    connect?: EchoDecisionWhereUniqueInput | EchoDecisionWhereUniqueInput[]
+  }
+
+  export type EchoMemoryEntryUpdateManyWithoutSourceMessageNestedInput = {
+    create?: XOR<EchoMemoryEntryCreateWithoutSourceMessageInput, EchoMemoryEntryUncheckedCreateWithoutSourceMessageInput> | EchoMemoryEntryCreateWithoutSourceMessageInput[] | EchoMemoryEntryUncheckedCreateWithoutSourceMessageInput[]
+    connectOrCreate?: EchoMemoryEntryCreateOrConnectWithoutSourceMessageInput | EchoMemoryEntryCreateOrConnectWithoutSourceMessageInput[]
+    upsert?: EchoMemoryEntryUpsertWithWhereUniqueWithoutSourceMessageInput | EchoMemoryEntryUpsertWithWhereUniqueWithoutSourceMessageInput[]
+    createMany?: EchoMemoryEntryCreateManySourceMessageInputEnvelope
+    set?: EchoMemoryEntryWhereUniqueInput | EchoMemoryEntryWhereUniqueInput[]
+    disconnect?: EchoMemoryEntryWhereUniqueInput | EchoMemoryEntryWhereUniqueInput[]
+    delete?: EchoMemoryEntryWhereUniqueInput | EchoMemoryEntryWhereUniqueInput[]
+    connect?: EchoMemoryEntryWhereUniqueInput | EchoMemoryEntryWhereUniqueInput[]
+    update?: EchoMemoryEntryUpdateWithWhereUniqueWithoutSourceMessageInput | EchoMemoryEntryUpdateWithWhereUniqueWithoutSourceMessageInput[]
+    updateMany?: EchoMemoryEntryUpdateManyWithWhereWithoutSourceMessageInput | EchoMemoryEntryUpdateManyWithWhereWithoutSourceMessageInput[]
+    deleteMany?: EchoMemoryEntryScalarWhereInput | EchoMemoryEntryScalarWhereInput[]
+  }
+
+  export type EchoHypothesisUpdateManyWithoutSourceMessageNestedInput = {
+    create?: XOR<EchoHypothesisCreateWithoutSourceMessageInput, EchoHypothesisUncheckedCreateWithoutSourceMessageInput> | EchoHypothesisCreateWithoutSourceMessageInput[] | EchoHypothesisUncheckedCreateWithoutSourceMessageInput[]
+    connectOrCreate?: EchoHypothesisCreateOrConnectWithoutSourceMessageInput | EchoHypothesisCreateOrConnectWithoutSourceMessageInput[]
+    upsert?: EchoHypothesisUpsertWithWhereUniqueWithoutSourceMessageInput | EchoHypothesisUpsertWithWhereUniqueWithoutSourceMessageInput[]
+    createMany?: EchoHypothesisCreateManySourceMessageInputEnvelope
+    set?: EchoHypothesisWhereUniqueInput | EchoHypothesisWhereUniqueInput[]
+    disconnect?: EchoHypothesisWhereUniqueInput | EchoHypothesisWhereUniqueInput[]
+    delete?: EchoHypothesisWhereUniqueInput | EchoHypothesisWhereUniqueInput[]
+    connect?: EchoHypothesisWhereUniqueInput | EchoHypothesisWhereUniqueInput[]
+    update?: EchoHypothesisUpdateWithWhereUniqueWithoutSourceMessageInput | EchoHypothesisUpdateWithWhereUniqueWithoutSourceMessageInput[]
+    updateMany?: EchoHypothesisUpdateManyWithWhereWithoutSourceMessageInput | EchoHypothesisUpdateManyWithWhereWithoutSourceMessageInput[]
+    deleteMany?: EchoHypothesisScalarWhereInput | EchoHypothesisScalarWhereInput[]
+  }
+
+  export type EchoDecisionUpdateManyWithoutSourceMessageNestedInput = {
+    create?: XOR<EchoDecisionCreateWithoutSourceMessageInput, EchoDecisionUncheckedCreateWithoutSourceMessageInput> | EchoDecisionCreateWithoutSourceMessageInput[] | EchoDecisionUncheckedCreateWithoutSourceMessageInput[]
+    connectOrCreate?: EchoDecisionCreateOrConnectWithoutSourceMessageInput | EchoDecisionCreateOrConnectWithoutSourceMessageInput[]
+    upsert?: EchoDecisionUpsertWithWhereUniqueWithoutSourceMessageInput | EchoDecisionUpsertWithWhereUniqueWithoutSourceMessageInput[]
+    createMany?: EchoDecisionCreateManySourceMessageInputEnvelope
+    set?: EchoDecisionWhereUniqueInput | EchoDecisionWhereUniqueInput[]
+    disconnect?: EchoDecisionWhereUniqueInput | EchoDecisionWhereUniqueInput[]
+    delete?: EchoDecisionWhereUniqueInput | EchoDecisionWhereUniqueInput[]
+    connect?: EchoDecisionWhereUniqueInput | EchoDecisionWhereUniqueInput[]
+    update?: EchoDecisionUpdateWithWhereUniqueWithoutSourceMessageInput | EchoDecisionUpdateWithWhereUniqueWithoutSourceMessageInput[]
+    updateMany?: EchoDecisionUpdateManyWithWhereWithoutSourceMessageInput | EchoDecisionUpdateManyWithWhereWithoutSourceMessageInput[]
+    deleteMany?: EchoDecisionScalarWhereInput | EchoDecisionScalarWhereInput[]
+  }
+
+  export type EchoMemoryEntryUncheckedUpdateManyWithoutSourceMessageNestedInput = {
+    create?: XOR<EchoMemoryEntryCreateWithoutSourceMessageInput, EchoMemoryEntryUncheckedCreateWithoutSourceMessageInput> | EchoMemoryEntryCreateWithoutSourceMessageInput[] | EchoMemoryEntryUncheckedCreateWithoutSourceMessageInput[]
+    connectOrCreate?: EchoMemoryEntryCreateOrConnectWithoutSourceMessageInput | EchoMemoryEntryCreateOrConnectWithoutSourceMessageInput[]
+    upsert?: EchoMemoryEntryUpsertWithWhereUniqueWithoutSourceMessageInput | EchoMemoryEntryUpsertWithWhereUniqueWithoutSourceMessageInput[]
+    createMany?: EchoMemoryEntryCreateManySourceMessageInputEnvelope
+    set?: EchoMemoryEntryWhereUniqueInput | EchoMemoryEntryWhereUniqueInput[]
+    disconnect?: EchoMemoryEntryWhereUniqueInput | EchoMemoryEntryWhereUniqueInput[]
+    delete?: EchoMemoryEntryWhereUniqueInput | EchoMemoryEntryWhereUniqueInput[]
+    connect?: EchoMemoryEntryWhereUniqueInput | EchoMemoryEntryWhereUniqueInput[]
+    update?: EchoMemoryEntryUpdateWithWhereUniqueWithoutSourceMessageInput | EchoMemoryEntryUpdateWithWhereUniqueWithoutSourceMessageInput[]
+    updateMany?: EchoMemoryEntryUpdateManyWithWhereWithoutSourceMessageInput | EchoMemoryEntryUpdateManyWithWhereWithoutSourceMessageInput[]
+    deleteMany?: EchoMemoryEntryScalarWhereInput | EchoMemoryEntryScalarWhereInput[]
+  }
+
+  export type EchoHypothesisUncheckedUpdateManyWithoutSourceMessageNestedInput = {
+    create?: XOR<EchoHypothesisCreateWithoutSourceMessageInput, EchoHypothesisUncheckedCreateWithoutSourceMessageInput> | EchoHypothesisCreateWithoutSourceMessageInput[] | EchoHypothesisUncheckedCreateWithoutSourceMessageInput[]
+    connectOrCreate?: EchoHypothesisCreateOrConnectWithoutSourceMessageInput | EchoHypothesisCreateOrConnectWithoutSourceMessageInput[]
+    upsert?: EchoHypothesisUpsertWithWhereUniqueWithoutSourceMessageInput | EchoHypothesisUpsertWithWhereUniqueWithoutSourceMessageInput[]
+    createMany?: EchoHypothesisCreateManySourceMessageInputEnvelope
+    set?: EchoHypothesisWhereUniqueInput | EchoHypothesisWhereUniqueInput[]
+    disconnect?: EchoHypothesisWhereUniqueInput | EchoHypothesisWhereUniqueInput[]
+    delete?: EchoHypothesisWhereUniqueInput | EchoHypothesisWhereUniqueInput[]
+    connect?: EchoHypothesisWhereUniqueInput | EchoHypothesisWhereUniqueInput[]
+    update?: EchoHypothesisUpdateWithWhereUniqueWithoutSourceMessageInput | EchoHypothesisUpdateWithWhereUniqueWithoutSourceMessageInput[]
+    updateMany?: EchoHypothesisUpdateManyWithWhereWithoutSourceMessageInput | EchoHypothesisUpdateManyWithWhereWithoutSourceMessageInput[]
+    deleteMany?: EchoHypothesisScalarWhereInput | EchoHypothesisScalarWhereInput[]
+  }
+
+  export type EchoDecisionUncheckedUpdateManyWithoutSourceMessageNestedInput = {
+    create?: XOR<EchoDecisionCreateWithoutSourceMessageInput, EchoDecisionUncheckedCreateWithoutSourceMessageInput> | EchoDecisionCreateWithoutSourceMessageInput[] | EchoDecisionUncheckedCreateWithoutSourceMessageInput[]
+    connectOrCreate?: EchoDecisionCreateOrConnectWithoutSourceMessageInput | EchoDecisionCreateOrConnectWithoutSourceMessageInput[]
+    upsert?: EchoDecisionUpsertWithWhereUniqueWithoutSourceMessageInput | EchoDecisionUpsertWithWhereUniqueWithoutSourceMessageInput[]
+    createMany?: EchoDecisionCreateManySourceMessageInputEnvelope
+    set?: EchoDecisionWhereUniqueInput | EchoDecisionWhereUniqueInput[]
+    disconnect?: EchoDecisionWhereUniqueInput | EchoDecisionWhereUniqueInput[]
+    delete?: EchoDecisionWhereUniqueInput | EchoDecisionWhereUniqueInput[]
+    connect?: EchoDecisionWhereUniqueInput | EchoDecisionWhereUniqueInput[]
+    update?: EchoDecisionUpdateWithWhereUniqueWithoutSourceMessageInput | EchoDecisionUpdateWithWhereUniqueWithoutSourceMessageInput[]
+    updateMany?: EchoDecisionUpdateManyWithWhereWithoutSourceMessageInput | EchoDecisionUpdateManyWithWhereWithoutSourceMessageInput[]
+    deleteMany?: EchoDecisionScalarWhereInput | EchoDecisionScalarWhereInput[]
+  }
+
+  export type EchoChatMessageCreateNestedOneWithoutMemoryEntriesInput = {
+    create?: XOR<EchoChatMessageCreateWithoutMemoryEntriesInput, EchoChatMessageUncheckedCreateWithoutMemoryEntriesInput>
+    connectOrCreate?: EchoChatMessageCreateOrConnectWithoutMemoryEntriesInput
+    connect?: EchoChatMessageWhereUniqueInput
+  }
+
+  export type EchoChatMessageUpdateOneWithoutMemoryEntriesNestedInput = {
+    create?: XOR<EchoChatMessageCreateWithoutMemoryEntriesInput, EchoChatMessageUncheckedCreateWithoutMemoryEntriesInput>
+    connectOrCreate?: EchoChatMessageCreateOrConnectWithoutMemoryEntriesInput
+    upsert?: EchoChatMessageUpsertWithoutMemoryEntriesInput
+    disconnect?: EchoChatMessageWhereInput | boolean
+    delete?: EchoChatMessageWhereInput | boolean
+    connect?: EchoChatMessageWhereUniqueInput
+    update?: XOR<XOR<EchoChatMessageUpdateToOneWithWhereWithoutMemoryEntriesInput, EchoChatMessageUpdateWithoutMemoryEntriesInput>, EchoChatMessageUncheckedUpdateWithoutMemoryEntriesInput>
+  }
+
+  export type EchoChatMessageCreateNestedOneWithoutHypothesesInput = {
+    create?: XOR<EchoChatMessageCreateWithoutHypothesesInput, EchoChatMessageUncheckedCreateWithoutHypothesesInput>
+    connectOrCreate?: EchoChatMessageCreateOrConnectWithoutHypothesesInput
+    connect?: EchoChatMessageWhereUniqueInput
+  }
+
+  export type EchoChatMessageUpdateOneWithoutHypothesesNestedInput = {
+    create?: XOR<EchoChatMessageCreateWithoutHypothesesInput, EchoChatMessageUncheckedCreateWithoutHypothesesInput>
+    connectOrCreate?: EchoChatMessageCreateOrConnectWithoutHypothesesInput
+    upsert?: EchoChatMessageUpsertWithoutHypothesesInput
+    disconnect?: EchoChatMessageWhereInput | boolean
+    delete?: EchoChatMessageWhereInput | boolean
+    connect?: EchoChatMessageWhereUniqueInput
+    update?: XOR<XOR<EchoChatMessageUpdateToOneWithWhereWithoutHypothesesInput, EchoChatMessageUpdateWithoutHypothesesInput>, EchoChatMessageUncheckedUpdateWithoutHypothesesInput>
+  }
+
+  export type EchoChatMessageCreateNestedOneWithoutDecisionsInput = {
+    create?: XOR<EchoChatMessageCreateWithoutDecisionsInput, EchoChatMessageUncheckedCreateWithoutDecisionsInput>
+    connectOrCreate?: EchoChatMessageCreateOrConnectWithoutDecisionsInput
+    connect?: EchoChatMessageWhereUniqueInput
+  }
+
+  export type EchoChatMessageUpdateOneWithoutDecisionsNestedInput = {
+    create?: XOR<EchoChatMessageCreateWithoutDecisionsInput, EchoChatMessageUncheckedCreateWithoutDecisionsInput>
+    connectOrCreate?: EchoChatMessageCreateOrConnectWithoutDecisionsInput
+    upsert?: EchoChatMessageUpsertWithoutDecisionsInput
+    disconnect?: EchoChatMessageWhereInput | boolean
+    delete?: EchoChatMessageWhereInput | boolean
+    connect?: EchoChatMessageWhereUniqueInput
+    update?: XOR<XOR<EchoChatMessageUpdateToOneWithWhereWithoutDecisionsInput, EchoChatMessageUpdateWithoutDecisionsInput>, EchoChatMessageUncheckedUpdateWithoutDecisionsInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -24633,6 +31046,79 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumFinanceInvoiceStatusFilter<$PrismaModel>
     _max?: NestedEnumFinanceInvoiceStatusFilter<$PrismaModel>
+  }
+
+  export type NestedUuidFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel>
+    in?: string[] | ListStringFieldRefInput<$PrismaModel>
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedUuidFilter<$PrismaModel> | string
+  }
+
+  export type NestedUuidWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel>
+    in?: string[] | ListStringFieldRefInput<$PrismaModel>
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedUuidWithAggregatesFilter<$PrismaModel> | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedStringFilter<$PrismaModel>
+    _max?: NestedStringFilter<$PrismaModel>
+  }
+  export type NestedJsonFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<NestedJsonFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type NestedUuidNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedUuidNullableFilter<$PrismaModel> | string | null
+  }
+
+  export type NestedUuidNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedUuidNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type AccesCreateWithoutClientInput = {
@@ -25286,6 +31772,423 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type EchoMemoryEntryCreateWithoutSourceMessageInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    source?: string
+    category?: string
+    type: string
+    sensitivity: string
+    confidence?: Decimal | DecimalJsLike | number | string
+    humanSummary: string
+    sourceContent?: string | null
+    status?: string
+    validated?: boolean
+    links?: JsonNullValueInput | InputJsonValue
+    metadata?: JsonNullValueInput | InputJsonValue
+  }
+
+  export type EchoMemoryEntryUncheckedCreateWithoutSourceMessageInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    source?: string
+    category?: string
+    type: string
+    sensitivity: string
+    confidence?: Decimal | DecimalJsLike | number | string
+    humanSummary: string
+    sourceContent?: string | null
+    status?: string
+    validated?: boolean
+    links?: JsonNullValueInput | InputJsonValue
+    metadata?: JsonNullValueInput | InputJsonValue
+  }
+
+  export type EchoMemoryEntryCreateOrConnectWithoutSourceMessageInput = {
+    where: EchoMemoryEntryWhereUniqueInput
+    create: XOR<EchoMemoryEntryCreateWithoutSourceMessageInput, EchoMemoryEntryUncheckedCreateWithoutSourceMessageInput>
+  }
+
+  export type EchoMemoryEntryCreateManySourceMessageInputEnvelope = {
+    data: EchoMemoryEntryCreateManySourceMessageInput | EchoMemoryEntryCreateManySourceMessageInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type EchoHypothesisCreateWithoutSourceMessageInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    hypothesis: string
+    confidence?: Decimal | DecimalJsLike | number | string
+    observedElements?: string | null
+    validationQuestion?: string | null
+    mathieuResponse?: string | null
+    status?: string
+    metadata?: JsonNullValueInput | InputJsonValue
+  }
+
+  export type EchoHypothesisUncheckedCreateWithoutSourceMessageInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    hypothesis: string
+    confidence?: Decimal | DecimalJsLike | number | string
+    observedElements?: string | null
+    validationQuestion?: string | null
+    mathieuResponse?: string | null
+    status?: string
+    metadata?: JsonNullValueInput | InputJsonValue
+  }
+
+  export type EchoHypothesisCreateOrConnectWithoutSourceMessageInput = {
+    where: EchoHypothesisWhereUniqueInput
+    create: XOR<EchoHypothesisCreateWithoutSourceMessageInput, EchoHypothesisUncheckedCreateWithoutSourceMessageInput>
+  }
+
+  export type EchoHypothesisCreateManySourceMessageInputEnvelope = {
+    data: EchoHypothesisCreateManySourceMessageInput | EchoHypothesisCreateManySourceMessageInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type EchoDecisionCreateWithoutSourceMessageInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    decision: string
+    reason?: string | null
+    status?: string
+    decidedAt?: Date | string | null
+    metadata?: JsonNullValueInput | InputJsonValue
+  }
+
+  export type EchoDecisionUncheckedCreateWithoutSourceMessageInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    decision: string
+    reason?: string | null
+    status?: string
+    decidedAt?: Date | string | null
+    metadata?: JsonNullValueInput | InputJsonValue
+  }
+
+  export type EchoDecisionCreateOrConnectWithoutSourceMessageInput = {
+    where: EchoDecisionWhereUniqueInput
+    create: XOR<EchoDecisionCreateWithoutSourceMessageInput, EchoDecisionUncheckedCreateWithoutSourceMessageInput>
+  }
+
+  export type EchoDecisionCreateManySourceMessageInputEnvelope = {
+    data: EchoDecisionCreateManySourceMessageInput | EchoDecisionCreateManySourceMessageInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type EchoMemoryEntryUpsertWithWhereUniqueWithoutSourceMessageInput = {
+    where: EchoMemoryEntryWhereUniqueInput
+    update: XOR<EchoMemoryEntryUpdateWithoutSourceMessageInput, EchoMemoryEntryUncheckedUpdateWithoutSourceMessageInput>
+    create: XOR<EchoMemoryEntryCreateWithoutSourceMessageInput, EchoMemoryEntryUncheckedCreateWithoutSourceMessageInput>
+  }
+
+  export type EchoMemoryEntryUpdateWithWhereUniqueWithoutSourceMessageInput = {
+    where: EchoMemoryEntryWhereUniqueInput
+    data: XOR<EchoMemoryEntryUpdateWithoutSourceMessageInput, EchoMemoryEntryUncheckedUpdateWithoutSourceMessageInput>
+  }
+
+  export type EchoMemoryEntryUpdateManyWithWhereWithoutSourceMessageInput = {
+    where: EchoMemoryEntryScalarWhereInput
+    data: XOR<EchoMemoryEntryUpdateManyMutationInput, EchoMemoryEntryUncheckedUpdateManyWithoutSourceMessageInput>
+  }
+
+  export type EchoMemoryEntryScalarWhereInput = {
+    AND?: EchoMemoryEntryScalarWhereInput | EchoMemoryEntryScalarWhereInput[]
+    OR?: EchoMemoryEntryScalarWhereInput[]
+    NOT?: EchoMemoryEntryScalarWhereInput | EchoMemoryEntryScalarWhereInput[]
+    id?: UuidFilter<"EchoMemoryEntry"> | string
+    createdAt?: DateTimeFilter<"EchoMemoryEntry"> | Date | string
+    updatedAt?: DateTimeFilter<"EchoMemoryEntry"> | Date | string
+    sourceMessageId?: UuidNullableFilter<"EchoMemoryEntry"> | string | null
+    source?: StringFilter<"EchoMemoryEntry"> | string
+    category?: StringFilter<"EchoMemoryEntry"> | string
+    type?: StringFilter<"EchoMemoryEntry"> | string
+    sensitivity?: StringFilter<"EchoMemoryEntry"> | string
+    confidence?: DecimalFilter<"EchoMemoryEntry"> | Decimal | DecimalJsLike | number | string
+    humanSummary?: StringFilter<"EchoMemoryEntry"> | string
+    sourceContent?: StringNullableFilter<"EchoMemoryEntry"> | string | null
+    status?: StringFilter<"EchoMemoryEntry"> | string
+    validated?: BoolFilter<"EchoMemoryEntry"> | boolean
+    links?: JsonFilter<"EchoMemoryEntry">
+    metadata?: JsonFilter<"EchoMemoryEntry">
+  }
+
+  export type EchoHypothesisUpsertWithWhereUniqueWithoutSourceMessageInput = {
+    where: EchoHypothesisWhereUniqueInput
+    update: XOR<EchoHypothesisUpdateWithoutSourceMessageInput, EchoHypothesisUncheckedUpdateWithoutSourceMessageInput>
+    create: XOR<EchoHypothesisCreateWithoutSourceMessageInput, EchoHypothesisUncheckedCreateWithoutSourceMessageInput>
+  }
+
+  export type EchoHypothesisUpdateWithWhereUniqueWithoutSourceMessageInput = {
+    where: EchoHypothesisWhereUniqueInput
+    data: XOR<EchoHypothesisUpdateWithoutSourceMessageInput, EchoHypothesisUncheckedUpdateWithoutSourceMessageInput>
+  }
+
+  export type EchoHypothesisUpdateManyWithWhereWithoutSourceMessageInput = {
+    where: EchoHypothesisScalarWhereInput
+    data: XOR<EchoHypothesisUpdateManyMutationInput, EchoHypothesisUncheckedUpdateManyWithoutSourceMessageInput>
+  }
+
+  export type EchoHypothesisScalarWhereInput = {
+    AND?: EchoHypothesisScalarWhereInput | EchoHypothesisScalarWhereInput[]
+    OR?: EchoHypothesisScalarWhereInput[]
+    NOT?: EchoHypothesisScalarWhereInput | EchoHypothesisScalarWhereInput[]
+    id?: UuidFilter<"EchoHypothesis"> | string
+    createdAt?: DateTimeFilter<"EchoHypothesis"> | Date | string
+    updatedAt?: DateTimeFilter<"EchoHypothesis"> | Date | string
+    sourceMessageId?: UuidNullableFilter<"EchoHypothesis"> | string | null
+    hypothesis?: StringFilter<"EchoHypothesis"> | string
+    confidence?: DecimalFilter<"EchoHypothesis"> | Decimal | DecimalJsLike | number | string
+    observedElements?: StringNullableFilter<"EchoHypothesis"> | string | null
+    validationQuestion?: StringNullableFilter<"EchoHypothesis"> | string | null
+    mathieuResponse?: StringNullableFilter<"EchoHypothesis"> | string | null
+    status?: StringFilter<"EchoHypothesis"> | string
+    metadata?: JsonFilter<"EchoHypothesis">
+  }
+
+  export type EchoDecisionUpsertWithWhereUniqueWithoutSourceMessageInput = {
+    where: EchoDecisionWhereUniqueInput
+    update: XOR<EchoDecisionUpdateWithoutSourceMessageInput, EchoDecisionUncheckedUpdateWithoutSourceMessageInput>
+    create: XOR<EchoDecisionCreateWithoutSourceMessageInput, EchoDecisionUncheckedCreateWithoutSourceMessageInput>
+  }
+
+  export type EchoDecisionUpdateWithWhereUniqueWithoutSourceMessageInput = {
+    where: EchoDecisionWhereUniqueInput
+    data: XOR<EchoDecisionUpdateWithoutSourceMessageInput, EchoDecisionUncheckedUpdateWithoutSourceMessageInput>
+  }
+
+  export type EchoDecisionUpdateManyWithWhereWithoutSourceMessageInput = {
+    where: EchoDecisionScalarWhereInput
+    data: XOR<EchoDecisionUpdateManyMutationInput, EchoDecisionUncheckedUpdateManyWithoutSourceMessageInput>
+  }
+
+  export type EchoDecisionScalarWhereInput = {
+    AND?: EchoDecisionScalarWhereInput | EchoDecisionScalarWhereInput[]
+    OR?: EchoDecisionScalarWhereInput[]
+    NOT?: EchoDecisionScalarWhereInput | EchoDecisionScalarWhereInput[]
+    id?: UuidFilter<"EchoDecision"> | string
+    createdAt?: DateTimeFilter<"EchoDecision"> | Date | string
+    updatedAt?: DateTimeFilter<"EchoDecision"> | Date | string
+    sourceMessageId?: UuidNullableFilter<"EchoDecision"> | string | null
+    decision?: StringFilter<"EchoDecision"> | string
+    reason?: StringNullableFilter<"EchoDecision"> | string | null
+    status?: StringFilter<"EchoDecision"> | string
+    decidedAt?: DateTimeNullableFilter<"EchoDecision"> | Date | string | null
+    metadata?: JsonFilter<"EchoDecision">
+  }
+
+  export type EchoChatMessageCreateWithoutMemoryEntriesInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role: string
+    content: string
+    model?: string | null
+    requestId?: string | null
+    metadata?: JsonNullValueInput | InputJsonValue
+    hypotheses?: EchoHypothesisCreateNestedManyWithoutSourceMessageInput
+    decisions?: EchoDecisionCreateNestedManyWithoutSourceMessageInput
+  }
+
+  export type EchoChatMessageUncheckedCreateWithoutMemoryEntriesInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role: string
+    content: string
+    model?: string | null
+    requestId?: string | null
+    metadata?: JsonNullValueInput | InputJsonValue
+    hypotheses?: EchoHypothesisUncheckedCreateNestedManyWithoutSourceMessageInput
+    decisions?: EchoDecisionUncheckedCreateNestedManyWithoutSourceMessageInput
+  }
+
+  export type EchoChatMessageCreateOrConnectWithoutMemoryEntriesInput = {
+    where: EchoChatMessageWhereUniqueInput
+    create: XOR<EchoChatMessageCreateWithoutMemoryEntriesInput, EchoChatMessageUncheckedCreateWithoutMemoryEntriesInput>
+  }
+
+  export type EchoChatMessageUpsertWithoutMemoryEntriesInput = {
+    update: XOR<EchoChatMessageUpdateWithoutMemoryEntriesInput, EchoChatMessageUncheckedUpdateWithoutMemoryEntriesInput>
+    create: XOR<EchoChatMessageCreateWithoutMemoryEntriesInput, EchoChatMessageUncheckedCreateWithoutMemoryEntriesInput>
+    where?: EchoChatMessageWhereInput
+  }
+
+  export type EchoChatMessageUpdateToOneWithWhereWithoutMemoryEntriesInput = {
+    where?: EchoChatMessageWhereInput
+    data: XOR<EchoChatMessageUpdateWithoutMemoryEntriesInput, EchoChatMessageUncheckedUpdateWithoutMemoryEntriesInput>
+  }
+
+  export type EchoChatMessageUpdateWithoutMemoryEntriesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    model?: NullableStringFieldUpdateOperationsInput | string | null
+    requestId?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: JsonNullValueInput | InputJsonValue
+    hypotheses?: EchoHypothesisUpdateManyWithoutSourceMessageNestedInput
+    decisions?: EchoDecisionUpdateManyWithoutSourceMessageNestedInput
+  }
+
+  export type EchoChatMessageUncheckedUpdateWithoutMemoryEntriesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    model?: NullableStringFieldUpdateOperationsInput | string | null
+    requestId?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: JsonNullValueInput | InputJsonValue
+    hypotheses?: EchoHypothesisUncheckedUpdateManyWithoutSourceMessageNestedInput
+    decisions?: EchoDecisionUncheckedUpdateManyWithoutSourceMessageNestedInput
+  }
+
+  export type EchoChatMessageCreateWithoutHypothesesInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role: string
+    content: string
+    model?: string | null
+    requestId?: string | null
+    metadata?: JsonNullValueInput | InputJsonValue
+    memoryEntries?: EchoMemoryEntryCreateNestedManyWithoutSourceMessageInput
+    decisions?: EchoDecisionCreateNestedManyWithoutSourceMessageInput
+  }
+
+  export type EchoChatMessageUncheckedCreateWithoutHypothesesInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role: string
+    content: string
+    model?: string | null
+    requestId?: string | null
+    metadata?: JsonNullValueInput | InputJsonValue
+    memoryEntries?: EchoMemoryEntryUncheckedCreateNestedManyWithoutSourceMessageInput
+    decisions?: EchoDecisionUncheckedCreateNestedManyWithoutSourceMessageInput
+  }
+
+  export type EchoChatMessageCreateOrConnectWithoutHypothesesInput = {
+    where: EchoChatMessageWhereUniqueInput
+    create: XOR<EchoChatMessageCreateWithoutHypothesesInput, EchoChatMessageUncheckedCreateWithoutHypothesesInput>
+  }
+
+  export type EchoChatMessageUpsertWithoutHypothesesInput = {
+    update: XOR<EchoChatMessageUpdateWithoutHypothesesInput, EchoChatMessageUncheckedUpdateWithoutHypothesesInput>
+    create: XOR<EchoChatMessageCreateWithoutHypothesesInput, EchoChatMessageUncheckedCreateWithoutHypothesesInput>
+    where?: EchoChatMessageWhereInput
+  }
+
+  export type EchoChatMessageUpdateToOneWithWhereWithoutHypothesesInput = {
+    where?: EchoChatMessageWhereInput
+    data: XOR<EchoChatMessageUpdateWithoutHypothesesInput, EchoChatMessageUncheckedUpdateWithoutHypothesesInput>
+  }
+
+  export type EchoChatMessageUpdateWithoutHypothesesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    model?: NullableStringFieldUpdateOperationsInput | string | null
+    requestId?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: JsonNullValueInput | InputJsonValue
+    memoryEntries?: EchoMemoryEntryUpdateManyWithoutSourceMessageNestedInput
+    decisions?: EchoDecisionUpdateManyWithoutSourceMessageNestedInput
+  }
+
+  export type EchoChatMessageUncheckedUpdateWithoutHypothesesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    model?: NullableStringFieldUpdateOperationsInput | string | null
+    requestId?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: JsonNullValueInput | InputJsonValue
+    memoryEntries?: EchoMemoryEntryUncheckedUpdateManyWithoutSourceMessageNestedInput
+    decisions?: EchoDecisionUncheckedUpdateManyWithoutSourceMessageNestedInput
+  }
+
+  export type EchoChatMessageCreateWithoutDecisionsInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role: string
+    content: string
+    model?: string | null
+    requestId?: string | null
+    metadata?: JsonNullValueInput | InputJsonValue
+    memoryEntries?: EchoMemoryEntryCreateNestedManyWithoutSourceMessageInput
+    hypotheses?: EchoHypothesisCreateNestedManyWithoutSourceMessageInput
+  }
+
+  export type EchoChatMessageUncheckedCreateWithoutDecisionsInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role: string
+    content: string
+    model?: string | null
+    requestId?: string | null
+    metadata?: JsonNullValueInput | InputJsonValue
+    memoryEntries?: EchoMemoryEntryUncheckedCreateNestedManyWithoutSourceMessageInput
+    hypotheses?: EchoHypothesisUncheckedCreateNestedManyWithoutSourceMessageInput
+  }
+
+  export type EchoChatMessageCreateOrConnectWithoutDecisionsInput = {
+    where: EchoChatMessageWhereUniqueInput
+    create: XOR<EchoChatMessageCreateWithoutDecisionsInput, EchoChatMessageUncheckedCreateWithoutDecisionsInput>
+  }
+
+  export type EchoChatMessageUpsertWithoutDecisionsInput = {
+    update: XOR<EchoChatMessageUpdateWithoutDecisionsInput, EchoChatMessageUncheckedUpdateWithoutDecisionsInput>
+    create: XOR<EchoChatMessageCreateWithoutDecisionsInput, EchoChatMessageUncheckedCreateWithoutDecisionsInput>
+    where?: EchoChatMessageWhereInput
+  }
+
+  export type EchoChatMessageUpdateToOneWithWhereWithoutDecisionsInput = {
+    where?: EchoChatMessageWhereInput
+    data: XOR<EchoChatMessageUpdateWithoutDecisionsInput, EchoChatMessageUncheckedUpdateWithoutDecisionsInput>
+  }
+
+  export type EchoChatMessageUpdateWithoutDecisionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    model?: NullableStringFieldUpdateOperationsInput | string | null
+    requestId?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: JsonNullValueInput | InputJsonValue
+    memoryEntries?: EchoMemoryEntryUpdateManyWithoutSourceMessageNestedInput
+    hypotheses?: EchoHypothesisUpdateManyWithoutSourceMessageNestedInput
+  }
+
+  export type EchoChatMessageUncheckedUpdateWithoutDecisionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    model?: NullableStringFieldUpdateOperationsInput | string | null
+    requestId?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: JsonNullValueInput | InputJsonValue
+    memoryEntries?: EchoMemoryEntryUncheckedUpdateManyWithoutSourceMessageNestedInput
+    hypotheses?: EchoHypothesisUncheckedUpdateManyWithoutSourceMessageNestedInput
+  }
+
   export type AccesCreateManyClientInput = {
     id?: string
     email: string
@@ -25488,6 +32391,170 @@ export namespace Prisma {
     failureReason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EchoMemoryEntryCreateManySourceMessageInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    source?: string
+    category?: string
+    type: string
+    sensitivity: string
+    confidence?: Decimal | DecimalJsLike | number | string
+    humanSummary: string
+    sourceContent?: string | null
+    status?: string
+    validated?: boolean
+    links?: JsonNullValueInput | InputJsonValue
+    metadata?: JsonNullValueInput | InputJsonValue
+  }
+
+  export type EchoHypothesisCreateManySourceMessageInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    hypothesis: string
+    confidence?: Decimal | DecimalJsLike | number | string
+    observedElements?: string | null
+    validationQuestion?: string | null
+    mathieuResponse?: string | null
+    status?: string
+    metadata?: JsonNullValueInput | InputJsonValue
+  }
+
+  export type EchoDecisionCreateManySourceMessageInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    decision: string
+    reason?: string | null
+    status?: string
+    decidedAt?: Date | string | null
+    metadata?: JsonNullValueInput | InputJsonValue
+  }
+
+  export type EchoMemoryEntryUpdateWithoutSourceMessageInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    source?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    sensitivity?: StringFieldUpdateOperationsInput | string
+    confidence?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    humanSummary?: StringFieldUpdateOperationsInput | string
+    sourceContent?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    validated?: BoolFieldUpdateOperationsInput | boolean
+    links?: JsonNullValueInput | InputJsonValue
+    metadata?: JsonNullValueInput | InputJsonValue
+  }
+
+  export type EchoMemoryEntryUncheckedUpdateWithoutSourceMessageInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    source?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    sensitivity?: StringFieldUpdateOperationsInput | string
+    confidence?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    humanSummary?: StringFieldUpdateOperationsInput | string
+    sourceContent?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    validated?: BoolFieldUpdateOperationsInput | boolean
+    links?: JsonNullValueInput | InputJsonValue
+    metadata?: JsonNullValueInput | InputJsonValue
+  }
+
+  export type EchoMemoryEntryUncheckedUpdateManyWithoutSourceMessageInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    source?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    sensitivity?: StringFieldUpdateOperationsInput | string
+    confidence?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    humanSummary?: StringFieldUpdateOperationsInput | string
+    sourceContent?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    validated?: BoolFieldUpdateOperationsInput | boolean
+    links?: JsonNullValueInput | InputJsonValue
+    metadata?: JsonNullValueInput | InputJsonValue
+  }
+
+  export type EchoHypothesisUpdateWithoutSourceMessageInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    hypothesis?: StringFieldUpdateOperationsInput | string
+    confidence?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    observedElements?: NullableStringFieldUpdateOperationsInput | string | null
+    validationQuestion?: NullableStringFieldUpdateOperationsInput | string | null
+    mathieuResponse?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    metadata?: JsonNullValueInput | InputJsonValue
+  }
+
+  export type EchoHypothesisUncheckedUpdateWithoutSourceMessageInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    hypothesis?: StringFieldUpdateOperationsInput | string
+    confidence?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    observedElements?: NullableStringFieldUpdateOperationsInput | string | null
+    validationQuestion?: NullableStringFieldUpdateOperationsInput | string | null
+    mathieuResponse?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    metadata?: JsonNullValueInput | InputJsonValue
+  }
+
+  export type EchoHypothesisUncheckedUpdateManyWithoutSourceMessageInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    hypothesis?: StringFieldUpdateOperationsInput | string
+    confidence?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    observedElements?: NullableStringFieldUpdateOperationsInput | string | null
+    validationQuestion?: NullableStringFieldUpdateOperationsInput | string | null
+    mathieuResponse?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    metadata?: JsonNullValueInput | InputJsonValue
+  }
+
+  export type EchoDecisionUpdateWithoutSourceMessageInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    decision?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    decidedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    metadata?: JsonNullValueInput | InputJsonValue
+  }
+
+  export type EchoDecisionUncheckedUpdateWithoutSourceMessageInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    decision?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    decidedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    metadata?: JsonNullValueInput | InputJsonValue
+  }
+
+  export type EchoDecisionUncheckedUpdateManyWithoutSourceMessageInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    decision?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    decidedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    metadata?: JsonNullValueInput | InputJsonValue
   }
 
 

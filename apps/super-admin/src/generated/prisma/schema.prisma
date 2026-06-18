@@ -308,6 +308,95 @@ model FinancePayment {
   @@map("finance_payments")
 }
 
+model EchoChatMessage {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  role      String  @db.Text
+  content   String  @db.Text
+  model     String? @db.Text
+  requestId String? @map("request_id") @db.Text
+  metadata  Json    @default("{}") @db.JsonB
+
+  memoryEntries EchoMemoryEntry[]
+  hypotheses    EchoHypothesis[]
+  decisions     EchoDecision[]
+
+  @@index([createdAt(sort: Desc)], map: "idx_echo_chat_messages_created_at")
+  @@index([requestId], map: "idx_echo_chat_messages_request_id")
+  @@map("echo_chat_messages")
+}
+
+model EchoMemoryEntry {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  sourceMessageId String?          @map("source_message_id") @db.Uuid
+  sourceMessage   EchoChatMessage? @relation(fields: [sourceMessageId], references: [id], onDelete: SetNull)
+
+  source        String  @default("chat") @db.Text
+  category      String  @default("general") @db.Text
+  type          String  @db.Text
+  sensitivity   String  @db.Text
+  confidence    Decimal @default(0) @db.Decimal(3, 2)
+  humanSummary  String  @map("human_summary") @db.Text
+  sourceContent String? @map("source_content") @db.Text
+  status        String  @default("en_validation") @db.Text
+  validated     Boolean @default(false)
+  links         Json    @default("[]") @db.JsonB
+  metadata      Json    @default("{}") @db.JsonB
+
+  @@index([createdAt(sort: Desc)], map: "idx_echo_memory_entries_created_at")
+  @@index([type], map: "idx_echo_memory_entries_type")
+  @@index([validated], map: "idx_echo_memory_entries_validated")
+  @@index([sourceMessageId], map: "idx_echo_memory_entries_source_message_id")
+  @@map("echo_memory_entries")
+}
+
+model EchoHypothesis {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  sourceMessageId String?          @map("source_message_id") @db.Uuid
+  sourceMessage   EchoChatMessage? @relation(fields: [sourceMessageId], references: [id], onDelete: SetNull)
+
+  hypothesis         String  @db.Text
+  confidence         Decimal @default(0) @db.Decimal(3, 2)
+  observedElements   String? @map("observed_elements") @db.Text
+  validationQuestion String? @map("validation_question") @db.Text
+  mathieuResponse    String? @map("mathieu_response") @db.Text
+  status             String  @default("en_attente") @db.Text
+  metadata           Json    @default("{}") @db.JsonB
+
+  @@index([createdAt(sort: Desc)], map: "idx_echo_hypotheses_created_at")
+  @@index([status], map: "idx_echo_hypotheses_status")
+  @@index([sourceMessageId], map: "idx_echo_hypotheses_source_message_id")
+  @@map("echo_hypotheses")
+}
+
+model EchoDecision {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  sourceMessageId String?          @map("source_message_id") @db.Uuid
+  sourceMessage   EchoChatMessage? @relation(fields: [sourceMessageId], references: [id], onDelete: SetNull)
+
+  decision  String    @db.Text
+  reason    String?   @db.Text
+  status    String    @default("actif") @db.Text
+  decidedAt DateTime? @map("decided_at") @db.Timestamptz(6)
+  metadata  Json      @default("{}") @db.JsonB
+
+  @@index([createdAt(sort: Desc)], map: "idx_echo_decisions_created_at")
+  @@index([status], map: "idx_echo_decisions_status")
+  @@index([sourceMessageId], map: "idx_echo_decisions_source_message_id")
+  @@map("echo_decisions")
+}
+
 enum ClientStatut {
   TRIAL
   ACTIF

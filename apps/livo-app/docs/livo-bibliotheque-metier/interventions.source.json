@@ -1,0 +1,2585 @@
+{
+  "meta": {
+    "version": "1.0.0",
+    "created": "2026-06-16",
+    "description": "Bibliothèque métier automobile LIVO — 100 interventions courantes pour garages multimarques",
+    "source": "Pratiques métier standardisées — usage interne LIVO",
+    "total": 100
+  },
+  "interventions": [
+    {
+      "id": "ENT-001",
+      "categorie": "Entretien",
+      "intervention": "Vidange huile moteur + filtre à huile",
+      "synonymes": [
+        "vidange",
+        "vidange moteur",
+        "vidange huile",
+        "changement huile",
+        "remplacement huile moteur",
+        "vidange + filtre",
+        "oil change"
+      ],
+      "taches_standard": [
+        "Dépose du bouchon de vidange",
+        "Vidange de l'huile moteur",
+        "Remplacement du filtre à huile",
+        "Repose et serrage du bouchon de vidange",
+        "Remplissage avec huile préconisée",
+        "Contrôle niveau huile",
+        "Réinitialisation indicateur de service",
+        "Contrôle visuel fuites"
+      ],
+      "controles_associes": [
+        "Contrôle niveau liquide de refroidissement",
+        "Contrôle niveau liquide de frein",
+        "Contrôle niveau lave-glace",
+        "Contrôle pression pneus",
+        "Contrôle visuel sous véhicule"
+      ],
+      "frequence": "Très fréquent"
+    },
+    {
+      "id": "ENT-002",
+      "categorie": "Entretien",
+      "intervention": "Remplacement filtre à air moteur",
+      "synonymes": [
+        "filtre air",
+        "filtre à air",
+        "changement filtre air",
+        "remplacement filtre air moteur"
+      ],
+      "taches_standard": [
+        "Dépose du boîtier de filtre à air",
+        "Remplacement de l'élément filtrant",
+        "Repose du boîtier",
+        "Contrôle conduit d'admission"
+      ],
+      "controles_associes": [
+        "Contrôle état conduit d'admission",
+        "Contrôle état durites d'air",
+        "Contrôle débit massique air (si anomalie)"
+      ],
+      "frequence": "Très fréquent"
+    },
+    {
+      "id": "ENT-003",
+      "categorie": "Entretien",
+      "intervention": "Remplacement filtre d'habitacle (filtre à pollen)",
+      "synonymes": [
+        "filtre habitacle",
+        "filtre pollen",
+        "filtre climatisation habitacle",
+        "filtre cabine",
+        "changement filtre pollen"
+      ],
+      "taches_standard": [
+        "Dépose du filtre habitacle",
+        "Remplacement de l'élément filtrant",
+        "Repose du filtre habitacle",
+        "Vérification du bon positionnement"
+      ],
+      "controles_associes": [
+        "Contrôle état boîtier filtre habitacle",
+        "Test fonctionnement ventilation"
+      ],
+      "frequence": "Très fréquent"
+    },
+    {
+      "id": "ENT-004",
+      "categorie": "Entretien",
+      "intervention": "Remplacement filtre à carburant",
+      "synonymes": [
+        "filtre carburant",
+        "filtre gasoil",
+        "filtre essence",
+        "changement filtre carburant",
+        "filtre gazole"
+      ],
+      "taches_standard": [
+        "Dépressurisation du circuit carburant",
+        "Dépose du filtre à carburant",
+        "Remplacement du filtre",
+        "Purge d'air du circuit (diesel)",
+        "Contrôle étanchéité raccords",
+        "Test démarrage"
+      ],
+      "controles_associes": [
+        "Contrôle état tuyaux carburant",
+        "Contrôle pression carburant",
+        "Contrôle absence de fuite"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "ENT-005",
+      "categorie": "Entretien",
+      "intervention": "Révision complète",
+      "synonymes": [
+        "révision",
+        "grande révision",
+        "révision périodique",
+        "service complet",
+        "entretien complet",
+        "full service"
+      ],
+      "taches_standard": [
+        "Vidange huile moteur + filtre à huile",
+        "Remplacement filtre à air",
+        "Remplacement filtre habitacle",
+        "Remplacement filtre carburant (si applicable)",
+        "Remplacement bougies d'allumage (si applicable)",
+        "Contrôle et appoint de tous les niveaux",
+        "Contrôle et réglage pression pneus",
+        "Contrôle freinage",
+        "Contrôle éclairage",
+        "Contrôle essuie-glaces",
+        "Diagnostic électronique",
+        "Contrôle visuel sous véhicule",
+        "Réinitialisation indicateur de service"
+      ],
+      "controles_associes": [
+        "Contrôle état batterie",
+        "Contrôle état courroie accessoires",
+        "Contrôle état suspension",
+        "Contrôle direction",
+        "Contrôle échappement"
+      ],
+      "frequence": "Très fréquent"
+    },
+    {
+      "id": "ENT-006",
+      "categorie": "Entretien",
+      "intervention": "Remplacement bougies d'allumage",
+      "synonymes": [
+        "bougies",
+        "bougie allumage",
+        "changement bougies",
+        "remplacement bougies",
+        "spark plugs"
+      ],
+      "taches_standard": [
+        "Dépose des bougies d'allumage",
+        "Contrôle état fils de bougie (si applicable)",
+        "Remplacement des bougies",
+        "Contrôle écartement si nécessaire",
+        "Repose des bougies neuves"
+      ],
+      "controles_associes": [
+        "Contrôle état bobines d'allumage",
+        "Contrôle fils de bougie",
+        "Diagnostic allumage si anomalie"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "ENT-007",
+      "categorie": "Entretien",
+      "intervention": "Remplacement bougies de préchauffage",
+      "synonymes": [
+        "bougies préchauffage",
+        "bougies de chauffe",
+        "préchauffage diesel",
+        "remplacement bougies diesel"
+      ],
+      "taches_standard": [
+        "Dépose des bougies de préchauffage",
+        "Remplacement des bougies de préchauffage",
+        "Contrôle résistance des bougies",
+        "Contrôle voyant préchauffage"
+      ],
+      "controles_associes": [
+        "Diagnostic préchauffage",
+        "Contrôle relais de préchauffage",
+        "Contrôle voyant tableau de bord"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "ENT-008",
+      "categorie": "Entretien",
+      "intervention": "Remplacement courroie d'accessoires",
+      "synonymes": [
+        "courroie accessoires",
+        "courroie alternateur",
+        "courroie poly-V",
+        "courroie serpentine",
+        "remplacement courroie"
+      ],
+      "taches_standard": [
+        "Dépose de la courroie d'accessoires",
+        "Contrôle état des galets tendeurs",
+        "Remplacement de la courroie",
+        "Remplacement galet tendeur si nécessaire",
+        "Contrôle tension courroie",
+        "Test fonctionnement"
+      ],
+      "controles_associes": [
+        "Contrôle état alternateur",
+        "Contrôle état compresseur climatisation",
+        "Contrôle état pompe de direction assistée"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "ENT-009",
+      "categorie": "Entretien",
+      "intervention": "Remplacement liquide de refroidissement",
+      "synonymes": [
+        "liquide refroidissement",
+        "liquide refroidissement moteur",
+        "antigel",
+        "remplacement antigel",
+        "vidange circuit de refroidissement",
+        "coolant"
+      ],
+      "taches_standard": [
+        "Vidange du circuit de refroidissement",
+        "Rinçage du circuit si nécessaire",
+        "Remplacement du liquide de refroidissement",
+        "Purge d'air du circuit",
+        "Contrôle étanchéité",
+        "Contrôle température de fonctionnement"
+      ],
+      "controles_associes": [
+        "Contrôle état durites de refroidissement",
+        "Contrôle état radiateur",
+        "Contrôle thermostat",
+        "Contrôle pompe à eau"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "ENT-010",
+      "categorie": "Entretien",
+      "intervention": "Remplacement liquide de frein",
+      "synonymes": [
+        "liquide de frein",
+        "purge freins",
+        "remplacement liquide freinage",
+        "DOT",
+        "brake fluid"
+      ],
+      "taches_standard": [
+        "Vidange du liquide de frein usagé",
+        "Remplissage avec liquide neuf",
+        "Purge de chaque roue",
+        "Contrôle niveau maître cylindre",
+        "Contrôle étanchéité du circuit"
+      ],
+      "controles_associes": [
+        "Contrôle état flexibles de frein",
+        "Contrôle état étriers",
+        "Contrôle voyant niveau liquide"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "FRE-001",
+      "categorie": "Freinage",
+      "intervention": "Remplacement plaquettes de frein avant",
+      "synonymes": [
+        "plaquettes avant",
+        "plaquettes de frein avant",
+        "frein avant",
+        "remplacement plaquettes avant",
+        "kit plaquettes avant",
+        "brake pads front"
+      ],
+      "taches_standard": [
+        "Dépose des roues avant",
+        "Dépose des étriers de frein avant",
+        "Dépose des plaquettes usagées",
+        "Contrôle visuel des disques avant",
+        "Rembobinage des pistons d'étrier",
+        "Remplacement des plaquettes neuves",
+        "Repose des étriers",
+        "Repose des roues",
+        "Contrôle niveau liquide de frein",
+        "Test de freinage"
+      ],
+      "controles_associes": [
+        "Contrôle état et épaisseur des disques avant",
+        "Contrôle état des flexibles de frein avant",
+        "Contrôle état des étriers",
+        "Contrôle témoin d'usure"
+      ],
+      "frequence": "Très fréquent"
+    },
+    {
+      "id": "FRE-002",
+      "categorie": "Freinage",
+      "intervention": "Remplacement plaquettes de frein arrière",
+      "synonymes": [
+        "plaquettes arrière",
+        "plaquettes de frein arrière",
+        "frein arrière",
+        "remplacement plaquettes arrière",
+        "kit plaquettes arrière"
+      ],
+      "taches_standard": [
+        "Dépose des roues arrière",
+        "Dépose des étriers de frein arrière",
+        "Dépose des plaquettes usagées",
+        "Contrôle visuel des disques arrière",
+        "Rembobinage des pistons d'étrier (rotation si frein de parking intégré)",
+        "Remplacement des plaquettes neuves",
+        "Réglage frein de parking si nécessaire",
+        "Repose des étriers",
+        "Repose des roues",
+        "Test de freinage"
+      ],
+      "controles_associes": [
+        "Contrôle état et épaisseur des disques arrière",
+        "Contrôle flexibles de frein arrière",
+        "Contrôle câble frein de parking"
+      ],
+      "frequence": "Très fréquent"
+    },
+    {
+      "id": "FRE-003",
+      "categorie": "Freinage",
+      "intervention": "Remplacement disques + plaquettes avant",
+      "synonymes": [
+        "disques plaquettes avant",
+        "kit freinage avant",
+        "remplacement disques avant",
+        "disques avant + plaquettes",
+        "freinage avant complet"
+      ],
+      "taches_standard": [
+        "Dépose des roues avant",
+        "Dépose des étriers de frein avant",
+        "Dépose des supports d'étrier",
+        "Dépose des disques usagés",
+        "Nettoyage des moyeux",
+        "Pose des disques neufs",
+        "Pose des supports d'étrier",
+        "Remplacement des plaquettes neuves",
+        "Repose des étriers",
+        "Repose des roues",
+        "Contrôle niveau liquide de frein",
+        "Rodage des freins (essai)",
+        "Test de freinage"
+      ],
+      "controles_associes": [
+        "Contrôle flexibles de frein avant",
+        "Contrôle état étriers avant",
+        "Contrôle roulement de roue avant"
+      ],
+      "frequence": "Très fréquent"
+    },
+    {
+      "id": "FRE-004",
+      "categorie": "Freinage",
+      "intervention": "Remplacement disques + plaquettes arrière",
+      "synonymes": [
+        "disques plaquettes arrière",
+        "kit freinage arrière",
+        "remplacement disques arrière",
+        "disques arrière + plaquettes",
+        "freinage arrière complet"
+      ],
+      "taches_standard": [
+        "Dépose des roues arrière",
+        "Dépose des étriers de frein arrière",
+        "Dépose des supports d'étrier",
+        "Dépose des disques usagés",
+        "Nettoyage des moyeux",
+        "Pose des disques neufs",
+        "Remplacement des plaquettes neuves",
+        "Réglage frein de parking si nécessaire",
+        "Repose des étriers",
+        "Repose des roues",
+        "Rodage des freins (essai)",
+        "Test de freinage"
+      ],
+      "controles_associes": [
+        "Contrôle flexibles de frein arrière",
+        "Contrôle câble frein de parking",
+        "Contrôle roulement de roue arrière"
+      ],
+      "frequence": "Très fréquent"
+    },
+    {
+      "id": "FRE-005",
+      "categorie": "Freinage",
+      "intervention": "Remplacement tambours + garnitures arrière",
+      "synonymes": [
+        "tambours arrière",
+        "garnitures tambour",
+        "freins à tambour",
+        "kit tambour arrière",
+        "remplacement garnitures tambour"
+      ],
+      "taches_standard": [
+        "Dépose des roues arrière",
+        "Dépose des tambours",
+        "Dépose des garnitures usagées",
+        "Nettoyage plateau de frein",
+        "Pose des garnitures neuves",
+        "Pose des tambours neufs ou rectifiés",
+        "Réglage du frein à tambour",
+        "Réglage câble frein de parking",
+        "Repose des roues",
+        "Test de freinage"
+      ],
+      "controles_associes": [
+        "Contrôle cylindres de roue",
+        "Contrôle câble frein de parking",
+        "Contrôle ressorts de rappel garnitures"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "FRE-006",
+      "categorie": "Freinage",
+      "intervention": "Remplacement flexible de frein",
+      "synonymes": [
+        "flexible frein",
+        "flexible de frein",
+        "durite frein",
+        "remplacement flexible freinage"
+      ],
+      "taches_standard": [
+        "Dépose du flexible de frein concerné",
+        "Pose du flexible neuf",
+        "Purge du circuit de frein",
+        "Contrôle étanchéité",
+        "Test de freinage"
+      ],
+      "controles_associes": [
+        "Contrôle état des autres flexibles",
+        "Contrôle niveau liquide de frein",
+        "Contrôle absence de fuite"
+      ],
+      "frequence": "Occasionnel"
+    },
+    {
+      "id": "FRE-007",
+      "categorie": "Freinage",
+      "intervention": "Remplacement étrier de frein",
+      "synonymes": [
+        "étrier frein",
+        "étrier de frein avant",
+        "étrier de frein arrière",
+        "remplacement étrier"
+      ],
+      "taches_standard": [
+        "Dépose de la roue concernée",
+        "Purge préalable du circuit",
+        "Dépose de l'étrier défectueux",
+        "Pose de l'étrier neuf ou révisé",
+        "Purge de l'air dans le circuit",
+        "Contrôle étanchéité",
+        "Repose de la roue",
+        "Test de freinage"
+      ],
+      "controles_associes": [
+        "Contrôle état disque et plaquettes",
+        "Contrôle flexible de frein associé",
+        "Contrôle niveau liquide de frein"
+      ],
+      "frequence": "Occasionnel"
+    },
+    {
+      "id": "FRE-008",
+      "categorie": "Freinage",
+      "intervention": "Réglage et câble frein de parking",
+      "synonymes": [
+        "frein à main",
+        "frein de parking",
+        "câble frein main",
+        "réglage frein à main",
+        "remplacement câble frein parking"
+      ],
+      "taches_standard": [
+        "Contrôle efficacité frein de parking",
+        "Réglage ou remplacement du câble",
+        "Réglage des garnitures ou mécanisme",
+        "Test efficacité frein de parking"
+      ],
+      "controles_associes": [
+        "Contrôle état garnitures/plaquettes arrière",
+        "Contrôle mécanisme de frein de parking"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "PNE-001",
+      "categorie": "Pneumatiques",
+      "intervention": "Montage / démontage pneus",
+      "synonymes": [
+        "changement pneus",
+        "montage pneus",
+        "démontage pneus",
+        "pose pneus",
+        "remplacement pneus"
+      ],
+      "taches_standard": [
+        "Dépose de la roue",
+        "Démontage du pneu usagé",
+        "Contrôle état de la jante",
+        "Montage du pneu neuf",
+        "Gonflage à la pression préconisée",
+        "Equilibrage de la roue",
+        "Repose de la roue",
+        "Contrôle pression finale"
+      ],
+      "controles_associes": [
+        "Contrôle état valve",
+        "Contrôle état jante",
+        "Contrôle TPMS si équipé"
+      ],
+      "frequence": "Très fréquent"
+    },
+    {
+      "id": "PNE-002",
+      "categorie": "Pneumatiques",
+      "intervention": "Équilibrage roues",
+      "synonymes": [
+        "équilibrage",
+        "rééquilibrage roues",
+        "balancing",
+        "équilibrage pneus"
+      ],
+      "taches_standard": [
+        "Dépose de la roue",
+        "Dépose des masses d'équilibrage existantes",
+        "Mesure du déséquilibre sur machine",
+        "Pose des masses d'équilibrage",
+        "Repose de la roue",
+        "Contrôle vibrations à l'essai"
+      ],
+      "controles_associes": [
+        "Contrôle état pneus",
+        "Contrôle état jantes",
+        "Contrôle géométrie si vibrations persistantes"
+      ],
+      "frequence": "Très fréquent"
+    },
+    {
+      "id": "PNE-003",
+      "categorie": "Pneumatiques",
+      "intervention": "Permutation des pneus",
+      "synonymes": [
+        "permutation pneus",
+        "rotation des pneus",
+        "inversion pneus",
+        "rotation pneus"
+      ],
+      "taches_standard": [
+        "Dépose des 4 roues",
+        "Permutation selon schéma préconisé",
+        "Contrôle pression de chaque pneu",
+        "Repose des roues",
+        "Réinitialisation TPMS si nécessaire"
+      ],
+      "controles_associes": [
+        "Contrôle usure pneus",
+        "Contrôle état pneus",
+        "Contrôle freinage"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "PNE-004",
+      "categorie": "Pneumatiques",
+      "intervention": "Réparation crevaison",
+      "synonymes": [
+        "crevaison",
+        "réparation pneu",
+        "bouchage crevaison",
+        "rustine pneu",
+        "repair crevaison"
+      ],
+      "taches_standard": [
+        "Dépose de la roue",
+        "Démontage du pneu",
+        "Localisation de la perforation",
+        "Réparation par patch intérieur ou mèche (si réparable)",
+        "Remontage du pneu",
+        "Gonflage et contrôle étanchéité",
+        "Équilibrage",
+        "Repose de la roue"
+      ],
+      "controles_associes": [
+        "Contrôle état général du pneu",
+        "Contrôle corps étranger restant",
+        "Contrôle zone de crevaison (réparabilité)"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "PNE-005",
+      "categorie": "Pneumatiques",
+      "intervention": "Contrôle et gonflage pression pneus",
+      "synonymes": [
+        "pression pneus",
+        "gonflage pneus",
+        "contrôle pression",
+        "TPMS",
+        "contrôle gonflage"
+      ],
+      "taches_standard": [
+        "Contrôle pression des 4 pneus",
+        "Contrôle pression roue de secours",
+        "Ajustement à la pression préconisée",
+        "Contrôle état des valves"
+      ],
+      "controles_associes": [
+        "Contrôle usure des pneus",
+        "Contrôle témoin TPMS"
+      ],
+      "frequence": "Très fréquent"
+    },
+    {
+      "id": "PNE-006",
+      "categorie": "Pneumatiques",
+      "intervention": "Remplacement valve de roue",
+      "synonymes": [
+        "valve roue",
+        "valve pneu",
+        "remplacement valve",
+        "valve TPMS"
+      ],
+      "taches_standard": [
+        "Dépose de la roue",
+        "Démontage du pneu",
+        "Remplacement de la valve (caoutchouc ou TPMS)",
+        "Remontage du pneu",
+        "Gonflage et contrôle étanchéité",
+        "Équilibrage",
+        "Repose de la roue"
+      ],
+      "controles_associes": [
+        "Contrôle état général du pneu",
+        "Initialisation capteur TPMS si applicable"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "DIS-001",
+      "categorie": "Distribution",
+      "intervention": "Remplacement kit de distribution (courroie + tendeur + galet)",
+      "synonymes": [
+        "distribution",
+        "courroie de distribution",
+        "kit distribution",
+        "remplacement distribution",
+        "timing belt"
+      ],
+      "taches_standard": [
+        "Repérage et contrôle du calage moteur",
+        "Dépose des protections de distribution",
+        "Dépose de la courroie usagée",
+        "Dépose galet tendeur et galet enrouleur",
+        "Contrôle état de la pompe à eau",
+        "Pose galet tendeur neuf",
+        "Pose galet enrouleur neuf",
+        "Pose courroie neuve",
+        "Mise en tension de la courroie",
+        "Contrôle calage moteur",
+        "Repose des protections",
+        "Démarrage et contrôle fonctionnement"
+      ],
+      "controles_associes": [
+        "Contrôle et remplacement pompe à eau (recommandé)",
+        "Contrôle joints d'arbre à cames",
+        "Contrôle étanchéité moteur"
+      ],
+      "frequence": "Très fréquent"
+    },
+    {
+      "id": "DIS-002",
+      "categorie": "Distribution",
+      "intervention": "Remplacement kit distribution + pompe à eau",
+      "synonymes": [
+        "kit distribution pompe à eau",
+        "distribution + pompe",
+        "remplacement distribution complet",
+        "timing kit + water pump"
+      ],
+      "taches_standard": [
+        "Vidange liquide de refroidissement",
+        "Repérage et contrôle du calage moteur",
+        "Dépose des protections de distribution",
+        "Dépose courroie, galets, pompe à eau",
+        "Pose pompe à eau neuve + joint",
+        "Pose galets neufs",
+        "Pose courroie neuve",
+        "Mise en tension et contrôle calage",
+        "Remplissage et purge circuit de refroidissement",
+        "Repose des protections",
+        "Test fonctionnement"
+      ],
+      "controles_associes": [
+        "Contrôle joints moteur",
+        "Contrôle niveau refroidissement après rodage",
+        "Contrôle absence fuite"
+      ],
+      "frequence": "Très fréquent"
+    },
+    {
+      "id": "DIS-003",
+      "categorie": "Distribution",
+      "intervention": "Remplacement chaîne de distribution",
+      "synonymes": [
+        "chaîne distribution",
+        "chaîne de distribution",
+        "kit chaîne distribution",
+        "timing chain"
+      ],
+      "taches_standard": [
+        "Dépose des éléments nécessaires à l'accès à la chaîne",
+        "Calage du moteur",
+        "Dépose de la chaîne usagée",
+        "Remplacement tendeur de chaîne",
+        "Remplacement guides de chaîne",
+        "Pose de la chaîne neuve",
+        "Contrôle tension et calage",
+        "Repose des éléments",
+        "Démarrage et contrôle bruit"
+      ],
+      "controles_associes": [
+        "Contrôle pression d'huile",
+        "Contrôle niveau d'huile",
+        "Contrôle absence de claquement après démarrage"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "EMB-001",
+      "categorie": "Embrayage",
+      "intervention": "Remplacement kit embrayage",
+      "synonymes": [
+        "embrayage",
+        "kit embrayage",
+        "remplacement embrayage",
+        "disque embrayage",
+        "mécanisme embrayage",
+        "clutch kit"
+      ],
+      "taches_standard": [
+        "Dépose de la boîte de vitesses",
+        "Dépose du kit embrayage usagé",
+        "Contrôle état du volant moteur",
+        "Contrôle état du roulement de butée",
+        "Pose du disque d'embrayage neuf",
+        "Pose du mécanisme d'embrayage neuf",
+        "Pose du roulement de butée neuf",
+        "Repose de la boîte de vitesses",
+        "Réglage pédale d'embrayage si nécessaire",
+        "Test fonctionnement"
+      ],
+      "controles_associes": [
+        "Contrôle état volant moteur (bi-masse)",
+        "Contrôle joint spi arbre d'entrée boîte",
+        "Contrôle joint spi vilebrequin",
+        "Contrôle huile boîte de vitesses"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "EMB-002",
+      "categorie": "Embrayage",
+      "intervention": "Remplacement kit embrayage + volant moteur bi-masse",
+      "synonymes": [
+        "volant bi-masse",
+        "DMF",
+        "kit embrayage + volant bi-masse",
+        "remplacement volant moteur",
+        "dual mass flywheel"
+      ],
+      "taches_standard": [
+        "Dépose de la boîte de vitesses",
+        "Dépose du kit embrayage et volant moteur",
+        "Pose du volant moteur neuf",
+        "Pose du disque d'embrayage neuf",
+        "Pose du mécanisme d'embrayage neuf",
+        "Pose du roulement de butée neuf",
+        "Repose de la boîte de vitesses",
+        "Test fonctionnement et absence de vibration"
+      ],
+      "controles_associes": [
+        "Contrôle joint spi arbre d'entrée boîte",
+        "Contrôle joint spi vilebrequin",
+        "Contrôle huile boîte de vitesses"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "EMB-003",
+      "categorie": "Embrayage",
+      "intervention": "Remplacement câble d'embrayage",
+      "synonymes": [
+        "câble embrayage",
+        "câble de débrayage",
+        "remplacement câble embrayage"
+      ],
+      "taches_standard": [
+        "Dépose du câble d'embrayage usagé",
+        "Pose du câble neuf",
+        "Réglage tension câble",
+        "Test fonctionnement pédale"
+      ],
+      "controles_associes": [
+        "Contrôle état fourchette d'embrayage",
+        "Contrôle roulement de butée"
+      ],
+      "frequence": "Occasionnel"
+    },
+    {
+      "id": "SUS-001",
+      "categorie": "Suspension",
+      "intervention": "Remplacement amortisseurs avant",
+      "synonymes": [
+        "amortisseurs avant",
+        "amortisseur avant gauche",
+        "amortisseur avant droit",
+        "remplacement amortisseurs avant",
+        "shock absorbers front"
+      ],
+      "taches_standard": [
+        "Dépose des roues avant",
+        "Dépose des amortisseurs avant",
+        "Dépose des coupelles et butées",
+        "Transfert des butées et coupelles si réutilisables",
+        "Pose des amortisseurs neufs avec butées neuves",
+        "Repose des roues",
+        "Contrôle géométrie recommandé"
+      ],
+      "controles_associes": [
+        "Contrôle état des ressorts avant",
+        "Contrôle état des rotules",
+        "Contrôle état des silent-blocs",
+        "Contrôle géométrie (parallélisme)"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "SUS-002",
+      "categorie": "Suspension",
+      "intervention": "Remplacement amortisseurs arrière",
+      "synonymes": [
+        "amortisseurs arrière",
+        "amortisseur arrière gauche",
+        "amortisseur arrière droit",
+        "remplacement amortisseurs arrière"
+      ],
+      "taches_standard": [
+        "Dépose des roues arrière",
+        "Dépose des amortisseurs arrière",
+        "Pose des amortisseurs neufs",
+        "Repose des roues",
+        "Contrôle géométrie si nécessaire"
+      ],
+      "controles_associes": [
+        "Contrôle état des ressorts arrière",
+        "Contrôle état des silent-blocs",
+        "Contrôle géométrie arrière"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "SUS-003",
+      "categorie": "Suspension",
+      "intervention": "Remplacement kit amortisseur + ressort avant",
+      "synonymes": [
+        "kit amortisseur ressort avant",
+        "kit suspension avant",
+        "jambe de force avant",
+        "strut avant"
+      ],
+      "taches_standard": [
+        "Dépose des roues avant",
+        "Dépose des jambes de suspension",
+        "Décompression et dépose des ressorts sur étau à ressorts",
+        "Remplacement amortisseur et ressort",
+        "Remplacement butée de suspension",
+        "Repose des jambes de suspension",
+        "Repose des roues",
+        "Contrôle géométrie"
+      ],
+      "controles_associes": [
+        "Contrôle rotules de direction",
+        "Contrôle rotules de suspension",
+        "Géométrie (parallélisme et carrossage)"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "SUS-004",
+      "categorie": "Suspension",
+      "intervention": "Remplacement silent-blocs bras de suspension",
+      "synonymes": [
+        "silent-blocs",
+        "silentbloc bras de suspension",
+        "bague bras de suspension",
+        "pivot bras de suspension",
+        "remplacement silent-blocs"
+      ],
+      "taches_standard": [
+        "Dépose du bras de suspension concerné",
+        "Dépose des silent-blocs usagés (presse)",
+        "Pose des silent-blocs neufs (presse)",
+        "Repose du bras de suspension",
+        "Contrôle géométrie"
+      ],
+      "controles_associes": [
+        "Contrôle rotules de suspension",
+        "Contrôle géométrie (parallélisme)"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "SUS-005",
+      "categorie": "Suspension",
+      "intervention": "Remplacement rotule de suspension",
+      "synonymes": [
+        "rotule suspension",
+        "rotule inférieure",
+        "rotule de triangle",
+        "remplacement rotule"
+      ],
+      "taches_standard": [
+        "Dépose de la roue concernée",
+        "Dépose de la rotule usagée",
+        "Pose de la rotule neuve",
+        "Repose et assemblage",
+        "Repose de la roue",
+        "Contrôle géométrie"
+      ],
+      "controles_associes": [
+        "Contrôle état bras de suspension",
+        "Contrôle silent-blocs bras",
+        "Contrôle géométrie"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "SUS-006",
+      "categorie": "Suspension",
+      "intervention": "Remplacement biellette de barre stabilisatrice",
+      "synonymes": [
+        "biellette barre stab",
+        "barre stabilisatrice",
+        "biellette anti-roulis",
+        "remplacement biellette",
+        "anti-roll bar link"
+      ],
+      "taches_standard": [
+        "Dépose de la roue concernée si nécessaire",
+        "Dépose de la biellette usagée",
+        "Pose de la biellette neuve",
+        "Contrôle état barre stabilisatrice"
+      ],
+      "controles_associes": [
+        "Contrôle état barre stabilisatrice",
+        "Contrôle silent-blocs barre stab",
+        "Contrôle état de l'autre biellette"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "SUS-007",
+      "categorie": "Suspension",
+      "intervention": "Remplacement roulement de roue avant",
+      "synonymes": [
+        "roulement roue avant",
+        "roulement avant gauche",
+        "roulement avant droit",
+        "moyeu avant",
+        "wheel bearing front"
+      ],
+      "taches_standard": [
+        "Dépose de la roue avant concernée",
+        "Dépose de l'étrier de frein",
+        "Dépose du moyeu ou support de fusée",
+        "Remplacement du roulement (presse ou remplacement moyeu complet)",
+        "Repose du moyeu",
+        "Repose de l'étrier",
+        "Repose de la roue",
+        "Test de bruit à l'essai routier"
+      ],
+      "controles_associes": [
+        "Contrôle état de la transmission",
+        "Contrôle rotule de direction",
+        "Contrôle rotule de suspension"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "SUS-008",
+      "categorie": "Suspension",
+      "intervention": "Remplacement roulement de roue arrière",
+      "synonymes": [
+        "roulement roue arrière",
+        "roulement arrière gauche",
+        "roulement arrière droit",
+        "moyeu arrière",
+        "wheel bearing rear"
+      ],
+      "taches_standard": [
+        "Dépose de la roue arrière concernée",
+        "Dépose de l'étrier ou tambour",
+        "Dépose du moyeu ou fusée arrière",
+        "Remplacement du roulement",
+        "Repose",
+        "Test de bruit à l'essai routier"
+      ],
+      "controles_associes": [
+        "Contrôle freinage arrière",
+        "Contrôle état de la transmission arrière (4x4)"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "DIR-001",
+      "categorie": "Direction",
+      "intervention": "Contrôle et réglage parallélisme",
+      "synonymes": [
+        "parallélisme",
+        "géométrie",
+        "réglage parallélisme",
+        "alignement roues",
+        "géométrie roues",
+        "wheel alignment"
+      ],
+      "taches_standard": [
+        "Contrôle visuel de la suspension",
+        "Mesure géométrie sur banc d'alignement",
+        "Réglage parallélisme avant",
+        "Réglage parallélisme arrière si nécessaire",
+        "Restitution des valeurs au client"
+      ],
+      "controles_associes": [
+        "Contrôle état rotules de direction",
+        "Contrôle état biellettes de direction",
+        "Contrôle pression pneus avant réglage"
+      ],
+      "frequence": "Très fréquent"
+    },
+    {
+      "id": "DIR-002",
+      "categorie": "Direction",
+      "intervention": "Remplacement rotule de direction",
+      "synonymes": [
+        "rotule direction",
+        "rotule de biellette",
+        "biellette de direction",
+        "remplacement rotule direction",
+        "tie rod end"
+      ],
+      "taches_standard": [
+        "Dépose de la roue concernée",
+        "Dépose de la rotule de direction",
+        "Pose de la rotule de direction neuve",
+        "Repose",
+        "Réglage parallélisme"
+      ],
+      "controles_associes": [
+        "Contrôle crémaillère de direction",
+        "Contrôle rotule de suspension associée",
+        "Parallélisme obligatoire après remplacement"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "DIR-003",
+      "categorie": "Direction",
+      "intervention": "Remplacement joint de cardan / soufflet de transmission",
+      "synonymes": [
+        "cardan",
+        "joint de cardan",
+        "soufflet cardan",
+        "soufflet de transmission",
+        "remplacement soufflet",
+        "CV boot"
+      ],
+      "taches_standard": [
+        "Dépose de la demi-transmission concernée",
+        "Dépose du soufflet / joint de cardan défectueux",
+        "Nettoyage et graissage",
+        "Pose du soufflet neuf avec graisse",
+        "Repose de la demi-transmission",
+        "Test de rotation et bruit"
+      ],
+      "controles_associes": [
+        "Contrôle état de l'autre cardan de la même demi-arbre",
+        "Contrôle état roulement de roue",
+        "Contrôle bruit à l'essai"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "DIR-004",
+      "categorie": "Direction",
+      "intervention": "Remplacement demi-arbre de transmission",
+      "synonymes": [
+        "demi-arbre transmission",
+        "arbre de transmission",
+        "demi-transmission",
+        "tripode",
+        "remplacement arbre transmission"
+      ],
+      "taches_standard": [
+        "Dépose de la roue concernée",
+        "Dépose de la demi-transmission",
+        "Pose de la demi-transmission neuve ou reconditionnée",
+        "Repose de la roue",
+        "Test de bruit et vibration"
+      ],
+      "controles_associes": [
+        "Contrôle joint spi de boîte côté transmission",
+        "Contrôle roulement de roue",
+        "Contrôle rotule de suspension"
+      ],
+      "frequence": "Occasionnel"
+    },
+    {
+      "id": "CLI-001",
+      "categorie": "Climatisation",
+      "intervention": "Recharge climatisation",
+      "synonymes": [
+        "recharge clim",
+        "recharge climatisation",
+        "remplissage gaz clim",
+        "charge clim",
+        "AC recharge"
+      ],
+      "taches_standard": [
+        "Contrôle pression basse et haute pression",
+        "Récupération du fluide frigorigène résiduel",
+        "Contrôle d'étanchéité du circuit",
+        "Remplacement huile compresseur si nécessaire",
+        "Recharge en fluide frigorigène à la quantité préconisée",
+        "Test fonctionnement climatisation"
+      ],
+      "controles_associes": [
+        "Contrôle filtrer déshydrateur",
+        "Contrôle compresseur climatisation",
+        "Contrôle ventilateur condenseur"
+      ],
+      "frequence": "Très fréquent"
+    },
+    {
+      "id": "CLI-002",
+      "categorie": "Climatisation",
+      "intervention": "Contrôle d'étanchéité climatisation",
+      "synonymes": [
+        "test étanchéité clim",
+        "fuite climatisation",
+        "recherche fuite clim",
+        "leak test AC"
+      ],
+      "taches_standard": [
+        "Injection de colorant fluorescent",
+        "Contrôle par lampe UV de toutes les connexions",
+        "Contrôle au détecteur électronique",
+        "Identification de la fuite",
+        "Réparation ou remplacement du composant défectueux",
+        "Recharge et test final"
+      ],
+      "controles_associes": [
+        "Contrôle état tuyaux et raccords",
+        "Contrôle condenseur",
+        "Contrôle évaporateur"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "CLI-003",
+      "categorie": "Climatisation",
+      "intervention": "Remplacement compresseur climatisation",
+      "synonymes": [
+        "compresseur clim",
+        "compresseur climatisation",
+        "remplacement compresseur AC"
+      ],
+      "taches_standard": [
+        "Récupération du fluide frigorigène",
+        "Dépose du compresseur défectueux",
+        "Remplacement filtre déshydrateur",
+        "Ajout huile compresseur neuf",
+        "Pose du compresseur neuf",
+        "Mise sous vide du circuit",
+        "Recharge en fluide frigorigène",
+        "Test fonctionnement"
+      ],
+      "controles_associes": [
+        "Contrôle condenseur",
+        "Contrôle embrayage compresseur",
+        "Contrôle ventilateur condenseur"
+      ],
+      "frequence": "Occasionnel"
+    },
+    {
+      "id": "CLI-004",
+      "categorie": "Climatisation",
+      "intervention": "Désinfection / assainissement climatisation",
+      "synonymes": [
+        "désinfection clim",
+        "assainissement climatisation",
+        "nettoyage clim",
+        "ozone clim",
+        "AC disinfection"
+      ],
+      "taches_standard": [
+        "Remplacement filtre habitacle",
+        "Traitement désinfectant du circuit d'air (bombe ou machine ozone)",
+        "Nettoyage évaporateur si accessible",
+        "Test d'odeur après traitement"
+      ],
+      "controles_associes": [
+        "Contrôle état filtre habitacle",
+        "Contrôle drainage bac condensats évaporateur"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "CLI-005",
+      "categorie": "Climatisation",
+      "intervention": "Remplacement filtre déshydrateur / bouteille déshydratante",
+      "synonymes": [
+        "filtre déshydrateur",
+        "bouteille déshydratante",
+        "dessicant",
+        "remplacement filtre clim"
+      ],
+      "taches_standard": [
+        "Récupération fluide frigorigène",
+        "Dépose du filtre déshydrateur",
+        "Pose du filtre neuf",
+        "Mise sous vide du circuit",
+        "Recharge fluide frigorigène",
+        "Test fonctionnement"
+      ],
+      "controles_associes": [
+        "Contrôle tuyaux et raccords",
+        "Contrôle état compresseur"
+      ],
+      "frequence": "Occasionnel"
+    },
+    {
+      "id": "DIA-001",
+      "categorie": "Diagnostic",
+      "intervention": "Diagnostic électronique (lecture codes défaut)",
+      "synonymes": [
+        "diagnostic",
+        "lecture codes défaut",
+        "valise diagnostic",
+        "scan diagnostic",
+        "OBD diagnostic",
+        "lecture OBD"
+      ],
+      "taches_standard": [
+        "Branchement de la valise diagnostic",
+        "Lecture de tous les codes défaut présents",
+        "Analyse des données en temps réel",
+        "Effacement des codes après diagnostic",
+        "Compte-rendu des défauts au client"
+      ],
+      "controles_associes": [
+        "Contrôle visuel des connecteurs",
+        "Contrôle batterie (si codes aléatoires)"
+      ],
+      "frequence": "Très fréquent"
+    },
+    {
+      "id": "DIA-002",
+      "categorie": "Diagnostic",
+      "intervention": "Diagnostic voyant moteur (MIL)",
+      "synonymes": [
+        "voyant moteur",
+        "check engine",
+        "MIL",
+        "voyant orange moteur",
+        "diagnostic voyant allumé"
+      ],
+      "taches_standard": [
+        "Lecture des codes défaut moteur",
+        "Analyse des données moteur en temps réel",
+        "Identification de la panne",
+        "Réparation de la cause",
+        "Effacement des codes",
+        "Essai routier de validation"
+      ],
+      "controles_associes": [
+        "Contrôle circuit d'admission",
+        "Contrôle système d'injection",
+        "Contrôle circuit d'échappement et sonde lambda"
+      ],
+      "frequence": "Très fréquent"
+    },
+    {
+      "id": "DIA-003",
+      "categorie": "Diagnostic",
+      "intervention": "Diagnostic problème de démarrage",
+      "synonymes": [
+        "problème démarrage",
+        "voiture ne démarre pas",
+        "panne démarrage",
+        "no start diagnostic"
+      ],
+      "taches_standard": [
+        "Contrôle batterie et charge",
+        "Contrôle démarreur",
+        "Contrôle circuit d'allumage",
+        "Contrôle alimentation carburant",
+        "Lecture codes défaut",
+        "Contrôle antidémarrage / immobiliseur",
+        "Identification cause et réparation"
+      ],
+      "controles_associes": [
+        "Contrôle état batterie",
+        "Contrôle alternateur",
+        "Contrôle pompe à carburant"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "DIA-004",
+      "categorie": "Diagnostic",
+      "intervention": "Diagnostic bruit anormal",
+      "synonymes": [
+        "bruit anormal",
+        "bruit suspect",
+        "claquement",
+        "grincement",
+        "couinement",
+        "diagnostic bruit"
+      ],
+      "taches_standard": [
+        "Essai routier pour reproduire le bruit",
+        "Identification zone et condition d'apparition du bruit",
+        "Contrôle visuel ciblé selon localisation",
+        "Test des différents organes suspects",
+        "Identification de la cause",
+        "Réparation et validation"
+      ],
+      "controles_associes": [
+        "Contrôle suspension et direction",
+        "Contrôle freinage",
+        "Contrôle transmission"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "DIA-005",
+      "categorie": "Diagnostic",
+      "intervention": "Diagnostic perte de puissance",
+      "synonymes": [
+        "perte de puissance",
+        "manque de puissance",
+        "moteur qui tire mal",
+        "turbo en défaut",
+        "diagnostic puissance"
+      ],
+      "taches_standard": [
+        "Lecture codes défaut moteur",
+        "Contrôle pression d'alimentation carburant",
+        "Contrôle pression turbo (si applicable)",
+        "Contrôle débit massique air",
+        "Contrôle système d'injection",
+        "Essai de compression si nécessaire",
+        "Identification cause et réparation"
+      ],
+      "controles_associes": [
+        "Contrôle filtre à air",
+        "Contrôle filtre carburant",
+        "Contrôle FAP (diesel)"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "ELE-001",
+      "categorie": "Électricité",
+      "intervention": "Remplacement batterie",
+      "synonymes": [
+        "batterie",
+        "remplacement batterie",
+        "changement batterie",
+        "batterie déchargée",
+        "battery replacement"
+      ],
+      "taches_standard": [
+        "Contrôle de la batterie (test de charge)",
+        "Dépose de la batterie usagée",
+        "Pose de la batterie neuve",
+        "Codage batterie si nécessaire (véhicules à gestion batterie)",
+        "Contrôle charge alternateur",
+        "Test de démarrage"
+      ],
+      "controles_associes": [
+        "Contrôle état alternateur",
+        "Contrôle cosses de batterie",
+        "Contrôle démarreur"
+      ],
+      "frequence": "Très fréquent"
+    },
+    {
+      "id": "ELE-002",
+      "categorie": "Électricité",
+      "intervention": "Contrôle et remplacement alternateur",
+      "synonymes": [
+        "alternateur",
+        "remplacement alternateur",
+        "alternateur en panne",
+        "pas de charge",
+        "alternator"
+      ],
+      "taches_standard": [
+        "Contrôle tension de charge batterie",
+        "Dépose de l'alternateur défectueux",
+        "Dépose courroie d'accessoires si nécessaire",
+        "Pose alternateur neuf ou révisé",
+        "Repose courroie d'accessoires",
+        "Contrôle tension de charge",
+        "Test de fonctionnement"
+      ],
+      "controles_associes": [
+        "Contrôle état batterie",
+        "Contrôle courroie d'accessoires",
+        "Contrôle câblage batterie"
+      ],
+      "frequence": "Occasionnel"
+    },
+    {
+      "id": "ELE-003",
+      "categorie": "Électricité",
+      "intervention": "Contrôle et remplacement démarreur",
+      "synonymes": [
+        "démarreur",
+        "remplacement démarreur",
+        "démarreur HS",
+        "starter"
+      ],
+      "taches_standard": [
+        "Contrôle circuit de démarrage (batterie, relais, contacteur)",
+        "Dépose du démarreur défectueux",
+        "Pose du démarreur neuf ou révisé",
+        "Test de démarrage"
+      ],
+      "controles_associes": [
+        "Contrôle état batterie",
+        "Contrôle relais et fusibles de démarrage",
+        "Contrôle câblage démarreur"
+      ],
+      "frequence": "Occasionnel"
+    },
+    {
+      "id": "ELE-004",
+      "categorie": "Électricité",
+      "intervention": "Remplacement éclairage / ampoules",
+      "synonymes": [
+        "ampoule",
+        "éclairage",
+        "phare grillé",
+        "feu grillé",
+        "remplacement ampoule",
+        "feu cassé"
+      ],
+      "taches_standard": [
+        "Identification de l'ampoule défectueuse",
+        "Dépose de l'élément d'éclairage",
+        "Remplacement de l'ampoule",
+        "Repose et contrôle fonctionnement",
+        "Réglage des feux si nécessaire"
+      ],
+      "controles_associes": [
+        "Contrôle état du projecteur",
+        "Contrôle faisceau électrique",
+        "Contrôle réglage direction des feux"
+      ],
+      "frequence": "Très fréquent"
+    },
+    {
+      "id": "ELE-005",
+      "categorie": "Électricité",
+      "intervention": "Remplacement balais essuie-glaces",
+      "synonymes": [
+        "essuie-glaces",
+        "balais essuie glace",
+        "raclettes essuie-glaces",
+        "wiper blades"
+      ],
+      "taches_standard": [
+        "Dépose des balais usagés",
+        "Pose des balais neufs (avant + arrière si applicable)",
+        "Test de fonctionnement"
+      ],
+      "controles_associes": [
+        "Contrôle niveau lave-glace",
+        "Contrôle état bras d'essuie-glace",
+        "Contrôle fonctionnement moteur essuie-glace"
+      ],
+      "frequence": "Très fréquent"
+    },
+    {
+      "id": "ELE-006",
+      "categorie": "Électricité",
+      "intervention": "Remplacement / réparation lève-vitre électrique",
+      "synonymes": [
+        "lève-vitre",
+        "lève vitre électrique",
+        "vitre coincée",
+        "remplacement lève-vitre",
+        "window regulator"
+      ],
+      "taches_standard": [
+        "Dépose du panneau de porte",
+        "Dépose du mécanisme de lève-vitre",
+        "Remplacement du mécanisme ou moteur",
+        "Repose et réglage",
+        "Test de fonctionnement"
+      ],
+      "controles_associes": [
+        "Contrôle câblage et connecteur",
+        "Contrôle fusible lève-vitre",
+        "Contrôle commande lève-vitre"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "ELE-007",
+      "categorie": "Électricité",
+      "intervention": "Diagnostic et remplacement capteur",
+      "synonymes": [
+        "capteur",
+        "sonde",
+        "capteur défectueux",
+        "sensor",
+        "remplacement capteur"
+      ],
+      "taches_standard": [
+        "Lecture codes défaut pour identification capteur",
+        "Contrôle câblage et connecteur capteur",
+        "Remplacement du capteur défectueux",
+        "Effacement codes défaut",
+        "Test de validation"
+      ],
+      "controles_associes": [
+        "Contrôle connexions électriques",
+        "Contrôle faisceau câblage"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "INJ-001",
+      "categorie": "Injection",
+      "intervention": "Nettoyage injecteurs",
+      "synonymes": [
+        "nettoyage injecteurs",
+        "décalaminage injecteurs",
+        "injecteurs encrassés",
+        "injector cleaning"
+      ],
+      "taches_standard": [
+        "Branchement machine de nettoyage injecteurs",
+        "Nettoyage en ligne ou dépose selon méthode",
+        "Test de débit injecteurs",
+        "Essai routier de validation"
+      ],
+      "controles_associes": [
+        "Contrôle pression carburant",
+        "Contrôle filtre à carburant",
+        "Contrôle codes défaut injection"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "INJ-002",
+      "categorie": "Injection",
+      "intervention": "Remplacement injecteurs",
+      "synonymes": [
+        "remplacement injecteurs",
+        "injecteur fuyant",
+        "injecteur HS",
+        "injector replacement"
+      ],
+      "taches_standard": [
+        "Dépose des injecteurs défectueux",
+        "Nettoyage logements injecteurs",
+        "Pose des injecteurs neufs",
+        "Codage injecteurs si nécessaire (diesel HDi, CDI, etc.)",
+        "Test de fonctionnement",
+        "Essai routier"
+      ],
+      "controles_associes": [
+        "Contrôle retour carburant",
+        "Contrôle pression rail carburant",
+        "Contrôle pompe haute pression"
+      ],
+      "frequence": "Occasionnel"
+    },
+    {
+      "id": "INJ-003",
+      "categorie": "Injection",
+      "intervention": "Remplacement pompe à carburant",
+      "synonymes": [
+        "pompe carburant",
+        "pompe à essence",
+        "pompe immergée",
+        "fuel pump"
+      ],
+      "taches_standard": [
+        "Dépressurisation du circuit carburant",
+        "Dépose de la pompe à carburant (trappe ou dépose réservoir)",
+        "Pose de la pompe neuve",
+        "Repose",
+        "Test de pression carburant",
+        "Test de démarrage"
+      ],
+      "controles_associes": [
+        "Contrôle filtre à carburant",
+        "Contrôle pression carburant",
+        "Contrôle relais pompe carburant"
+      ],
+      "frequence": "Occasionnel"
+    },
+    {
+      "id": "INJ-004",
+      "categorie": "Injection",
+      "intervention": "Régénération FAP (filtre à particules)",
+      "synonymes": [
+        "FAP",
+        "filtre à particules",
+        "régénération FAP",
+        "DPF",
+        "voyant FAP",
+        "forcer régénération"
+      ],
+      "taches_standard": [
+        "Lecture codes défaut FAP",
+        "Forçage de régénération via valise diagnostic",
+        "Essai routier (régénération active)",
+        "Contrôle taux de suie après régénération",
+        "Effacement codes"
+      ],
+      "controles_associes": [
+        "Contrôle niveau additif FAP (Eolys, etc.)",
+        "Contrôle sonde de pression différentielle",
+        "Contrôle vanne EGR"
+      ],
+      "frequence": "Très fréquent"
+    },
+    {
+      "id": "INJ-005",
+      "categorie": "Injection",
+      "intervention": "Remplacement FAP (filtre à particules)",
+      "synonymes": [
+        "remplacement FAP",
+        "remplacement DPF",
+        "FAP colmaté",
+        "DPF replacement"
+      ],
+      "taches_standard": [
+        "Dépose du FAP",
+        "Pose du FAP neuf ou régénéré",
+        "Réinitialisation compteur de suie",
+        "Essai de régénération",
+        "Contrôle absence de code défaut"
+      ],
+      "controles_associes": [
+        "Contrôle niveau additif FAP",
+        "Contrôle capteur pression différentielle",
+        "Contrôle sonde de température"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "INJ-006",
+      "categorie": "Injection",
+      "intervention": "Nettoyage / remplacement vanne EGR",
+      "synonymes": [
+        "EGR",
+        "vanne EGR",
+        "recirculation gaz",
+        "nettoyage EGR",
+        "EGR valve"
+      ],
+      "taches_standard": [
+        "Dépose de la vanne EGR",
+        "Nettoyage de la vanne et du circuit",
+        "Remplacement si défectueuse",
+        "Repose",
+        "Effacement codes défaut",
+        "Test de fonctionnement"
+      ],
+      "controles_associes": [
+        "Contrôle conduit EGR et collecteur admission",
+        "Contrôle turbocompresseur",
+        "Contrôle FAP"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "ECH-001",
+      "categorie": "Échappement",
+      "intervention": "Remplacement silencieux arrière",
+      "synonymes": [
+        "silencieux",
+        "pot d'échappement",
+        "silencieux arrière",
+        "remplacement silencieux",
+        "muffler"
+      ],
+      "taches_standard": [
+        "Contrôle visuel de l'état de l'échappement",
+        "Dépose du silencieux arrière",
+        "Pose du silencieux neuf",
+        "Contrôle étanchéité",
+        "Test de bruit"
+      ],
+      "controles_associes": [
+        "Contrôle état silencieux intermédiaire",
+        "Contrôle état support caoutchouc",
+        "Contrôle joints et colliers"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "ECH-002",
+      "categorie": "Échappement",
+      "intervention": "Remplacement catalyseur",
+      "synonymes": [
+        "catalyseur",
+        "cat",
+        "pot catalytique",
+        "remplacement catalyseur"
+      ],
+      "taches_standard": [
+        "Dépose du catalyseur",
+        "Pose du catalyseur neuf",
+        "Contrôle sonde lambda amont / aval",
+        "Contrôle codes défaut après remplacement",
+        "Essai routier"
+      ],
+      "controles_associes": [
+        "Contrôle sondes lambda",
+        "Contrôle circuit d'échappement amont",
+        "Contrôle absence code défaut"
+      ],
+      "frequence": "Occasionnel"
+    },
+    {
+      "id": "ECH-003",
+      "categorie": "Échappement",
+      "intervention": "Remplacement sonde lambda",
+      "synonymes": [
+        "sonde lambda",
+        "sonde oxygène",
+        "capteur O2",
+        "lambda sensor",
+        "oxygen sensor"
+      ],
+      "taches_standard": [
+        "Identification de la sonde défectueuse (amont/aval)",
+        "Dépose de la sonde lambda",
+        "Pose de la sonde neuve",
+        "Effacement des codes défaut",
+        "Essai routier de validation"
+      ],
+      "controles_associes": [
+        "Contrôle état catalyseur",
+        "Contrôle richesse moteur",
+        "Contrôle codes défaut moteur"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "ECH-004",
+      "categorie": "Échappement",
+      "intervention": "Remplacement joint / collier d'échappement",
+      "synonymes": [
+        "joint échappement",
+        "collier échappement",
+        "fuite échappement",
+        "remplacement joint"
+      ],
+      "taches_standard": [
+        "Localisation de la fuite",
+        "Dépose des éléments concernés",
+        "Remplacement joint et/ou collier",
+        "Repose",
+        "Test moteur tournant (contrôle fuite)"
+      ],
+      "controles_associes": [
+        "Contrôle état général de la ligne d'échappement",
+        "Contrôle fixations et supports caoutchouc"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "CAR-001",
+      "categorie": "Carrosserie",
+      "intervention": "Remplacement pare-chocs avant",
+      "synonymes": [
+        "pare-chocs avant",
+        "parechoc avant",
+        "bumper avant",
+        "remplacement pare chocs"
+      ],
+      "taches_standard": [
+        "Dépose du pare-chocs avant",
+        "Dépose des accessoires (radar, grilles, calandre)",
+        "Pose du pare-chocs neuf",
+        "Repose des accessoires",
+        "Contrôle positionnement et jeux",
+        "Calibration radars / caméra si applicable"
+      ],
+      "controles_associes": [
+        "Contrôle état calandre et grilles",
+        "Contrôle capteurs de parking",
+        "Contrôle caméra frontale"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "CAR-002",
+      "categorie": "Carrosserie",
+      "intervention": "Remplacement pare-chocs arrière",
+      "synonymes": [
+        "pare-chocs arrière",
+        "parechoc arrière",
+        "bumper arrière"
+      ],
+      "taches_standard": [
+        "Dépose du pare-chocs arrière",
+        "Dépose des accessoires (radar, feux)",
+        "Pose du pare-chocs neuf",
+        "Repose des accessoires",
+        "Contrôle positionnement",
+        "Calibration capteurs si applicable"
+      ],
+      "controles_associes": [
+        "Contrôle capteurs de stationnement arrière",
+        "Contrôle caméra de recul"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "CAR-003",
+      "categorie": "Carrosserie",
+      "intervention": "Débosselage sans peinture (PDR)",
+      "synonymes": [
+        "PDR",
+        "débosselage sans peinture",
+        "bosselage",
+        "débosselage grêle",
+        "paintless dent repair"
+      ],
+      "taches_standard": [
+        "Analyse des déformations",
+        "Accès au revers de la pièce si nécessaire",
+        "Débosselage par traction ou outil spécifique",
+        "Contrôle résultat final"
+      ],
+      "controles_associes": [
+        "Contrôle état peinture",
+        "Contrôle que la pièce est réparable sans peinture"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "CAR-004",
+      "categorie": "Carrosserie",
+      "intervention": "Remplacement aile",
+      "synonymes": [
+        "aile",
+        "aile avant",
+        "aile arrière",
+        "remplacement aile",
+        "dépose aile"
+      ],
+      "taches_standard": [
+        "Dépose de l'aile endommagée",
+        "Préparation de la surface",
+        "Pose de l'aile neuve",
+        "Réglage des jeux",
+        "Peinture et finition",
+        "Contrôle alignement carrosserie"
+      ],
+      "controles_associes": [
+        "Contrôle anti-corrosion",
+        "Contrôle protection insonorisante"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "VIT-001",
+      "categorie": "Vitrage",
+      "intervention": "Remplacement pare-brise",
+      "synonymes": [
+        "pare-brise",
+        "windshield",
+        "remplacement pare brise",
+        "bris de glace pare-brise",
+        "pare brise fissuré"
+      ],
+      "taches_standard": [
+        "Dépose du pare-brise existant",
+        "Nettoyage et préparation du cadre",
+        "Application primaire et colle",
+        "Pose du pare-brise neuf",
+        "Repose des enjoliveurs et joints",
+        "Temps de séchage colle",
+        "Test étanchéité",
+        "Calibration caméra frontale ADAS si équipé"
+      ],
+      "controles_associes": [
+        "Contrôle état des joints de pare-brise",
+        "Contrôle étanchéité à l'eau",
+        "Calibration ADAS (caméra, radar)"
+      ],
+      "frequence": "Très fréquent"
+    },
+    {
+      "id": "VIT-002",
+      "categorie": "Vitrage",
+      "intervention": "Réparation impact pare-brise",
+      "synonymes": [
+        "impact pare-brise",
+        "éclat pare-brise",
+        "chip repair",
+        "résine pare-brise",
+        "réparation éclat"
+      ],
+      "taches_standard": [
+        "Contrôle taille et position de l'impact",
+        "Nettoyage de l'impact",
+        "Injection de résine",
+        "Polymérisation UV",
+        "Contrôle résultat final"
+      ],
+      "controles_associes": [
+        "Contrôle si l'impact est réparable (taille, position)",
+        "Contrôle résultat après traitement"
+      ],
+      "frequence": "Très fréquent"
+    },
+    {
+      "id": "VIT-003",
+      "categorie": "Vitrage",
+      "intervention": "Remplacement vitre latérale",
+      "synonymes": [
+        "vitre latérale",
+        "vitre de porte",
+        "glace latérale",
+        "vitre cassée",
+        "remplacement vitre"
+      ],
+      "taches_standard": [
+        "Dépose du panneau de porte",
+        "Dépose de la vitre endommagée",
+        "Nettoyage du cadre",
+        "Pose de la vitre neuve",
+        "Repose du panneau",
+        "Test lève-vitre"
+      ],
+      "controles_associes": [
+        "Contrôle fonctionnement lève-vitre",
+        "Contrôle état joint de vitre"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "VO-001",
+      "categorie": "Préparation VO",
+      "intervention": "Contrôle pré-achat / expertise véhicule",
+      "synonymes": [
+        "expertise VO",
+        "pré-achat",
+        "contrôle véhicule occasion",
+        "expertise avant achat",
+        "inspection VO"
+      ],
+      "taches_standard": [
+        "Contrôle visuel carrosserie et châssis",
+        "Contrôle état intérieur",
+        "Contrôle état mécanique (niveaux, fuites)",
+        "Diagnostic électronique complet",
+        "Contrôle état pneus",
+        "Contrôle freinage",
+        "Contrôle éclairage",
+        "Essai routier",
+        "Rédaction rapport d'expertise"
+      ],
+      "controles_associes": [
+        "Contrôle historique entretien",
+        "Contrôle kilométrage",
+        "Contrôle VIN / conformité"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "VO-002",
+      "categorie": "Préparation VO",
+      "intervention": "Préparation esthétique VO",
+      "synonymes": [
+        "préparation VO",
+        "esthétique VO",
+        "remise en état VO",
+        "préparation vente"
+      ],
+      "taches_standard": [
+        "Lavage extérieur et intérieur",
+        "Nettoyage et aspiration habitacle",
+        "Traitement plastiques intérieurs",
+        "Lustrage / polish carrosserie",
+        "Contrôle et nettoyage vitres",
+        "Désodorisation habitacle"
+      ],
+      "controles_associes": [
+        "Contrôle état peinture",
+        "Contrôle état sellerie",
+        "Contrôle état moquettes"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "VO-003",
+      "categorie": "Préparation VO",
+      "intervention": "Révision pré-vente VO",
+      "synonymes": [
+        "révision VO",
+        "entretien avant vente",
+        "révision avant vente",
+        "service VO"
+      ],
+      "taches_standard": [
+        "Vidange huile moteur + filtre",
+        "Remplacement filtres (air, habitacle, carburant si nécessaire)",
+        "Contrôle et appoint niveaux",
+        "Contrôle freinage",
+        "Contrôle pneus et pression",
+        "Contrôle éclairage",
+        "Contrôle essuie-glaces",
+        "Diagnostic électronique",
+        "Essai routier"
+      ],
+      "controles_associes": [
+        "Contrôle courroie de distribution (kilométrage)",
+        "Contrôle état batterie",
+        "Contrôle embrayage"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "CT-001",
+      "categorie": "Contrôle technique",
+      "intervention": "Préparation contrôle technique",
+      "synonymes": [
+        "préparation CT",
+        "contrôle technique",
+        "avant CT",
+        "avant visite technique",
+        "pré-CT"
+      ],
+      "taches_standard": [
+        "Contrôle éclairage complet",
+        "Contrôle et réglage feux",
+        "Contrôle état pneus",
+        "Contrôle freinage",
+        "Contrôle fuites (huile, carburant, refroidissement)",
+        "Contrôle essuie-glaces",
+        "Contrôle avertisseur sonore",
+        "Contrôle visuel châssis et suspension",
+        "Diagnostic électronique (contrôle voyants)"
+      ],
+      "controles_associes": [
+        "Contrôle pollution (diesel/essence)",
+        "Contrôle direction",
+        "Contrôle identification du véhicule"
+      ],
+      "frequence": "Très fréquent"
+    },
+    {
+      "id": "CT-002",
+      "categorie": "Contrôle technique",
+      "intervention": "Contre-visite contrôle technique",
+      "synonymes": [
+        "contre-visite",
+        "contre visite CT",
+        "retour CT",
+        "second CT"
+      ],
+      "taches_standard": [
+        "Lecture du rapport de contre-visite",
+        "Réparation des défaillances mentionnées",
+        "Contrôle des points corrigés",
+        "Essai routier si nécessaire"
+      ],
+      "controles_associes": [
+        "Contrôle de tous les points de défaillance listés",
+        "Validation avant retour au CT"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "GAR-001",
+      "categorie": "Garantie",
+      "intervention": "Intervention sous garantie atelier ou fournisseur",
+      "synonymes": [
+        "garantie atelier",
+        "garantie fournisseur",
+        "garantie pièces",
+        "prise en garantie",
+        "retour garantie"
+      ],
+      "taches_standard": [
+        "Vérification de la validité de la garantie",
+        "Ouverture du dossier de garantie",
+        "Diagnostic et identification du défaut",
+        "Réparation ou remplacement de l'élément concerné",
+        "Rédaction du rapport d'intervention",
+        "Archivage des justificatifs"
+      ],
+      "controles_associes": [
+        "Contrôle date et kilométrage",
+        "Vérification de la couverture garantie",
+        "Contrôle conformité du dossier"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "DIV-001",
+      "categorie": "Divers",
+      "intervention": "Remplacement thermostat",
+      "synonymes": [
+        "thermostat",
+        "remplacement thermostat",
+        "thermostat moteur",
+        "surchauffe moteur"
+      ],
+      "taches_standard": [
+        "Vidange partielle du circuit de refroidissement",
+        "Dépose du thermostat usagé",
+        "Pose du thermostat neuf avec joint",
+        "Remplissage et purge circuit de refroidissement",
+        "Contrôle température de fonctionnement"
+      ],
+      "controles_associes": [
+        "Contrôle état durites",
+        "Contrôle pompe à eau",
+        "Contrôle ventilateur de refroidissement"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "DIV-002",
+      "categorie": "Divers",
+      "intervention": "Remplacement pompe à eau",
+      "synonymes": [
+        "pompe à eau",
+        "water pump",
+        "remplacement pompe eau",
+        "pompe refroidissement"
+      ],
+      "taches_standard": [
+        "Vidange du circuit de refroidissement",
+        "Dépose de la courroie ou chaîne de distribution si nécessaire",
+        "Dépose de la pompe à eau",
+        "Pose de la pompe neuve avec joint",
+        "Repose des éléments déposés",
+        "Remplissage et purge circuit",
+        "Contrôle étanchéité et température"
+      ],
+      "controles_associes": [
+        "Contrôle état courroie de distribution (si déposée)",
+        "Contrôle étanchéité joint pompe",
+        "Contrôle thermostat"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "DIV-003",
+      "categorie": "Divers",
+      "intervention": "Remplacement joint de culasse",
+      "synonymes": [
+        "joint de culasse",
+        "joint culasse",
+        "head gasket",
+        "culasse grillée"
+      ],
+      "taches_standard": [
+        "Dépose de la culasse",
+        "Contrôle planéité culasse et bloc moteur",
+        "Rectification culasse si nécessaire",
+        "Remplacement du joint de culasse",
+        "Repose de la culasse",
+        "Remplacement courroie de distribution si accessible",
+        "Remplacement liquide de refroidissement",
+        "Rodage et contrôle"
+      ],
+      "controles_associes": [
+        "Test analyse gaz culasse",
+        "Contrôle planéité",
+        "Contrôle absence mélange eau/huile"
+      ],
+      "frequence": "Occasionnel"
+    },
+    {
+      "id": "DIV-004",
+      "categorie": "Divers",
+      "intervention": "Remplacement turbocompresseur",
+      "synonymes": [
+        "turbo",
+        "turbocompresseur",
+        "remplacement turbo",
+        "turbo HS"
+      ],
+      "taches_standard": [
+        "Vidange huile moteur",
+        "Dépose du turbocompresseur",
+        "Contrôle conduits d'huile et d'air",
+        "Pose du turbocompresseur neuf",
+        "Pré-lubrification du turbo",
+        "Remplacement huile moteur et filtre",
+        "Démarrage progressif et contrôle",
+        "Essai routier"
+      ],
+      "controles_associes": [
+        "Contrôle conduits d'alimentation huile",
+        "Contrôle intercooler",
+        "Contrôle circuit d'admission"
+      ],
+      "frequence": "Occasionnel"
+    },
+    {
+      "id": "DIV-005",
+      "categorie": "Divers",
+      "intervention": "Remplacement radiateur de refroidissement",
+      "synonymes": [
+        "radiateur",
+        "remplacement radiateur",
+        "radiateur percé",
+        "radiateur moteur"
+      ],
+      "taches_standard": [
+        "Vidange du circuit de refroidissement",
+        "Dépose du radiateur",
+        "Pose du radiateur neuf",
+        "Remplissage et purge circuit",
+        "Contrôle étanchéité",
+        "Contrôle température fonctionnement"
+      ],
+      "controles_associes": [
+        "Contrôle ventilateur refroidissement",
+        "Contrôle durites",
+        "Contrôle thermostat"
+      ],
+      "frequence": "Occasionnel"
+    },
+    {
+      "id": "DIV-006",
+      "categorie": "Divers",
+      "intervention": "Remplacement boîte de vitesses manuelle",
+      "synonymes": [
+        "boîte de vitesses",
+        "BVM",
+        "remplacement boîte vitesse",
+        "gearbox"
+      ],
+      "taches_standard": [
+        "Dépose de la boîte de vitesses",
+        "Remplacement par boîte neuve ou reconditionnée",
+        "Remplacement kit embrayage (recommandé)",
+        "Remplacement huile boîte",
+        "Repose et réglage câbles/tringlerie",
+        "Test de fonctionnement"
+      ],
+      "controles_associes": [
+        "Contrôle joints spi",
+        "Contrôle transmissions",
+        "Contrôle commande de boîte"
+      ],
+      "frequence": "Rare"
+    },
+    {
+      "id": "DIV-007",
+      "categorie": "Divers",
+      "intervention": "Vidange boîte de vitesses automatique",
+      "synonymes": [
+        "vidange BVA",
+        "vidange boîte auto",
+        "huile boîte automatique",
+        "automatic transmission fluid"
+      ],
+      "taches_standard": [
+        "Vidange huile boîte automatique",
+        "Remplacement filtre boîte si accessible",
+        "Remplissage avec huile préconisée",
+        "Test de fonctionnement passages de vitesses"
+      ],
+      "controles_associes": [
+        "Contrôle fuites boîte automatique",
+        "Contrôle fonctionnement en conduite"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "DIV-008",
+      "categorie": "Divers",
+      "intervention": "Remplacement maître cylindre de frein",
+      "synonymes": [
+        "maître cylindre",
+        "maitre cylindre frein",
+        "master cylinder"
+      ],
+      "taches_standard": [
+        "Dépose du maître cylindre",
+        "Pose du maître cylindre neuf",
+        "Purge complète du circuit de frein",
+        "Contrôle étanchéité",
+        "Test de freinage"
+      ],
+      "controles_associes": [
+        "Contrôle servofrein",
+        "Contrôle niveau liquide de frein",
+        "Contrôle étanchéité circuit"
+      ],
+      "frequence": "Rare"
+    },
+    {
+      "id": "DIV-009",
+      "categorie": "Divers",
+      "intervention": "Remplacement pompe de direction assistée hydraulique",
+      "synonymes": [
+        "pompe direction assistée",
+        "pompe DA",
+        "direction assistée hydraulique",
+        "power steering pump"
+      ],
+      "taches_standard": [
+        "Vidange circuit direction assistée",
+        "Dépose de la pompe de direction",
+        "Pose de la pompe neuve",
+        "Remplissage circuit",
+        "Purge d'air",
+        "Contrôle fonctionnement direction"
+      ],
+      "controles_associes": [
+        "Contrôle courroie d'accessoires",
+        "Contrôle état crémaillère",
+        "Contrôle niveau huile direction"
+      ],
+      "frequence": "Rare"
+    },
+    {
+      "id": "DIV-010",
+      "categorie": "Divers",
+      "intervention": "Remplacement crémaillère de direction",
+      "synonymes": [
+        "crémaillère direction",
+        "crémaillère de direction",
+        "remplacement crémaillère"
+      ],
+      "taches_standard": [
+        "Dépose des biellettes de direction",
+        "Dépose de la crémaillère",
+        "Pose de la crémaillère neuve",
+        "Repose des biellettes",
+        "Réglage parallélisme"
+      ],
+      "controles_associes": [
+        "Contrôle rotules de direction",
+        "Parallélisme obligatoire après remplacement",
+        "Contrôle colonne de direction"
+      ],
+      "frequence": "Rare"
+    },
+    {
+      "id": "DIV-011",
+      "categorie": "Divers",
+      "intervention": "Remplacement joint de vilebrequin",
+      "synonymes": [
+        "joint spi vilebrequin",
+        "spi vilebrequin",
+        "fuite d'huile avant / arrière moteur",
+        "crankshaft seal"
+      ],
+      "taches_standard": [
+        "Dépose des éléments donnant accès au spi",
+        "Dépose du joint spi usagé",
+        "Pose du joint spi neuf",
+        "Repose des éléments",
+        "Contrôle étanchéité après démarrage"
+      ],
+      "controles_associes": [
+        "Contrôle distribution si déposée",
+        "Contrôle absence de fuite après remontage"
+      ],
+      "frequence": "Occasionnel"
+    },
+    {
+      "id": "DIV-012",
+      "categorie": "Divers",
+      "intervention": "Remplacement collecteur d'admission",
+      "synonymes": [
+        "collecteur admission",
+        "pipe d'admission",
+        "intake manifold",
+        "remplacement collecteur"
+      ],
+      "taches_standard": [
+        "Dépose du collecteur d'admission",
+        "Nettoyage ou remplacement",
+        "Pose du collecteur neuf",
+        "Contrôle étanchéité",
+        "Test moteur"
+      ],
+      "controles_associes": [
+        "Contrôle joint de collecteur",
+        "Contrôle vanne EGR",
+        "Contrôle système d'injection"
+      ],
+      "frequence": "Occasionnel"
+    },
+    {
+      "id": "DIV-013",
+      "categorie": "Divers",
+      "intervention": "Remplacement capteur ABS",
+      "synonymes": [
+        "capteur ABS",
+        "sonde ABS",
+        "voyant ABS",
+        "ABS sensor"
+      ],
+      "taches_standard": [
+        "Lecture codes défaut ABS",
+        "Identification du capteur défectueux",
+        "Dépose du capteur ABS",
+        "Pose du capteur neuf",
+        "Effacement codes défaut",
+        "Test fonctionnement ABS"
+      ],
+      "controles_associes": [
+        "Contrôle câblage capteur",
+        "Contrôle couronne phonique",
+        "Contrôle fonctionnement ABS / ESP"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "DIV-014",
+      "categorie": "Divers",
+      "intervention": "Réparation / remplacement climatiseur habitacle (résistance de chauffage)",
+      "synonymes": [
+        "résistance chauffage",
+        "pulseur habitacle",
+        "ventilation habitacle",
+        "soufflerie chauffage"
+      ],
+      "taches_standard": [
+        "Diagnostic défaut ventilation habitacle",
+        "Dépose de la résistance de pulseur",
+        "Remplacement résistance",
+        "Repose",
+        "Test fonctionnement"
+      ],
+      "controles_associes": [
+        "Contrôle commande chauffage",
+        "Contrôle moteur de pulseur"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "DIV-015",
+      "categorie": "Divers",
+      "intervention": "Remplacement ampoule / kit xenon / LED",
+      "synonymes": [
+        "xenon",
+        "LED phare",
+        "ballast xenon",
+        "remplacement xenon",
+        "kit phare xenon"
+      ],
+      "taches_standard": [
+        "Dépose du projecteur ou accès ampoule",
+        "Remplacement ampoule xenon/LED ou ballast",
+        "Réglage des feux",
+        "Test fonctionnement"
+      ],
+      "controles_associes": [
+        "Contrôle réglage des feux",
+        "Contrôle fonctionnement correcteur assiette"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "DIV-016",
+      "categorie": "Divers",
+      "intervention": "Remplacement intercooler (refroidisseur d'air de suralimentation)",
+      "synonymes": [
+        "intercooler",
+        "échangeur de suralimentation",
+        "refroidisseur air suralim",
+        "charge air cooler"
+      ],
+      "taches_standard": [
+        "Dépose des conduits d'air turbo",
+        "Dépose de l'intercooler",
+        "Contrôle des conduits et durites",
+        "Pose de l'intercooler neuf",
+        "Repose des conduits",
+        "Test étanchéité et fonctionnement"
+      ],
+      "controles_associes": [
+        "Contrôle état conduits turbo",
+        "Contrôle fonctionnement turbo",
+        "Contrôle absence de fuite"
+      ],
+      "frequence": "Occasionnel"
+    },
+    {
+      "id": "DIV-017",
+      "categorie": "Divers",
+      "intervention": "Remplacement durites de refroidissement",
+      "synonymes": [
+        "durite refroidissement",
+        "durites radiateur",
+        "remplacement durite",
+        "coolant hose"
+      ],
+      "taches_standard": [
+        "Vidange partielle du circuit de refroidissement",
+        "Dépose des durites usagées ou percées",
+        "Pose des durites neuves",
+        "Remplissage et purge circuit",
+        "Contrôle étanchéité"
+      ],
+      "controles_associes": [
+        "Contrôle état de toutes les durites",
+        "Contrôle colliers de serrage"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "DIV-018",
+      "categorie": "Divers",
+      "intervention": "Remplacement capteur de pression des pneus (TPMS)",
+      "synonymes": [
+        "TPMS",
+        "capteur pression pneu",
+        "capteur gonflage",
+        "tire pressure sensor"
+      ],
+      "taches_standard": [
+        "Dépose de la roue concernée",
+        "Démontage du pneu",
+        "Remplacement du capteur TPMS",
+        "Remontage du pneu et gonflage",
+        "Apprentissage du capteur sur l'outil de diagnostic",
+        "Équilibrage",
+        "Repose de la roue"
+      ],
+      "controles_associes": [
+        "Contrôle voyant TPMS tableau de bord",
+        "Contrôle pression de tous les pneus"
+      ],
+      "frequence": "Fréquent"
+    }
+  ]
+}

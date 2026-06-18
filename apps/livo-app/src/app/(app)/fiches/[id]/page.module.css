@@ -85,6 +85,70 @@
 .notesLabel { font-size: var(--text-xs); color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
 .notesText { font-size: var(--text-sm); color: var(--color-text-secondary); line-height: var(--leading-normal); }
 
+.interventionsMetier {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.interventionMetier {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+}
+
+.interventionMetierHead {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.interventionMetierName {
+  color: var(--color-text-primary);
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  overflow-wrap: anywhere;
+}
+
+.interventionMetierMeta {
+  color: var(--color-text-muted);
+  font-size: var(--text-xs);
+}
+
+.interventionMetierGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.interventionMetierLabel {
+  display: block;
+  margin-bottom: var(--space-2);
+  color: var(--color-text-secondary);
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
+}
+
+.interventionMetierList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+  padding-left: var(--space-4);
+  color: var(--color-text-muted);
+  font-size: var(--text-xs);
+  line-height: var(--leading-normal);
+}
+
+.interventionMetierList li {
+  overflow-wrap: anywhere;
+}
+
 .compagnonsList { display: flex; flex-direction: column; }
 .compagnonRow {
   display: grid;
@@ -98,3 +162,9 @@
 .compagnonNom { font-size: var(--text-sm); font-weight: var(--font-medium); color: var(--color-text-primary); }
 .compagnonInfo { font-size: var(--text-xs); color: var(--color-text-muted); font-variant-numeric: tabular-nums; }
 .compagnonDuree { font-size: var(--text-sm); font-weight: var(--font-semibold); color: var(--color-text-primary); font-variant-numeric: tabular-nums; text-align: right; }
+
+@media (max-width: 720px) {
+  .interventionMetierGrid {
+    grid-template-columns: 1fr;
+  }
+}

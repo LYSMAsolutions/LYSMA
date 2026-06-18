@@ -26,6 +26,51 @@ const STATUT_BADGE: Record<
   ANNULEE: { label: 'Annulée', variant: 'error' },
 }
 
+type InterventionMetierView = {
+  id: string
+  categorie: string
+  intervention: string
+  synonymes: string[]
+  pieces_suggerees: string[]
+  controles_suggeres: string[]
+  operations_fin: string[]
+  frequence: string
+}
+
+function isStringArray(value: unknown): value is string[] {
+  return Array.isArray(value) && value.every((item) => typeof item === 'string')
+}
+
+function parseInterventionsMetier(value: unknown): InterventionMetierView[] {
+  if (!Array.isArray(value)) return []
+
+  return value.flatMap((item) => {
+    if (!item || typeof item !== 'object') return []
+
+    const intervention = item as Record<string, unknown>
+    if (
+      typeof intervention.id !== 'string' ||
+      typeof intervention.categorie !== 'string' ||
+      typeof intervention.intervention !== 'string'
+    ) {
+      return []
+    }
+
+    return [{
+      id: intervention.id,
+      categorie: intervention.categorie,
+      intervention: intervention.intervention,
+      synonymes: isStringArray(intervention.synonymes) ? intervention.synonymes : [],
+      pieces_suggerees: isStringArray(intervention.pieces_suggerees) ? intervention.pieces_suggerees : [],
+      controles_suggeres: isStringArray(intervention.controles_suggeres)
+        ? intervention.controles_suggeres
+        : isStringArray(intervention.controles_associes) ? intervention.controles_associes : [],
+      operations_fin: isStringArray(intervention.operations_fin) ? intervention.operations_fin : [],
+      frequence: typeof intervention.frequence === 'string' ? intervention.frequence : '',
+    }]
+  })
+}
+
 function formatDate(date: Date) {
   return new Date(date).toLocaleDateString('fr-FR', {
     day: 'numeric',
@@ -102,6 +147,7 @@ export default async function FicheDetailPage({
     .split('\n')
     .map((line) => line.trim())
     .filter(Boolean)
+  const interventionsMetier = parseInterventionsMetier(fiche.interventionsMetier)
 
   return (
     <>
@@ -219,6 +265,65 @@ export default async function FicheDetailPage({
             </div>
           )}
         </div>
+
+        {interventionsMetier.length > 0 && (
+          <div className={styles.card}>
+            <h3 className={styles.cardTitle}>Interventions métier</h3>
+
+            <div className={styles.interventionsMetier}>
+              {interventionsMetier.map((intervention) => (
+                <div key={intervention.id} className={styles.interventionMetier}>
+                  <div className={styles.interventionMetierHead}>
+                    <span className={styles.interventionMetierName}>{intervention.intervention}</span>
+                    <span className={styles.interventionMetierMeta}>
+                      {intervention.categorie} · {intervention.id}
+                      {intervention.frequence ? ` · ${intervention.frequence}` : ''}
+                    </span>
+                  </div>
+
+                  {(intervention.pieces_suggerees.length > 0 ||
+                    intervention.controles_suggeres.length > 0 ||
+                    intervention.operations_fin.length > 0) && (
+                    <div className={styles.interventionMetierGrid}>
+                      {intervention.pieces_suggerees.length > 0 && (
+                        <div>
+                          <span className={styles.interventionMetierLabel}>Pièces suggérées</span>
+                          <ul className={styles.interventionMetierList}>
+                            {intervention.pieces_suggerees.slice(0, 6).map((piece) => (
+                              <li key={piece}>{piece}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+
+                      {intervention.controles_suggeres.length > 0 && (
+                        <div>
+                          <span className={styles.interventionMetierLabel}>Contrôles suggérés</span>
+                          <ul className={styles.interventionMetierList}>
+                            {intervention.controles_suggeres.slice(0, 5).map((controle) => (
+                              <li key={controle}>{controle}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+
+                      {intervention.operations_fin.length > 0 && (
+                        <div>
+                          <span className={styles.interventionMetierLabel}>Opérations de fin</span>
+                          <ul className={styles.interventionMetierList}>
+                            {intervention.operations_fin.slice(0, 4).map((operation) => (
+                              <li key={operation}>{operation}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {fiche.pointagesFiche.length > 0 && (
           <div className={styles.card}>

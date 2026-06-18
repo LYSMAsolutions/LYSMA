@@ -401,6 +401,7 @@ model FicheTravaux {
   numero        String
   statut        StatutFiche @default(EN_ATTENTE)
   travaux       String      @db.Text
+  interventionsMetier Json?
   notes         String?     @db.Text
   tempsFacture  Decimal?    @db.Decimal(6, 2)
   tauxApplique  TauxType?

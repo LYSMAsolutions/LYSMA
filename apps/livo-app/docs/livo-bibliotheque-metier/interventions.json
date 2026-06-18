@@ -1,0 +1,2729 @@
+{
+  "meta": {
+    "version": "2.0.0",
+    "created": "2026-06-16",
+    "description": "Bibliothèque métier automobile LIVO V2 — interventions orientées fiche de travail atelier",
+    "source": "Adaptation LIVO des pratiques métier standardisées — sans procédure mécanicien détaillée",
+    "total": 100
+  },
+  "interventions": [
+    {
+      "id": "ENT-001",
+      "categorie": "Entretien",
+      "intervention": "Vidange moteur",
+      "synonymes": [
+        "vidange",
+        "vidange moteur",
+        "vidange huile",
+        "changement huile",
+        "remplacement huile moteur",
+        "vidange + filtre",
+        "oil change"
+      ],
+      "pieces_suggerees": [
+        "Huile moteur",
+        "Filtre à huile",
+        "Joint de vidange si nécessaire"
+      ],
+      "controles_suggeres": [
+        "Contrôle niveau huile",
+        "Contrôle niveaux",
+        "Contrôle visuel absence de fuite",
+        "Contrôle pression pneus"
+      ],
+      "operations_fin": [
+        "Remise à zéro maintenance si nécessaire"
+      ],
+      "frequence": "Très fréquent"
+    },
+    {
+      "id": "ENT-002",
+      "categorie": "Entretien",
+      "intervention": "Filtre à air moteur",
+      "synonymes": [
+        "filtre air",
+        "filtre à air",
+        "changement filtre air",
+        "remplacement filtre air moteur",
+        "Filtre à air moteur"
+      ],
+      "pieces_suggerees": [
+        "Filtre à air moteur"
+      ],
+      "controles_suggeres": [
+        "Contrôle état conduit d'admission",
+        "Contrôle état durites d'air",
+        "Contrôle débit massique air (si anomalie)",
+        "Contrôle niveaux",
+        "Contrôle visuel absence de fuite"
+      ],
+      "operations_fin": [
+        "Remise à zéro maintenance si nécessaire"
+      ],
+      "frequence": "Très fréquent"
+    },
+    {
+      "id": "ENT-003",
+      "categorie": "Entretien",
+      "intervention": "Filtre habitacle",
+      "synonymes": [
+        "filtre habitacle",
+        "filtre pollen",
+        "filtre climatisation habitacle",
+        "filtre cabine",
+        "changement filtre pollen"
+      ],
+      "pieces_suggerees": [
+        "Filtre habitacle"
+      ],
+      "controles_suggeres": [
+        "Contrôle état boîtier filtre habitacle",
+        "Test fonctionnement ventilation",
+        "Contrôle niveaux",
+        "Contrôle visuel absence de fuite"
+      ],
+      "operations_fin": [
+        "Remise à zéro maintenance si nécessaire"
+      ],
+      "frequence": "Très fréquent"
+    },
+    {
+      "id": "ENT-004",
+      "categorie": "Entretien",
+      "intervention": "Filtre à carburant",
+      "synonymes": [
+        "filtre carburant",
+        "filtre gasoil",
+        "filtre essence",
+        "changement filtre carburant",
+        "filtre gazole",
+        "Filtre à carburant"
+      ],
+      "pieces_suggerees": [
+        "Filtre à carburant"
+      ],
+      "controles_suggeres": [
+        "Contrôle état tuyaux carburant",
+        "Contrôle pression carburant",
+        "Contrôle absence de fuite",
+        "Contrôle niveaux",
+        "Contrôle visuel absence de fuite"
+      ],
+      "operations_fin": [
+        "Remise à zéro maintenance si nécessaire"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "ENT-005",
+      "categorie": "Entretien",
+      "intervention": "Révision moteur",
+      "synonymes": [
+        "révision",
+        "grande révision",
+        "révision périodique",
+        "service complet",
+        "entretien complet",
+        "full service",
+        "Révision moteur"
+      ],
+      "pieces_suggerees": [
+        "Huile moteur",
+        "Filtre à huile",
+        "Filtre à air",
+        "Filtre habitacle",
+        "Filtre à carburant si applicable",
+        "Bougies d’allumage si applicable"
+      ],
+      "controles_suggeres": [
+        "Contrôle niveaux",
+        "Contrôle éclairage",
+        "Contrôle pression pneus",
+        "Contrôle essuie-glaces",
+        "Contrôle visuel freinage"
+      ],
+      "operations_fin": [
+        "Remise à zéro maintenance",
+        "Essai routier si nécessaire"
+      ],
+      "frequence": "Très fréquent"
+    },
+    {
+      "id": "ENT-006",
+      "categorie": "Entretien",
+      "intervention": "Bougies d’allumage",
+      "synonymes": [
+        "bougies",
+        "bougie allumage",
+        "changement bougies",
+        "remplacement bougies",
+        "spark plugs",
+        "Bougies d’allumage"
+      ],
+      "pieces_suggerees": [
+        "Bougies d’allumage"
+      ],
+      "controles_suggeres": [
+        "Contrôle état bobines d'allumage",
+        "Contrôle fils de bougie",
+        "Diagnostic allumage si anomalie",
+        "Contrôle niveaux",
+        "Contrôle visuel absence de fuite"
+      ],
+      "operations_fin": [
+        "Remise à zéro maintenance si nécessaire"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "ENT-007",
+      "categorie": "Entretien",
+      "intervention": "Bougies de préchauffage",
+      "synonymes": [
+        "bougies préchauffage",
+        "bougies de chauffe",
+        "préchauffage diesel",
+        "remplacement bougies diesel",
+        "Bougies de préchauffage"
+      ],
+      "pieces_suggerees": [
+        "Bougies de préchauffage"
+      ],
+      "controles_suggeres": [
+        "Diagnostic préchauffage",
+        "Contrôle relais de préchauffage",
+        "Contrôle voyant tableau de bord",
+        "Contrôle niveaux",
+        "Contrôle visuel absence de fuite"
+      ],
+      "operations_fin": [
+        "Remise à zéro maintenance si nécessaire"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "ENT-008",
+      "categorie": "Entretien",
+      "intervention": "Courroie accessoires",
+      "synonymes": [
+        "courroie accessoires",
+        "courroie alternateur",
+        "courroie poly-V",
+        "courroie serpentine",
+        "remplacement courroie"
+      ],
+      "pieces_suggerees": [
+        "Courroie accessoires",
+        "Galet tendeur si nécessaire"
+      ],
+      "controles_suggeres": [
+        "Contrôle état alternateur",
+        "Contrôle état compresseur climatisation",
+        "Contrôle état pompe de direction assistée",
+        "Contrôle niveaux",
+        "Contrôle visuel absence de fuite"
+      ],
+      "operations_fin": [
+        "Remise à zéro maintenance si nécessaire"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "ENT-009",
+      "categorie": "Entretien",
+      "intervention": "Liquide de refroidissement",
+      "synonymes": [
+        "liquide refroidissement",
+        "liquide refroidissement moteur",
+        "antigel",
+        "remplacement antigel",
+        "vidange circuit de refroidissement",
+        "coolant",
+        "Liquide de refroidissement"
+      ],
+      "pieces_suggerees": [
+        "Liquide de refroidissement"
+      ],
+      "controles_suggeres": [
+        "Contrôle état durites de refroidissement",
+        "Contrôle état radiateur",
+        "Contrôle thermostat",
+        "Contrôle pompe à eau",
+        "Contrôle niveaux",
+        "Contrôle visuel absence de fuite"
+      ],
+      "operations_fin": [
+        "Remise à zéro maintenance si nécessaire"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "ENT-010",
+      "categorie": "Entretien",
+      "intervention": "Liquide de frein",
+      "synonymes": [
+        "liquide de frein",
+        "purge freins",
+        "remplacement liquide freinage",
+        "DOT",
+        "brake fluid"
+      ],
+      "pieces_suggerees": [
+        "Liquide de frein"
+      ],
+      "controles_suggeres": [
+        "Contrôle état flexibles de frein",
+        "Contrôle état organe de frein",
+        "Contrôle voyant niveau liquide",
+        "Contrôle niveaux",
+        "Contrôle visuel absence de fuite",
+        "Contrôle niveau liquide de frein"
+      ],
+      "operations_fin": [
+        "Remise à zéro maintenance si nécessaire",
+        "Essai freinage"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "FRE-001",
+      "categorie": "Freinage",
+      "intervention": "Plaquettes avant",
+      "synonymes": [
+        "plaquettes avant",
+        "plaquettes de frein avant",
+        "frein avant",
+        "remplacement plaquettes avant",
+        "kit plaquettes avant",
+        "brake pads front"
+      ],
+      "pieces_suggerees": [
+        "Plaquettes de frein avant"
+      ],
+      "controles_suggeres": [
+        "Contrôle visuel des disques avant",
+        "Contrôle niveau liquide de frein",
+        "Contrôle flexibles de frein",
+        "Contrôle témoin d’usure si équipé"
+      ],
+      "operations_fin": [
+        "Essai freinage"
+      ],
+      "frequence": "Très fréquent"
+    },
+    {
+      "id": "FRE-002",
+      "categorie": "Freinage",
+      "intervention": "Plaquettes arrière",
+      "synonymes": [
+        "plaquettes arrière",
+        "plaquettes de frein arrière",
+        "frein arrière",
+        "remplacement plaquettes arrière",
+        "kit plaquettes arrière"
+      ],
+      "pieces_suggerees": [
+        "Plaquettes de frein arrière"
+      ],
+      "controles_suggeres": [
+        "Contrôle visuel des disques arrière",
+        "Contrôle niveau liquide de frein",
+        "Contrôle frein de parking",
+        "Contrôle témoin d’usure si équipé"
+      ],
+      "operations_fin": [
+        "Essai freinage"
+      ],
+      "frequence": "Très fréquent"
+    },
+    {
+      "id": "FRE-003",
+      "categorie": "Freinage",
+      "intervention": "Disques et plaquettes avant",
+      "synonymes": [
+        "disques plaquettes avant",
+        "kit freinage avant",
+        "remplacement disques avant",
+        "disques avant + plaquettes",
+        "freinage avant complet",
+        "Disques et plaquettes avant"
+      ],
+      "pieces_suggerees": [
+        "Disques de frein avant",
+        "Plaquettes de frein avant"
+      ],
+      "controles_suggeres": [
+        "Contrôle flexibles de frein avant",
+        "Contrôle roulements de roue avant",
+        "Contrôle niveau liquide de frein"
+      ],
+      "operations_fin": [
+        "Essai freinage"
+      ],
+      "frequence": "Très fréquent"
+    },
+    {
+      "id": "FRE-004",
+      "categorie": "Freinage",
+      "intervention": "Disques et plaquettes arrière",
+      "synonymes": [
+        "disques plaquettes arrière",
+        "kit freinage arrière",
+        "remplacement disques arrière",
+        "disques arrière + plaquettes",
+        "freinage arrière complet",
+        "Disques et plaquettes arrière"
+      ],
+      "pieces_suggerees": [
+        "Disques de frein arrière",
+        "Plaquettes de frein arrière"
+      ],
+      "controles_suggeres": [
+        "Contrôle flexibles de frein arrière",
+        "Contrôle frein de parking",
+        "Contrôle niveau liquide de frein"
+      ],
+      "operations_fin": [
+        "Essai freinage"
+      ],
+      "frequence": "Très fréquent"
+    },
+    {
+      "id": "FRE-005",
+      "categorie": "Freinage",
+      "intervention": "Tambours et garnitures arrière",
+      "synonymes": [
+        "tambours arrière",
+        "garnitures tambour",
+        "freins à tambour",
+        "kit tambour arrière",
+        "remplacement garnitures tambour",
+        "Tambours et garnitures arrière"
+      ],
+      "pieces_suggerees": [
+        "Tambours arrière si nécessaires",
+        "Garnitures arrière",
+        "Cylindres de roue si nécessaires"
+      ],
+      "controles_suggeres": [
+        "Contrôle cylindres de roue",
+        "Contrôle câble frein de parking",
+        "Contrôle ressorts de rappel garnitures",
+        "Contrôle niveau liquide de frein",
+        "Contrôle visuel freinage"
+      ],
+      "operations_fin": [
+        "Essai freinage"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "FRE-006",
+      "categorie": "Freinage",
+      "intervention": "Flexible de frein",
+      "synonymes": [
+        "flexible frein",
+        "flexible de frein",
+        "durite frein",
+        "remplacement flexible freinage"
+      ],
+      "pieces_suggerees": [
+        "Flexible de frein concerné",
+        "Liquide de frein si nécessaire"
+      ],
+      "controles_suggeres": [
+        "Contrôle état des autres flexibles",
+        "Contrôle niveau liquide de frein",
+        "Contrôle absence de fuite",
+        "Contrôle visuel freinage"
+      ],
+      "operations_fin": [
+        "Essai freinage"
+      ],
+      "frequence": "Occasionnel"
+    },
+    {
+      "id": "FRE-007",
+      "categorie": "Freinage",
+      "intervention": "Organe de frein",
+      "synonymes": [
+        "étrier frein",
+        "étrier de frein avant",
+        "étrier de frein arrière",
+        "remplacement étrier",
+        "Organe de frein"
+      ],
+      "pieces_suggerees": [
+        "Organe de frein concerné",
+        "Liquide de frein si nécessaire"
+      ],
+      "controles_suggeres": [
+        "Contrôle état disque et plaquettes",
+        "Contrôle flexible de frein associé",
+        "Contrôle niveau liquide de frein",
+        "Contrôle visuel freinage"
+      ],
+      "operations_fin": [
+        "Essai freinage"
+      ],
+      "frequence": "Occasionnel"
+    },
+    {
+      "id": "FRE-008",
+      "categorie": "Freinage",
+      "intervention": "Frein de parking",
+      "synonymes": [
+        "frein à main",
+        "frein de parking",
+        "câble frein main",
+        "réglage frein à main",
+        "remplacement câble frein parking"
+      ],
+      "pieces_suggerees": [
+        "Câble de frein de parking si nécessaire",
+        "Kit frein arrière si nécessaire"
+      ],
+      "controles_suggeres": [
+        "Contrôle état garnitures/plaquettes arrière",
+        "Contrôle mécanisme de frein de parking",
+        "Contrôle niveau liquide de frein",
+        "Contrôle visuel freinage"
+      ],
+      "operations_fin": [
+        "Essai freinage"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "PNE-001",
+      "categorie": "Pneumatiques",
+      "intervention": "Pneus avant",
+      "synonymes": [
+        "changement pneus",
+        "montage pneus",
+        "démontage pneus",
+        "pose pneus",
+        "remplacement pneus",
+        "Pneus avant",
+        "2 pneus avant",
+        "pneu avant",
+        "changement pneus avant"
+      ],
+      "pieces_suggerees": [
+        "2 pneus avant",
+        "2 valves"
+      ],
+      "controles_suggeres": [
+        "Contrôle état jantes",
+        "Contrôle pression pneus",
+        "Contrôle visuel train avant"
+      ],
+      "operations_fin": [
+        "Équilibrage",
+        "Réinitialisation TPMS si nécessaire"
+      ],
+      "frequence": "Très fréquent"
+    },
+    {
+      "id": "PNE-002",
+      "categorie": "Pneumatiques",
+      "intervention": "Équilibrage roues",
+      "synonymes": [
+        "équilibrage",
+        "rééquilibrage roues",
+        "balancing",
+        "équilibrage pneus",
+        "Équilibrage roues"
+      ],
+      "pieces_suggerees": [
+        "Masses d’équilibrage",
+        "Valve si nécessaire"
+      ],
+      "controles_suggeres": [
+        "Contrôle état pneus",
+        "Contrôle état jantes",
+        "Contrôle géométrie si vibrations persistantes",
+        "Contrôle pression pneus"
+      ],
+      "operations_fin": [
+        "Contrôle pression finale",
+        "Équilibrage si nécessaire",
+        "Réinitialisation TPMS si nécessaire"
+      ],
+      "frequence": "Très fréquent"
+    },
+    {
+      "id": "PNE-003",
+      "categorie": "Pneumatiques",
+      "intervention": "Permutation pneus",
+      "synonymes": [
+        "permutation pneus",
+        "rotation des pneus",
+        "inversion pneus",
+        "rotation pneus"
+      ],
+      "pieces_suggerees": [],
+      "controles_suggeres": [
+        "Contrôle usure pneus",
+        "Contrôle état pneus",
+        "Contrôle freinage",
+        "Contrôle pression pneus",
+        "Contrôle état jantes"
+      ],
+      "operations_fin": [
+        "Contrôle pression finale",
+        "Équilibrage si nécessaire",
+        "Réinitialisation TPMS si nécessaire"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "PNE-004",
+      "categorie": "Pneumatiques",
+      "intervention": "Réparation crevaison",
+      "synonymes": [
+        "crevaison",
+        "réparation pneu",
+        "bouchage crevaison",
+        "rustine pneu",
+        "repair crevaison",
+        "Réparation crevaison"
+      ],
+      "pieces_suggerees": [
+        "Kit réparation pneu si réparable",
+        "Valve si nécessaire"
+      ],
+      "controles_suggeres": [
+        "Contrôle état général du pneu",
+        "Contrôle corps étranger restant",
+        "Contrôle zone de crevaison (réparabilité)",
+        "Contrôle état pneus",
+        "Contrôle pression pneus",
+        "Contrôle état jantes"
+      ],
+      "operations_fin": [
+        "Contrôle pression finale"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "PNE-005",
+      "categorie": "Pneumatiques",
+      "intervention": "Pression pneus",
+      "synonymes": [
+        "pression pneus",
+        "gonflage pneus",
+        "contrôle pression",
+        "TPMS",
+        "contrôle gonflage"
+      ],
+      "pieces_suggerees": [],
+      "controles_suggeres": [
+        "Contrôle usure des pneus",
+        "Contrôle témoin TPMS",
+        "Contrôle état pneus",
+        "Contrôle pression pneus",
+        "Contrôle état jantes"
+      ],
+      "operations_fin": [
+        "Contrôle pression finale",
+        "Équilibrage si nécessaire",
+        "Réinitialisation TPMS si nécessaire"
+      ],
+      "frequence": "Très fréquent"
+    },
+    {
+      "id": "PNE-006",
+      "categorie": "Pneumatiques",
+      "intervention": "Valve de roue",
+      "synonymes": [
+        "valve roue",
+        "valve pneu",
+        "remplacement valve",
+        "valve TPMS",
+        "Valve de roue"
+      ],
+      "pieces_suggerees": [
+        "Valve de roue"
+      ],
+      "controles_suggeres": [
+        "Contrôle état général du pneu",
+        "Initialisation capteur TPMS si applicable",
+        "Contrôle état pneus",
+        "Contrôle pression pneus",
+        "Contrôle état jantes"
+      ],
+      "operations_fin": [
+        "Contrôle pression finale",
+        "Équilibrage si nécessaire",
+        "Réinitialisation TPMS si nécessaire"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "DIS-001",
+      "categorie": "Distribution",
+      "intervention": "Distribution",
+      "synonymes": [
+        "distribution",
+        "courroie de distribution",
+        "kit distribution",
+        "remplacement distribution",
+        "timing belt"
+      ],
+      "pieces_suggerees": [
+        "Kit distribution",
+        "Courroie accessoires si nécessaire",
+        "Liquide de refroidissement si nécessaire"
+      ],
+      "controles_suggeres": [
+        "Contrôle absence fuite",
+        "Contrôle circuit de refroidissement",
+        "Contrôle courroie accessoires"
+      ],
+      "operations_fin": [
+        "Essai routier",
+        "Contrôle niveau liquide de refroidissement après chauffe"
+      ],
+      "frequence": "Très fréquent"
+    },
+    {
+      "id": "DIS-002",
+      "categorie": "Distribution",
+      "intervention": "Distribution + pompe à eau",
+      "synonymes": [
+        "kit distribution pompe à eau",
+        "distribution + pompe",
+        "remplacement distribution complet",
+        "timing kit + water pump",
+        "Distribution + pompe à eau"
+      ],
+      "pieces_suggerees": [
+        "Kit distribution",
+        "Pompe à eau",
+        "Liquide de refroidissement",
+        "Courroie accessoires si nécessaire"
+      ],
+      "controles_suggeres": [
+        "Contrôle absence fuite",
+        "Contrôle circuit de refroidissement"
+      ],
+      "operations_fin": [
+        "Essai routier",
+        "Contrôle niveau liquide de refroidissement après chauffe"
+      ],
+      "frequence": "Très fréquent"
+    },
+    {
+      "id": "DIS-003",
+      "categorie": "Distribution",
+      "intervention": "Chaîne de distribution",
+      "synonymes": [
+        "chaîne distribution",
+        "chaîne de distribution",
+        "kit chaîne distribution",
+        "timing chain"
+      ],
+      "pieces_suggerees": [
+        "Kit chaîne de distribution",
+        "Huile moteur si nécessaire",
+        "Joints associés si nécessaires"
+      ],
+      "controles_suggeres": [
+        "Contrôle bruit distribution",
+        "Contrôle absence fuite",
+        "Diagnostic électronique si voyant"
+      ],
+      "operations_fin": [
+        "Essai routier"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "EMB-001",
+      "categorie": "Embrayage",
+      "intervention": "Embrayage",
+      "synonymes": [
+        "embrayage",
+        "kit embrayage",
+        "remplacement embrayage",
+        "disque embrayage",
+        "mécanisme embrayage",
+        "clutch kit"
+      ],
+      "pieces_suggerees": [
+        "Kit embrayage"
+      ],
+      "controles_suggeres": [
+        "Contrôle état volant moteur (bi-masse)",
+        "Contrôle joint spi arbre d'entrée boîte",
+        "Contrôle joint spi vilebrequin",
+        "Contrôle huile boîte de vitesses",
+        "Contrôle commande embrayage",
+        "Contrôle absence fuite"
+      ],
+      "operations_fin": [
+        "Essai routier"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "EMB-002",
+      "categorie": "Embrayage",
+      "intervention": "Embrayage + volant moteur",
+      "synonymes": [
+        "volant bi-masse",
+        "DMF",
+        "kit embrayage + volant bi-masse",
+        "remplacement volant moteur",
+        "dual mass flywheel",
+        "Embrayage + volant moteur"
+      ],
+      "pieces_suggerees": [
+        "Kit embrayage",
+        "Volant moteur bi-masse"
+      ],
+      "controles_suggeres": [
+        "Contrôle joint spi arbre d'entrée boîte",
+        "Contrôle joint spi vilebrequin",
+        "Contrôle huile boîte de vitesses",
+        "Contrôle commande embrayage",
+        "Contrôle absence fuite"
+      ],
+      "operations_fin": [
+        "Essai routier"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "EMB-003",
+      "categorie": "Embrayage",
+      "intervention": "Câble d’embrayage",
+      "synonymes": [
+        "câble embrayage",
+        "câble de débrayage",
+        "remplacement câble embrayage",
+        "Câble d’embrayage"
+      ],
+      "pieces_suggerees": [
+        "Câble d’embrayage"
+      ],
+      "controles_suggeres": [
+        "Contrôle état fourchette d'embrayage",
+        "Contrôle roulement de butée",
+        "Contrôle commande embrayage",
+        "Contrôle absence fuite"
+      ],
+      "operations_fin": [
+        "Essai routier"
+      ],
+      "frequence": "Occasionnel"
+    },
+    {
+      "id": "SUS-001",
+      "categorie": "Suspension",
+      "intervention": "Amortisseurs avant",
+      "synonymes": [
+        "amortisseurs avant",
+        "amortisseur avant gauche",
+        "amortisseur avant droit",
+        "remplacement amortisseurs avant",
+        "shock absorbers front"
+      ],
+      "pieces_suggerees": [
+        "Amortisseurs avant",
+        "Coupelles si nécessaires"
+      ],
+      "controles_suggeres": [
+        "Contrôle état des ressorts avant",
+        "Contrôle état des rotules",
+        "Contrôle état des silent-blocs",
+        "Contrôle géométrie (parallélisme)",
+        "Contrôle visuel train roulant",
+        "Contrôle usure pneus"
+      ],
+      "operations_fin": [
+        "Essai routier",
+        "Géométrie si nécessaire"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "SUS-002",
+      "categorie": "Suspension",
+      "intervention": "Amortisseurs arrière",
+      "synonymes": [
+        "amortisseurs arrière",
+        "amortisseur arrière gauche",
+        "amortisseur arrière droit",
+        "remplacement amortisseurs arrière"
+      ],
+      "pieces_suggerees": [
+        "Amortisseurs arrière"
+      ],
+      "controles_suggeres": [
+        "Contrôle état des ressorts arrière",
+        "Contrôle état des silent-blocs",
+        "Contrôle géométrie arrière",
+        "Contrôle visuel train roulant",
+        "Contrôle usure pneus"
+      ],
+      "operations_fin": [
+        "Essai routier",
+        "Géométrie si nécessaire"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "SUS-003",
+      "categorie": "Suspension",
+      "intervention": "Amortisseur + ressort avant",
+      "synonymes": [
+        "kit amortisseur ressort avant",
+        "kit suspension avant",
+        "jambe de force avant",
+        "strut avant",
+        "Amortisseur + ressort avant"
+      ],
+      "pieces_suggerees": [
+        "Amortisseur avant",
+        "Ressort avant",
+        "Coupelle si nécessaire"
+      ],
+      "controles_suggeres": [
+        "Contrôle rotules de direction",
+        "Contrôle rotules de suspension",
+        "Géométrie (parallélisme et carrossage)",
+        "Contrôle visuel train roulant",
+        "Contrôle usure pneus"
+      ],
+      "operations_fin": [
+        "Essai routier",
+        "Géométrie si nécessaire"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "SUS-004",
+      "categorie": "Suspension",
+      "intervention": "Silent-blocs de suspension",
+      "synonymes": [
+        "silent-blocs",
+        "silentbloc bras de suspension",
+        "bague bras de suspension",
+        "pivot bras de suspension",
+        "remplacement silent-blocs",
+        "Silent-blocs de suspension"
+      ],
+      "pieces_suggerees": [
+        "Silent-blocs de suspension"
+      ],
+      "controles_suggeres": [
+        "Contrôle rotules de suspension",
+        "Contrôle géométrie (parallélisme)",
+        "Contrôle visuel train roulant",
+        "Contrôle usure pneus"
+      ],
+      "operations_fin": [
+        "Essai routier",
+        "Géométrie si nécessaire"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "SUS-005",
+      "categorie": "Suspension",
+      "intervention": "Rotule de suspension",
+      "synonymes": [
+        "rotule suspension",
+        "rotule inférieure",
+        "rotule de triangle",
+        "remplacement rotule",
+        "Rotule de suspension"
+      ],
+      "pieces_suggerees": [
+        "Rotule de suspension"
+      ],
+      "controles_suggeres": [
+        "Contrôle état bras de suspension",
+        "Contrôle silent-blocs bras",
+        "Contrôle géométrie",
+        "Contrôle visuel train roulant",
+        "Contrôle usure pneus",
+        "Contrôle géométrie si nécessaire"
+      ],
+      "operations_fin": [
+        "Essai routier",
+        "Géométrie si nécessaire"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "SUS-006",
+      "categorie": "Suspension",
+      "intervention": "Biellette de barre stabilisatrice",
+      "synonymes": [
+        "biellette barre stab",
+        "barre stabilisatrice",
+        "biellette anti-roulis",
+        "remplacement biellette",
+        "anti-roll bar link",
+        "Biellette de barre stabilisatrice"
+      ],
+      "pieces_suggerees": [
+        "Biellette de barre stabilisatrice"
+      ],
+      "controles_suggeres": [
+        "Contrôle état barre stabilisatrice",
+        "Contrôle silent-blocs barre stab",
+        "Contrôle état de l'autre biellette",
+        "Contrôle visuel train roulant",
+        "Contrôle usure pneus"
+      ],
+      "operations_fin": [
+        "Essai routier",
+        "Géométrie si nécessaire"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "SUS-007",
+      "categorie": "Suspension",
+      "intervention": "Roulement de roue avant",
+      "synonymes": [
+        "roulement roue avant",
+        "roulement avant gauche",
+        "roulement avant droit",
+        "moyeu avant",
+        "wheel bearing front",
+        "Roulement de roue avant"
+      ],
+      "pieces_suggerees": [
+        "Roulement de roue avant"
+      ],
+      "controles_suggeres": [
+        "Contrôle état de la transmission",
+        "Contrôle rotule de direction",
+        "Contrôle rotule de suspension",
+        "Contrôle visuel train roulant",
+        "Contrôle usure pneus",
+        "Contrôle pression pneus"
+      ],
+      "operations_fin": [
+        "Essai routier",
+        "Géométrie si nécessaire",
+        "Équilibrage si nécessaire",
+        "Réinitialisation TPMS si nécessaire"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "SUS-008",
+      "categorie": "Suspension",
+      "intervention": "Roulement de roue arrière",
+      "synonymes": [
+        "roulement roue arrière",
+        "roulement arrière gauche",
+        "roulement arrière droit",
+        "moyeu arrière",
+        "wheel bearing rear",
+        "Roulement de roue arrière"
+      ],
+      "pieces_suggerees": [
+        "Roulement de roue arrière"
+      ],
+      "controles_suggeres": [
+        "Contrôle freinage arrière",
+        "Contrôle état de la transmission arrière (4x4)",
+        "Contrôle visuel train roulant",
+        "Contrôle usure pneus",
+        "Contrôle pression pneus",
+        "Contrôle état jantes"
+      ],
+      "operations_fin": [
+        "Essai routier",
+        "Géométrie si nécessaire",
+        "Équilibrage si nécessaire",
+        "Réinitialisation TPMS si nécessaire"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "DIR-001",
+      "categorie": "Direction",
+      "intervention": "Parallélisme",
+      "synonymes": [
+        "parallélisme",
+        "géométrie",
+        "réglage parallélisme",
+        "alignement roues",
+        "géométrie roues",
+        "wheel alignment"
+      ],
+      "pieces_suggerees": [],
+      "controles_suggeres": [
+        "Contrôle état rotules de direction",
+        "Contrôle état biellettes de direction",
+        "Contrôle pression pneus avant réglage",
+        "Contrôle direction",
+        "Contrôle usure pneus",
+        "Contrôle géométrie si nécessaire"
+      ],
+      "operations_fin": [
+        "Essai routier",
+        "Géométrie si nécessaire"
+      ],
+      "frequence": "Très fréquent"
+    },
+    {
+      "id": "DIR-002",
+      "categorie": "Direction",
+      "intervention": "Rotule de direction",
+      "synonymes": [
+        "rotule direction",
+        "rotule de biellette",
+        "biellette de direction",
+        "remplacement rotule direction",
+        "tie rod end",
+        "Rotule de direction"
+      ],
+      "pieces_suggerees": [
+        "Rotule de direction"
+      ],
+      "controles_suggeres": [
+        "Contrôle crémaillère de direction",
+        "Contrôle rotule de suspension associée",
+        "Parallélisme obligatoire après remplacement",
+        "Contrôle direction",
+        "Contrôle usure pneus",
+        "Contrôle géométrie si nécessaire"
+      ],
+      "operations_fin": [
+        "Essai routier",
+        "Géométrie si nécessaire"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "DIR-003",
+      "categorie": "Direction",
+      "intervention": "Soufflet de transmission",
+      "synonymes": [
+        "cardan",
+        "joint de cardan",
+        "soufflet cardan",
+        "soufflet de transmission",
+        "remplacement soufflet",
+        "CV boot"
+      ],
+      "pieces_suggerees": [
+        "Soufflet de transmission",
+        "Colliers",
+        "Graisse si nécessaire"
+      ],
+      "controles_suggeres": [
+        "Contrôle état de l'autre cardan de la même demi-arbre",
+        "Contrôle état roulement de roue",
+        "Contrôle bruit à l'essai",
+        "Contrôle direction",
+        "Contrôle usure pneus",
+        "Contrôle géométrie si nécessaire"
+      ],
+      "operations_fin": [
+        "Essai routier",
+        "Géométrie si nécessaire"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "DIR-004",
+      "categorie": "Direction",
+      "intervention": "Demi-arbre de transmission",
+      "synonymes": [
+        "demi-arbre transmission",
+        "arbre de transmission",
+        "demi-transmission",
+        "tripode",
+        "remplacement arbre transmission",
+        "Demi-arbre de transmission"
+      ],
+      "pieces_suggerees": [
+        "Demi-arbre de transmission"
+      ],
+      "controles_suggeres": [
+        "Contrôle joint spi de boîte côté transmission",
+        "Contrôle roulement de roue",
+        "Contrôle rotule de suspension",
+        "Contrôle direction",
+        "Contrôle usure pneus",
+        "Contrôle géométrie si nécessaire"
+      ],
+      "operations_fin": [
+        "Essai routier",
+        "Géométrie si nécessaire"
+      ],
+      "frequence": "Occasionnel"
+    },
+    {
+      "id": "CLI-001",
+      "categorie": "Climatisation",
+      "intervention": "Recharge climatisation",
+      "synonymes": [
+        "recharge clim",
+        "recharge climatisation",
+        "remplissage gaz clim",
+        "charge clim",
+        "AC recharge"
+      ],
+      "pieces_suggerees": [
+        "Fluide climatisation",
+        "Traceur si nécessaire"
+      ],
+      "controles_suggeres": [
+        "Contrôle filtrer déshydrateur",
+        "Contrôle compresseur climatisation",
+        "Contrôle ventilateur condenseur",
+        "Contrôle température sortie d’air",
+        "Contrôle absence fuite visible"
+      ],
+      "operations_fin": [
+        "Test fonctionnement climatisation"
+      ],
+      "frequence": "Très fréquent"
+    },
+    {
+      "id": "CLI-002",
+      "categorie": "Climatisation",
+      "intervention": "Étanchéité climatisation",
+      "synonymes": [
+        "test étanchéité clim",
+        "fuite climatisation",
+        "recherche fuite clim",
+        "leak test AC",
+        "Étanchéité climatisation"
+      ],
+      "pieces_suggerees": [
+        "Traceur climatisation si nécessaire",
+        "Joint climatisation si nécessaire"
+      ],
+      "controles_suggeres": [
+        "Contrôle état tuyaux et raccords",
+        "Contrôle condenseur",
+        "Contrôle évaporateur",
+        "Contrôle température sortie d’air",
+        "Contrôle absence fuite visible"
+      ],
+      "operations_fin": [
+        "Test fonctionnement climatisation"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "CLI-003",
+      "categorie": "Climatisation",
+      "intervention": "Compresseur climatisation",
+      "synonymes": [
+        "compresseur clim",
+        "compresseur climatisation",
+        "remplacement compresseur AC"
+      ],
+      "pieces_suggerees": [
+        "Compresseur climatisation",
+        "Filtre déshydrateur si nécessaire",
+        "Fluide climatisation"
+      ],
+      "controles_suggeres": [
+        "Contrôle condenseur",
+        "Contrôle embrayage compresseur",
+        "Contrôle ventilateur condenseur",
+        "Contrôle température sortie d’air",
+        "Contrôle absence fuite visible"
+      ],
+      "operations_fin": [
+        "Test fonctionnement climatisation"
+      ],
+      "frequence": "Occasionnel"
+    },
+    {
+      "id": "CLI-004",
+      "categorie": "Climatisation",
+      "intervention": "Assainissement climatisation",
+      "synonymes": [
+        "désinfection clim",
+        "assainissement climatisation",
+        "nettoyage clim",
+        "ozone clim",
+        "AC disinfection"
+      ],
+      "pieces_suggerees": [
+        "Produit assainissant climatisation",
+        "Filtre habitacle si nécessaire"
+      ],
+      "controles_suggeres": [
+        "Contrôle état filtre habitacle",
+        "Contrôle drainage bac condensats évaporateur",
+        "Contrôle température sortie d’air",
+        "Contrôle absence fuite visible"
+      ],
+      "operations_fin": [
+        "Test fonctionnement climatisation"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "CLI-005",
+      "categorie": "Climatisation",
+      "intervention": "Filtre déshydrateur climatisation",
+      "synonymes": [
+        "filtre déshydrateur",
+        "bouteille déshydratante",
+        "dessicant",
+        "remplacement filtre clim",
+        "Filtre déshydrateur climatisation"
+      ],
+      "pieces_suggerees": [
+        "Filtre déshydrateur / bouteille déshydratante"
+      ],
+      "controles_suggeres": [
+        "Contrôle tuyaux et raccords",
+        "Contrôle état compresseur",
+        "Contrôle température sortie d’air",
+        "Contrôle absence fuite visible"
+      ],
+      "operations_fin": [
+        "Test fonctionnement climatisation",
+        "Remise à zéro maintenance si nécessaire"
+      ],
+      "frequence": "Occasionnel"
+    },
+    {
+      "id": "DIA-001",
+      "categorie": "Diagnostic",
+      "intervention": "Diagnostic électronique",
+      "synonymes": [
+        "diagnostic",
+        "lecture codes défaut",
+        "valise diagnostic",
+        "scan diagnostic",
+        "OBD diagnostic",
+        "lecture OBD",
+        "Diagnostic électronique"
+      ],
+      "pieces_suggerees": [],
+      "controles_suggeres": [
+        "Contrôle visuel des connecteurs",
+        "Contrôle batterie (si codes aléatoires)",
+        "Lecture codes défaut",
+        "Contrôle symptômes client"
+      ],
+      "operations_fin": [
+        "Compte rendu diagnostic",
+        "Compte rendu au client"
+      ],
+      "frequence": "Très fréquent"
+    },
+    {
+      "id": "DIA-002",
+      "categorie": "Diagnostic",
+      "intervention": "Voyant moteur",
+      "synonymes": [
+        "voyant moteur",
+        "check engine",
+        "MIL",
+        "voyant orange moteur",
+        "diagnostic voyant allumé"
+      ],
+      "pieces_suggerees": [],
+      "controles_suggeres": [
+        "Contrôle circuit d'admission",
+        "Contrôle système d'injection",
+        "Contrôle circuit d'échappement et sonde lambda",
+        "Lecture codes défaut",
+        "Contrôle symptômes client"
+      ],
+      "operations_fin": [
+        "Compte rendu diagnostic",
+        "Compte rendu au client"
+      ],
+      "frequence": "Très fréquent"
+    },
+    {
+      "id": "DIA-003",
+      "categorie": "Diagnostic",
+      "intervention": "Diagnostic démarrage",
+      "synonymes": [
+        "problème démarrage",
+        "voiture ne démarre pas",
+        "panne démarrage",
+        "no start diagnostic",
+        "Diagnostic démarrage"
+      ],
+      "pieces_suggerees": [],
+      "controles_suggeres": [
+        "Contrôle état batterie",
+        "Contrôle alternateur",
+        "Contrôle pompe à carburant",
+        "Lecture codes défaut",
+        "Contrôle symptômes client"
+      ],
+      "operations_fin": [
+        "Compte rendu diagnostic",
+        "Compte rendu au client"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "DIA-004",
+      "categorie": "Diagnostic",
+      "intervention": "Diagnostic bruit",
+      "synonymes": [
+        "bruit anormal",
+        "bruit suspect",
+        "claquement",
+        "grincement",
+        "couinement",
+        "diagnostic bruit"
+      ],
+      "pieces_suggerees": [],
+      "controles_suggeres": [
+        "Contrôle suspension et direction",
+        "Contrôle freinage",
+        "Contrôle transmission",
+        "Lecture codes défaut",
+        "Contrôle symptômes client"
+      ],
+      "operations_fin": [
+        "Compte rendu diagnostic",
+        "Compte rendu au client"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "DIA-005",
+      "categorie": "Diagnostic",
+      "intervention": "Diagnostic perte de puissance",
+      "synonymes": [
+        "perte de puissance",
+        "manque de puissance",
+        "moteur qui tire mal",
+        "turbo en défaut",
+        "diagnostic puissance",
+        "Diagnostic perte de puissance"
+      ],
+      "pieces_suggerees": [],
+      "controles_suggeres": [
+        "Contrôle filtre à air",
+        "Contrôle filtre carburant",
+        "Contrôle FAP (diesel)",
+        "Lecture codes défaut",
+        "Contrôle symptômes client"
+      ],
+      "operations_fin": [
+        "Compte rendu diagnostic",
+        "Compte rendu au client"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "ELE-001",
+      "categorie": "Électricité",
+      "intervention": "Batterie",
+      "synonymes": [
+        "batterie",
+        "remplacement batterie",
+        "changement batterie",
+        "batterie déchargée",
+        "battery replacement"
+      ],
+      "pieces_suggerees": [
+        "Batterie"
+      ],
+      "controles_suggeres": [
+        "Contrôle état alternateur",
+        "Contrôle cosses de batterie",
+        "Contrôle démarreur",
+        "Contrôle charge",
+        "Contrôle connectique visible",
+        "Contrôle tension batterie"
+      ],
+      "operations_fin": [
+        "Test fonctionnement"
+      ],
+      "frequence": "Très fréquent"
+    },
+    {
+      "id": "ELE-002",
+      "categorie": "Électricité",
+      "intervention": "Alternateur",
+      "synonymes": [
+        "alternateur",
+        "remplacement alternateur",
+        "alternateur en panne",
+        "pas de charge",
+        "alternator"
+      ],
+      "pieces_suggerees": [
+        "Alternateur",
+        "Courroie accessoires si nécessaire"
+      ],
+      "controles_suggeres": [
+        "Contrôle état batterie",
+        "Contrôle courroie d'accessoires",
+        "Contrôle câblage batterie",
+        "Contrôle charge",
+        "Contrôle connectique visible",
+        "Contrôle batterie"
+      ],
+      "operations_fin": [
+        "Test fonctionnement"
+      ],
+      "frequence": "Occasionnel"
+    },
+    {
+      "id": "ELE-003",
+      "categorie": "Électricité",
+      "intervention": "Démarreur",
+      "synonymes": [
+        "démarreur",
+        "remplacement démarreur",
+        "démarreur HS",
+        "starter"
+      ],
+      "pieces_suggerees": [
+        "Démarreur"
+      ],
+      "controles_suggeres": [
+        "Contrôle état batterie",
+        "Contrôle relais et fusibles de démarrage",
+        "Contrôle câblage démarreur",
+        "Contrôle charge",
+        "Contrôle connectique visible",
+        "Contrôle batterie"
+      ],
+      "operations_fin": [
+        "Test fonctionnement"
+      ],
+      "frequence": "Occasionnel"
+    },
+    {
+      "id": "ELE-004",
+      "categorie": "Électricité",
+      "intervention": "Éclairage et ampoules",
+      "synonymes": [
+        "ampoule",
+        "éclairage",
+        "phare grillé",
+        "feu grillé",
+        "remplacement ampoule",
+        "feu cassé",
+        "Éclairage et ampoules"
+      ],
+      "pieces_suggerees": [
+        "Ampoule ou optique concerné"
+      ],
+      "controles_suggeres": [
+        "Contrôle état du projecteur",
+        "Contrôle faisceau électrique",
+        "Contrôle réglage direction des feux",
+        "Contrôle charge",
+        "Contrôle connectique visible"
+      ],
+      "operations_fin": [
+        "Test fonctionnement"
+      ],
+      "frequence": "Très fréquent"
+    },
+    {
+      "id": "ELE-005",
+      "categorie": "Électricité",
+      "intervention": "Balais essuie-glaces",
+      "synonymes": [
+        "essuie-glaces",
+        "balais essuie glace",
+        "raclettes essuie-glaces",
+        "wiper blades",
+        "Balais essuie-glaces"
+      ],
+      "pieces_suggerees": [
+        "Balais essuie-glaces"
+      ],
+      "controles_suggeres": [
+        "Contrôle niveau lave-glace",
+        "Contrôle état bras d'essuie-glace",
+        "Contrôle fonctionnement moteur essuie-glace",
+        "Contrôle charge",
+        "Contrôle connectique visible"
+      ],
+      "operations_fin": [
+        "Test fonctionnement"
+      ],
+      "frequence": "Très fréquent"
+    },
+    {
+      "id": "ELE-006",
+      "categorie": "Électricité",
+      "intervention": "Lève-vitre électrique",
+      "synonymes": [
+        "lève-vitre",
+        "lève vitre électrique",
+        "vitre coincée",
+        "remplacement lève-vitre",
+        "window regulator",
+        "Lève-vitre électrique"
+      ],
+      "pieces_suggerees": [
+        "Mécanisme lève-vitre",
+        "Interrupteur si nécessaire"
+      ],
+      "controles_suggeres": [
+        "Contrôle câblage et connecteur",
+        "Contrôle fusible lève-vitre",
+        "Contrôle commande lève-vitre",
+        "Contrôle charge",
+        "Contrôle connectique visible",
+        "Contrôle étanchéité vitrage"
+      ],
+      "operations_fin": [
+        "Test fonctionnement"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "ELE-007",
+      "categorie": "Électricité",
+      "intervention": "Capteur électrique",
+      "synonymes": [
+        "capteur",
+        "sonde",
+        "capteur défectueux",
+        "sensor",
+        "remplacement capteur",
+        "Capteur électrique"
+      ],
+      "pieces_suggerees": [
+        "Capteur concerné"
+      ],
+      "controles_suggeres": [
+        "Contrôle connexions électriques",
+        "Contrôle faisceau câblage",
+        "Contrôle charge",
+        "Contrôle connectique visible"
+      ],
+      "operations_fin": [
+        "Test fonctionnement"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "INJ-001",
+      "categorie": "Injection",
+      "intervention": "Nettoyage injecteurs",
+      "synonymes": [
+        "nettoyage injecteurs",
+        "décalaminage injecteurs",
+        "injecteurs encrassés",
+        "injector cleaning"
+      ],
+      "pieces_suggerees": [
+        "Produit nettoyage injection si nécessaire"
+      ],
+      "controles_suggeres": [
+        "Contrôle pression carburant",
+        "Contrôle filtre à carburant",
+        "Contrôle codes défaut injection",
+        "Diagnostic électronique",
+        "Contrôle absence fuite carburant"
+      ],
+      "operations_fin": [
+        "Diagnostic après intervention",
+        "Essai routier si nécessaire"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "INJ-002",
+      "categorie": "Injection",
+      "intervention": "Injecteurs",
+      "synonymes": [
+        "remplacement injecteurs",
+        "injecteur fuyant",
+        "injecteur HS",
+        "injector replacement",
+        "Injecteurs"
+      ],
+      "pieces_suggerees": [
+        "Injecteur(s)",
+        "Joints injecteur si nécessaires"
+      ],
+      "controles_suggeres": [
+        "Contrôle retour carburant",
+        "Contrôle pression rail carburant",
+        "Contrôle pompe haute pression",
+        "Diagnostic électronique",
+        "Contrôle absence fuite carburant"
+      ],
+      "operations_fin": [
+        "Diagnostic après intervention",
+        "Essai routier si nécessaire"
+      ],
+      "frequence": "Occasionnel"
+    },
+    {
+      "id": "INJ-003",
+      "categorie": "Injection",
+      "intervention": "Pompe à carburant",
+      "synonymes": [
+        "pompe carburant",
+        "pompe à essence",
+        "pompe immergée",
+        "fuel pump",
+        "Pompe à carburant"
+      ],
+      "pieces_suggerees": [
+        "Pompe à carburant",
+        "Filtre à carburant si nécessaire"
+      ],
+      "controles_suggeres": [
+        "Contrôle filtre à carburant",
+        "Contrôle pression carburant",
+        "Contrôle relais pompe carburant",
+        "Diagnostic électronique",
+        "Contrôle absence fuite carburant"
+      ],
+      "operations_fin": [
+        "Diagnostic après intervention",
+        "Essai routier si nécessaire"
+      ],
+      "frequence": "Occasionnel"
+    },
+    {
+      "id": "INJ-004",
+      "categorie": "Injection",
+      "intervention": "Régénération FAP",
+      "synonymes": [
+        "FAP",
+        "filtre à particules",
+        "régénération FAP",
+        "DPF",
+        "voyant FAP",
+        "forcer régénération"
+      ],
+      "pieces_suggerees": [
+        "Additif FAP si nécessaire"
+      ],
+      "controles_suggeres": [
+        "Contrôle niveau additif FAP (Eolys, etc.)",
+        "Contrôle sonde de pression différentielle",
+        "Contrôle vanne EGR",
+        "Diagnostic électronique",
+        "Contrôle absence fuite carburant"
+      ],
+      "operations_fin": [
+        "Diagnostic après intervention",
+        "Essai routier si nécessaire"
+      ],
+      "frequence": "Très fréquent"
+    },
+    {
+      "id": "INJ-005",
+      "categorie": "Injection",
+      "intervention": "FAP",
+      "synonymes": [
+        "remplacement FAP",
+        "remplacement DPF",
+        "FAP colmaté",
+        "DPF replacement",
+        "FAP"
+      ],
+      "pieces_suggerees": [
+        "FAP",
+        "Capteurs associés si nécessaires"
+      ],
+      "controles_suggeres": [
+        "Contrôle niveau additif FAP",
+        "Contrôle capteur pression différentielle",
+        "Contrôle sonde de température",
+        "Diagnostic électronique",
+        "Contrôle absence fuite carburant"
+      ],
+      "operations_fin": [
+        "Diagnostic après intervention",
+        "Essai routier si nécessaire"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "INJ-006",
+      "categorie": "Injection",
+      "intervention": "Vanne EGR",
+      "synonymes": [
+        "EGR",
+        "vanne EGR",
+        "recirculation gaz",
+        "nettoyage EGR",
+        "EGR valve"
+      ],
+      "pieces_suggerees": [
+        "Vanne EGR",
+        "Joint EGR si nécessaire"
+      ],
+      "controles_suggeres": [
+        "Contrôle conduit EGR et collecteur admission",
+        "Contrôle turbocompresseur",
+        "Contrôle FAP",
+        "Diagnostic électronique",
+        "Contrôle absence fuite carburant"
+      ],
+      "operations_fin": [
+        "Diagnostic après intervention",
+        "Essai routier si nécessaire"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "ECH-001",
+      "categorie": "Échappement",
+      "intervention": "Silencieux arrière",
+      "synonymes": [
+        "silencieux",
+        "pot d'échappement",
+        "silencieux arrière",
+        "remplacement silencieux",
+        "muffler"
+      ],
+      "pieces_suggerees": [
+        "Silencieux arrière",
+        "Collier / silent-bloc si nécessaire"
+      ],
+      "controles_suggeres": [
+        "Contrôle état silencieux intermédiaire",
+        "Contrôle état support caoutchouc",
+        "Contrôle joints et colliers",
+        "Contrôle fixation échappement",
+        "Contrôle absence fuite échappement"
+      ],
+      "operations_fin": [
+        "Contrôle bruit échappement",
+        "Essai routier si nécessaire"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "ECH-002",
+      "categorie": "Échappement",
+      "intervention": "Catalyseur",
+      "synonymes": [
+        "catalyseur",
+        "cat",
+        "pot catalytique",
+        "remplacement catalyseur"
+      ],
+      "pieces_suggerees": [
+        "Catalyseur",
+        "Joint / collier si nécessaire"
+      ],
+      "controles_suggeres": [
+        "Contrôle sondes lambda",
+        "Contrôle circuit d'échappement amont",
+        "Contrôle absence code défaut",
+        "Contrôle fixation échappement",
+        "Contrôle absence fuite échappement"
+      ],
+      "operations_fin": [
+        "Contrôle bruit échappement",
+        "Essai routier si nécessaire"
+      ],
+      "frequence": "Occasionnel"
+    },
+    {
+      "id": "ECH-003",
+      "categorie": "Échappement",
+      "intervention": "Sonde lambda",
+      "synonymes": [
+        "sonde lambda",
+        "sonde oxygène",
+        "capteur O2",
+        "lambda sensor",
+        "oxygen sensor"
+      ],
+      "pieces_suggerees": [
+        "Sonde lambda"
+      ],
+      "controles_suggeres": [
+        "Contrôle état catalyseur",
+        "Contrôle richesse moteur",
+        "Contrôle codes défaut moteur",
+        "Contrôle fixation échappement",
+        "Contrôle absence fuite échappement"
+      ],
+      "operations_fin": [
+        "Contrôle bruit échappement",
+        "Essai routier si nécessaire"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "ECH-004",
+      "categorie": "Échappement",
+      "intervention": "Joint / collier d’échappement",
+      "synonymes": [
+        "joint échappement",
+        "collier échappement",
+        "fuite échappement",
+        "remplacement joint",
+        "Joint / collier d’échappement"
+      ],
+      "pieces_suggerees": [
+        "Joint d’échappement",
+        "Collier d’échappement"
+      ],
+      "controles_suggeres": [
+        "Contrôle état général de la ligne d'échappement",
+        "Contrôle fixations et supports caoutchouc",
+        "Contrôle fixation échappement",
+        "Contrôle absence fuite échappement"
+      ],
+      "operations_fin": [
+        "Contrôle bruit échappement",
+        "Essai routier si nécessaire"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "CAR-001",
+      "categorie": "Carrosserie",
+      "intervention": "Pare-chocs avant",
+      "synonymes": [
+        "pare-chocs avant",
+        "parechoc avant",
+        "bumper avant",
+        "remplacement pare chocs"
+      ],
+      "pieces_suggerees": [
+        "Pare-chocs avant",
+        "Agrafes / supports si nécessaires"
+      ],
+      "controles_suggeres": [
+        "Contrôle état calandre et grilles",
+        "Contrôle capteurs de parking",
+        "Contrôle caméra frontale",
+        "Contrôle aspect carrosserie",
+        "Contrôle fixation éléments"
+      ],
+      "operations_fin": [
+        "Contrôle alignement et aspect"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "CAR-002",
+      "categorie": "Carrosserie",
+      "intervention": "Pare-chocs arrière",
+      "synonymes": [
+        "pare-chocs arrière",
+        "parechoc arrière",
+        "bumper arrière"
+      ],
+      "pieces_suggerees": [
+        "Pare-chocs arrière",
+        "Agrafes / supports si nécessaires"
+      ],
+      "controles_suggeres": [
+        "Contrôle capteurs de stationnement arrière",
+        "Contrôle caméra de recul",
+        "Contrôle aspect carrosserie",
+        "Contrôle fixation éléments"
+      ],
+      "operations_fin": [
+        "Contrôle alignement et aspect"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "CAR-003",
+      "categorie": "Carrosserie",
+      "intervention": "Débosselage sans peinture",
+      "synonymes": [
+        "PDR",
+        "débosselage sans peinture",
+        "bosselage",
+        "débosselage grêle",
+        "paintless dent repair"
+      ],
+      "pieces_suggerees": [],
+      "controles_suggeres": [
+        "Contrôle état peinture",
+        "Contrôle que la pièce est réparable sans peinture",
+        "Contrôle aspect carrosserie",
+        "Contrôle fixation éléments"
+      ],
+      "operations_fin": [
+        "Contrôle alignement et aspect"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "CAR-004",
+      "categorie": "Carrosserie",
+      "intervention": "Aile de carrosserie",
+      "synonymes": [
+        "aile",
+        "aile avant",
+        "aile arrière",
+        "remplacement aile",
+        "dépose aile",
+        "Aile de carrosserie"
+      ],
+      "pieces_suggerees": [
+        "Aile de carrosserie",
+        "Agrafes / supports si nécessaires"
+      ],
+      "controles_suggeres": [
+        "Contrôle anti-corrosion",
+        "Contrôle protection insonorisante",
+        "Contrôle aspect carrosserie",
+        "Contrôle fixation éléments"
+      ],
+      "operations_fin": [
+        "Contrôle alignement et aspect"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "VIT-001",
+      "categorie": "Vitrage",
+      "intervention": "Pare-brise",
+      "synonymes": [
+        "pare-brise",
+        "windshield",
+        "remplacement pare brise",
+        "bris de glace pare-brise",
+        "pare brise fissuré"
+      ],
+      "pieces_suggerees": [
+        "Pare-brise",
+        "Colle vitrage",
+        "Capteur pluie/lumière si nécessaire"
+      ],
+      "controles_suggeres": [
+        "Contrôle état des joints de pare-brise",
+        "Contrôle étanchéité à l'eau",
+        "Calibration ADAS (caméra, radar)",
+        "Contrôle étanchéité",
+        "Contrôle fonctionnement équipements associés",
+        "Contrôle étanchéité vitrage"
+      ],
+      "operations_fin": [
+        "Contrôle étanchéité",
+        "Test équipements associés si nécessaire"
+      ],
+      "frequence": "Très fréquent"
+    },
+    {
+      "id": "VIT-002",
+      "categorie": "Vitrage",
+      "intervention": "Impact pare-brise",
+      "synonymes": [
+        "impact pare-brise",
+        "éclat pare-brise",
+        "chip repair",
+        "résine pare-brise",
+        "réparation éclat"
+      ],
+      "pieces_suggerees": [
+        "Résine réparation impact"
+      ],
+      "controles_suggeres": [
+        "Contrôle si l'impact est réparable (taille, position)",
+        "Contrôle résultat après traitement",
+        "Contrôle étanchéité",
+        "Contrôle fonctionnement équipements associés",
+        "Contrôle étanchéité vitrage"
+      ],
+      "operations_fin": [
+        "Contrôle étanchéité",
+        "Test équipements associés si nécessaire"
+      ],
+      "frequence": "Très fréquent"
+    },
+    {
+      "id": "VIT-003",
+      "categorie": "Vitrage",
+      "intervention": "Vitre latérale",
+      "synonymes": [
+        "vitre latérale",
+        "vitre de porte",
+        "glace latérale",
+        "vitre cassée",
+        "remplacement vitre"
+      ],
+      "pieces_suggerees": [
+        "Vitre latérale",
+        "Joint si nécessaire"
+      ],
+      "controles_suggeres": [
+        "Contrôle fonctionnement lève-vitre",
+        "Contrôle état joint de vitre",
+        "Contrôle étanchéité",
+        "Contrôle fonctionnement équipements associés",
+        "Contrôle étanchéité vitrage"
+      ],
+      "operations_fin": [
+        "Contrôle étanchéité",
+        "Test équipements associés si nécessaire"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "VO-001",
+      "categorie": "Préparation VO",
+      "intervention": "Expertise véhicule occasion",
+      "synonymes": [
+        "expertise VO",
+        "pré-achat",
+        "contrôle véhicule occasion",
+        "expertise avant achat",
+        "inspection VO",
+        "Expertise véhicule occasion"
+      ],
+      "pieces_suggerees": [],
+      "controles_suggeres": [
+        "Contrôle historique entretien",
+        "Contrôle kilométrage",
+        "Contrôle VIN / conformité",
+        "Contrôle état général",
+        "Contrôle propreté",
+        "Contrôle équipements"
+      ],
+      "operations_fin": [
+        "Compte rendu préparation"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "VO-002",
+      "categorie": "Préparation VO",
+      "intervention": "Préparation esthétique VO",
+      "synonymes": [
+        "préparation VO",
+        "esthétique VO",
+        "remise en état VO",
+        "préparation vente",
+        "Préparation esthétique VO"
+      ],
+      "pieces_suggerees": [
+        "Produits nettoyage",
+        "Consommables esthétique"
+      ],
+      "controles_suggeres": [
+        "Contrôle état peinture",
+        "Contrôle état sellerie",
+        "Contrôle état moquettes",
+        "Contrôle état général",
+        "Contrôle propreté",
+        "Contrôle équipements"
+      ],
+      "operations_fin": [
+        "Compte rendu préparation"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "VO-003",
+      "categorie": "Préparation VO",
+      "intervention": "Révision pré-vente VO",
+      "synonymes": [
+        "révision VO",
+        "entretien avant vente",
+        "révision avant vente",
+        "service VO",
+        "Révision pré-vente VO"
+      ],
+      "pieces_suggerees": [
+        "Huile moteur",
+        "Filtres selon état",
+        "Balais essuie-glaces si nécessaires"
+      ],
+      "controles_suggeres": [
+        "Contrôle courroie de distribution (kilométrage)",
+        "Contrôle état batterie",
+        "Contrôle embrayage",
+        "Contrôle état général",
+        "Contrôle propreté",
+        "Contrôle équipements"
+      ],
+      "operations_fin": [
+        "Compte rendu préparation",
+        "Remise à zéro maintenance si nécessaire"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "CT-001",
+      "categorie": "Contrôle technique",
+      "intervention": "Préparation contrôle technique",
+      "synonymes": [
+        "préparation CT",
+        "contrôle technique",
+        "avant CT",
+        "avant visite technique",
+        "pré-CT",
+        "Préparation contrôle technique"
+      ],
+      "pieces_suggerees": [
+        "Ampoules si nécessaires",
+        "Balais essuie-glaces si nécessaires"
+      ],
+      "controles_suggeres": [
+        "Contrôle pollution (diesel/essence)",
+        "Contrôle direction",
+        "Contrôle identification du véhicule",
+        "Contrôle points rapportés",
+        "Contrôle sécurité"
+      ],
+      "operations_fin": [
+        "Validation des points traités"
+      ],
+      "frequence": "Très fréquent"
+    },
+    {
+      "id": "CT-002",
+      "categorie": "Contrôle technique",
+      "intervention": "Contre-visite contrôle technique",
+      "synonymes": [
+        "contre-visite",
+        "contre visite CT",
+        "retour CT",
+        "second CT",
+        "Contre-visite contrôle technique"
+      ],
+      "pieces_suggerees": [
+        "Pièces selon rapport de contrôle technique"
+      ],
+      "controles_suggeres": [
+        "Contrôle de tous les points de défaillance listés",
+        "Validation avant retour au CT",
+        "Contrôle points rapportés",
+        "Contrôle sécurité"
+      ],
+      "operations_fin": [
+        "Validation des points traités"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "GAR-001",
+      "categorie": "Garantie",
+      "intervention": "Garantie atelier ou fournisseur",
+      "synonymes": [
+        "garantie atelier",
+        "garantie fournisseur",
+        "garantie pièces",
+        "prise en garantie",
+        "retour garantie",
+        "Garantie atelier ou fournisseur"
+      ],
+      "pieces_suggerees": [
+        "Pièce concernée selon dossier"
+      ],
+      "controles_suggeres": [
+        "Contrôle date et kilométrage",
+        "Vérification de la couverture garantie",
+        "Contrôle conformité du dossier",
+        "Contrôle conformité dossier"
+      ],
+      "operations_fin": [
+        "Mise à jour dossier garantie"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "DIV-001",
+      "categorie": "Divers",
+      "intervention": "Thermostat",
+      "synonymes": [
+        "thermostat",
+        "remplacement thermostat",
+        "thermostat moteur",
+        "surchauffe moteur"
+      ],
+      "pieces_suggerees": [
+        "Thermostat",
+        "Joint thermostat",
+        "Liquide de refroidissement si nécessaire"
+      ],
+      "controles_suggeres": [
+        "Contrôle état durites",
+        "Contrôle pompe à eau",
+        "Contrôle ventilateur de refroidissement",
+        "Contrôle absence fuite",
+        "Contrôle fonctionnement"
+      ],
+      "operations_fin": [
+        "Essai fonctionnement si nécessaire"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "DIV-002",
+      "categorie": "Divers",
+      "intervention": "Pompe à eau",
+      "synonymes": [
+        "pompe à eau",
+        "water pump",
+        "remplacement pompe eau",
+        "pompe refroidissement"
+      ],
+      "pieces_suggerees": [
+        "Pompe à eau",
+        "Joint pompe à eau",
+        "Liquide de refroidissement"
+      ],
+      "controles_suggeres": [
+        "Contrôle état courroie de distribution (si concernée)",
+        "Contrôle étanchéité joint pompe",
+        "Contrôle thermostat",
+        "Contrôle absence fuite",
+        "Contrôle fonctionnement"
+      ],
+      "operations_fin": [
+        "Essai fonctionnement si nécessaire",
+        "Essai routier"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "DIV-003",
+      "categorie": "Divers",
+      "intervention": "Joint de culasse",
+      "synonymes": [
+        "joint de culasse",
+        "joint culasse",
+        "head gasket",
+        "culasse grillée"
+      ],
+      "pieces_suggerees": [
+        "Joint de culasse",
+        "Kit joints haut moteur",
+        "Liquide de refroidissement",
+        "Huile moteur si nécessaire"
+      ],
+      "controles_suggeres": [
+        "Test analyse gaz culasse",
+        "Contrôle planéité",
+        "Contrôle absence mélange eau/huile",
+        "Contrôle absence fuite",
+        "Contrôle fonctionnement"
+      ],
+      "operations_fin": [
+        "Essai fonctionnement si nécessaire"
+      ],
+      "frequence": "Occasionnel"
+    },
+    {
+      "id": "DIV-004",
+      "categorie": "Divers",
+      "intervention": "Turbocompresseur",
+      "synonymes": [
+        "turbo",
+        "turbocompresseur",
+        "remplacement turbo",
+        "turbo HS"
+      ],
+      "pieces_suggerees": [
+        "Turbocompresseur",
+        "Huile moteur",
+        "Filtre à huile",
+        "Joints associés"
+      ],
+      "controles_suggeres": [
+        "Contrôle conduits d'alimentation huile",
+        "Contrôle intercooler",
+        "Contrôle circuit d'admission",
+        "Contrôle absence fuite",
+        "Contrôle fonctionnement"
+      ],
+      "operations_fin": [
+        "Essai fonctionnement si nécessaire",
+        "Essai routier"
+      ],
+      "frequence": "Occasionnel"
+    },
+    {
+      "id": "DIV-005",
+      "categorie": "Divers",
+      "intervention": "Radiateur de refroidissement",
+      "synonymes": [
+        "radiateur",
+        "remplacement radiateur",
+        "radiateur percé",
+        "radiateur moteur",
+        "Radiateur de refroidissement"
+      ],
+      "pieces_suggerees": [
+        "Radiateur de refroidissement",
+        "Liquide de refroidissement"
+      ],
+      "controles_suggeres": [
+        "Contrôle ventilateur refroidissement",
+        "Contrôle durites",
+        "Contrôle thermostat",
+        "Contrôle absence fuite",
+        "Contrôle fonctionnement"
+      ],
+      "operations_fin": [
+        "Essai fonctionnement si nécessaire",
+        "Essai routier"
+      ],
+      "frequence": "Occasionnel"
+    },
+    {
+      "id": "DIV-006",
+      "categorie": "Divers",
+      "intervention": "Boîte de vitesses manuelle",
+      "synonymes": [
+        "boîte de vitesses",
+        "BVM",
+        "remplacement boîte vitesse",
+        "gearbox",
+        "Boîte de vitesses manuelle"
+      ],
+      "pieces_suggerees": [
+        "Boîte de vitesses manuelle",
+        "Huile boîte",
+        "Kit embrayage recommandé"
+      ],
+      "controles_suggeres": [
+        "Contrôle joints spi",
+        "Contrôle transmissions",
+        "Contrôle commande de boîte",
+        "Contrôle absence fuite",
+        "Contrôle fonctionnement"
+      ],
+      "operations_fin": [
+        "Essai fonctionnement si nécessaire",
+        "Essai routier"
+      ],
+      "frequence": "Rare"
+    },
+    {
+      "id": "DIV-007",
+      "categorie": "Divers",
+      "intervention": "Boîte automatique",
+      "synonymes": [
+        "vidange BVA",
+        "vidange boîte auto",
+        "huile boîte automatique",
+        "automatic transmission fluid",
+        "Boîte automatique"
+      ],
+      "pieces_suggerees": [
+        "Huile boîte automatique",
+        "Filtre boîte si accessible"
+      ],
+      "controles_suggeres": [
+        "Contrôle fuites boîte automatique",
+        "Contrôle fonctionnement en conduite",
+        "Contrôle absence fuite",
+        "Contrôle fonctionnement"
+      ],
+      "operations_fin": [
+        "Essai fonctionnement si nécessaire",
+        "Essai routier"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "DIV-008",
+      "categorie": "Divers",
+      "intervention": "Maître cylindre de frein",
+      "synonymes": [
+        "maître cylindre",
+        "maitre cylindre frein",
+        "master cylinder",
+        "Maître cylindre de frein"
+      ],
+      "pieces_suggerees": [
+        "Maître cylindre de frein",
+        "Liquide de frein"
+      ],
+      "controles_suggeres": [
+        "Contrôle servofrein",
+        "Contrôle niveau liquide de frein",
+        "Contrôle étanchéité circuit",
+        "Contrôle absence fuite",
+        "Contrôle fonctionnement",
+        "Contrôle visuel freinage"
+      ],
+      "operations_fin": [
+        "Essai fonctionnement si nécessaire",
+        "Essai freinage"
+      ],
+      "frequence": "Rare"
+    },
+    {
+      "id": "DIV-009",
+      "categorie": "Divers",
+      "intervention": "Pompe de direction assistée",
+      "synonymes": [
+        "pompe direction assistée",
+        "pompe DA",
+        "direction assistée hydraulique",
+        "power steering pump",
+        "Pompe de direction assistée"
+      ],
+      "pieces_suggerees": [
+        "Pompe de direction assistée",
+        "Huile direction assistée"
+      ],
+      "controles_suggeres": [
+        "Contrôle courroie d'accessoires",
+        "Contrôle état crémaillère",
+        "Contrôle niveau huile direction",
+        "Contrôle absence fuite",
+        "Contrôle fonctionnement",
+        "Contrôle géométrie si nécessaire"
+      ],
+      "operations_fin": [
+        "Essai fonctionnement si nécessaire",
+        "Essai routier"
+      ],
+      "frequence": "Rare"
+    },
+    {
+      "id": "DIV-010",
+      "categorie": "Divers",
+      "intervention": "Crémaillère de direction",
+      "synonymes": [
+        "crémaillère direction",
+        "crémaillère de direction",
+        "remplacement crémaillère"
+      ],
+      "pieces_suggerees": [
+        "Crémaillère de direction",
+        "Huile direction assistée si nécessaire"
+      ],
+      "controles_suggeres": [
+        "Contrôle rotules de direction",
+        "Parallélisme obligatoire après remplacement",
+        "Contrôle colonne de direction",
+        "Contrôle absence fuite",
+        "Contrôle fonctionnement",
+        "Contrôle géométrie si nécessaire"
+      ],
+      "operations_fin": [
+        "Essai fonctionnement si nécessaire",
+        "Essai routier"
+      ],
+      "frequence": "Rare"
+    },
+    {
+      "id": "DIV-011",
+      "categorie": "Divers",
+      "intervention": "Joint de vilebrequin",
+      "synonymes": [
+        "joint spi vilebrequin",
+        "spi vilebrequin",
+        "fuite d'huile avant / arrière moteur",
+        "crankshaft seal",
+        "Joint de vilebrequin"
+      ],
+      "pieces_suggerees": [
+        "Joint de vilebrequin"
+      ],
+      "controles_suggeres": [
+        "Contrôle distribution si concernée",
+        "Contrôle absence de fuite après",
+        "Contrôle absence fuite",
+        "Contrôle fonctionnement"
+      ],
+      "operations_fin": [
+        "Essai fonctionnement si nécessaire"
+      ],
+      "frequence": "Occasionnel"
+    },
+    {
+      "id": "DIV-012",
+      "categorie": "Divers",
+      "intervention": "Collecteur d’admission",
+      "synonymes": [
+        "collecteur admission",
+        "pipe d'admission",
+        "intake manifold",
+        "remplacement collecteur",
+        "Collecteur d’admission"
+      ],
+      "pieces_suggerees": [
+        "Collecteur d’admission",
+        "Joint collecteur"
+      ],
+      "controles_suggeres": [
+        "Contrôle joint de collecteur",
+        "Contrôle vanne EGR",
+        "Contrôle système d'injection",
+        "Contrôle absence fuite",
+        "Contrôle fonctionnement"
+      ],
+      "operations_fin": [
+        "Essai fonctionnement si nécessaire"
+      ],
+      "frequence": "Occasionnel"
+    },
+    {
+      "id": "DIV-013",
+      "categorie": "Divers",
+      "intervention": "Capteur ABS",
+      "synonymes": [
+        "capteur ABS",
+        "sonde ABS",
+        "voyant ABS",
+        "ABS sensor"
+      ],
+      "pieces_suggerees": [
+        "Capteur ABS"
+      ],
+      "controles_suggeres": [
+        "Contrôle câblage capteur",
+        "Contrôle couronne phonique",
+        "Contrôle fonctionnement ABS / ESP",
+        "Contrôle absence fuite",
+        "Contrôle fonctionnement"
+      ],
+      "operations_fin": [
+        "Essai fonctionnement si nécessaire"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "DIV-014",
+      "categorie": "Divers",
+      "intervention": "Ventilation habitacle",
+      "synonymes": [
+        "résistance chauffage",
+        "pulseur habitacle",
+        "ventilation habitacle",
+        "soufflerie chauffage"
+      ],
+      "pieces_suggerees": [
+        "Résistance de chauffage",
+        "Pulseur habitacle si nécessaire"
+      ],
+      "controles_suggeres": [
+        "Contrôle commande chauffage",
+        "Contrôle moteur de pulseur",
+        "Contrôle absence fuite",
+        "Contrôle fonctionnement"
+      ],
+      "operations_fin": [
+        "Essai fonctionnement si nécessaire"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "DIV-015",
+      "categorie": "Divers",
+      "intervention": "Éclairage xénon / LED",
+      "synonymes": [
+        "xenon",
+        "LED phare",
+        "ballast xenon",
+        "remplacement xenon",
+        "kit phare xenon",
+        "Éclairage xénon / LED"
+      ],
+      "pieces_suggerees": [
+        "Ampoule xénon / LED",
+        "Ballast si nécessaire"
+      ],
+      "controles_suggeres": [
+        "Contrôle réglage des feux",
+        "Contrôle fonctionnement correcteur assiette",
+        "Contrôle absence fuite",
+        "Contrôle fonctionnement"
+      ],
+      "operations_fin": [
+        "Essai fonctionnement si nécessaire"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "DIV-016",
+      "categorie": "Divers",
+      "intervention": "Intercooler",
+      "synonymes": [
+        "intercooler",
+        "échangeur de suralimentation",
+        "refroidisseur air suralim",
+        "charge air cooler"
+      ],
+      "pieces_suggerees": [
+        "Intercooler",
+        "Durites d’air si nécessaires"
+      ],
+      "controles_suggeres": [
+        "Contrôle état conduits turbo",
+        "Contrôle fonctionnement turbo",
+        "Contrôle absence de fuite",
+        "Contrôle absence fuite",
+        "Contrôle fonctionnement"
+      ],
+      "operations_fin": [
+        "Essai fonctionnement si nécessaire"
+      ],
+      "frequence": "Occasionnel"
+    },
+    {
+      "id": "DIV-017",
+      "categorie": "Divers",
+      "intervention": "Durites de refroidissement",
+      "synonymes": [
+        "durite refroidissement",
+        "durites radiateur",
+        "remplacement durite",
+        "coolant hose",
+        "Durites de refroidissement"
+      ],
+      "pieces_suggerees": [
+        "Durites de refroidissement",
+        "Liquide de refroidissement",
+        "Colliers"
+      ],
+      "controles_suggeres": [
+        "Contrôle état de toutes les durites",
+        "Contrôle colliers de fixation",
+        "Contrôle absence fuite",
+        "Contrôle fonctionnement"
+      ],
+      "operations_fin": [
+        "Essai fonctionnement si nécessaire"
+      ],
+      "frequence": "Fréquent"
+    },
+    {
+      "id": "DIV-018",
+      "categorie": "Divers",
+      "intervention": "Capteur TPMS",
+      "synonymes": [
+        "TPMS",
+        "capteur pression pneu",
+        "capteur gonflage",
+        "tire pressure sensor",
+        "Capteur TPMS"
+      ],
+      "pieces_suggerees": [
+        "Capteur TPMS",
+        "Valve TPMS"
+      ],
+      "controles_suggeres": [
+        "Contrôle voyant TPMS tableau de bord",
+        "Contrôle pression de tous les pneus",
+        "Contrôle absence fuite",
+        "Contrôle fonctionnement"
+      ],
+      "operations_fin": [
+        "Essai fonctionnement si nécessaire"
+      ],
+      "frequence": "Fréquent"
+    }
+  ]
+}

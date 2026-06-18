@@ -12,6 +12,15 @@ export type LysmaTool = {
 
 const TOOL_DEFINITIONS = [
   {
+    id: 'echo',
+    name: 'ECHO',
+    kind: 'app' as const,
+    relativePath: 'apps/ECHO',
+    command: 'ouvrir /echo',
+    envFile: 'apps/super-admin/.env',
+    packageName: 'super-admin',
+  },
+  {
     id: 'livo-app',
     name: 'LIVO App',
     kind: 'app' as const,

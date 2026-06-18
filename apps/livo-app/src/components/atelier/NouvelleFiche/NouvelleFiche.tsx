@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { X, MagnifyingGlass, Car, Plus, Info, FilePdf, Check } from '@phosphor-icons/react'
+import { X, MagnifyingGlass, Car, Plus, Info, FilePdf, Check, Wrench } from '@phosphor-icons/react'
 import { Button, Input } from '@/components/ui'
 import { cn } from '@/lib/utils'
 import { formatImmat, formatVIN, formatVehiculeLabel, formatNom, formatPrenom, formatTelephone } from '@/lib/formatters'
@@ -15,6 +15,21 @@ type Vehicule = {
   annee: number | null
   clientNom: string
   clientPrenom: string | null
+}
+
+type InterventionMetier = {
+  id: string
+  categorie: string
+  intervention: string
+  synonymes: string[]
+  pieces_suggerees: string[]
+  controles_suggeres: string[]
+  operations_fin: string[]
+  frequence: 'Très fréquent' | 'Fréquent' | 'Occasionnel' | 'Rare'
+}
+
+type BibliothequeMetierResponse = {
+  interventions?: InterventionMetier[]
 }
 
 type Props = {
@@ -46,6 +61,11 @@ export function NouvelleFiche({ garageId, onClose, onCreated }: Props) {
 
   const [travaux, setTravaux] = useState('')
   const [notes, setNotes] = useState('')
+  const [interventionSearch, setInterventionSearch] = useState('')
+  const [interventions, setInterventions] = useState<InterventionMetier[]>([])
+  const [interventionsLoading, setInterventionsLoading] = useState(false)
+  const [selectedInterventions, setSelectedInterventions] = useState<InterventionMetier[]>([])
+  const [expandedInterventionId, setExpandedInterventionId] = useState<string | null>(null)
 
   useEffect(() => {
     if (search.length < 1) { setVehicules([]); return }
@@ -60,12 +80,93 @@ export function NouvelleFiche({ garageId, onClose, onCreated }: Props) {
     return () => clearTimeout(timer)
   }, [search, garageId])
 
+  useEffect(() => {
+    if (step !== 'travaux') return
+
+    const controller = new AbortController()
+    const timer = setTimeout(async () => {
+      setInterventionsLoading(true)
+      try {
+        const params = new URLSearchParams({ limit: interventionSearch.trim() ? '12' : '8' })
+        if (interventionSearch.trim()) params.set('q', interventionSearch.trim())
+
+        const res = await fetch(`/api/bibliotheque-metier/interventions?${params.toString()}`, {
+          signal: controller.signal,
+        })
+        const data: BibliothequeMetierResponse = await res.json()
+        setInterventions(data.interventions ?? [])
+      } catch (error) {
+        const aborted = error instanceof DOMException && error.name === 'AbortError'
+        if (!aborted) setInterventions([])
+      } finally {
+        if (!controller.signal.aborted) setInterventionsLoading(false)
+      }
+    }, interventionSearch.trim() ? 250 : 0)
+
+    return () => {
+      controller.abort()
+      clearTimeout(timer)
+    }
+  }, [step, interventionSearch])
+
+  function normalizeLine(line: string) {
+    return line.trim().toLocaleLowerCase('fr-FR')
+  }
+
+  function appendUniqueLines(current: string, lines: string[]) {
+    const existingLines = current
+      .split('\n')
+      .map((line) => line.trim())
+      .filter(Boolean)
+    const existing = new Set(existingLines.map(normalizeLine))
+    const next = [...existingLines]
+
+    for (const line of lines.map((value) => value.trim()).filter(Boolean)) {
+      const key = normalizeLine(line)
+      if (existing.has(key)) continue
+
+      existing.add(key)
+      next.push(line)
+    }
+
+    return next.join('\n')
+  }
+
+  function addIntervention(intervention: InterventionMetier) {
+    setSelectedInterventions((current) => {
+      if (current.some((item) => item.id === intervention.id)) return current
+      return [...current, intervention]
+    })
+    setTravaux((current) => appendUniqueLines(current, [intervention.intervention]))
+    setExpandedInterventionId(intervention.id)
+    setInterventionSearch('')
+  }
+
+  function removeIntervention(interventionId: string) {
+    setSelectedInterventions((current) => current.filter((item) => item.id !== interventionId))
+    setExpandedInterventionId((current) => current === interventionId ? null : current)
+  }
+
+  function addSuggestedTasks(intervention: InterventionMetier) {
+    setTravaux((current) => appendUniqueLines(current, [
+      intervention.intervention,
+      ...intervention.pieces_suggerees,
+      ...intervention.controles_suggeres,
+      ...intervention.operations_fin,
+    ]))
+  }
+
   async function handleSubmit() {
     if (!travaux.trim()) return
     setSubmitError('')
     setSubmitting(true)
     try {
-      const body: Record<string, unknown> = { garageId, travaux, notes }
+      const body: Record<string, unknown> = {
+        garageId,
+        travaux,
+        notes,
+        interventionsMetier: selectedInterventions.map(({ id }) => ({ id })),
+      }
       if (vehiculeSelectionne) {
         body.vehiculeId = vehiculeSelectionne.id
       } else {
@@ -117,6 +218,8 @@ export function NouvelleFiche({ garageId, onClose, onCreated }: Props) {
   }
 
   const peutContinuer = vehiculeSelectionne || (nouveauVehicule && marque && modele && clientNom)
+  const selectedInterventionIds = new Set(selectedInterventions.map((intervention) => intervention.id))
+  const visibleInterventions = interventions.filter((intervention) => !selectedInterventionIds.has(intervention.id))
 
   // Écran de confirmation après création
   if (ficheCreee) {
@@ -161,7 +264,7 @@ export function NouvelleFiche({ garageId, onClose, onCreated }: Props) {
 
   return (
     <div className={styles.overlay} onClick={(e) => e.target === e.currentTarget && onClose()}>
-      <div className={styles.modal}>
+      <div className={cn(styles.modal, step === 'travaux' && styles.modalWide)}>
 
         <div className={styles.header}>
           <div className={styles.headerLeft}>
@@ -323,6 +426,137 @@ export function NouvelleFiche({ garageId, onClose, onCreated }: Props) {
               <span className={styles.client}>{vehiculeSelectionne?.clientNom ?? clientNom}</span>
             </div>
 
+            <div className={styles.libraryPanel}>
+              <div className={styles.libraryHeader}>
+                <div>
+                  <label className={styles.label} htmlFor="intervention-metier-search">
+                    Bibliothèque métier
+                  </label>
+                  {selectedInterventions.length > 0 && (
+                    <p className={styles.libraryMeta}>
+                      {selectedInterventions.length} intervention{selectedInterventions.length > 1 ? 's' : ''} sélectionnée{selectedInterventions.length > 1 ? 's' : ''}
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              <Input
+                id="intervention-metier-search"
+                placeholder="Plaquettes avant, vidange, diagnostic..."
+                value={interventionSearch}
+                onChange={(e) => setInterventionSearch(e.target.value)}
+                iconLeft={<MagnifyingGlass />}
+                inputSize="lg"
+                autoFocus
+              />
+
+              {(visibleInterventions.length > 0 || interventionsLoading) && (
+                <div className={styles.interventionResults}>
+                  {visibleInterventions.map((intervention) => (
+                    <button
+                      key={intervention.id}
+                      type="button"
+                      className={styles.interventionResult}
+                      onClick={() => addIntervention(intervention)}
+                    >
+                      <span className={styles.interventionResultIcon}>
+                        <Wrench size={15} weight="bold" />
+                      </span>
+                      <span className={styles.interventionResultInfo}>
+                        <span className={styles.interventionName}>{intervention.intervention}</span>
+                        <span className={styles.interventionMeta}>
+                          {intervention.categorie} · {intervention.frequence}
+                        </span>
+                      </span>
+                      <Plus size={15} />
+                    </button>
+                  ))}
+
+                  {interventionsLoading && (
+                    <p className={styles.libraryLoading}>Recherche en cours...</p>
+                  )}
+                </div>
+              )}
+
+              {selectedInterventions.length > 0 && (
+                <div className={styles.selectedInterventions}>
+                  {selectedInterventions.map((intervention) => {
+                    const expanded = expandedInterventionId === intervention.id
+
+                    return (
+                      <div key={intervention.id} className={styles.selectedIntervention}>
+                        <div className={styles.selectedInterventionTop}>
+                          <button
+                            type="button"
+                            className={styles.selectedInterventionMain}
+                            aria-expanded={expanded}
+                            onClick={() => setExpandedInterventionId(expanded ? null : intervention.id)}
+                          >
+                            <span className={styles.selectedInterventionTitle}>{intervention.intervention}</span>
+                            <span className={styles.interventionMeta}>
+                              {intervention.categorie} · {intervention.id}
+                            </span>
+                          </button>
+
+                          <button
+                            type="button"
+                            className={styles.removeIntervention}
+                            onClick={() => removeIntervention(intervention.id)}
+                            aria-label={`Retirer ${intervention.intervention}`}
+                          >
+                            <X size={14} />
+                          </button>
+                        </div>
+
+                        {expanded && (
+                          <div className={styles.interventionDetails}>
+                            <div className={styles.suggestionColumn}>
+                              <span className={styles.suggestionTitle}>Pièces suggérées</span>
+                              <ul className={styles.suggestionList}>
+                                {intervention.pieces_suggerees.length > 0 ? intervention.pieces_suggerees.slice(0, 6).map((piece) => (
+                                  <li key={piece}>{piece}</li>
+                                )) : (
+                                  <li>Aucune pièce systématique</li>
+                                )}
+                              </ul>
+                            </div>
+
+                            <div className={styles.suggestionColumn}>
+                              <span className={styles.suggestionTitle}>Contrôles suggérés</span>
+                              <ul className={styles.suggestionList}>
+                                {intervention.controles_suggeres.slice(0, 5).map((controle) => (
+                                  <li key={controle}>{controle}</li>
+                                ))}
+                              </ul>
+                            </div>
+
+                            <div className={styles.suggestionColumn}>
+                              <span className={styles.suggestionTitle}>Opérations de fin</span>
+                              <ul className={styles.suggestionList}>
+                                {intervention.operations_fin.slice(0, 4).map((operation) => (
+                                  <li key={operation}>{operation}</li>
+                                ))}
+                              </ul>
+                            </div>
+
+                            <Button
+                              type="button"
+                              variant="secondary"
+                              size="sm"
+                              icon={<Plus />}
+                              onClick={() => addSuggestedTasks(intervention)}
+                            >
+                              Ajouter les éléments
+                            </Button>
+                          </div>
+                        )}
+                      </div>
+                    )
+                  })}
+                </div>
+              )}
+            </div>
+
             <div className={styles.field}>
               <label className={styles.label}>Travaux à effectuer *</label>
               <textarea
@@ -331,7 +565,6 @@ export function NouvelleFiche({ garageId, onClose, onCreated }: Props) {
                 value={travaux}
                 onChange={(e) => setTravaux(e.target.value)}
                 rows={6}
-                autoFocus
               />
               <p className={styles.hint}>Une ligne = un travail</p>
             </div>

@@ -1,14 +1,26 @@
 import { Document, Page, Text, View, Image, StyleSheet } from '@react-pdf/renderer'
 import { COLORS } from './styles'
+import React from 'react'
 
 type Compagnon = { prenom: string; nom: string; poste: string | null }
 type PointageFiche = { compagnon: Compagnon; dureeMinutes: number | null; debutAt: Date; finAt: Date | null }
+type InterventionMetier = {
+  id: string
+  categorie: string
+  intervention: string
+  synonymes: string[]
+  pieces_suggerees: string[]
+  controles_suggeres: string[]
+  operations_fin: string[]
+  frequence: string
+}
 
 type Props = {
   fiche: {
     numero: string
     statut: string
     travaux: string
+    interventionsMetier?: unknown
     notes: string | null
     tempsFacture: number | null
     tempsReel: number | null
@@ -51,6 +63,40 @@ function formatDate(d: Date) {
 }
 function formatEur(v: number) {
   return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(v)
+}
+
+function isStringArray(value: unknown): value is string[] {
+  return Array.isArray(value) && value.every((item) => typeof item === 'string')
+}
+
+function parseInterventionsMetier(value: unknown): InterventionMetier[] {
+  if (!Array.isArray(value)) return []
+
+  return value.flatMap((item) => {
+    if (!item || typeof item !== 'object') return []
+
+    const intervention = item as Record<string, unknown>
+    if (
+      typeof intervention.id !== 'string' ||
+      typeof intervention.categorie !== 'string' ||
+      typeof intervention.intervention !== 'string'
+    ) {
+      return []
+    }
+
+    return [{
+      id: intervention.id,
+      categorie: intervention.categorie,
+      intervention: intervention.intervention,
+      synonymes: isStringArray(intervention.synonymes) ? intervention.synonymes : [],
+      pieces_suggerees: isStringArray(intervention.pieces_suggerees) ? intervention.pieces_suggerees : [],
+      controles_suggeres: isStringArray(intervention.controles_suggeres)
+        ? intervention.controles_suggeres
+        : isStringArray(intervention.controles_associes) ? intervention.controles_associes : [],
+      operations_fin: isStringArray(intervention.operations_fin) ? intervention.operations_fin : [],
+      frequence: typeof intervention.frequence === 'string' ? intervention.frequence : '',
+    }]
+  })
 }
 
 const s = StyleSheet.create({
@@ -152,6 +198,22 @@ const s = StyleSheet.create({
   notesLabel: { fontSize: 7, color: '#8a6a00', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 3 },
   notesText: { fontSize: 8, color: '#665500' },
 
+  metierSection: { marginBottom: 14 },
+  metierItem: {
+    marginBottom: 8,
+    padding: 8,
+    backgroundColor: '#f8faff',
+    borderWidth: 1,
+    borderColor: '#dde8f5',
+    borderRadius: 3,
+  },
+  metierTitle: { fontSize: 8, fontFamily: 'Helvetica-Bold', color: COLORS.blueDeep, marginBottom: 2 },
+  metierMeta: { fontSize: 6, color: COLORS.textMuted, marginBottom: 5 },
+  metierColumns: { flexDirection: 'row', gap: 10 },
+  metierColumn: { flex: 1 },
+  metierSubtitle: { fontSize: 6, fontFamily: 'Helvetica-Bold', color: COLORS.blueElectric, marginBottom: 3 },
+  metierLine: { fontSize: 6.5, color: '#555555', marginBottom: 2, lineHeight: 1.25 },
+
   // ── Travaux à prévoir ─────────────────────────────────────
   prevoir: {
     marginBottom: 14,
@@ -240,6 +302,7 @@ const EMPTY_ROWS = 7
 
 export function FichePDF({ fiche, garage, logoSrc, qrCodeSrc }: Props) {
   const travailsLignes = fiche.travaux.split('\n').filter(Boolean)
+  const interventionsMetier = parseInterventionsMetier(fiche.interventionsMetier)
   const tReel = fiche.tempsReel ?? 0
   const tFacture = fiche.tempsFacture ?? 0
   const delta = tFacture - tReel
@@ -322,6 +385,46 @@ export function FichePDF({ fiche, garage, logoSrc, qrCodeSrc }: Props) {
             )}
           </View>
         </View>
+
+        {interventionsMetier.length > 0 && (
+          <View style={s.metierSection}>
+            <Text style={s.sectionTitle}>Interventions métier</Text>
+            {interventionsMetier.map((intervention) => (
+              <View key={intervention.id} style={s.metierItem}>
+                <Text style={s.metierTitle}>{intervention.intervention}</Text>
+                <Text style={s.metierMeta}>
+                  {intervention.categorie} - {intervention.id}{intervention.frequence ? ` - ${intervention.frequence}` : ''}
+                </Text>
+                <View style={s.metierColumns}>
+                  {intervention.pieces_suggerees.length > 0 && (
+                    <View style={s.metierColumn}>
+                      <Text style={s.metierSubtitle}>Pièces suggérées</Text>
+                      {intervention.pieces_suggerees.slice(0, 4).map((piece) => (
+                        <Text key={piece} style={s.metierLine}>- {piece}</Text>
+                      ))}
+                    </View>
+                  )}
+                  {intervention.controles_suggeres.length > 0 && (
+                    <View style={s.metierColumn}>
+                      <Text style={s.metierSubtitle}>Contrôles suggérés</Text>
+                      {intervention.controles_suggeres.slice(0, 3).map((controle) => (
+                        <Text key={controle} style={s.metierLine}>- {controle}</Text>
+                      ))}
+                    </View>
+                  )}
+                  {intervention.operations_fin.length > 0 && (
+                    <View style={s.metierColumn}>
+                      <Text style={s.metierSubtitle}>Opérations de fin</Text>
+                      {intervention.operations_fin.slice(0, 3).map((operation) => (
+                        <Text key={operation} style={s.metierLine}>- {operation}</Text>
+                      ))}
+                    </View>
+                  )}
+                </View>
+              </View>
+            ))}
+          </View>
+        )}
 
         {/* Travaux à prévoir */}
         <Text style={s.sectionTitle}>Travaux à prévoir</Text>

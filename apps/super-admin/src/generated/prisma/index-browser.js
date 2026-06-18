@@ -359,6 +359,61 @@ exports.Prisma.FinancePaymentScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.EchoChatMessageScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  role: 'role',
+  content: 'content',
+  model: 'model',
+  requestId: 'requestId',
+  metadata: 'metadata'
+};
+
+exports.Prisma.EchoMemoryEntryScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  sourceMessageId: 'sourceMessageId',
+  source: 'source',
+  category: 'category',
+  type: 'type',
+  sensitivity: 'sensitivity',
+  confidence: 'confidence',
+  humanSummary: 'humanSummary',
+  sourceContent: 'sourceContent',
+  status: 'status',
+  validated: 'validated',
+  links: 'links',
+  metadata: 'metadata'
+};
+
+exports.Prisma.EchoHypothesisScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  sourceMessageId: 'sourceMessageId',
+  hypothesis: 'hypothesis',
+  confidence: 'confidence',
+  observedElements: 'observedElements',
+  validationQuestion: 'validationQuestion',
+  mathieuResponse: 'mathieuResponse',
+  status: 'status',
+  metadata: 'metadata'
+};
+
+exports.Prisma.EchoDecisionScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  sourceMessageId: 'sourceMessageId',
+  decision: 'decision',
+  reason: 'reason',
+  status: 'status',
+  decidedAt: 'decidedAt',
+  metadata: 'metadata'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -366,6 +421,10 @@ exports.Prisma.SortOrder = {
 
 exports.Prisma.NullableJsonNullValueInput = {
   DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
+};
+
+exports.Prisma.JsonNullValueInput = {
   JsonNull: Prisma.JsonNull
 };
 
@@ -525,7 +584,11 @@ exports.Prisma.ModelName = {
   LysmaExpense: 'LysmaExpense',
   RevenueSubscription: 'RevenueSubscription',
   FinanceInvoice: 'FinanceInvoice',
-  FinancePayment: 'FinancePayment'
+  FinancePayment: 'FinancePayment',
+  EchoChatMessage: 'EchoChatMessage',
+  EchoMemoryEntry: 'EchoMemoryEntry',
+  EchoHypothesis: 'EchoHypothesis',
+  EchoDecision: 'EchoDecision'
 };
 
 /**

@@ -7,6 +7,7 @@ import styles from './Sidebar.module.css'
 
 const NAV = [
   { href: '/dashboard', label: 'Tableau de bord', icon: '>' },
+  { href: '/echo', label: 'ECHO', icon: 'E' },
   { href: '/clients', label: 'Clients', icon: 'C' },
   { href: '/messagerie', label: 'Messagerie', icon: '@' },
   { href: '/chatbox', label: 'Chatbox', icon: '?' },
