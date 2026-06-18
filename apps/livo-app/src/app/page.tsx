@@ -20,7 +20,6 @@ import {
 import Link from 'next/link'
 import { LIVO_PRICING } from '@/lib/pricing'
 import { canonical } from '@/lib/seo'
-import { PublicSidebar } from './PublicSidebar'
 import styles from './page.module.css'
 
 const pageTitle = 'LIVO — Pointage et pilotage du temps pour ateliers automobiles'
@@ -250,8 +249,6 @@ export default function HomePage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareJsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
-
-      <PublicSidebar />
 
       <main className={styles.content}>
         <section id="accueil" className={styles.hero}>

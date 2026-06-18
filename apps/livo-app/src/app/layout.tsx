@@ -4,6 +4,7 @@ import '@/styles/globals.css'
 import { CookieBanner } from '@/components/layout/CookieBanner/CookieBanner'
 import { LivoChatbox } from '@/components/layout/LivoChatbox'
 import { SITE_URL } from '@/lib/seo'
+import { PublicSiteShell } from './PublicSiteShell'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -67,7 +68,7 @@ export default function RootLayout({
   return (
     <html lang="fr" className={inter.variable}>
       <body>
-        {children}
+        <PublicSiteShell>{children}</PublicSiteShell>
         <CookieBanner />
         <LivoChatbox />
       </body>
