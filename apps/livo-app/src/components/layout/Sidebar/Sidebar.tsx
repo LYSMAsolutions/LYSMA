@@ -19,7 +19,7 @@ import styles from './Sidebar.module.css'
 const NAV_ITEMS = [
   { href: '/dashboard', label: 'Tableau de bord', icon: Gauge },
   { href: '/atelier', label: 'Atelier', icon: Wrench },
-  { href: '/or-externes', label: 'OR externes', icon: ClipboardText },
+  { href: '/or-externes', label: 'OR / Fiches', icon: ClipboardText },
   { href: '/compagnons', label: 'Compagnons', icon: Users },
   { href: '/vehicules', label: 'Véhicules', icon: Car },
   { href: '/rapports', label: 'Rapports', icon: ChartBar },
