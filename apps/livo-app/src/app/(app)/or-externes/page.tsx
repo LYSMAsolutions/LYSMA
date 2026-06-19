@@ -90,26 +90,13 @@ export default async function OrExternesPage() {
       />
 
       <main className={styles.content}>
-        <section className={styles.explain}>
-          <strong>Le logiciel atelier reste la source de l’OR.</strong>
-          <span>LIVO reçoit l’OR, retrouve le travail grâce au QR et mesure le temps réel sans remplacer la facturation.</span>
-        </section>
-
-        <section className={styles.flowGrid}>
-          <article>
-            <strong>OR envoyé avant le scan</strong>
-            <span>Le logiciel de facturation transmet l’OR à LIVO, puis imprime son QR sur le document atelier.</span>
-          </article>
-          <article>
-            <strong>OR reçu au premier scan</strong>
-            <span>Un QR complet peut enregistrer l’OR lors du premier scan. Les scans suivants retrouvent le même OR.</span>
-          </article>
           <article>
             <strong>Travaux internes</strong>
             <span>Pour une intervention hors logiciel de facturation, créez une fiche de travail LIVO.</span>
             <DashboardNewFicheButton garageId={garage.id} variant="secondary" label="Créer une fiche" />
           </article>
-        </section>
+
+
 
         <section className={styles.kpis}>
           <article><span>OR reçus</span><strong>{orders.length}</strong></article>
