@@ -43,6 +43,7 @@ const navGroups: NavGroup[] = [
     icon: SquaresFour,
     children: [
       { label: 'Fonctionnalités', href: '/#fonctionnalites' },
+      { label: 'Espace compagnon', href: '/#espace-atelier' },
       { label: 'Fonctionnement', href: '/#fonctionnement' },
       { label: 'Pilotage', href: '/#pilotage' },
       { label: 'Périmètre', href: '/#perimetre' },
@@ -54,7 +55,7 @@ const navGroups: NavGroup[] = [
     icon: QrCode,
     children: [
       { label: 'Vue d’ensemble', href: '/#or-externes' },
-      { label: 'API & QR code OR', href: '/api-qr-ordre-reparation-garage' },
+      { label: 'Connexion et QR code', href: '/api-qr-ordre-reparation-garage' },
     ],
   },
   {
@@ -79,6 +80,7 @@ const directItems = [
 
 const sectionHrefs = [
   '#accueil',
+  '#espace-atelier',
   '#fonctionnalites',
   '#fonctionnement',
   '#pilotage',

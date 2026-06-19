@@ -41,8 +41,12 @@ type ExternalMirror = {
   immatriculation: string | null
   operation: string | null
   status: string
+  plannedHours: number | null
   soldHours: number | null
+  billedHours: number | null
+  billedAmountHT: number | null
   realMinutes: number
+  lines: { id: string; type: string; label: string }[]
   activePointage: { id: string; debutAt: string } | null
 }
 
@@ -457,7 +461,7 @@ function ExternalMirrorModalV2({
         <div className={styles.externalHeader}>
           <div>
             <h2 id="external-or-title">Scanner un OR</h2>
-            <p>Le QR de l ordre de reparation importe les infos. La saisie numero reste un secours.</p>
+            <p>Scannez le QR imprimé sur l’OR. LIVO retrouve l’OR ou l’enregistre si le QR contient les informations nécessaires.</p>
           </div>
           <button type="button" onClick={close}>Fermer</button>
         </div>
@@ -512,12 +516,12 @@ function ExternalMirrorModalV2({
                 autoFocus
               />
               <button type="button" onClick={() => void findOrCreate()} disabled={loading === 'search'}>
-                {loading === 'search' ? 'Recherche...' : 'Utiliser cet OR'}
+                {loading === 'search' ? 'Recherche...' : 'Rechercher cet OR'}
               </button>
             </div>
 
             <p className={styles.externalHint}>
-              Mode secours: LIVO suivra le numero et les temps, sans client, vehicule ni travaux importes.
+              Saisie de secours : recherchez un OR déjà reçu dans LIVO.
             </p>
           </>
         )}
@@ -528,15 +532,22 @@ function ExternalMirrorModalV2({
           <div className={styles.externalCard}>
             <div className={styles.externalCardTitle}>
               <strong>{order.externalNumber}</strong>
+              <Badge variant="success" dot>OR reçu</Badge>
               <Badge variant={order.activePointage ? 'blue' : 'muted'} dot>
                 {order.activePointage ? 'Pointage en cours' : 'Pret a pointer'}
               </Badge>
             </div>
             <p>{order.vehicleLabel || 'Vehicule non renseigne'}{order.immatriculation ? ` · ${order.immatriculation}` : ''}</p>
             <small>{order.clientName || 'Client non renseigne'} · {order.operation || 'Pointage OR sans details importes'}</small>
+            {order.lines.length > 0 && (
+              <ul className={styles.ficheTravaux}>
+                {order.lines.slice(0, 3).map((line) => <li key={line.id}>{line.label}</li>)}
+              </ul>
+            )}
             <div className={styles.externalStats}>
               <span><small>Temps reel</small><strong>{formatMinutes(order.realMinutes)}</strong></span>
               <span><small>Temps vendu</small><strong>{order.soldHours ? `${order.soldHours} h` : 'A completer'}</strong></span>
+              <span><small>Temps facturé</small><strong>{order.billedHours !== null ? `${order.billedHours} h` : 'À compléter'}</strong></span>
             </div>
 
             {canPoint ? (

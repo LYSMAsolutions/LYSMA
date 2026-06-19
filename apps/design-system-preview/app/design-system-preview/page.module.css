@@ -763,10 +763,16 @@
 }
 
 .sidebarFrame {
+  width: min(330px, 100%);
   min-height: 560px;
   overflow: hidden;
   border: 1px solid var(--preview-line);
   border-radius: 12px;
+}
+
+.sidebarFrame :global(.lysma-sidebar-shell),
+.sidebarFrame :global(.lysma-sidebar-shell__desktop) {
+  height: 100%;
 }
 
 .sidebarFrame :global(.lysma-sidebar) {
@@ -775,10 +781,34 @@
   height: 100%;
 }
 
+.sidebarFrame :global(.lysma-sidebar__brand),
+.sidebarFrame :global(.lysma-sidebar__nav),
+.sidebarFrame :global(.lysma-sidebar__group),
+.sidebarFrame :global(.lysma-sidebar__item) {
+  width: 100%;
+}
+
 .sidebarFrame :global(.lysma-sidebar__brandText),
 .sidebarFrame :global(.lysma-sidebar__label),
-.sidebarFrame :global(.lysma-sidebar__badge) {
+.sidebarFrame :global(.lysma-sidebar__badge),
+.sidebarFrame :global(.lysma-sidebar__heading),
+.sidebarFrame :global(.lysma-sidebar__caret),
+.sidebarFrame :global(.lysma-sidebar__footer) {
   opacity: 1;
+  pointer-events: auto;
+  transform: none;
+}
+
+.sidebarFrame :global(.lysma-sidebar__item) {
+  gap: 11px;
+  padding-inline: 12px;
+}
+
+.sidebarFrame :global(.lysma-sidebar__bottom) {
+  width: 100%;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
   transform: none;
 }
 

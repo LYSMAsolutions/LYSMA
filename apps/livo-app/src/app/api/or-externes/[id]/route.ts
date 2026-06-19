@@ -9,6 +9,9 @@ const patchSchema = z.object({
   tauxType: z.enum(['T1', 'T2', 'T3', 'T4', 'CARROSSERIE', 'PEINTURE', 'AUTRE']).optional().nullable(),
   soldHours: z.coerce.number().min(0).max(999).optional().nullable(),
   soldAmountHT: z.coerce.number().min(0).max(999999).optional().nullable(),
+  billedHours: z.coerce.number().min(0).max(999).optional().nullable(),
+  billedAmountHT: z.coerce.number().min(0).max(999999).optional().nullable(),
+  laborAmountHT: z.coerce.number().min(0).max(999999).optional().nullable(),
 })
 
 export async function PATCH(
@@ -72,16 +75,34 @@ export async function PATCH(
       },
     })
 
-    const fallbackHours = (realMinutes._sum.dureeMinutes ?? 0) / 60
-    const soldHours = parsed.data.soldHours ?? (order.soldHours ? Number(order.soldHours) : null) ?? fallbackHours
-    const soldAmountHT = parsed.data.soldAmountHT ?? soldHours * Number(tauxGarage.montant)
+    const actualMinutes = realMinutes._sum.dureeMinutes ?? 0
+    const fallbackHours = actualMinutes / 60
+    const billedHours = parsed.data.billedHours
+      ?? parsed.data.soldHours
+      ?? (order.billedHours ? Number(order.billedHours) : null)
+      ?? (order.soldHours ? Number(order.soldHours) : null)
+      ?? fallbackHours
+    const billedAmountHT = parsed.data.billedAmountHT
+      ?? parsed.data.soldAmountHT
+      ?? (order.billedAmountHT ? Number(order.billedAmountHT) : null)
+      ?? (order.soldAmountHT ? Number(order.soldAmountHT) : null)
+      ?? billedHours * Number(tauxGarage.montant)
+    const laborAmountHT = parsed.data.laborAmountHT
+      ?? (order.laborAmountHT ? Number(order.laborAmountHT) : null)
+      ?? billedHours * Number(tauxGarage.montant)
 
     closureData = {
-      soldHours,
-      soldAmountHT,
+      soldHours: order.soldHours ?? billedHours,
+      billedHours,
+      soldAmountHT: billedAmountHT,
+      billedAmountHT,
+      laborAmountHT,
       tauxApplique: tauxGarage.type,
       tauxLibelle: tauxGarage.libelle,
       tauxHoraire: tauxGarage.montant,
+      billingHourlyRateHT: tauxGarage.montant,
+      actualMinutes,
+      closureComment: parsed.data.motif || null,
     }
   }
 
@@ -107,6 +128,9 @@ export async function PATCH(
         tauxType: parsed.data.tauxType || null,
         soldHours: parsed.data.soldHours ?? null,
         soldAmountHT: parsed.data.soldAmountHT ?? null,
+        billedHours: parsed.data.billedHours ?? null,
+        billedAmountHT: parsed.data.billedAmountHT ?? null,
+        laborAmountHT: parsed.data.laborAmountHT ?? null,
       },
     },
   })

@@ -14,6 +14,7 @@ import {
   SidebarLysma,
   TextareaLysma,
   type LysmaNavItem,
+  type LysmaSidebarEntry,
 } from "@lysma/design-system";
 import styles from "./page.module.css";
 
@@ -24,6 +25,23 @@ const menuItems: LysmaNavItem[] = [
   { href: "/livo", label: "LIVO", description: "Atelier auto", icon: <IconMark label="L" />, badge: "Lab" },
   { href: "/pma", label: "PMA", description: "Portail metier", icon: <IconMark label="P" /> },
   { href: "/parametres", label: "Parametres", description: "Systeme", icon: <IconMark label="G" /> },
+];
+
+const menuNavigation: LysmaSidebarEntry[] = [
+  menuItems[0],
+  {
+    id: "produits",
+    label: "Produits",
+    icon: <IconMark label="P" />,
+    items: [menuItems[1], menuItems[3], menuItems[4]],
+  },
+  {
+    id: "sites",
+    label: "Sites & contenus",
+    icon: <IconMark label="S" />,
+    items: [menuItems[2]],
+  },
+  menuItems[5],
 ];
 
 const inspirationGroups = [
@@ -146,7 +164,7 @@ const selectionGroups: SelectionGroup[] = [
     key: "sidebar",
     label: "Sidebar",
     items: [
-      { id: "sidebar-lysma-rail", label: "LYSMA rail anime", tag: "Signature", description: "Rail compact qui s ouvre au hover, labels fluides, actif lumineux.", preview: "sidebarRail" },
+      { id: "sidebar-lysma-rail", label: "Sidebar LIVO standard", tag: "Par defaut", description: "Rail desktop compact et drawer mobile, valide comme navigation LYSMA commune.", preview: "sidebarRail" },
       { id: "sidebar-linear", label: "Linear dense", tag: "SaaS", description: "Navigation calme, dense, tres lisible pour produit B2B.", preview: "sidebarLinear" },
       { id: "sidebar-arc", label: "Arc expressive", tag: "Exploration", description: "Sidebar plus personnelle, profonde, avec variation couleur.", preview: "sidebarArc" },
       { id: "sidebar-vscode", label: "VS Code admin", tag: "Metier", description: "Approche tres dense pour outils internes et Super Admin.", preview: "sidebarVs" },
@@ -319,9 +337,13 @@ export default function DesignSystemPreviewPage() {
                   logo: <IconMark label="L" />,
                   href: "#references",
                 }}
-                items={menuItems}
+                navigation={menuNavigation}
                 activeHref="/livo"
-                bottomItems={[{ href: "/aide", label: "Aide", icon: <IconMark label="?" /> }]}
+                heading="Navigation LYSMA"
+                bottomItems={[
+                  { href: "/connexion", label: "Connexion", icon: <IconMark label="→" />, variant: "secondary" },
+                  { href: "/nouveau", label: "Nouveau projet", icon: <IconMark label="+" />, variant: "primary" },
+                ]}
                 footer={<span>Preview isolee</span>}
               />
             </div>

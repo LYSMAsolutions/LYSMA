@@ -6,6 +6,8 @@ import { Header } from '@/components/layout/Header'
 import { RapportsClient } from '@/components/rapports/RapportsClient/RapportsClient'
 import { RapportsTabs } from '@/components/rapports/RapportsTabs/RapportsTabs'
 import { RHClient } from '@/components/rh/RHClient/RHClient'
+import { calculateWorkshopMetrics } from '@/lib/workshop-metrics'
+import Link from 'next/link'
 import styles from './page.module.css'
 
 export const dynamic = 'force-dynamic'
@@ -19,7 +21,11 @@ function vehicleLabel(vehicule: { marque: string | null; modele: string | null; 
   return label || vehicule.immatriculation || 'Véhicule'
 }
 
-export default async function RapportsPage() {
+export default async function RapportsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ source?: string }>
+}) {
   const session = await auth()
 
   if (!session?.user?.id) {
@@ -32,6 +38,9 @@ export default async function RapportsPage() {
     redirect('/dashboard')
   }
 
+  const requestedSource = (await searchParams).source
+  const source = requestedSource === 'livo' || requestedSource === 'external' ? requestedSource : 'all'
+
   const now = new Date()
   const debutMois = new Date(now.getFullYear(), now.getMonth(), 1)
   const debutAnnee = new Date(now.getFullYear(), 0, 1)
@@ -41,6 +50,7 @@ export default async function RapportsPage() {
     compagnons,
     absences,
     fichesCloturees,
+    externalOrders,
     taux,
   ] = await Promise.all([
     prisma.compagnon.findMany({
@@ -98,6 +108,17 @@ export default async function RapportsPage() {
         dateFermeture: 'asc',
       },
     }),
+    prisma.externalWorkOrder.findMany({
+      where: {
+        garageId: garage.id,
+        status: 'CLOTURE',
+        closedAt: { gte: debutDouzeMois },
+      },
+      include: {
+        pointages: { include: { compagnon: { include: { user: true } } } },
+      },
+      orderBy: { closedAt: 'asc' },
+    }),
     prisma.tauxGarage.findMany({
       where: {
         garageId: garage.id,
@@ -105,6 +126,9 @@ export default async function RapportsPage() {
       },
     }),
   ])
+
+  const fichesSelectionnees = source === 'external' ? [] : fichesCloturees
+  const externalSelectionnes = source === 'livo' ? [] : externalOrders
 
   const tauxMap = Object.fromEntries(taux.map((item) => [item.type, Number(item.montant)]))
   const tauxMoyen = taux.length
@@ -128,6 +152,26 @@ export default async function RapportsPage() {
     }
   }
 
+  function calcExternal(order: (typeof externalOrders)[number]) {
+    const actualMinutes = order.pointages.reduce((sum, pointage) => sum + (pointage.dureeMinutes ?? 0), 0)
+    const metrics = calculateWorkshopMetrics({
+      plannedHours: order.plannedHours ? Number(order.plannedHours) : null,
+      soldHours: order.soldHours ? Number(order.soldHours) : null,
+      billedHours: order.billedHours ? Number(order.billedHours) : null,
+      actualMinutes,
+      billedAmountHT: order.billedAmountHT ? Number(order.billedAmountHT) : null,
+      laborAmountHT: order.laborAmountHT ? Number(order.laborAmountHT) : null,
+      billingHourlyRateHT: order.billingHourlyRateHT ? Number(order.billingHourlyRateHT) : null,
+      internalLaborCostRateHT: order.internalLaborCostRateHT ? Number(order.internalLaborCostRateHT) : null,
+    })
+    return {
+      tempsFacture: metrics.billedHours ?? 0,
+      tempsReel: metrics.actualHours,
+      montantFacture: metrics.billedAmountHT ?? 0,
+      delta: metrics.laborMarginHT ?? 0,
+    }
+  }
+
   const moisIndex = new Map<string, number>()
   const fichesMois = Array.from({ length: 12 }, (_, index) => {
     const date = new Date(now.getFullYear(), now.getMonth() - 11 + index, 1)
@@ -143,7 +187,7 @@ export default async function RapportsPage() {
     }
   })
 
-  for (const fiche of fichesCloturees) {
+  for (const fiche of fichesSelectionnees) {
     if (!fiche.dateFermeture) continue
 
     const index = moisIndex.get(monthKey(fiche.dateFermeture))
@@ -155,16 +199,32 @@ export default async function RapportsPage() {
     fichesMois[index].nbFiches += 1
   }
 
-  const fichesAnnee = fichesCloturees.filter((fiche) =>
+
+  for (const order of externalSelectionnes) {
+    if (!order.closedAt) continue
+    const index = moisIndex.get(monthKey(order.closedAt))
+    if (index === undefined) continue
+    const metrics = calcExternal(order)
+    fichesMois[index].ca += metrics.montantFacture
+    fichesMois[index].rentabilite += metrics.delta
+    fichesMois[index].nbFiches += 1
+  }
+
+  const fichesAnnee = fichesSelectionnees.filter((fiche) =>
     fiche.dateFermeture && fiche.dateFermeture >= debutAnnee
   )
-  const fichesMoisActuel = fichesCloturees.filter((fiche) =>
+  const fichesMoisActuel = fichesSelectionnees.filter((fiche) =>
     fiche.dateFermeture && fiche.dateFermeture >= debutMois
   )
 
-  const caTotal = fichesCloturees.reduce((sum, fiche) => sum + calcRentabilite(fiche).montantFacture, 0)
+  const externalAnnee = externalSelectionnes.filter((order) => order.closedAt && order.closedAt >= debutAnnee)
+  const externalMoisActuel = externalSelectionnes.filter((order) => order.closedAt && order.closedAt >= debutMois)
+  const caTotal = fichesSelectionnees.reduce((sum, fiche) => sum + calcRentabilite(fiche).montantFacture, 0)
+    + externalSelectionnes.reduce((sum, order) => sum + calcExternal(order).montantFacture, 0)
   const caAnnee = fichesAnnee.reduce((sum, fiche) => sum + calcRentabilite(fiche).montantFacture, 0)
+    + externalAnnee.reduce((sum, order) => sum + calcExternal(order).montantFacture, 0)
   const rentabiliteAnnee = fichesAnnee.reduce((sum, fiche) => sum + calcRentabilite(fiche).delta, 0)
+    + externalAnnee.reduce((sum, order) => sum + calcExternal(order).delta, 0)
 
   const compagnonStatsMap = new Map<string, {
     id: string
@@ -222,13 +282,44 @@ export default async function RapportsPage() {
     }
   }
 
-  const fichesRecentes = fichesCloturees
-    .slice()
-    .sort((a, b) => (b.dateFermeture?.getTime() ?? 0) - (a.dateFermeture?.getTime() ?? 0))
-    .slice(0, 8)
-    .map((fiche) => {
-      const rentabilite = calcRentabilite(fiche)
+  for (const order of externalMoisActuel) {
+    const metrics = calcExternal(order)
+    const repartition = new Map<string, {
+      compagnon: (typeof order.pointages)[number]['compagnon']
+      minutes: number
+    }>()
+    for (const pointage of order.pointages) {
+      const existing = repartition.get(pointage.compagnonId)
+      repartition.set(pointage.compagnonId, {
+        compagnon: pointage.compagnon,
+        minutes: (existing?.minutes ?? 0) + (pointage.dureeMinutes ?? 0),
+      })
+    }
+    const totalMinutes = Array.from(repartition.values()).reduce((sum, item) => sum + item.minutes, 0)
+    for (const [compagnonId, item] of repartition) {
+      const existing = compagnonStatsMap.get(compagnonId) ?? {
+        id: compagnonId,
+        nom: item.compagnon.user?.nom ?? item.compagnon.nom,
+        prenom: item.compagnon.user?.prenom ?? item.compagnon.prenom,
+        poste: item.compagnon.poste,
+        nbFiches: 0,
+        tFacture: 0,
+        tReel: 0,
+        delta: 0,
+        ca: 0,
+      }
+      const weight = totalMinutes > 0 ? item.minutes / totalMinutes : 1 / Math.max(1, repartition.size)
+      existing.nbFiches += 1
+      existing.tFacture += metrics.tempsFacture * weight
+      existing.tReel += metrics.tempsReel * weight
+      existing.delta += metrics.delta * weight
+      existing.ca += metrics.montantFacture * weight
+      compagnonStatsMap.set(compagnonId, existing)
+    }
+  }
 
+  const fichesRecentesLivo = fichesSelectionnees.map((fiche) => {
+      const rentabilite = calcRentabilite(fiche)
       return {
         id: fiche.id,
         numero: fiche.numero,
@@ -242,6 +333,26 @@ export default async function RapportsPage() {
         tauxApplique: fiche.tauxApplique,
       }
     })
+
+  const fichesRecentesExternes = externalSelectionnes.map((order) => {
+    const metrics = calcExternal(order)
+    return {
+      id: order.id,
+      numero: order.externalNumber,
+      vehicule: order.vehicleLabel || order.immatriculation || 'Véhicule',
+      clientNom: order.clientName || 'Client non renseigné',
+      dateFermeture: order.closedAt?.toISOString() ?? '',
+      montantHT: metrics.montantFacture,
+      tempsFacture: metrics.tempsFacture,
+      tempsReel: metrics.tempsReel,
+      delta: metrics.delta,
+      tauxApplique: order.tauxApplique,
+    }
+  })
+
+  const fichesRecentes = [...fichesRecentesLivo, ...fichesRecentesExternes]
+    .sort((left, right) => new Date(right.dateFermeture).getTime() - new Date(left.dateFermeture).getTime())
+    .slice(0, 8)
 
   const compagnonsSerialises = compagnons.map((compagnon) => ({
     id: compagnon.id,
@@ -269,10 +380,15 @@ export default async function RapportsPage() {
     <>
       <Header
         title="Rapports"
-        description="Valeur vendue, écarts opérationnels, RH et absences"
+        description="Valeur vendue, écarts de temps, activité atelier et absences"
       />
 
       <div className={styles.content}>
+        <nav className={styles.sourceFilters} aria-label="Source des activités">
+          <Link href="/rapports" className={source === 'all' ? styles.sourceFilterActive : ''}>Toutes les activités</Link>
+          <Link href="/rapports?source=livo" className={source === 'livo' ? styles.sourceFilterActive : ''}>Fiches LIVO</Link>
+          <Link href="/rapports?source=external" className={source === 'external' ? styles.sourceFilterActive : ''}>OR externes</Link>
+        </nav>
         <RapportsTabs
           analytiques={(
             <RapportsClient
@@ -282,7 +398,7 @@ export default async function RapportsPage() {
               caTotal={caTotal}
               caAnnee={caAnnee}
               rentabiliteAnnee={rentabiliteAnnee}
-              nbFichesAnnee={fichesAnnee.length}
+              nbFichesAnnee={fichesAnnee.length + externalAnnee.length}
             />
           )}
           rh={(

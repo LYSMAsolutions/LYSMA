@@ -9,6 +9,7 @@ import { PointageReviewPanel } from '@/components/rh/PointageReviewPanel/Pointag
 import { ArrowLeft, Clock, Wrench, Calendar } from '@phosphor-icons/react/dist/ssr'
 import Link from 'next/link'
 import { getSoldeConges, getCompteurAbsences } from '@/lib/rh'
+import { calculateWorkshopMetrics } from '@/lib/workshop-metrics'
 import styles from './page.module.css'
 
 export const dynamic = 'force-dynamic'
@@ -112,6 +113,15 @@ export default async function CompagnonFichePage({
         orderBy: { debutAt: 'desc' },
         take: 20,
       },
+      externalWorkOrderPointages: {
+        include: {
+          externalWorkOrder: {
+            include: { pointages: true },
+          },
+        },
+        orderBy: { debutAt: 'desc' },
+        take: 20,
+      },
     },
   })
 
@@ -146,7 +156,7 @@ export default async function CompagnonFichePage({
     return new Date(pointage.debutAt) >= debutMois && pointage.fiche?.statut === 'CLOTUREE'
   })
 
-  const delta = fichesMois.reduce((sum: number, pointage: PointageFicheItem) => {
+  const deltaFiches = fichesMois.reduce((sum: number, pointage: PointageFicheItem) => {
     const fiche = pointage.fiche
     if (!fiche) return sum
 
@@ -158,6 +168,32 @@ export default async function CompagnonFichePage({
         tauxFiche
     )
   }, 0)
+
+  const externalOrdersMois = Array.from(new Map(
+    compagnon.externalWorkOrderPointages
+      .filter((pointage) => pointage.debutAt >= debutMois && pointage.externalWorkOrder.status === 'CLOTURE')
+      .map((pointage) => [pointage.externalWorkOrderId, pointage.externalWorkOrder])
+  ).values())
+
+  const deltaExternal = externalOrdersMois.reduce((sum, order) => {
+    const allMinutes = order.pointages.reduce((value, pointage) => value + (pointage.dureeMinutes ?? 0), 0)
+    const compagnonMinutes = order.pointages
+      .filter((pointage) => pointage.compagnonId === compagnon.id)
+      .reduce((value, pointage) => value + (pointage.dureeMinutes ?? 0), 0)
+    const metrics = calculateWorkshopMetrics({
+      soldHours: order.soldHours ? Number(order.soldHours) : null,
+      billedHours: order.billedHours ? Number(order.billedHours) : null,
+      actualMinutes: allMinutes,
+      billedAmountHT: order.billedAmountHT ? Number(order.billedAmountHT) : null,
+      laborAmountHT: order.laborAmountHT ? Number(order.laborAmountHT) : null,
+      billingHourlyRateHT: order.billingHourlyRateHT ? Number(order.billingHourlyRateHT) : null,
+      internalLaborCostRateHT: order.internalLaborCostRateHT ? Number(order.internalLaborCostRateHT) : null,
+    })
+    const weight = allMinutes > 0 ? compagnonMinutes / allMinutes : 0
+    return sum + (metrics.laborMarginHT ?? 0) * weight
+  }, 0)
+  const delta = deltaFiches + deltaExternal
+  const activitesMois = fichesMois.length + externalOrdersMois.length
 
   const [solde, compteurs, monthlyReview] = await Promise.all([
     compagnon.dateEntree
@@ -231,8 +267,8 @@ export default async function CompagnonFichePage({
 
           <div className={styles.profilKpis}>
             <div className={styles.profilKpi}>
-              <span className={styles.profilKpiVal}>{fichesMois.length}</span>
-              <span className={styles.profilKpiLabel}>Fiches ce mois</span>
+              <span className={styles.profilKpiVal}>{activitesMois}</span>
+              <span className={styles.profilKpiLabel}>Activités ce mois</span>
             </div>
 
             <div className={styles.profilKpi}>
@@ -241,7 +277,7 @@ export default async function CompagnonFichePage({
                 {formatEur(delta)}
               </span>
 
-              <span className={styles.profilKpiLabel}>Rentabilité mois</span>
+              <span className={styles.profilKpiLabel}>Rentabilité MO estimée</span>
             </div>
 
             <div className={styles.profilKpi}>

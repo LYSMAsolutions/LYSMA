@@ -24,7 +24,18 @@ export type LysmaNavItem = {
   icon?: ReactNode;
   badge?: ReactNode;
   match?: "exact" | "prefix";
+  variant?: "default" | "secondary" | "primary";
 };
+
+export type LysmaNavGroup = {
+  id: string;
+  label: string;
+  icon?: ReactNode;
+  items: LysmaNavItem[];
+  defaultOpen?: boolean;
+};
+
+export type LysmaSidebarEntry = LysmaNavItem | LysmaNavGroup;
 
 export type LysmaMetric = {
   label: string;

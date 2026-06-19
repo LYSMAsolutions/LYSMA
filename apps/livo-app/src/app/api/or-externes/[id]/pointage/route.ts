@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { prisma } from '@/lib/prisma'
 import { getPointageAccess } from '@/lib/access'
+import { hasConflictingWorkshopPointage } from '@/lib/work-pointage'
 
 const schema = z.object({
   compagnonId: z.string().min(1),
@@ -55,12 +56,16 @@ export async function POST(
       const existing = await tx.externalWorkOrderPointage.findFirst({
         where: {
           compagnonId,
-          externalWorkOrderId: id,
           statut: { in: ['EN_COURS', 'EN_PAUSE'] },
         },
       })
 
-      if (existing) return null
+      const existingFiche = await tx.pointageFiche.findFirst({
+        where: { compagnonId, statut: { in: ['EN_COURS', 'EN_PAUSE'] } },
+        select: { id: true },
+      })
+
+      if (hasConflictingWorkshopPointage(existingFiche, existing)) return null
 
       const created = await tx.externalWorkOrderPointage.create({
         data: {
@@ -68,6 +73,7 @@ export async function POST(
           externalWorkOrderId: id,
           debutAt: now,
           statut: 'EN_COURS',
+          context: { accessMode: access.mode, source: 'OR_EXTERNE' },
         },
       })
 
@@ -102,7 +108,7 @@ export async function POST(
     })
 
     if (!pointage) {
-      return NextResponse.json({ error: 'Déjà pointé sur cet OR externe.' }, { status: 400 })
+      return NextResponse.json({ error: 'Un pointage atelier est déjà en cours.' }, { status: 409 })
     }
 
     return NextResponse.json({ success: true, pointage })
@@ -138,9 +144,17 @@ export async function POST(
       },
     })
 
+    const completedPointages = await tx.externalWorkOrderPointage.aggregate({
+      where: { externalWorkOrderId: id, statut: 'TERMINE' },
+      _sum: { dureeMinutes: true },
+    })
+
     await tx.externalWorkOrder.update({
       where: { id },
-      data: { status: activeCount > 0 ? 'EN_COURS' : 'TERMINE' },
+      data: {
+        status: activeCount > 0 ? 'EN_COURS' : 'TERMINE',
+        actualMinutes: completedPointages._sum.dureeMinutes ?? 0,
+      },
     })
 
     await tx.pointageAuditLog.create({

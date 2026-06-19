@@ -3,6 +3,10 @@ import { z } from 'zod'
 import { prisma } from '@/lib/prisma'
 import { requireSecureSession } from '@/lib/security/secure-session'
 import { getPrimaryGarageForUser } from '@/lib/garage'
+import {
+  externalWorkOrderUniqueWhere,
+  normalizeExternalWorkOrderNumber,
+} from '@/lib/external-work-order-key'
 
 const createSchema = z.object({
   externalNumber: z.string().trim().min(1).max(80),
@@ -12,8 +16,14 @@ const createSchema = z.object({
   immatriculation: z.string().trim().max(40).optional().nullable(),
   vin: z.string().trim().max(80).optional().nullable(),
   operation: z.string().trim().max(3000).optional().nullable(),
+  plannedHours: z.coerce.number().min(0).max(999).optional().nullable(),
   soldHours: z.coerce.number().min(0).max(999).optional().nullable(),
+  billedHours: z.coerce.number().min(0).max(999).optional().nullable(),
   soldAmountHT: z.coerce.number().min(0).max(999999).optional().nullable(),
+  billedAmountHT: z.coerce.number().min(0).max(999999).optional().nullable(),
+  laborAmountHT: z.coerce.number().min(0).max(999999).optional().nullable(),
+  billingHourlyRateHT: z.coerce.number().min(0).max(9999).optional().nullable(),
+  internalLaborCostRateHT: z.coerce.number().min(0).max(9999).optional().nullable(),
   assignedCompagnonId: z.string().optional().nullable(),
 })
 
@@ -35,6 +45,7 @@ export async function GET(req: NextRequest) {
       ...(status ? { status: status as any } : {}),
     },
     include: {
+      lines: { orderBy: { position: 'asc' } },
       assignedCompagnon: {
         include: { user: true },
       },
@@ -74,11 +85,8 @@ export async function POST(req: NextRequest) {
     if (!compagnon) return NextResponse.json({ error: 'Compagnon affecté introuvable.' }, { status: 400 })
   }
 
-  const existing = await prisma.externalWorkOrder.findFirst({
-    where: {
-      garageId: garage.id,
-      externalNumber: parsed.data.externalNumber,
-    },
+  const existing = await prisma.externalWorkOrder.findUnique({
+    where: externalWorkOrderUniqueWhere(garage.id, parsed.data.externalNumber),
   })
 
   if (existing) {
@@ -93,6 +101,7 @@ export async function POST(req: NextRequest) {
       garageId: garage.id,
       source: 'MANUEL',
       externalNumber: parsed.data.externalNumber,
+      externalNumberNormalized: normalizeExternalWorkOrderNumber(parsed.data.externalNumber),
       sourceSoftware: parsed.data.sourceSoftware || null,
       clientName: parsed.data.clientName || null,
       vehicleLabel: parsed.data.vehicleLabel || null,
@@ -102,7 +111,13 @@ export async function POST(req: NextRequest) {
         parsed.data.operation ||
         'Fiche miroir créée pour rattacher les pointages LIVO à un OR externe.',
       soldHours: toDecimalOrNull(parsed.data.soldHours),
+      plannedHours: toDecimalOrNull(parsed.data.plannedHours),
+      billedHours: toDecimalOrNull(parsed.data.billedHours),
       soldAmountHT: toDecimalOrNull(parsed.data.soldAmountHT),
+      billedAmountHT: toDecimalOrNull(parsed.data.billedAmountHT),
+      laborAmountHT: toDecimalOrNull(parsed.data.laborAmountHT),
+      billingHourlyRateHT: toDecimalOrNull(parsed.data.billingHourlyRateHT),
+      internalLaborCostRateHT: toDecimalOrNull(parsed.data.internalLaborCostRateHT),
       assignedCompagnonId: parsed.data.assignedCompagnonId || null,
       importMetadata: {
         createdBy: 'admin',
@@ -118,7 +133,11 @@ export async function POST(req: NextRequest) {
       action: 'CREATE_MIRROR_MANUAL',
       status: 'SUCCESS',
       message: 'Fiche miroir OR externe créée manuellement dans LIVO.',
-      payload: parsed.data,
+      payload: {
+        externalNumber: parsed.data.externalNumber,
+        sourceSoftware: parsed.data.sourceSoftware || null,
+        createdBy: 'admin',
+      },
     },
   })
 

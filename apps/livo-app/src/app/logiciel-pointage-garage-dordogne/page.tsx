@@ -92,7 +92,7 @@ export default function DordogneSeoPage() {
         <nav className={styles.nav} aria-label="Navigation LIVO">
           <Link href="/">Accueil</Link>
           <Link href={'/a-propos' as Route}>À propos</Link>
-          <Link href="/api-qr-ordre-reparation-garage">API QR OR</Link>
+          <Link href="/api-qr-ordre-reparation-garage">Connexion OR et QR code</Link>
           <Link href="/demo">Démo</Link>
           <Link href="/inscription">Essai gratuit</Link>
         </nav>
@@ -172,8 +172,8 @@ export default function DordogneSeoPage() {
           <span className={styles.kicker}>Organisation existante</span>
           <h2>LIVO complète le logiciel métier du garage</h2>
           <p>
-            Un atelier peut utiliser LIVO avec ses fiches internes, avec des OR saisis en secours, ou avec des OR
-            transmis par un logiciel de facturation via API et QR code lorsque l'intégration est activée.
+            Un atelier peut utiliser LIVO avec ses fiches internes, avec des OR saisis manuellement, ou avec des OR
+            transmis par un logiciel de facturation et retrouvé par QR code lorsque la connexion est activée.
           </p>
         </div>
         <div className={styles.faqGrid}>
@@ -193,7 +193,7 @@ export default function DordogneSeoPage() {
         <div>
           <Link href="/">Accueil</Link>
           <Link href={'/a-propos' as Route}>À propos</Link>
-          <Link href="/api-qr-ordre-reparation-garage">API QR OR</Link>
+          <Link href="/api-qr-ordre-reparation-garage">Connexion OR et QR code</Link>
           <Link href="/conformite-temps-travail">Conformité</Link>
           <Link href="/politique-confidentialite">Confidentialité</Link>
         </div>

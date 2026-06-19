@@ -16,8 +16,9 @@ type Props = {
   orderId: string
   externalNumber: string
   realMinutes: number
-  soldHours: number | null
-  soldAmountHT: number | null
+  billedHours: number | null
+  billedAmountHT: number | null
+  laborAmountHT: number | null
   taux: TauxGarage[]
 }
 
@@ -31,17 +32,19 @@ export function ExternalOrderCloseButton({
   orderId,
   externalNumber,
   realMinutes,
-  soldHours,
-  soldAmountHT,
+  billedHours,
+  billedAmountHT,
+  laborAmountHT,
   taux,
 }: Props) {
   const router = useRouter()
-  const defaultHours = soldHours ?? Math.max(0, Math.round((realMinutes / 60) * 100) / 100)
+  const defaultHours = billedHours ?? Math.max(0, Math.round((realMinutes / 60) * 100) / 100)
   const [open, setOpen] = useState(false)
   const [hours, setHours] = useState(defaultHours ? String(defaultHours) : '')
   const [selectedTaux, setSelectedTaux] = useState<TauxType>(taux[0]?.type ?? 'T1')
-  const [amount, setAmount] = useState(soldAmountHT ? String(soldAmountHT) : '')
-  const [manualAmount, setManualAmount] = useState(Boolean(soldAmountHT))
+  const [amount, setAmount] = useState(billedAmountHT ? String(billedAmountHT) : '')
+  const [laborAmount, setLaborAmount] = useState(laborAmountHT ? String(laborAmountHT) : '')
+  const [manualAmount, setManualAmount] = useState(Boolean(billedAmountHT))
   const [motif, setMotif] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -54,7 +57,11 @@ export function ExternalOrderCloseButton({
   const calculatedAmount = tauxSelectionne ? hoursNumber * tauxSelectionne.montant : 0
 
   useEffect(() => {
-    if (!manualAmount) setAmount(calculatedAmount ? calculatedAmount.toFixed(2) : '')
+    if (!manualAmount) {
+      const calculated = calculatedAmount ? calculatedAmount.toFixed(2) : ''
+      setAmount(calculated)
+      setLaborAmount(calculated)
+    }
   }, [calculatedAmount, manualAmount])
 
   async function submit() {
@@ -72,8 +79,9 @@ export function ExternalOrderCloseButton({
         body: JSON.stringify({
           action: 'CLOTURER',
           tauxType: tauxSelectionne.type,
-          soldHours: hoursNumber,
-          soldAmountHT: Number(amount.replace(',', '.')) || null,
+          billedHours: hoursNumber,
+          billedAmountHT: Number(amount.replace(',', '.')) || null,
+          laborAmountHT: Number(laborAmount.replace(',', '.')) || null,
           motif: motif.trim() || undefined,
         }),
       })
@@ -114,7 +122,7 @@ export function ExternalOrderCloseButton({
             </div>
 
             <label className={styles.closeField}>
-              <span>Temps vendu / facture</span>
+              <span>Temps facturé</span>
               <input
                 type="number"
                 min="0"
@@ -143,7 +151,7 @@ export function ExternalOrderCloseButton({
             </div>
 
             <label className={styles.closeField}>
-              <span>Montant HT</span>
+              <span>Montant total HT facturé</span>
               <input
                 type="number"
                 min="0"
@@ -156,6 +164,17 @@ export function ExternalOrderCloseButton({
               />
             </label>
 
+            <label className={styles.closeField}>
+              <span>Montant main-d’œuvre HT</span>
+              <input
+                type="number"
+                min="0"
+                step="0.01"
+                value={laborAmount}
+                onChange={(event) => setLaborAmount(event.target.value)}
+              />
+            </label>
+
             {manualAmount && (
               <button type="button" className={styles.recalcButton} onClick={() => setManualAmount(false)}>
                 Recalculer automatiquement
@@ -163,7 +182,7 @@ export function ExternalOrderCloseButton({
             )}
 
             <label className={styles.closeField}>
-              <span>Note de cloture</span>
+              <span>Commentaire de clôture</span>
               <textarea rows={3} value={motif} onChange={(event) => setMotif(event.target.value)} />
             </label>
 

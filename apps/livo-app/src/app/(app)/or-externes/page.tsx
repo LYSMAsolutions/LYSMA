@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation'
 import { Header } from '@/components/layout/Header'
 import { Badge } from '@/components/ui'
 import { DashboardNewFicheButton } from '@/components/atelier/NouvelleFiche/DashboardNewFicheButton'
-import { ExternalOrderForm } from './ExternalOrderForm'
+import { calculateWorkshopMetrics } from '@/lib/workshop-metrics'
 import { ExternalOrderCloseButton } from './ExternalOrderCloseButton'
 import styles from './page.module.css'
 
@@ -29,21 +29,18 @@ function formatH(minutes: number) {
 }
 
 function formatHours(value: unknown) {
-  const number = Number(value ?? 0)
-  return `${new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 2 }).format(number)} h`
+  return `${new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 2 }).format(Number(value ?? 0))} h`
 }
 
 function formatEur(value: unknown) {
   return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(Number(value ?? 0))
 }
 
-function rentabilityTone(soldHours: number, realMinutes: number) {
-  if (!soldHours) return { label: 'À compléter', className: styles.neutral }
-  const realHours = realMinutes / 60
-  const ratio = realHours / soldHours
-  if (ratio <= 0.9) return { label: 'Rentable', className: styles.good }
-  if (ratio <= 1.1) return { label: 'À surveiller', className: styles.warning }
-  return { label: 'Non rentable', className: styles.bad }
+function efficiencyTone(efficiencyPercent: number | null) {
+  if (efficiencyPercent === null) return { label: 'À compléter', className: styles.neutral }
+  if (efficiencyPercent >= 110) return { label: 'Temps maîtrisé', className: styles.good }
+  if (efficiencyPercent >= 90) return { label: 'À surveiller', className: styles.warning }
+  return { label: 'Temps dépassé', className: styles.bad }
 }
 
 export default async function OrExternesPage() {
@@ -57,10 +54,9 @@ export default async function OrExternesPage() {
     prisma.externalWorkOrder.findMany({
       where: { garageId: garage.id },
       include: {
+        lines: { orderBy: { position: 'asc' } },
         pointages: {
-          include: {
-            compagnon: { include: { user: true } },
-          },
+          include: { compagnon: { include: { user: true } } },
           orderBy: { debutAt: 'desc' },
         },
       },
@@ -78,10 +74,9 @@ export default async function OrExternesPage() {
     libelle: item.libelle,
     montant: Number(item.montant),
   }))
-
   const ouverts = orders.filter((order) => !['CLOTURE', 'ANNULE'].includes(order.status)).length
   const totalReelMinutes = orders.reduce(
-    (sum, order) => sum + order.pointages.reduce((s, pointage) => s + (pointage.dureeMinutes ?? 0), 0),
+    (sum, order) => sum + order.pointages.reduce((value, pointage) => value + (pointage.dureeMinutes ?? 0), 0),
     0
   )
   const totalVendu = orders.reduce((sum, order) => sum + Number(order.soldHours ?? 0), 0)
@@ -91,85 +86,66 @@ export default async function OrExternesPage() {
       <Header
         title="OR atelier"
         action={<DashboardNewFicheButton garageId={garage.id} variant="secondary" label="Fiche de travail" />}
-        description="Import, QR et pointage sur les ordres créés dans le logiciel de facturation."
+        description="Suivi des ordres reçus depuis le logiciel de facturation."
       />
 
       <main className={styles.content}>
         <section className={styles.explain}>
           <strong>Le logiciel atelier reste la source de l’OR.</strong>
-          <span>
-            LIVO récupère l’OR via API ou QR pour pointer, mesurer le temps réel et préparer la clôture sans double saisie.
-          </span>
+          <span>LIVO reçoit l’OR, retrouve le travail grâce au QR et mesure le temps réel sans remplacer la facturation.</span>
         </section>
 
         <section className={styles.flowGrid}>
           <article>
-            <strong>Flux recommandé</strong>
-            <span>Le logiciel de facturation envoie l’OR à LIVO, puis imprime un QR sur l’ordre remis au compagnon.</span>
-            <code>POST /api/integrations/work-orders</code>
+            <strong>OR envoyé avant le scan</strong>
+            <span>Le logiciel de facturation transmet l’OR à LIVO, puis imprime son QR sur le document atelier.</span>
           </article>
           <article>
-            <strong>Secours sans intégration</strong>
-            <span>Le compagnon tape seulement le numéro OR. LIVO pointe sans les détails client/véhicule, puis l’admin renseigne le taux à la clôture.</span>
+            <strong>OR reçu au premier scan</strong>
+            <span>Un QR complet peut enregistrer l’OR lors du premier scan. Les scans suivants retrouvent le même OR.</span>
           </article>
           <article>
-            <strong>Hors OR logiciel</strong>
-            <span>Pour une intervention interne ou un cas non facturé dans le logiciel atelier, créez une fiche de travail LIVO.</span>
+            <strong>Travaux internes</strong>
+            <span>Pour une intervention hors logiciel de facturation, créez une fiche de travail LIVO.</span>
             <DashboardNewFicheButton garageId={garage.id} variant="secondary" label="Créer une fiche" />
           </article>
         </section>
 
         <section className={styles.kpis}>
-          <article>
-            <span>Fiches miroir</span>
-            <strong>{orders.length}</strong>
-          </article>
-          <article>
-            <span>OR ouverts</span>
-            <strong>{ouverts}</strong>
-          </article>
-          <article>
-            <span>Temps vendu</span>
-            <strong>{formatHours(totalVendu)}</strong>
-          </article>
-          <article>
-            <span>Temps réel</span>
-            <strong>{formatH(totalReelMinutes)}</strong>
-          </article>
+          <article><span>OR reçus</span><strong>{orders.length}</strong></article>
+          <article><span>OR ouverts</span><strong>{ouverts}</strong></article>
+          <article><span>Temps vendu</span><strong>{formatHours(totalVendu)}</strong></article>
+          <article><span>Temps réel</span><strong>{formatH(totalReelMinutes)}</strong></article>
         </section>
 
         <section className={styles.panel}>
           <div className={styles.panelHeader}>
             <div>
-              <h2>OR de secours</h2>
-              <p>À utiliser seulement si le QR est absent et si le logiciel de facturation n’envoie pas encore les OR à LIVO.</p>
-            </div>
-          </div>
-          <details className={styles.manualDetails}>
-            <summary>Créer manuellement un OR miroir</summary>
-            <ExternalOrderForm />
-          </details>
-        </section>
-
-        <section className={styles.panel}>
-          <div className={styles.panelHeader}>
-            <div>
-              <h2>Suivi des fiches miroir</h2>
-              <p>Lecture simple du temps vendu, du temps réel et de l’écart atelier.</p>
+              <h2>Suivi des OR reçus</h2>
+              <p>Temps prévu, vendu, facturé et réellement pointé dans l’atelier.</p>
             </div>
           </div>
 
           {orders.length === 0 ? (
-            <p className={styles.empty}>Aucune fiche miroir enregistrée pour le moment.</p>
+            <p className={styles.empty}>Aucun OR reçu pour le moment.</p>
           ) : (
             <div className={styles.list}>
               {orders.map((order) => {
                 const realMinutes = order.pointages.reduce((sum, pointage) => sum + (pointage.dureeMinutes ?? 0), 0)
-                const soldHours = Number(order.soldHours ?? 0)
-                const deltaMinutes = Math.round(soldHours * 60) - realMinutes
+                const metrics = calculateWorkshopMetrics({
+                  plannedHours: order.plannedHours ? Number(order.plannedHours) : null,
+                  soldHours: order.soldHours ? Number(order.soldHours) : null,
+                  billedHours: order.billedHours ? Number(order.billedHours) : null,
+                  actualMinutes: realMinutes,
+                  billedAmountHT: order.billedAmountHT ? Number(order.billedAmountHT) : null,
+                  laborAmountHT: order.laborAmountHT ? Number(order.laborAmountHT) : null,
+                  billingHourlyRateHT: order.billingHourlyRateHT ? Number(order.billingHourlyRateHT) : null,
+                  internalLaborCostRateHT: order.internalLaborCostRateHT ? Number(order.internalLaborCostRateHT) : null,
+                })
+                const deltaMinutes = metrics.timeDeltaHours === null ? null : Math.round(metrics.timeDeltaHours * 60)
                 const activePointages = order.pointages.some((pointage) => ['EN_COURS', 'EN_PAUSE'].includes(pointage.statut))
                 const canClose = !activePointages && !['CLOTURE', 'ANNULE'].includes(order.status)
-                const tone = rentabilityTone(soldHours, realMinutes)
+                const tone = efficiencyTone(metrics.efficiencyPercent)
                 const status = STATUS_LABELS[order.status] ?? { label: order.status, variant: 'muted' as const }
 
                 return (
@@ -178,41 +154,44 @@ export default async function OrExternesPage() {
                       <div>
                         <div className={styles.orderTitle}>
                           <strong>{order.externalNumber}</strong>
-                          <Badge variant={status.variant} dot>
-                            {status.label}
-                          </Badge>
+                          <Badge variant={status.variant} dot>{status.label}</Badge>
                           <span className={`${styles.rentability} ${tone.className}`}>{tone.label}</span>
                           {canClose && (
                             <ExternalOrderCloseButton
                               orderId={order.id}
                               externalNumber={order.externalNumber}
                               realMinutes={realMinutes}
-                              soldHours={order.soldHours ? Number(order.soldHours) : null}
-                              soldAmountHT={order.soldAmountHT ? Number(order.soldAmountHT) : null}
+                              billedHours={order.billedHours ? Number(order.billedHours) : null}
+                              billedAmountHT={order.billedAmountHT ? Number(order.billedAmountHT) : null}
+                              laborAmountHT={order.laborAmountHT ? Number(order.laborAmountHT) : null}
                               taux={tauxSerialises}
                             />
                           )}
                         </div>
-                        <p>
-                          {order.vehicleLabel || 'Véhicule non renseigné'}
-                          {order.immatriculation ? ` · ${order.immatriculation}` : ''}
-                        </p>
-                        <small>
-                          {order.clientName || 'Client non renseigné'} · {order.operation || 'Aucune opération renseignée'}
-                        </small>
+                        <p>{order.vehicleLabel || 'Véhicule non renseigné'}{order.immatriculation ? ` · ${order.immatriculation}` : ''}</p>
+                        <small>{order.clientName || 'Client non renseigné'} · {order.operation || 'Aucun travail renseigné'}</small>
+                        {order.lines.length > 0 && (
+                          <ul>{order.lines.slice(0, 4).map((line) => <li key={line.id}>{line.label}</li>)}</ul>
+                        )}
                       </div>
                     </div>
                     <div className={styles.metrics}>
-                      <span><small>Vendu</small><strong>{formatHours(order.soldHours)}</strong></span>
+                      <span><small>Prévu</small><strong>{metrics.plannedHours === null ? '—' : formatHours(metrics.plannedHours)}</strong></span>
+                      <span><small>Vendu</small><strong>{metrics.soldHours === null ? '—' : formatHours(metrics.soldHours)}</strong></span>
+                      <span><small>Facturé</small><strong>{metrics.billedHours === null ? 'À compléter' : formatHours(metrics.billedHours)}</strong></span>
                       <span><small>Réel</small><strong>{formatH(realMinutes)}</strong></span>
-                      <span><small>Taux</small><strong>{order.tauxApplique || 'À la clôture'}</strong></span>
+                      <span><small>Taux</small><strong>{order.tauxLibelle || 'À la clôture'}</strong></span>
                       <span>
                         <small>Écart</small>
-                        <strong className={deltaMinutes >= 0 ? styles.goodText : styles.badText}>
-                          {soldHours ? `${deltaMinutes >= 0 ? '+' : ''}${formatH(deltaMinutes)}` : 'Mode secours'}
+                        <strong className={deltaMinutes !== null && deltaMinutes >= 0 ? styles.goodText : styles.badText}>
+                          {deltaMinutes === null ? 'À compléter' : `${deltaMinutes >= 0 ? '+' : ''}${formatH(deltaMinutes)}`}
                         </strong>
                       </span>
-                      <span><small>Montant HT</small><strong>{order.soldAmountHT ? formatEur(order.soldAmountHT) : 'À la clôture'}</strong></span>
+                      <span><small>Montant HT</small><strong>{metrics.billedAmountHT === null ? 'À la clôture' : formatEur(metrics.billedAmountHT)}</strong></span>
+                      <span><small>Efficacité temps</small><strong>{metrics.efficiencyPercent === null ? '—' : `${Math.round(metrics.efficiencyPercent)} %`}</strong></span>
+                      {metrics.laborMarginHT !== null && (
+                        <span><small>Rentabilité MO estimée</small><strong>{formatEur(metrics.laborMarginHT)}</strong></span>
+                      )}
                     </div>
                   </article>
                 )

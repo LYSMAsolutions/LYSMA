@@ -223,6 +223,16 @@
   animation: scaleIn var(--duration-base) var(--ease-spring) both;
 }
 
+.foundMessage {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 10px;
+  color: var(--color-success);
+  font-size: 13px;
+  font-weight: 700;
+}
+
 .ficheResultHeader { display: flex; align-items: center; justify-content: space-between; }
 .ficheNumero { font-family: var(--font-mono); font-size: var(--text-base); font-weight: var(--font-bold); color: var(--color-text-primary); }
 

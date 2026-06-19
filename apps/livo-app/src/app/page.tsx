@@ -6,17 +6,16 @@ import {
   ChartLineUp,
   CheckCircle,
   ClipboardText,
-  Clock,
   DeviceMobile,
   FilePdf,
   Gauge,
-  LockKey,
   QrCode,
   ShieldCheck,
   Timer,
   Wrench,
   XCircle,
 } from '@phosphor-icons/react/dist/ssr'
+import Image from 'next/image'
 import Link from 'next/link'
 import { LIVO_PRICING } from '@/lib/pricing'
 import { canonical } from '@/lib/seo'
@@ -24,7 +23,7 @@ import styles from './page.module.css'
 
 const pageTitle = 'LIVO — Pointage et pilotage du temps pour ateliers automobiles'
 const pageDescription =
-  'LIVO relie le pointage des compagnons aux fiches de travail, aux véhicules et aux ordres de réparation afin de suivre le temps réel de l’atelier.'
+  'LIVO permet aux compagnons de pointer depuis un smartphone, de retrouver une fiche de travail et de rechercher ou scanner un ordre de réparation dans l’atelier.'
 
 export const metadata: Metadata = {
   title: pageTitle,
@@ -33,6 +32,7 @@ export const metadata: Metadata = {
     'logiciel de pointage atelier',
     'logiciel pointage garage',
     'pointage compagnon garage',
+    'pointage atelier smartphone',
     'suivi temps réel atelier',
     'temps vendu temps réel',
     'fiche de travail garage',
@@ -52,11 +52,56 @@ export const metadata: Metadata = {
   },
 }
 
-const dashboardStats = [
-  { label: 'Compagnons présents', value: '4', detail: 'sur 6 actifs' },
-  { label: 'Fiches en cours', value: '7', detail: 'dans l’atelier' },
-  { label: 'Temps vendu', value: '18 h 30', detail: 'fiches clôturées' },
-  { label: 'Temps réel', value: '16 h 42', detail: 'temps pointé' },
+const atelierBenefits = [
+  'Connexion par profil compagnon et code PIN.',
+  'Pointage de l’arrivée atelier depuis le téléphone.',
+  'Consultation des fiches de travaux préparées.',
+  'Recherche d’une fiche ou d’un ordre de réparation.',
+  'Scan du QR code présent sur un ordre de réparation.',
+  'Aucun ordinateur fixe nécessaire dans l’atelier.',
+]
+
+const atelierCaptures = [
+  {
+    src: '/captures/atelier-01-choix-compagnon.png',
+    width: 716,
+    height: 1096,
+    title: '1. Choix du compagnon',
+    description: 'Le compagnon sélectionne son profil avant d’accéder à son espace.',
+    format: 'phone',
+  },
+  {
+    src: '/captures/atelier-02-code-pin.png',
+    width: 716,
+    height: 1276,
+    title: '2. Code PIN',
+    description: 'Il saisit son code PIN personnel sur le pavé numérique.',
+    format: 'phone',
+  },
+  {
+    src: '/captures/atelier-03-arrivee-atelier.png',
+    width: 716,
+    height: 356,
+    title: '3. Arrivée atelier',
+    description: 'Le pointage de l’arrivée est accessible immédiatement.',
+    format: 'wide',
+  },
+  {
+    src: '/captures/atelier-04-fiches-travaux.png',
+    width: 716,
+    height: 1598,
+    title: '4. Fiches de travaux',
+    description: 'Les fiches préparées sont visibles avec le véhicule et les travaux à réaliser.',
+    format: 'list',
+  },
+  {
+    src: '/captures/atelier-05-rechercher-scanner-or.png',
+    width: 716,
+    height: 220,
+    title: '5. Recherche et scan',
+    description: 'Deux accès permettent de scanner un OR ou de rechercher une fiche.',
+    format: 'wide',
+  },
 ]
 
 const features = [
@@ -78,7 +123,7 @@ const features = [
   {
     icon: DeviceMobile,
     title: 'Espace atelier séparé',
-    text: 'Une tablette ou un autre appareil connecté donne accès aux compagnons par code PIN, sans ouvrir le compte administrateur.',
+    text: 'Un smartphone, une tablette ou un ordinateur connecté donne accès aux compagnons par code PIN, sans ouvrir le compte administrateur.',
   },
   {
     icon: Gauge,
@@ -108,7 +153,7 @@ const features = [
   {
     icon: ShieldCheck,
     title: 'Accès administrateur protégé',
-    text: 'L’adresse email est vérifiée et le compte administrateur utilise une double authentification par application TOTP.',
+    text: 'L’adresse email est vérifiée et le compte administrateur utilise une double authentification par application de sécurité.',
   },
 ]
 
@@ -144,7 +189,7 @@ const includedScope = [
 ]
 
 const excludedScope = [
-  'LIVO ne remplace pas un DMS, un logiciel de facturation ou un logiciel de comptabilité.',
+  'LIVO ne remplace pas le logiciel de facturation ou de comptabilité du garage.',
   'LIVO ne gère pas les stocks, les achats de pièces, les devis ni les factures clients.',
   'Les indicateurs LIVO ne constituent pas une marge comptable complète.',
   'La connexion à un logiciel métier n’est pas automatique : elle doit être configurée et validée.',
@@ -180,12 +225,12 @@ const faqItems = [
   {
     question: 'LIVO peut-il récupérer les ordres de réparation de mon logiciel métier ?',
     answer:
-      'LIVO possède des routes d’intégration et un flux QR pour les OR externes. Leur utilisation suppose toutefois une configuration technique avec le logiciel concerné. Aucun connecteur universel n’est activé automatiquement.',
+      'Oui, lorsqu’une connexion a été configurée et validée avec le logiciel concerné. L’ordre de réparation peut alors être retrouvé par son numéro ou son QR code. Cette connexion n’est pas activée automatiquement pour tous les logiciels.',
   },
   {
-    question: 'Que se passe-t-il sans intégration avec mon logiciel métier ?',
+    question: 'Peut-on utiliser LIVO sans connexion au logiciel atelier ?',
     answer:
-      'Le garage peut créer ses propres fiches de travail dans LIVO. Un OR miroir peut aussi être saisi manuellement comme solution de secours, avec moins d’informations qu’un OR importé.',
+      'Oui. Le garage peut créer ses propres fiches de travail dans LIVO ou saisir manuellement un ordre de réparation, avec davantage de saisie qu’avec une connexion configurée.',
   },
   {
     question: 'Quels documents peut-on télécharger ?',
@@ -273,32 +318,65 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className={styles.dashboardCard} aria-label="Exemple fictif de tableau de bord atelier">
-            <div className={styles.dashboardHeader}>
-              <div>
-                <strong>Tableau de bord atelier</strong>
-                <span>Exemple de présentation avec données fictives</span>
-              </div>
-              <span className={styles.liveBadge}>Exemple</span>
+          <figure className={styles.heroProductCapture}>
+            <Image
+              src="/captures/atelier-03-arrivee-atelier.png"
+              alt="Écran LIVO permettant au compagnon de pointer son arrivée atelier"
+              width={716}
+              height={356}
+              priority
+            />
+            <figcaption>Écran réel de pointage compagnon sur smartphone.</figcaption>
+          </figure>
+        </section>
+
+        <section id="espace-atelier" className={styles.atelierSection} aria-labelledby="atelier-title">
+          <div className={styles.atelierIntro}>
+            <div>
+              <h2 id="atelier-title">Pointage atelier depuis un simple smartphone</h2>
+              <p>
+                LIVO permet aux compagnons de se connecter et de pointer directement depuis
+                l’atelier, sans ordinateur fixe. Ils peuvent retrouver une fiche de travail,
+                rechercher un ordre de réparation ou scanner son QR code depuis le navigateur du
+                téléphone.
+              </p>
+              <p>
+                LIVO complète l’organisation existante du garage ou de la carrosserie. Il ne
+                remplace pas le logiciel utilisé pour les devis et la facturation.
+              </p>
+              <Link href="/demo-atelier" className={styles.secondaryButton}>
+                Voir l’espace atelier
+              </Link>
             </div>
-            <div className={styles.dashboardStats}>
-              {dashboardStats.map((stat) => (
-                <div key={stat.label}>
-                  <span>{stat.label}</span>
-                  <strong>{stat.value}</strong>
-                  <small>{stat.detail}</small>
-                </div>
+            <ul className={styles.atelierBenefits}>
+              {atelierBenefits.map((benefit) => (
+                <li key={benefit}><CheckCircle size={20} weight="fill" /> {benefit}</li>
               ))}
-            </div>
-            <div className={styles.comparisonPanel}>
-              <div>
-                <span>Temps vendu comparé au temps réel</span>
-                <strong>18 h 30 / 16 h 42</strong>
-              </div>
-              <div className={styles.progressBar} aria-hidden="true"><span /></div>
-              <small>Ces chiffres illustrent l’interface ; ils ne proviennent pas d’un garage réel.</small>
-            </div>
+            </ul>
           </div>
+
+          <div className={styles.captureGallery}>
+            {atelierCaptures.map((capture) => (
+              <figure
+                key={capture.src}
+                className={`${styles.captureCard} ${styles[`capture${capture.format[0].toUpperCase()}${capture.format.slice(1)}`]}`}
+              >
+                <div className={styles.captureImage}>
+                  <Image
+                    src={capture.src}
+                    alt={`${capture.title} dans l’espace atelier LIVO`}
+                    width={capture.width}
+                    height={capture.height}
+                  />
+                </div>
+                <figcaption>
+                  <strong>{capture.title}</strong>
+                  <span>{capture.description}</span>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+          <p className={styles.captureNote}>Captures réelles de l’application LIVO.</p>
         </section>
 
         <section id="fonctionnalites" className={styles.section} aria-labelledby="features-title">
@@ -357,42 +435,42 @@ export default function HomePage() {
               pièces, les achats, les charges fixes ni tous les coûts de l’entreprise.
             </p>
           </div>
-          <div className={styles.timeExample} aria-label="Exemple fictif de comparaison de temps">
-            <div><span>Temps vendu</span><strong>2 h 00</strong></div>
-            <div><span>Temps réel</span><strong>2 h 35</strong></div>
-            <div><span>Écart de temps</span><strong>− 35 min</strong></div>
-            <div><span>Lecture</span><strong>À examiner</strong></div>
+          <div className={styles.timeExample} aria-label="Données comparées dans LIVO">
+            <div><span>Temps vendu</span><strong>Renseigné à la clôture</strong></div>
+            <div><span>Temps réel</span><strong>Issu des pointages</strong></div>
+            <div><span>Écart de temps</span><strong>Calculé par LIVO</strong></div>
+            <div><span>Utilité</span><strong>Repérer les dossiers à examiner</strong></div>
           </div>
         </section>
 
         <section id="or-externes" className={styles.securitySection} aria-labelledby="external-orders-title">
           <div>
             <span className={styles.sectionKicker}>Ordres de réparation externes</span>
-            <h2 id="external-orders-title">Une intégration possible, jamais supposée</h2>
+            <h2 id="external-orders-title">Une connexion possible avec le logiciel atelier</h2>
             <p>
-              LIVO sait recevoir et suivre un OR externe, générer ou lire son identifiant QR et
-              enregistrer le temps du compagnon. Cette capacité technique doit être configurée avec
-              le logiciel métier concerné avant d’être utilisée dans un garage.
+              LIVO peut recevoir et suivre un ordre de réparation externe, lire son QR code et
+              enregistrer le temps du compagnon. Cette connexion doit être configurée et vérifiée
+              avec le logiciel atelier concerné avant son utilisation dans le garage.
             </p>
             <Link href="/api-qr-ordre-reparation-garage" className={styles.secondaryButton}>
-              Comprendre le fonctionnement API et QR
+              Comprendre la connexion et le QR code
             </Link>
           </div>
           <div className={styles.securityGrid}>
             <article>
               <QrCode size={24} weight="duotone" />
-              <h3>Avec intégration configurée</h3>
+              <h3>Avec une connexion configurée</h3>
               <p>L’OR peut être importé puis retrouvé par son numéro ou son QR code.</p>
             </article>
             <article>
               <ClipboardText size={24} weight="duotone" />
-              <h3>Sans connecteur</h3>
-              <p>Une fiche LIVO reste disponible ; un OR miroir peut aussi être saisi en secours.</p>
+              <h3>Sans connexion au logiciel atelier</h3>
+              <p>Le garage peut utiliser une fiche LIVO ou saisir manuellement un ordre de réparation.</p>
             </article>
             <article>
               <XCircle size={24} weight="duotone" />
               <h3>Pas de compatibilité automatique</h3>
-              <p>La présence d’une API ne garantit pas la connexion immédiate à tous les logiciels du marché.</p>
+              <p>Chaque connexion doit être configurée et validée avec le logiciel concerné.</p>
             </article>
           </div>
         </section>
@@ -438,7 +516,7 @@ export default function HomePage() {
               <li>Compagnons illimités</li>
               <li>Application web sans terminal propriétaire</li>
               <li>Pointage, fiches, véhicules, rapports et PDF</li>
-              <li>Intégration OR externe sur configuration</li>
+              <li>Connexion aux OR externes après configuration</li>
             </ul>
             <Link href="/inscription" className={styles.primaryButton}>Créer un compte d’essai</Link>
           </div>

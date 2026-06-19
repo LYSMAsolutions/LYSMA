@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { getPointageAccess } from '@/lib/access'
 import { z } from 'zod'
+import { hasConflictingWorkshopPointage } from '@/lib/work-pointage'
 
 const schema = z.object({
   compagnonId: z.string().min(1),
@@ -56,12 +57,22 @@ export async function POST(req: NextRequest) {
     const pointageFiche = await prisma.$transaction(async (tx) => {
       await tx.$queryRaw`SELECT id FROM compagnons WHERE id = ${compagnonId} FOR UPDATE`
       const existing = await tx.pointageFiche.findFirst({
-        where: { compagnonId, ficheId, statut: { in: ['EN_COURS', 'EN_PAUSE'] } },
+        where: { compagnonId, statut: { in: ['EN_COURS', 'EN_PAUSE'] } },
       })
-      if (existing) return null
+      const existingExternal = await tx.externalWorkOrderPointage.findFirst({
+        where: { compagnonId, statut: { in: ['EN_COURS', 'EN_PAUSE'] } },
+        select: { id: true },
+      })
+      if (hasConflictingWorkshopPointage(existing, existingExternal)) return null
 
       const created = await tx.pointageFiche.create({
-        data: { compagnonId, ficheId, debutAt: now, statut: 'EN_COURS' },
+        data: {
+          compagnonId,
+          ficheId,
+          debutAt: now,
+          statut: 'EN_COURS',
+          context: { accessMode: access.mode, source: 'FICHE_LIVO' },
+        },
       })
       await tx.ficheTravaux.update({
         where: { id: ficheId },
@@ -95,7 +106,7 @@ export async function POST(req: NextRequest) {
     })
 
     if (!pointageFiche) {
-      return NextResponse.json({ error: 'Déjà pointé sur cette fiche' }, { status: 400 })
+      return NextResponse.json({ error: 'Un pointage atelier est déjà en cours.' }, { status: 409 })
     }
 
     return NextResponse.json({ success: true, pointageFiche })

@@ -14,6 +14,102 @@ export const externalWorkOrderPayloadSchema = z.object({
 
 export type ExternalWorkOrderPayload = z.infer<typeof externalWorkOrderPayloadSchema>
 
+const decimalSchema = z.coerce.number().min(0).max(999999)
+
+export const externalWorkOrderLineSchema = z.object({
+  externalLineId: z.string().trim().min(1).max(120),
+  position: z.coerce.number().int().min(0).max(10000).default(0),
+  type: z.enum(['LABOR', 'PART', 'PACKAGE', 'SUBCONTRACT', 'OTHER']),
+  code: z.string().trim().max(120).optional().nullable(),
+  label: z.string().trim().min(1).max(300),
+  description: z.string().trim().max(3000).optional().nullable(),
+  quantity: decimalSchema.optional().nullable(),
+  unit: z.string().trim().max(40).optional().nullable(),
+  plannedHours: z.coerce.number().min(0).max(999).optional().nullable(),
+  soldHours: z.coerce.number().min(0).max(999).optional().nullable(),
+  billedHours: z.coerce.number().min(0).max(999).optional().nullable(),
+  unitPriceHT: decimalSchema.optional().nullable(),
+  billedAmountHT: decimalSchema.optional().nullable(),
+  costAmountHT: decimalSchema.optional().nullable(),
+  billingHourlyRateHT: decimalSchema.optional().nullable(),
+  metadata: z.record(z.string(), z.unknown()).optional(),
+})
+
+export const externalWorkOrderImportSchema = z.object({
+  schemaVersion: z.literal('1.0'),
+  eventId: z.string().trim().min(1).max(160),
+  eventType: z.literal('work_order.upserted'),
+  occurredAt: z.string().datetime({ offset: true }),
+  garageExternalId: z.string().trim().min(1).max(120),
+  workOrder: z.object({
+    externalId: z.string().trim().min(1).max(120),
+    number: z.string().trim().min(1).max(80),
+    revision: z.coerce.number().int().min(0),
+    status: z.enum(['OPEN', 'IN_PROGRESS', 'PAUSED', 'COMPLETED', 'CLOSED', 'CANCELLED']),
+    openedAt: z.string().datetime({ offset: true }).optional().nullable(),
+    updatedAt: z.string().datetime({ offset: true }).optional().nullable(),
+    closedAt: z.string().datetime({ offset: true }).optional().nullable(),
+    customer: z.object({
+      displayName: z.string().trim().max(160).optional().nullable(),
+    }).optional().nullable(),
+    vehicle: z.object({
+      registration: z.string().trim().max(40).optional().nullable(),
+      vin: z.string().trim().max(80).optional().nullable(),
+      make: z.string().trim().max(80).optional().nullable(),
+      model: z.string().trim().max(120).optional().nullable(),
+    }).optional().nullable(),
+    totals: z.object({
+      plannedHours: z.coerce.number().min(0).max(999).optional().nullable(),
+      soldHours: z.coerce.number().min(0).max(999).optional().nullable(),
+      billedHours: z.coerce.number().min(0).max(999).optional().nullable(),
+      billedAmountHT: decimalSchema.optional().nullable(),
+      laborAmountHT: decimalSchema.optional().nullable(),
+      billingHourlyRateHT: decimalSchema.optional().nullable(),
+      internalLaborCostRateHT: decimalSchema.optional().nullable(),
+      currency: z.literal('EUR').default('EUR'),
+    }).default({ currency: 'EUR' }),
+    lines: z.array(externalWorkOrderLineSchema).max(500).default([]),
+  }),
+  metadata: z.record(z.string(), z.unknown()).optional(),
+})
+
+export type ExternalWorkOrderImport = z.infer<typeof externalWorkOrderImportSchema>
+
+const LINE_TYPE_MAP = {
+  LABOR: 'MAIN_OEUVRE',
+  PART: 'PIECE',
+  PACKAGE: 'FORFAIT',
+  SUBCONTRACT: 'SOUS_TRAITANCE',
+  OTHER: 'AUTRE',
+} as const
+
+const STATUS_MAP = {
+  OPEN: 'OUVERT',
+  IN_PROGRESS: 'EN_COURS',
+  PAUSED: 'EN_PAUSE',
+  COMPLETED: 'TERMINE',
+  CLOSED: 'CLOTURE',
+  CANCELLED: 'ANNULE',
+} as const
+
+export function mapExternalWorkOrderLineType(type: keyof typeof LINE_TYPE_MAP) {
+  return LINE_TYPE_MAP[type]
+}
+
+export function mapExternalWorkOrderStatus(status: keyof typeof STATUS_MAP) {
+  return STATUS_MAP[status]
+}
+
+export function summarizeExternalWorkOrderLines(lines: ExternalWorkOrderImport['workOrder']['lines']) {
+  return lines
+    .slice()
+    .sort((left, right) => left.position - right.position)
+    .map((line) => line.label)
+    .filter(Boolean)
+    .join('\n')
+    .slice(0, 3000)
+}
+
 type UnknownRecord = Record<string, unknown>
 
 function isRecord(value: unknown): value is UnknownRecord {

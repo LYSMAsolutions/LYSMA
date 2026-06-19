@@ -7,6 +7,7 @@ import QRCode from 'qrcode'
 import React from 'react'
 import path from 'path'
 import fs from 'fs'
+import { buildFicheQrPayload, createFicheScanToken } from '@/lib/work-order-qr'
 
 export async function GET(
   req: NextRequest,
@@ -55,7 +56,15 @@ export async function GET(
     ? `data:image/png;base64,${fs.readFileSync(logoPath).toString('base64')}`
     : undefined
 
-  const qrCodeSrc = await QRCode.toDataURL(fiche.numero, {
+  const scanToken = fiche.scanToken ?? createFicheScanToken()
+  if (!fiche.scanToken) {
+    await prisma.ficheTravaux.update({
+      where: { id: fiche.id },
+      data: { scanToken },
+    })
+  }
+
+  const qrCodeSrc = await QRCode.toDataURL(buildFicheQrPayload(scanToken), {
     errorCorrectionLevel: 'M',
     margin: 1,
     scale: 8,

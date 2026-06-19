@@ -122,37 +122,45 @@ enum ExternalPointageStatus {
   TERMINE
 }
 
-model User {
-  id            String    @id @default(cuid())
-  email         String    @unique
-  emailVerified DateTime?
-  emailVerifiedAt DateTime?
-  nom           String
-  prenom        String
-  telephone     String?
-  role          Role      @default(OWNER)
-  passwordHash  String?
-  passwordChangedAt DateTime?
-  twoFactorEnabled Boolean @default(false)
-  twoFactorSecretEncrypted String?
-  twoFactorConfirmedAt DateTime?
-  recoveryCodesHash String?
-  failedLoginCount Int @default(0)
-  lockedUntil DateTime?
-  sessionVersion Int @default(1)
-  avatarUrl     String?
-  actif         Boolean   @default(true)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+enum ExternalWorkOrderLineType {
+  MAIN_OEUVRE
+  PIECE
+  FORFAIT
+  SOUS_TRAITANCE
+  AUTRE
+}
 
-  accounts   Account[]
-  sessions   Session[]
-  garages    Garage[]
-  compagnons Compagnon[]
-  securityTokens SecurityToken[]
-  securityAuditLogs SecurityAuditLog[]
-  trustedDevices TrustedDevice[]
-  pointageAuditLogs PointageAuditLog[]
+model User {
+  id                       String    @id @default(cuid())
+  email                    String    @unique
+  emailVerified            DateTime?
+  emailVerifiedAt          DateTime?
+  nom                      String
+  prenom                   String
+  telephone                String?
+  role                     Role      @default(OWNER)
+  passwordHash             String?
+  passwordChangedAt        DateTime?
+  twoFactorEnabled         Boolean   @default(false)
+  twoFactorSecretEncrypted String?
+  twoFactorConfirmedAt     DateTime?
+  recoveryCodesHash        String?
+  failedLoginCount         Int       @default(0)
+  lockedUntil              DateTime?
+  sessionVersion           Int       @default(1)
+  avatarUrl                String?
+  actif                    Boolean   @default(true)
+  createdAt                DateTime  @default(now())
+  updatedAt                DateTime  @updatedAt
+
+  accounts                        Account[]
+  sessions                        Session[]
+  garages                         Garage[]
+  compagnons                      Compagnon[]
+  securityTokens                  SecurityToken[]
+  securityAuditLogs               SecurityAuditLog[]
+  trustedDevices                  TrustedDevice[]
+  pointageAuditLogs               PointageAuditLog[]
   pointageMonthlyReviewsValidated PointageMonthlyReview[] @relation("PointageMonthlyReviewValidator")
 
   @@map("users")
@@ -226,30 +234,30 @@ model SecurityAuditLog {
 }
 
 model RateLimitBucket {
-  id        String   @id @default(cuid())
-  key       String   @unique
-  count     Int      @default(0)
-  resetAt   DateTime
+  id           String    @id @default(cuid())
+  key          String    @unique
+  count        Int       @default(0)
+  resetAt      DateTime
   blockedUntil DateTime?
-  updatedAt DateTime @updatedAt
+  updatedAt    DateTime  @updatedAt
 
   @@index([resetAt])
   @@map("rate_limit_buckets")
 }
 
 model TrustedDevice {
-  id          String    @id @default(cuid())
-  tokenHash   String    @unique
-  label       String?
-  ip          String?
-  userAgent   String?   @db.Text
-  expiresAt   DateTime
-  lastUsedAt  DateTime?
-  revokedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  userId      String
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id         String    @id @default(cuid())
+  tokenHash  String    @unique
+  label      String?
+  ip         String?
+  userAgent  String?   @db.Text
+  expiresAt  DateTime
+  lastUsedAt DateTime?
+  revokedAt  DateTime?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, expiresAt])
   @@index([revokedAt])
@@ -257,35 +265,36 @@ model TrustedDevice {
 }
 
 model Garage {
-  id          String       @id @default(cuid())
-  nom         String
-  adresse     String?
-  ville       String?
-  codePostal  String?
-  telephone   String?
-  email       String?
-  siret       String?
-  logoUrl     String?
-  statutJour  StatutGarage @default(FERME)
-  actif       Boolean      @default(true)
+  id              String       @id @default(cuid())
+  nom             String
+  adresse         String?
+  ville           String?
+  codePostal      String?
+  telephone       String?
+  email           String?
+  siret           String?
+  logoUrl         String?
+  statutJour      StatutGarage @default(FERME)
+  actif           Boolean      @default(true)
   trialEndsAt     DateTime?
-  abonnementActif Boolean   @default(false)
+  abonnementActif Boolean      @default(false)
   passwordAtelier String?
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
 
   ownerId String
   owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
 
-  taux         TauxGarage[]
-  compagnons   Compagnon[]
-  vehicules    Vehicule[]
-  fiches       FicheTravaux[]
-  joursOuverts JourOuvert[]
-  pointageAuditLogs PointageAuditLog[]
-  pointageMonthlyReviews PointageMonthlyReview[]
-  externalWorkOrders ExternalWorkOrder[]
+  taux                      TauxGarage[]
+  compagnons                Compagnon[]
+  vehicules                 Vehicule[]
+  fiches                    FicheTravaux[]
+  joursOuverts              JourOuvert[]
+  pointageAuditLogs         PointageAuditLog[]
+  pointageMonthlyReviews    PointageMonthlyReview[]
+  externalWorkOrders        ExternalWorkOrder[]
   externalWorkOrderSyncLogs ExternalWorkOrderSyncLog[]
+  externalIntegrations      ExternalGarageIntegration[]
 
   @@map("garages")
 }
@@ -323,8 +332,8 @@ model JourOuvert {
 
 model Compagnon {
   id            String    @id @default(cuid())
-  nom           String   @default("")
-  prenom        String   @default("")
+  nom           String    @default("")
+  prenom        String    @default("")
   matricule     String?
   poste         String?
   heuresContrat Decimal   @default(35) @db.Decimal(5, 2)
@@ -336,16 +345,16 @@ model Compagnon {
   updatedAt     DateTime  @updatedAt
 
   userId   String?
-  user     User?  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user     User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
   garageId String
-  garage   Garage @relation(fields: [garageId], references: [id], onDelete: Cascade)
+  garage   Garage  @relation(fields: [garageId], references: [id], onDelete: Cascade)
 
-  pointagesJour  PointageJour[]
-  pointagesFiche PointageFiche[]
-  absences       Absence[]
-  pointageAuditLogs PointageAuditLog[]
-  pointageMonthlyReviews PointageMonthlyReview[]
-  externalWorkOrdersAssigned ExternalWorkOrder[] @relation("ExternalWorkOrderAssignedCompagnon")
+  pointagesJour              PointageJour[]
+  pointagesFiche             PointageFiche[]
+  absences                   Absence[]
+  pointageAuditLogs          PointageAuditLog[]
+  pointageMonthlyReviews     PointageMonthlyReview[]
+  externalWorkOrdersAssigned ExternalWorkOrder[]         @relation("ExternalWorkOrderAssignedCompagnon")
   externalWorkOrderPointages ExternalWorkOrderPointage[]
 
   @@map("compagnons")
@@ -397,20 +406,21 @@ model Vehicule {
 }
 
 model FicheTravaux {
-  id            String      @id @default(cuid())
-  numero        String
-  statut        StatutFiche @default(EN_ATTENTE)
-  travaux       String      @db.Text
+  id                  String      @id @default(cuid())
+  numero              String
+  statut              StatutFiche @default(EN_ATTENTE)
+  travaux             String      @db.Text
   interventionsMetier Json?
-  notes         String?     @db.Text
-  tempsFacture  Decimal?    @db.Decimal(6, 2)
-  tauxApplique  TauxType?
-  montantHT     Decimal?    @db.Decimal(10, 2)
-  tempsReel     Decimal?    @db.Decimal(6, 2)
-  dateOuverture DateTime    @default(now())
-  dateFermeture DateTime?
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
+  notes               String?     @db.Text
+  tempsFacture        Decimal?    @db.Decimal(6, 2)
+  tauxApplique        TauxType?
+  montantHT           Decimal?    @db.Decimal(10, 2)
+  tempsReel           Decimal?    @db.Decimal(6, 2)
+  scanToken           String?     @unique
+  dateOuverture       DateTime    @default(now())
+  dateFermeture       DateTime?
+  createdAt           DateTime    @default(now())
+  updatedAt           DateTime    @updatedAt
 
   garageId   String
   garage     Garage   @relation(fields: [garageId], references: [id], onDelete: Cascade)
@@ -429,6 +439,7 @@ model PointageFiche {
   finAt        DateTime?
   dureeMinutes Int?
   statut       StatutPointageFiche @default(EN_COURS)
+  context      Json?
   createdAt    DateTime            @default(now())
   updatedAt    DateTime            @updatedAt
 
@@ -441,26 +452,26 @@ model PointageFiche {
 }
 
 model PointageAuditLog {
-  id              String              @id @default(cuid())
-  action          PointageAuditAction
-  targetType      String
-  targetId        String?
-  field           String?
-  oldValue        Json?
-  newValue        Json?
-  motif           String              @db.Text
-  ip              String?
-  userAgent       String?             @db.Text
-  createdAt       DateTime            @default(now())
+  id         String              @id @default(cuid())
+  action     PointageAuditAction
+  targetType String
+  targetId   String?
+  field      String?
+  oldValue   Json?
+  newValue   Json?
+  motif      String              @db.Text
+  ip         String?
+  userAgent  String?             @db.Text
+  createdAt  DateTime            @default(now())
 
   garageId        String
-  garage          Garage              @relation(fields: [garageId], references: [id], onDelete: Cascade)
+  garage          Garage     @relation(fields: [garageId], references: [id], onDelete: Cascade)
   compagnonId     String?
-  compagnon       Compagnon?          @relation(fields: [compagnonId], references: [id], onDelete: SetNull)
+  compagnon       Compagnon? @relation(fields: [compagnonId], references: [id], onDelete: SetNull)
   pointageJourId  String?
   pointageFicheId String?
   userId          String?
-  user            User?               @relation(fields: [userId], references: [id], onDelete: SetNull)
+  user            User?      @relation(fields: [userId], references: [id], onDelete: SetNull)
 
   @@index([garageId, createdAt])
   @@index([compagnonId, createdAt])
@@ -469,22 +480,22 @@ model PointageAuditLog {
 }
 
 model PointageMonthlyReview {
-  id            String              @id @default(cuid())
-  mois          Int
-  annee         Int
-  status        ReleveMensuelStatus @default(BROUILLON)
-  notes         String?             @db.Text
-  validatedAt   DateTime?
-  contestedAt   DateTime?
-  createdAt     DateTime            @default(now())
-  updatedAt     DateTime            @updatedAt
+  id          String              @id @default(cuid())
+  mois        Int
+  annee       Int
+  status      ReleveMensuelStatus @default(BROUILLON)
+  notes       String?             @db.Text
+  validatedAt DateTime?
+  contestedAt DateTime?
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
 
   garageId      String
-  garage        Garage              @relation(fields: [garageId], references: [id], onDelete: Cascade)
+  garage        Garage    @relation(fields: [garageId], references: [id], onDelete: Cascade)
   compagnonId   String
-  compagnon     Compagnon           @relation(fields: [compagnonId], references: [id], onDelete: Cascade)
+  compagnon     Compagnon @relation(fields: [compagnonId], references: [id], onDelete: Cascade)
   validatedById String?
-  validatedBy   User?               @relation("PointageMonthlyReviewValidator", fields: [validatedById], references: [id], onDelete: SetNull)
+  validatedBy   User?     @relation("PointageMonthlyReviewValidator", fields: [validatedById], references: [id], onDelete: SetNull)
 
   @@unique([compagnonId, mois, annee])
   @@index([garageId, annee, mois])
@@ -493,72 +504,170 @@ model PointageMonthlyReview {
 }
 
 model ExternalWorkOrder {
-  id                  String                  @id @default(cuid())
-  source              ExternalWorkOrderSource @default(MANUEL)
-  externalNumber      String
-  sourceSoftware      String?
-  clientName          String?
-  vehicleLabel        String?
-  immatriculation     String?
-  vin                 String?
-  operation           String?                 @db.Text
-  soldHours           Decimal?                @db.Decimal(6, 2)
-  soldAmountHT        Decimal?                @db.Decimal(10, 2)
-  tauxApplique        TauxType?
-  tauxLibelle         String?
-  tauxHoraire         Decimal?                @db.Decimal(10, 2)
-  status              ExternalWorkOrderStatus @default(OUVERT)
-  openedAt            DateTime                @default(now())
-  closedAt            DateTime?
-  importMetadata      Json?
-  createdAt           DateTime                @default(now())
-  updatedAt           DateTime                @updatedAt
+  id                       String                  @id @default(cuid())
+  source                   ExternalWorkOrderSource @default(MANUEL)
+  externalNumber           String
+  externalNumberNormalized String
+  sourceSoftware           String?
+  clientName               String?
+  vehicleLabel             String?
+  immatriculation          String?
+  vin                      String?
+  operation                String?                 @db.Text
+  plannedHours             Decimal?                @db.Decimal(6, 2)
+  soldHours                Decimal?                @db.Decimal(6, 2)
+  billedHours              Decimal?                @db.Decimal(6, 2)
+  soldAmountHT             Decimal?                @db.Decimal(10, 2)
+  billedAmountHT           Decimal?                @db.Decimal(10, 2)
+  laborAmountHT            Decimal?                @db.Decimal(10, 2)
+  tauxApplique             TauxType?
+  tauxLibelle              String?
+  tauxHoraire              Decimal?                @db.Decimal(10, 2)
+  billingHourlyRateHT      Decimal?                @db.Decimal(10, 2)
+  internalLaborCostRateHT  Decimal?                @db.Decimal(10, 2)
+  actualMinutes            Int                     @default(0)
+  externalId               String?
+  externalRevision         Int?
+  sourceUpdatedAt          DateTime?
+  lastImportedAt           DateTime?
+  closureComment           String?                 @db.Text
+  status                   ExternalWorkOrderStatus @default(OUVERT)
+  openedAt                 DateTime                @default(now())
+  closedAt                 DateTime?
+  importMetadata           Json?
+  createdAt                DateTime                @default(now())
+  updatedAt                DateTime                @updatedAt
 
   garageId            String
-  garage              Garage                  @relation(fields: [garageId], references: [id], onDelete: Cascade)
+  garage              Garage                      @relation(fields: [garageId], references: [id], onDelete: Cascade)
   assignedCompagnonId String?
-  assignedCompagnon   Compagnon?              @relation("ExternalWorkOrderAssignedCompagnon", fields: [assignedCompagnonId], references: [id], onDelete: SetNull)
+  assignedCompagnon   Compagnon?                  @relation("ExternalWorkOrderAssignedCompagnon", fields: [assignedCompagnonId], references: [id], onDelete: SetNull)
+  integrationId       String?
+  integration         ExternalGarageIntegration?  @relation(fields: [integrationId], references: [id], onDelete: SetNull)
   pointages           ExternalWorkOrderPointage[]
+  lines               ExternalWorkOrderLine[]
   syncLogs            ExternalWorkOrderSyncLog[]
 
-  @@unique([garageId, source, externalNumber])
+  @@unique([garageId, externalNumberNormalized])
+  @@unique([integrationId, externalId])
   @@index([garageId, status])
   @@index([externalNumber])
+  @@index([integrationId, externalRevision])
   @@map("external_work_orders")
 }
 
 model ExternalWorkOrderPointage {
-  id                  String                @id @default(cuid())
-  debutAt             DateTime              @default(now())
-  finAt               DateTime?
-  dureeMinutes        Int?
-  statut              ExternalPointageStatus @default(EN_COURS)
-  createdAt           DateTime              @default(now())
-  updatedAt           DateTime              @updatedAt
+  id           String                 @id @default(cuid())
+  debutAt      DateTime               @default(now())
+  finAt        DateTime?
+  dureeMinutes Int?
+  statut       ExternalPointageStatus @default(EN_COURS)
+  context      Json?
+  createdAt    DateTime               @default(now())
+  updatedAt    DateTime               @updatedAt
 
   externalWorkOrderId String
-  externalWorkOrder   ExternalWorkOrder     @relation(fields: [externalWorkOrderId], references: [id], onDelete: Cascade)
+  externalWorkOrder   ExternalWorkOrder @relation(fields: [externalWorkOrderId], references: [id], onDelete: Cascade)
   compagnonId         String
-  compagnon           Compagnon             @relation(fields: [compagnonId], references: [id], onDelete: Cascade)
+  compagnon           Compagnon         @relation(fields: [compagnonId], references: [id], onDelete: Cascade)
 
   @@index([externalWorkOrderId, statut])
   @@index([compagnonId, statut])
   @@map("external_work_order_pointages")
 }
 
+model ExternalWorkOrderLine {
+  id                  String                    @id @default(cuid())
+  externalLineId      String
+  position            Int                       @default(0)
+  type                ExternalWorkOrderLineType @default(AUTRE)
+  code                String?
+  label               String
+  description         String?                   @db.Text
+  quantity            Decimal?                  @db.Decimal(10, 3)
+  unit                String?
+  plannedHours        Decimal?                  @db.Decimal(6, 2)
+  soldHours           Decimal?                  @db.Decimal(6, 2)
+  billedHours         Decimal?                  @db.Decimal(6, 2)
+  unitPriceHT         Decimal?                  @db.Decimal(10, 2)
+  billedAmountHT      Decimal?                  @db.Decimal(10, 2)
+  costAmountHT        Decimal?                  @db.Decimal(10, 2)
+  billingHourlyRateHT Decimal?                  @db.Decimal(10, 2)
+  metadata            Json?
+  createdAt           DateTime                  @default(now())
+  updatedAt           DateTime                  @updatedAt
+
+  externalWorkOrderId String
+  externalWorkOrder   ExternalWorkOrder @relation(fields: [externalWorkOrderId], references: [id], onDelete: Cascade)
+
+  @@unique([externalWorkOrderId, externalLineId])
+  @@index([externalWorkOrderId, position])
+  @@map("external_work_order_lines")
+}
+
+model ExternalIntegrationPartner {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  name      String
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  integrations ExternalGarageIntegration[]
+
+  @@map("external_integration_partners")
+}
+
+model ExternalGarageIntegration {
+  id                 String    @id @default(cuid())
+  externalGarageId   String
+  apiSecretEncrypted String
+  qrSecretEncrypted  String
+  qrKeyId            String
+  active             Boolean   @default(true)
+  lastImportedAt     DateTime?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  partnerId String
+  partner   ExternalIntegrationPartner @relation(fields: [partnerId], references: [id], onDelete: Cascade)
+  garageId  String
+  garage    Garage                     @relation(fields: [garageId], references: [id], onDelete: Cascade)
+
+  workOrders ExternalWorkOrder[]
+  syncLogs   ExternalWorkOrderSyncLog[]
+
+  @@unique([partnerId, externalGarageId])
+  @@unique([partnerId, garageId])
+  @@index([garageId, active])
+  @@map("external_garage_integrations")
+}
+
 model ExternalWorkOrderSyncLog {
-  id                  String             @id @default(cuid())
-  action              String
-  status              String
-  message             String?            @db.Text
-  payload             Json?
-  createdAt           DateTime           @default(now())
+  id               String   @id @default(cuid())
+  action           String
+  status           String
+  message          String?  @db.Text
+  payload          Json?
+  eventId          String?
+  idempotencyKey   String?
+  nonce            String?
+  requestHash      String?
+  signatureValid   Boolean?
+  externalRevision Int?
+  durationMs       Int?
+  legacyFormat     Boolean  @default(false)
+  createdAt        DateTime @default(now())
 
   garageId            String
-  garage              Garage             @relation(fields: [garageId], references: [id], onDelete: Cascade)
+  garage              Garage                     @relation(fields: [garageId], references: [id], onDelete: Cascade)
   externalWorkOrderId String?
-  externalWorkOrder   ExternalWorkOrder?  @relation(fields: [externalWorkOrderId], references: [id], onDelete: SetNull)
+  externalWorkOrder   ExternalWorkOrder?         @relation(fields: [externalWorkOrderId], references: [id], onDelete: SetNull)
+  integrationId       String?
+  integration         ExternalGarageIntegration? @relation(fields: [integrationId], references: [id], onDelete: SetNull)
 
+  @@unique([integrationId, idempotencyKey])
+  @@unique([integrationId, nonce])
   @@index([garageId, createdAt])
   @@index([externalWorkOrderId, createdAt])
   @@map("external_work_order_sync_logs")

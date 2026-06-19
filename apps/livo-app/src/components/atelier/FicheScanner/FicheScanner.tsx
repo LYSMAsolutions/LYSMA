@@ -41,6 +41,7 @@ export function FicheScanner({ compagnonId, onPointer, onClose }: Props) {
   const [searching, setSearching] = useState(false)
   const [fiche, setFiche] = useState<FicheTrouvee | null>(null)
   const [notFound, setNotFound] = useState(false)
+  const [searchError, setSearchError] = useState('')
   const [scanActive, setScanActive] = useState(false)
   const [scanError, setScanError] = useState('')
   const videoRef = useRef<HTMLVideoElement>(null)
@@ -49,19 +50,25 @@ export function FicheScanner({ compagnonId, onPointer, onClose }: Props) {
   const lastScanRef = useRef('')
   const nativeScanActiveRef = useRef(false)
 
-  const searchFiche = useCallback(async (q: string) => {
+  const searchFiche = useCallback(async (q: string, source: 'manual' | 'scan' = 'manual') => {
     if (!q || q.length < 2) return
     setSearching(true)
     setNotFound(false)
+    setSearchError('')
     setFiche(null)
     try {
-      const res = await fetch(`/api/atelier-auth/fiche-search?q=${encodeURIComponent(q)}`)
-      const data = await res.json()
-      if (data.fiche) {
+      const parameter = source === 'scan' ? 'qr' : 'q'
+      const res = await fetch(`/api/atelier-auth/fiche-search?${parameter}=${encodeURIComponent(q)}`)
+      const data = await res.json().catch(() => null)
+      if (res.ok && data?.fiche) {
         setFiche(data.fiche)
       } else {
         setNotFound(true)
+        setSearchError(typeof data?.error === 'string' ? data.error : 'Fiche introuvable.')
       }
+    } catch {
+      setNotFound(true)
+      setSearchError('Connexion impossible. Réessayez dans un instant.')
     } finally {
       setSearching(false)
     }
@@ -85,14 +92,14 @@ export function FicheScanner({ compagnonId, onPointer, onClose }: Props) {
   }, [])
 
   const handleScanResult = useCallback((rawText: string) => {
-    const text = rawText.trim().toUpperCase()
+    const text = rawText.trim()
     if (!text || text === lastScanRef.current) return
 
     lastScanRef.current = text
     stopScan()
     setMode('search')
-    setQuery(text)
-    searchFiche(text)
+    setQuery(/^FT-/i.test(text) ? text.toUpperCase() : '')
+    searchFiche(text, 'scan')
   }, [searchFiche, stopScan])
 
   const startScan = useCallback(async () => {
@@ -252,14 +259,14 @@ export function FicheScanner({ compagnonId, onPointer, onClose }: Props) {
                   className={styles.searchInput}
                   value={query}
                   onChange={e => setQuery(e.target.value.toUpperCase())}
-                  onKeyDown={e => e.key === 'Enter' && searchFiche(query)}
+                  onKeyDown={e => e.key === 'Enter' && searchFiche(query, 'manual')}
                   placeholder="Ex: FT-2026-001"
                   autoFocus
                   inputMode="text"
                 />
                 <button
                   className={styles.searchBtn}
-                  onClick={() => searchFiche(query)}
+                  onClick={() => searchFiche(query, 'manual')}
                   disabled={searching || query.length < 2}
                 >
                   {searching ? '...' : <MagnifyingGlass weight="bold" size={18} />}
@@ -301,12 +308,13 @@ export function FicheScanner({ compagnonId, onPointer, onClose }: Props) {
 
           {notFound && (
             <div className={styles.notFound}>
-              Aucune fiche trouvée pour "{query}"
+              {searchError || 'Fiche introuvable.'}
             </div>
           )}
 
           {fiche && badge && (
             <div className={styles.ficheResult}>
+              <p className={styles.foundMessage}><Check weight="bold" size={14} /> Fiche trouvée</p>
               <div className={styles.ficheResultHeader}>
                 <span className={styles.ficheNumero}>{fiche.numero}</span>
                 <Badge variant={badge.variant} dot>{badge.label}</Badge>

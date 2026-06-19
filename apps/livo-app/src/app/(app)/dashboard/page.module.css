@@ -5,6 +5,29 @@
   gap: var(--space-8);
 }
 
+.sourceFilters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: var(--space-4);
+}
+
+.sourceFilters a {
+  padding: 8px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  color: var(--color-text-secondary);
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.sourceFilters a:hover,
+.sourceFilterActive {
+  border-color: var(--color-primary) !important;
+  color: var(--color-primary) !important;
+  background: color-mix(in srgb, var(--color-primary) 10%, transparent);
+}
+
 .kpiGrid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);

@@ -1,7 +1,7 @@
 import { auth } from '@/lib/auth'
 import { getPrimaryGarageForUser } from '@/lib/garage'
 import { redirect } from 'next/navigation'
-import { getDashboardData } from '@/lib/dashboard'
+import { getDashboardData, type WorkshopSourceFilter } from '@/lib/dashboard'
 import { Header } from '@/components/layout/Header'
 import { Button, Badge } from '@/components/ui'
 import {
@@ -46,14 +46,22 @@ function formatTime(date?: Date | null) {
   return date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
 }
 
-export default async function DashboardPage() {
+export default async function DashboardPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ source?: string }>
+}) {
   const session = await auth()
   if (!session?.user?.id) redirect('/connexion')
 
   const garage = await getPrimaryGarageForUser(session.user.id)
   if (!garage) redirect('/parametres')
 
-  const data = await getDashboardData(garage.id)
+  const requestedSource = (await searchParams).source
+  const source: WorkshopSourceFilter = requestedSource === 'livo' || requestedSource === 'external'
+    ? requestedSource
+    : 'all'
+  const data = await getDashboardData(garage.id, source)
   const today = new Date().toLocaleDateString('fr-FR', {
     weekday: 'long',
     day: 'numeric',
@@ -65,11 +73,16 @@ export default async function DashboardPage() {
     <>
       <Header title="Tableau de bord" description={today} action={<DashboardNewFicheButton garageId={garage.id} />} />
       <div className={styles.content}>
+        <nav className={styles.sourceFilters} aria-label="Source des activités">
+          <Link href="/dashboard" className={source === 'all' ? styles.sourceFilterActive : ''}>Toutes les activités</Link>
+          <Link href="/dashboard?source=livo" className={source === 'livo' ? styles.sourceFilterActive : ''}>Fiches LIVO</Link>
+          <Link href="/dashboard?source=external" className={source === 'external' ? styles.sourceFilterActive : ''}>OR externes</Link>
+        </nav>
         <div className={styles.kpiGrid}>
           <KpiCard
             label="Valeur vendue du jour"
             value={formatEur(data.caJour)}
-            sub={`${data.fichesTermineesJour} fiche${data.fichesTermineesJour > 1 ? 's' : ''} clôturée${data.fichesTermineesJour > 1 ? 's' : ''}`}
+            sub={`${data.fichesTermineesJour} activité${data.fichesTermineesJour > 1 ? 's' : ''} clôturée${data.fichesTermineesJour > 1 ? 's' : ''}`}
             color="gold"
             icon={<TrendUp weight="bold" />}
           />

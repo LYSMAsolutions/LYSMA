@@ -7,6 +7,7 @@ import {
 } from '@/lib/bibliotheque-metier'
 import { z } from 'zod'
 import { Prisma } from '@prisma/client'
+import { createFicheScanToken } from '@/lib/work-order-qr'
 
 const schema = z.object({
   garageId: z.string().min(1),
@@ -86,6 +87,7 @@ export async function POST(req: NextRequest) {
           garageId,
           vehiculeId: finalVehiculeId,
           numero,
+          scanToken: createFicheScanToken(),
           travaux,
           interventionsMetier: selectedInterventions.length > 0
             ? selectedInterventions as Prisma.InputJsonValue

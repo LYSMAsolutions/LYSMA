@@ -1,12 +1,17 @@
 import { prisma } from '@/lib/prisma'
+import { calculateWorkshopMetrics } from '@/lib/workshop-metrics'
 
-export async function getDashboardData(garageId: string) {
+export type WorkshopSourceFilter = 'all' | 'livo' | 'external'
+
+export async function getDashboardData(garageId: string, source: WorkshopSourceFilter = 'all') {
   const now = new Date()
   const debutJour = new Date(now.getFullYear(), now.getMonth(), now.getDate())
   const finJour = new Date(debutJour.getTime() + 86400000)
   const debutSemaine = new Date(debutJour)
   debutSemaine.setDate(debutJour.getDate() - debutJour.getDay() + 1)
   const debutMois = new Date(now.getFullYear(), now.getMonth(), 1)
+  const includeLivo = source !== 'external'
+  const includeExternal = source !== 'livo'
 
   const taux = await prisma.tauxGarage.findMany({
     where: {
@@ -67,6 +72,23 @@ export async function getDashboardData(garageId: string) {
     },
     include: includeFiche,
   })
+
+  const externalOrdersPeriode = await prisma.externalWorkOrder.findMany({
+    where: {
+      garageId,
+      status: 'CLOTURE',
+      closedAt: { gte: new Date(Math.min(debutSemaine.getTime(), debutMois.getTime())) },
+    },
+    include: {
+      pointages: {
+        include: { compagnon: { include: { user: true } } },
+      },
+    },
+  })
+
+  const externalOrdersJour = externalOrdersPeriode.filter((order) => order.closedAt && order.closedAt >= debutJour && order.closedAt < finJour)
+  const externalOrdersSemaine = externalOrdersPeriode.filter((order) => order.closedAt && order.closedAt >= debutSemaine)
+  const externalOrdersMois = externalOrdersPeriode.filter((order) => order.closedAt && order.closedAt >= debutMois)
 
   const fichesEnCours = await prisma.ficheTravaux.findMany({
     where: {
@@ -210,6 +232,21 @@ export async function getDashboardData(garageId: string) {
     },
   })
 
+  const pointagesExternalActifs = await prisma.externalWorkOrderPointage.findMany({
+    where: {
+      statut: { in: ['EN_COURS', 'EN_PAUSE'] },
+      externalWorkOrder: {
+        garageId,
+        status: { in: ['OUVERT', 'EN_COURS', 'EN_PAUSE', 'TERMINE'] },
+      },
+    },
+    include: {
+      compagnon: { include: { user: true } },
+      externalWorkOrder: true,
+    },
+    orderBy: { debutAt: 'desc' },
+  })
+
   const garage = await prisma.garage.findUnique({
     where: {
       id: garageId,
@@ -245,7 +282,21 @@ export async function getDashboardData(garageId: string) {
     return fiches.reduce((sum, fiche) => sum + calcRentabilite(fiche).delta, 0)
   }
 
-  const rentabiliteParCompagnon = fichesMois.reduce(
+  function calcExternalMetrics(order: (typeof externalOrdersPeriode)[number]) {
+    const actualMinutes = order.pointages.reduce((sum, pointage) => sum + (pointage.dureeMinutes ?? 0), 0)
+    return calculateWorkshopMetrics({
+      plannedHours: order.plannedHours ? Number(order.plannedHours) : null,
+      soldHours: order.soldHours ? Number(order.soldHours) : null,
+      billedHours: order.billedHours ? Number(order.billedHours) : null,
+      actualMinutes,
+      billedAmountHT: order.billedAmountHT ? Number(order.billedAmountHT) : null,
+      laborAmountHT: order.laborAmountHT ? Number(order.laborAmountHT) : null,
+      billingHourlyRateHT: order.billingHourlyRateHT ? Number(order.billingHourlyRateHT) : null,
+      internalLaborCostRateHT: order.internalLaborCostRateHT ? Number(order.internalLaborCostRateHT) : null,
+    })
+  }
+
+  const rentabiliteParCompagnon = (includeLivo ? fichesMois : []).reduce(
     (acc, fiche) => {
       const rentabilite = calcRentabilite(fiche)
       const repartition = new Map<string, {
@@ -304,12 +355,53 @@ export async function getDashboardData(garageId: string) {
     >
   )
 
-  const rentabiliteJour = calcRentabiliteGlobale(fichesJour)
-  const rentabiliteSemaine = calcRentabiliteGlobale(fichesSemaine)
-  const rentabiliteMois = calcRentabiliteGlobale(fichesMois)
+  if (includeExternal) {
+    for (const order of externalOrdersMois) {
+      const metrics = calcExternalMetrics(order)
+      const repartition = new Map<string, { pointage: (typeof order.pointages)[number]; minutes: number }>()
+      for (const pointage of order.pointages) {
+        const existing = repartition.get(pointage.compagnonId)
+        repartition.set(pointage.compagnonId, {
+          pointage,
+          minutes: (existing?.minutes ?? 0) + (pointage.dureeMinutes ?? 0),
+        })
+      }
+      const totalMinutes = Array.from(repartition.values()).reduce((sum, item) => sum + item.minutes, 0)
+      for (const [compagnonId, item] of repartition) {
+        const compagnon = item.pointage.compagnon
+        const weight = totalMinutes > 0 ? item.minutes / totalMinutes : 1 / Math.max(1, repartition.size)
+        const existing = rentabiliteParCompagnon[compagnonId] ?? {
+          id: compagnonId,
+          nom: `${compagnon.user?.prenom ?? compagnon.prenom} ${compagnon.user?.nom ?? compagnon.nom}`.trim() || 'Compagnon',
+          delta: 0,
+          tFacture: 0,
+          tReel: 0,
+          nbFiches: 0,
+        }
+        existing.delta += (metrics.laborMarginHT ?? 0) * weight
+        existing.tFacture += (metrics.billedHours ?? 0) * weight
+        existing.tReel += metrics.actualHours * weight
+        existing.nbFiches += 1
+        rentabiliteParCompagnon[compagnonId] = existing
+      }
+    }
+  }
 
-  const tempsFactureJour = fichesJour.reduce((sum, fiche) => sum + Number(fiche.tempsFacture ?? 0), 0)
-  const tempsReelJour = fichesJour.reduce((sum, fiche) => sum + Number(fiche.tempsReel ?? fiche.tempsFacture ?? 0), 0)
+  const nativeJour = includeLivo ? fichesJour : []
+  const nativeSemaine = includeLivo ? fichesSemaine : []
+  const nativeMois = includeLivo ? fichesMois : []
+  const externalJour = includeExternal ? externalOrdersJour : []
+  const externalSemaine = includeExternal ? externalOrdersSemaine : []
+  const externalMois = includeExternal ? externalOrdersMois : []
+
+  const rentabiliteJour = calcRentabiliteGlobale(nativeJour) + externalJour.reduce((sum, order) => sum + (calcExternalMetrics(order).laborMarginHT ?? 0), 0)
+  const rentabiliteSemaine = calcRentabiliteGlobale(nativeSemaine) + externalSemaine.reduce((sum, order) => sum + (calcExternalMetrics(order).laborMarginHT ?? 0), 0)
+  const rentabiliteMois = calcRentabiliteGlobale(nativeMois) + externalMois.reduce((sum, order) => sum + (calcExternalMetrics(order).laborMarginHT ?? 0), 0)
+
+  const tempsFactureJour = nativeJour.reduce((sum, fiche) => sum + Number(fiche.tempsFacture ?? 0), 0)
+    + externalJour.reduce((sum, order) => sum + (calcExternalMetrics(order).billedHours ?? 0), 0)
+  const tempsReelJour = nativeJour.reduce((sum, fiche) => sum + Number(fiche.tempsReel ?? fiche.tempsFacture ?? 0), 0)
+    + externalJour.reduce((sum, order) => sum + calcExternalMetrics(order).actualHours, 0)
 
   const compagnonsActifs = pointagesJour.filter(
     (pointage) => !['ABSENT', 'PARTI'].includes(pointage.statutActuel)
@@ -317,10 +409,17 @@ export async function getDashboardData(garageId: string) {
 
   const pointageJourParCompagnon = new Map(pointagesJour.map((pointage) => [pointage.compagnonId, pointage]))
   const pointageFicheParCompagnon = new Map<string, (typeof pointagesFicheActifs)[number]>()
+  const pointageExternalParCompagnon = new Map<string, (typeof pointagesExternalActifs)[number]>()
 
   for (const pointageFiche of pointagesFicheActifs) {
     if (!pointageFicheParCompagnon.has(pointageFiche.compagnonId)) {
       pointageFicheParCompagnon.set(pointageFiche.compagnonId, pointageFiche)
+    }
+  }
+
+  for (const pointageExternal of pointagesExternalActifs) {
+    if (!pointageExternalParCompagnon.has(pointageExternal.compagnonId)) {
+      pointageExternalParCompagnon.set(pointageExternal.compagnonId, pointageExternal)
     }
   }
 
@@ -336,15 +435,16 @@ export async function getDashboardData(garageId: string) {
   const atelierLive = compagnons.map((compagnon) => {
     const pointageJour = pointageJourParCompagnon.get(compagnon.id)
     const pointageFiche = pointageFicheParCompagnon.get(compagnon.id)
+    const pointageExternal = pointageExternalParCompagnon.get(compagnon.id)
     const statutJour = pointageJour?.statutActuel ?? 'ABSENT'
     const enPauseJour = ['PAUSE_CAFE', 'PAUSE_DEJEUNER'].includes(statutJour)
     const parti = statutJour === 'PARTI'
     const absent = statutJour === 'ABSENT'
-    const enPauseFiche = pointageFiche?.statut === 'EN_PAUSE'
-    const travaille = Boolean(pointageFiche) && !enPauseFiche
-    const inactif = !pointageFiche && !absent && !parti && !enPauseJour
+    const enPauseFiche = pointageFiche?.statut === 'EN_PAUSE' || pointageExternal?.statut === 'EN_PAUSE'
+    const travaille = Boolean(pointageFiche || pointageExternal) && !enPauseFiche
+    const inactif = !pointageFiche && !pointageExternal && !absent && !parti && !enPauseJour
 
-    const depuis = pointageFiche?.debutAt ?? pointageJour?.heureArrivee ?? null
+    const depuis = pointageFiche?.debutAt ?? pointageExternal?.debutAt ?? pointageJour?.heureArrivee ?? null
 
     return {
       id: compagnon.id,
@@ -371,13 +471,25 @@ export async function getDashboardData(garageId: string) {
             vehicule: `${pointageFiche.fiche.vehicule.marque} ${pointageFiche.fiche.vehicule.modele}`,
             immatriculation: pointageFiche.fiche.vehicule.immatriculation,
           }
-        : null,
+        : pointageExternal
+          ? {
+              id: pointageExternal.externalWorkOrder.id,
+              numero: pointageExternal.externalWorkOrder.externalNumber,
+              statut: pointageExternal.externalWorkOrder.status,
+              travaux: pointageExternal.externalWorkOrder.operation?.split('\n')[0] || 'Ordre de réparation externe',
+              vehicule: pointageExternal.externalWorkOrder.vehicleLabel || 'Véhicule',
+              immatriculation: pointageExternal.externalWorkOrder.immatriculation,
+            }
+          : null,
       heureArrivee: pointageJour?.heureArrivee,
     }
   })
 
   const compagnonsInactifs = atelierLive.filter((compagnon) => compagnon.tone === 'inactive')
-  const fichesLongues = pointagesFicheActifs.filter((pointage) => (minutesDepuis(pointage.debutAt) ?? 0) >= 240)
+  const fichesLongues = [
+    ...pointagesFicheActifs.map((pointage) => ({ debutAt: pointage.debutAt, numero: pointage.fiche.numero })),
+    ...pointagesExternalActifs.map((pointage) => ({ debutAt: pointage.debutAt, numero: pointage.externalWorkOrder.externalNumber })),
+  ].filter((pointage) => (minutesDepuis(pointage.debutAt) ?? 0) >= 240)
 
   const alertes = [
     ...(compagnonsInactifs.length > 0
@@ -403,7 +515,7 @@ export async function getDashboardData(garageId: string) {
           {
             type: 'info' as const,
             titre: `${fichesLongues.length} intervention${fichesLongues.length > 1 ? 's' : ''} ouverte${fichesLongues.length > 1 ? 's' : ''} depuis plus de 4 h`,
-            detail: fichesLongues.map((pointage) => pointage.fiche.numero).join(', '),
+            detail: fichesLongues.map((pointage) => pointage.numero).join(', '),
           },
         ]
       : []),
@@ -421,19 +533,21 @@ export async function getDashboardData(garageId: string) {
   const statutCount = Object.fromEntries(repartitionFiches.map((item) => [item.statut, item._count._all]))
 
   return {
-    caJour: calcCA(fichesJour),
-    caSemaine: calcCA(fichesSemaine),
-    caMois: calcCA(fichesMois),
+    source,
+    caJour: calcCA(nativeJour) + externalJour.reduce((sum, order) => sum + (calcExternalMetrics(order).billedAmountHT ?? 0), 0),
+    caSemaine: calcCA(nativeSemaine) + externalSemaine.reduce((sum, order) => sum + (calcExternalMetrics(order).billedAmountHT ?? 0), 0),
+    caMois: calcCA(nativeMois) + externalMois.reduce((sum, order) => sum + (calcExternalMetrics(order).billedAmountHT ?? 0), 0),
     rentabiliteJour,
     rentabiliteSemaine,
     rentabiliteMois,
     tempsFactureJour,
     tempsReelJour,
     compagnonsActifs,
-    fichesEnCours,
+    fichesEnCours: includeLivo ? fichesEnCours : [],
     fichesTermineesNonCloturees,
-    fichesTermineesJour: fichesJour.length,
-    vehiculesAtelier: vehiculesAtelier.length,
+    fichesTermineesJour: nativeJour.length + externalJour.length,
+    vehiculesAtelier: (includeLivo ? vehiculesAtelier.length : 0)
+      + (includeExternal ? new Set(pointagesExternalActifs.map((pointage) => pointage.externalWorkOrderId)).size : 0),
     atelierLive,
     alertes,
     fluxAtelier: {
@@ -450,11 +564,29 @@ export async function getDashboardData(garageId: string) {
       absents: atelierLive.filter((compagnon) => compagnon.tone === 'absent').length,
     },
     rentabiliteParCompagnon: Object.values(rentabiliteParCompagnon),
-    rentabiliteFichesJour: fichesJour.map((fiche) => ({
-      id: fiche.id,
-      numero: fiche.numero,
-      vehicule: `${fiche.vehicule.marque} ${fiche.vehicule.modele}`,
-      ...calcRentabilite(fiche),
-    })),
+    rentabiliteFichesJour: [
+      ...nativeJour.map((fiche) => ({
+        id: fiche.id,
+        numero: fiche.numero,
+        vehicule: `${fiche.vehicule.marque} ${fiche.vehicule.modele}`,
+        source: 'Fiche LIVO',
+        ...calcRentabilite(fiche),
+      })),
+      ...externalJour.map((order) => {
+        const metrics = calcExternalMetrics(order)
+        return {
+          id: order.id,
+          numero: order.externalNumber,
+          vehicule: order.vehicleLabel || 'Véhicule',
+          source: 'OR externe',
+          tFacture: metrics.billedHours ?? 0,
+          tReel: metrics.actualHours,
+          montantFacture: metrics.billedAmountHT ?? 0,
+          montantReel: metrics.estimatedLaborCostHT ?? 0,
+          delta: metrics.laborMarginHT ?? 0,
+          tauxF: metrics.billingHourlyRateHT ?? 0,
+        }
+      }),
+    ],
   }
 }
