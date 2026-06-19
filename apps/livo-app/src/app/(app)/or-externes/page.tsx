@@ -84,19 +84,12 @@ export default async function OrExternesPage() {
   return (
     <>
       <Header
-        title="OR atelier"
+        title="OR / Fiches"
         action={<DashboardNewFicheButton garageId={garage.id} variant="secondary" label="Fiche de travail" />}
         description="Suivi des ordres reçus depuis le logiciel de facturation."
       />
 
       <main className={styles.content}>
-          <article>
-            <strong>Travaux internes</strong>
-            <span>Pour une intervention hors logiciel de facturation, créez une fiche de travail LIVO.</span>
-            <DashboardNewFicheButton garageId={garage.id} variant="secondary" label="Créer une fiche" />
-          </article>
-
-
 
         <section className={styles.kpis}>
           <article><span>OR reçus</span><strong>{orders.length}</strong></article>
