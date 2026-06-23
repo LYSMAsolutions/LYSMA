@@ -1,6 +1,7 @@
 import { prisma } from '@/lib/prisma'
-import styles from './page.module.css'
+import { Badge, StatCard, PageHeader } from '@/components/ui'
 import { ErrorActions } from './ErrorActions'
+import styles from './page.module.css'
 
 export const dynamic = 'force-dynamic'
 
@@ -14,11 +15,21 @@ function formatDate(value: Date) {
   }).format(value)
 }
 
-function statusClass(statut: string) {
-  if (statut === 'RESOLU') return styles.green
-  if (statut === 'IGNORE') return styles.muted
-  if (statut === 'EN_COURS') return styles.yellow
-  return styles.red
+function statutToBadge(statut: string): 'error' | 'warning' | 'success' | 'muted' {
+  if (statut === 'RESOLU') return 'success'
+  if (statut === 'IGNORE') return 'muted'
+  if (statut === 'EN_COURS') return 'warning'
+  return 'error'
+}
+
+function statutLabel(statut: string) {
+  const map: Record<string, string> = {
+    NOUVEAU: 'Nouveau',
+    EN_COURS: 'En cours',
+    RESOLU: 'Résolu',
+    IGNORE: 'Ignoré',
+  }
+  return map[statut] ?? statut
 }
 
 export default async function ErreursPage({
@@ -48,55 +59,65 @@ export default async function ErreursPage({
 
   return (
     <main className={styles.page}>
-      <div className={styles.termHeader}>
-        <span className={styles.termPrompt}>root@lysma</span>
-        <span>:</span>
-        <span className={styles.termCmd}>~/erreurs</span>
-      </div>
+      <PageHeader
+        title="Erreurs outils"
+        description="Réception, suivi et résolution des erreurs remontées par les outils LYSMA."
+      />
 
-      <section className={styles.hero}>
-        <div>
-          <span className={styles.eyebrow}>observabilite</span>
-          <h1>Erreurs outils</h1>
-          <p>Reception, suivi et resolution des erreurs remontees par les outils LYSMA.</p>
-        </div>
-        <div className={styles.statGrid}>
-          <div className={styles.statCard}><span>nouvelles</span><strong>{countMap.get('NOUVEAU') ?? 0}</strong></div>
-          <div className={styles.statCard}><span>en cours</span><strong>{countMap.get('EN_COURS') ?? 0}</strong></div>
-          <div className={styles.statCard}><span>resolues</span><strong>{countMap.get('RESOLU') ?? 0}</strong></div>
-        </div>
-      </section>
+      <div className={styles.statsGrid}>
+        <StatCard
+          label="Nouvelles"
+          value={countMap.get('NOUVEAU') ?? 0}
+          color={(countMap.get('NOUVEAU') ?? 0) > 0 ? 'red' : 'muted'}
+        />
+        <StatCard
+          label="En cours"
+          value={countMap.get('EN_COURS') ?? 0}
+          color={(countMap.get('EN_COURS') ?? 0) > 0 ? 'yellow' : 'muted'}
+        />
+        <StatCard
+          label="Résolues"
+          value={countMap.get('RESOLU') ?? 0}
+          color="green"
+        />
+      </div>
 
       <section className={styles.panel}>
         <div className={styles.panelHeader}>
-          <span className={styles.panelTitle}>// rapports_erreurs</span>
-          <span className={styles.panelMeta}>{errors.length} lignes</span>
+          <span className={styles.panelTitle}>Rapports d&apos;erreurs</span>
+          <span className={styles.panelMeta}>{errors.length} entrées</span>
         </div>
 
         {errors.length === 0 ? (
-          <div className={styles.empty}>Aucune erreur remontee.</div>
+          <div className={styles.empty}>Aucune erreur remontée.</div>
         ) : (
           <table className={styles.table}>
             <thead>
               <tr>
-                <th>outil</th>
-                <th>statut</th>
-                <th>message</th>
-                <th>url</th>
-                <th>date</th>
-                <th>action</th>
+                <th>Outil</th>
+                <th>Statut</th>
+                <th>Message</th>
+                <th>URL</th>
+                <th>Date</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
               {errors.map((error) => (
                 <tr key={error.id}>
                   <td><span className={styles.tag}>{error.outil}</span></td>
-                  <td><span className={statusClass(error.statut)}>{error.statut.toLowerCase()}</span></td>
                   <td>
-                    <strong>{error.message}</strong>
-                    {error.stack ? <small>{error.stack.slice(0, 180)}</small> : null}
+                    <Badge variant={statutToBadge(error.statut)}>
+                      {statutLabel(error.statut)}
+                    </Badge>
                   </td>
-                  <td className={styles.url}>{error.url ?? '-'}</td>
+                  <td>
+                    <span className={styles.errorMessage}>{error.message}</span>
+                    {error.stack && (
+                      <span className={styles.errorStack}>{error.stack.slice(0, 180)}</span>
+                    )}
+                  </td>
+                  <td><span className={styles.url}>{error.url ?? '—'}</span></td>
                   <td>{formatDate(error.createdAt)}</td>
                   <td><ErrorActions id={error.id} /></td>
                 </tr>

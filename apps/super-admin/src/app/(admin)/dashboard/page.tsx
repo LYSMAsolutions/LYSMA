@@ -5,6 +5,7 @@ import { getPublishingStatus } from '@/lib/publishing'
 import { getShowcaseOverviewSites } from '@/lib/site-vitrine-manifest'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
+import { Badge, StatCard, PageHeader } from '@/components/ui'
 import styles from './page.module.css'
 
 export const revalidate = 0
@@ -52,74 +53,60 @@ export default async function DashboardPage() {
 
   return (
     <div className={styles.page}>
-      <section className={styles.hero}>
-        <div>
-          <div className={styles.termHeader}>
-            <span className={styles.termPrompt}>admin@lysma</span>
-            <span className={styles.termCmd}> $ dashboard --pilotage-total</span>
-          </div>
-          <h1>Centre de controle LYSMA</h1>
-          <p>
-            Vue globale pour surveiller les clients, les outils, les sites vitrines, les messages,
-            les erreurs et les actions recentes.
-          </p>
-        </div>
-        <div className={styles.quickActions}>
-          <Link href="/clients" className={styles.primaryAction}>Clients</Link>
-          <Link href="/erreurs" className={styles.secondaryAction}>Erreurs</Link>
-          <Link href="/sites" className={styles.secondaryAction}>Sites</Link>
-        </div>
-      </section>
+      <PageHeader
+        title="Centre de contrôle LYSMA"
+        description="Vue globale : clients, outils, sites vitrines, messages, erreurs et actions récentes."
+      >
+        <Link href="/clients" className={styles.btnPrimary}>Clients</Link>
+        <Link href="/erreurs" className={styles.btnSecondary}>Erreurs</Link>
+        <Link href="/sites" className={styles.btnSecondary}>Sites</Link>
+      </PageHeader>
 
       <section className={styles.statsGrid} aria-label="Indicateurs de supervision">
-        <StatCard label="clients_total" value={totalClients} color="cyan" />
-        <StatCard label="abonnements_actifs" value={clientsActifs} color="green" />
-        <StatCard label="en_trial" value={clientsTrial} color={trialUrgents > 0 ? 'yellow' : 'muted'} />
-        <StatCard label="messages_non_lus" value={messagesNonLus} color={messagesNonLus > 0 ? 'red' : 'muted'} />
-        <StatCard label="erreurs_ouvertes" value={erreursOuvertes} color={erreursOuvertes > 0 ? 'red' : 'green'} />
-        <StatCard label="sites_vitrine" value={showcaseSites.length} color="purple" />
+        <StatCard label="Clients total" value={totalClients} color="cyan" />
+        <StatCard label="Abonnements actifs" value={clientsActifs} color="green" />
+        <StatCard label="En trial" value={clientsTrial} color={trialUrgents > 0 ? 'yellow' : 'muted'} />
+        <StatCard label="Messages non lus" value={messagesNonLus} color={messagesNonLus > 0 ? 'red' : 'muted'} />
+        <StatCard label="Erreurs ouvertes" value={erreursOuvertes} color={erreursOuvertes > 0 ? 'red' : 'green'} />
+        <StatCard label="Sites vitrine" value={showcaseSites.length} color="purple" />
       </section>
 
       <section className={styles.commandGrid}>
-        <CommandCard
-          title="GitHub"
-          value={publishing.githubReady ? 'configure' : 'a connecter'}
-          detail={githubDetail}
-          href="/sites"
-          tone={publishing.githubReady ? 'green' : 'yellow'}
-        />
-        <CommandCard
-          title="Vercel"
-          value={publishing.vercelReady ? 'hooks prets' : 'hooks absents'}
-          detail="Publication sites vitrines et redeploiements manuels"
-          href="/outils"
-          tone={publishing.vercelReady ? 'green' : 'yellow'}
-        />
-        <CommandCard
-          title="Restaurations"
-          value="corbeille"
-          detail="Actions auditees, suppressions et retours arriere"
-          href="/corbeille"
-          tone="cyan"
-        />
-        <CommandCard
-          title="Journal"
-          value={`${auditLogs.length} actions`}
-          detail="Dernieres operations tracees dans super-admin"
-          href="/journal"
-          tone="purple"
-        />
+        <Link href="/sites" className={styles.commandCard}>
+          <span className={styles.commandLabel}>GitHub</span>
+          <strong className={`${styles.commandValue} ${publishing.githubReady ? styles.colorGreen : styles.colorYellow}`}>
+            {publishing.githubReady ? 'Configuré' : 'À connecter'}
+          </strong>
+          <span className={styles.commandDetail}>{githubDetail}</span>
+        </Link>
+        <Link href="/outils" className={styles.commandCard}>
+          <span className={styles.commandLabel}>Vercel</span>
+          <strong className={`${styles.commandValue} ${publishing.vercelReady ? styles.colorGreen : styles.colorYellow}`}>
+            {publishing.vercelReady ? 'Hooks prêts' : 'Hooks absents'}
+          </strong>
+          <span className={styles.commandDetail}>Publication sites vitrines et redéploiements manuels</span>
+        </Link>
+        <Link href="/corbeille" className={styles.commandCard}>
+          <span className={styles.commandLabel}>Restaurations</span>
+          <strong className={`${styles.commandValue} ${styles.colorCyan}`}>Corbeille</strong>
+          <span className={styles.commandDetail}>Actions auditées, suppressions et retours arrière</span>
+        </Link>
+        <Link href="/journal" className={styles.commandCard}>
+          <span className={styles.commandLabel}>Journal</span>
+          <strong className={`${styles.commandValue} ${styles.colorPurple}`}>{auditLogs.length} actions</strong>
+          <span className={styles.commandDetail}>Dernières opérations tracées dans super-admin</span>
+        </Link>
       </section>
 
       <section className={styles.grid}>
-        <Panel title="// clients_recents" href="/clients" linkLabel="voir tout">
+        <Panel title="Clients récents" href="/clients" linkLabel="Voir tout">
           <table className={styles.table}>
             <thead>
               <tr>
-                <th>nom</th>
-                <th>outil</th>
-                <th>statut</th>
-                <th>cree</th>
+                <th>Nom</th>
+                <th>Outil</th>
+                <th>Statut</th>
+                <th>Créé</th>
               </tr>
             </thead>
             <tbody>
@@ -130,16 +117,18 @@ export default async function DashboardPage() {
                     <span className={styles.muted}>{client.email}</span>
                   </td>
                   <td><span className={styles.tag}>{client.outil}</span></td>
-                  <td><StatusDot statut={client.statut} /></td>
+                  <td><ClientBadge statut={client.statut} /></td>
                   <td className={styles.muted}>{formatDate(client.createdAt)}</td>
                 </tr>
               ))}
-              {clients.length === 0 && <EmptyRow colSpan={4} label="// aucun client" />}
+              {clients.length === 0 && (
+                <tr><td colSpan={4} className={styles.empty}>Aucun client</td></tr>
+              )}
             </tbody>
           </table>
         </Panel>
 
-        <Panel title="// messages_entrants" href="/messagerie" linkLabel="ouvrir">
+        <Panel title="Messages entrants" href="/messagerie" linkLabel="Ouvrir">
           <div className={styles.messageList}>
             {messages.map((message) => (
               <Link key={message.id} href="/messagerie" className={styles.messageItem}>
@@ -151,20 +140,20 @@ export default async function DashboardPage() {
                 <p className={styles.messagePreview}>{message.message}</p>
               </Link>
             ))}
-            {messages.length === 0 && <div className={styles.empty}>// aucun nouveau message</div>}
+            {messages.length === 0 && <div className={styles.empty}>Aucun nouveau message</div>}
           </div>
         </Panel>
       </section>
 
       <section className={styles.grid}>
-        <Panel title="// livo_garages" href="/livo" linkLabel="ouvrir livo">
+        <Panel title="Garages LIVO" href="/livo" linkLabel="Ouvrir LIVO">
           <table className={styles.table}>
             <thead>
               <tr>
-                <th>garage</th>
-                <th>client</th>
-                <th>statut</th>
-                <th>ca</th>
+                <th>Garage</th>
+                <th>Client</th>
+                <th>Statut</th>
+                <th>CA</th>
               </tr>
             </thead>
             <tbody>
@@ -173,45 +162,49 @@ export default async function DashboardPage() {
                   <td><Link href={`/livo/${garage.id}`} className={styles.link}>{garage.nom}</Link></td>
                   <td className={styles.muted}>{garage.owner.prenom} {garage.owner.nom}</td>
                   <td>
-                    <span className={garage.abonnementActif ? styles.green : garage.trialExpire ? styles.red : styles.yellow}>
-                      {garage.abonnementActif ? 'actif' : garage.trialExpire ? 'expire' : 'trial'}
-                    </span>
+                    <Badge variant={garage.abonnementActif ? 'success' : garage.trialExpire ? 'error' : 'warning'}>
+                      {garage.abonnementActif ? 'Actif' : garage.trialExpire ? 'Expiré' : 'Trial'}
+                    </Badge>
                   </td>
                   <td className={styles.muted}>{formatEuro(garage.stats.caTotal)}</td>
                 </tr>
               ))}
-              {livoGarages.length === 0 && <EmptyRow colSpan={4} label="// aucun garage livo connecte" />}
+              {livoGarages.length === 0 && (
+                <tr><td colSpan={4} className={styles.empty}>Aucun garage LIVO connecté</td></tr>
+              )}
             </tbody>
           </table>
         </Panel>
 
-        <Panel title="// sites_vitrine" href="/sites" linkLabel="studio">
+        <Panel title="Sites vitrine" href="/sites" linkLabel="Studio">
           <div className={styles.siteList}>
             {showcaseSites.slice(0, 6).map((site) => (
               <Link key={site.id} href={`/sites/${site.id}/studio`} className={styles.siteItem}>
                 <span>
-                  <strong>{site.name}</strong>
-                  <small>{site.relativePath}</small>
+                  <span className={styles.siteName}>{site.name}</span>
+                  <span className={styles.sitePath}>{site.relativePath}</span>
                 </span>
-                <em>{site.kind}</em>
+                <span className={styles.siteKind}>{site.kind}</span>
               </Link>
             ))}
-            {showcaseSites.length === 0 && <div className={styles.empty}>// aucun site vitrine detecte</div>}
+            {showcaseSites.length === 0 && <div className={styles.empty}>Aucun site vitrine détecté</div>}
           </div>
         </Panel>
       </section>
 
-      <Panel title="// journal_recent" href="/journal" linkLabel="historique complet">
+      <Panel title="Journal récent" href="/journal" linkLabel="Historique complet">
         <div className={styles.auditList}>
           {auditLogs.map((log) => (
             <Link key={log.id} href="/journal" className={styles.auditItem}>
               <span className={styles.auditAction}>{log.action}</span>
               <span className={styles.muted}>{log.outil} / {log.cibleType}</span>
-              <span className={log.statut === 'SUCCESS' ? styles.green : styles.red}>{log.statut.toLowerCase()}</span>
+              <Badge variant={log.statut === 'SUCCESS' ? 'success' : 'error'}>
+                {log.statut.toLowerCase()}
+              </Badge>
               <span className={styles.muted}>{formatDateTime(log.createdAt)}</span>
             </Link>
           ))}
-          {auditLogs.length === 0 && <div className={styles.empty}>// aucune action tracee</div>}
+          {auditLogs.length === 0 && <div className={styles.empty}>Aucune action tracée</div>}
         </div>
       </Panel>
     </div>
@@ -240,57 +233,23 @@ function Panel({
   )
 }
 
-function StatCard({ label, value, color }: { label: string; value: number; color: string }) {
-  return (
-    <div className={styles.statCard}>
-      <span className={styles.statLabel}>{label}</span>
-      <span className={`${styles.statValue} ${styles[color] ?? ''}`}>{value}</span>
-    </div>
-  )
-}
-
-function CommandCard({
-  title,
-  value,
-  detail,
-  href,
-  tone,
-}: {
-  title: string
-  value: string
-  detail: string
-  href: string
-  tone: string
-}) {
-  return (
-    <Link href={href} className={styles.commandCard}>
-      <span className={styles.commandTitle}>{title}</span>
-      <strong className={styles[tone] ?? ''}>{value}</strong>
-      <small>{detail}</small>
-    </Link>
-  )
-}
-
-function StatusDot({ statut }: { statut: string }) {
-  const map: Record<string, { color: string; label: string }> = {
-    ACTIF: { color: 'var(--green)', label: 'actif' },
-    TRIAL: { color: 'var(--yellow)', label: 'trial' },
-    SUSPENDU: { color: 'var(--red)', label: 'suspendu' },
-    RESILIE: { color: 'var(--text-muted)', label: 'resilie' },
+function ClientBadge({ statut }: { statut: string }) {
+  const variantMap: Record<string, 'success' | 'warning' | 'error' | 'muted'> = {
+    ACTIF: 'success',
+    TRIAL: 'warning',
+    SUSPENDU: 'error',
+    RESILIE: 'muted',
   }
-  const current = map[statut] ?? { color: 'var(--text-muted)', label: statut.toLowerCase() }
+  const labelMap: Record<string, string> = {
+    ACTIF: 'Actif',
+    TRIAL: 'Trial',
+    SUSPENDU: 'Suspendu',
+    RESILIE: 'Résilié',
+  }
   return (
-    <span className={styles.statusDot} style={{ color: current.color }}>
-      {current.label}
-    </span>
-  )
-}
-
-function EmptyRow({ colSpan, label }: { colSpan: number; label: string }) {
-  return (
-    <tr>
-      <td colSpan={colSpan} className={styles.empty}>{label}</td>
-    </tr>
+    <Badge variant={variantMap[statut] ?? 'muted'}>
+      {labelMap[statut] ?? statut.toLowerCase()}
+    </Badge>
   )
 }
 

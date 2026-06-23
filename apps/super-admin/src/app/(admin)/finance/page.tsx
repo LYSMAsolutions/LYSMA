@@ -2,6 +2,7 @@ import { auth } from '@/lib/auth'
 import { getFinanceData, formatEuro, formatPercent, formatDate } from '@/lib/finance'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
+import { Badge, StatCard, PageHeader } from '@/components/ui'
 import { FinanceNav } from './FinanceNav'
 import styles from './page.module.css'
 
@@ -13,124 +14,130 @@ export default async function FinancePage() {
 
   const data = await getFinanceData()
 
+  const activeRevenues = data.revenues.filter(r => r.status === 'ACTIF' || r.status === 'ACTIF_PAYANT')
+  const trialRevenues = data.revenues.filter(r => r.status === 'ESSAI')
+
   return (
     <div className={styles.page}>
-      <section className={styles.hero}>
-        <div>
-          <div className={styles.termHeader}>
-            <span className={styles.prompt}>lysmasolutions@gmail.com</span>
-            <span className={styles.cmd}>cockpit expert-comptable</span>
-          </div>
-          <h1>Finance / Expert-comptable</h1>
-          <p>
-            Pilotage du chiffre d'affaires, des abonnements clients, des charges LYSMA,
-            de l'URSSAF estimee et de la rentabilite par outil.
-          </p>
-        </div>
-        <div className={styles.heroActions}>
-          <Link href="/finance/exports" className={styles.primaryAction}>Exporter</Link>
-          <Link href="/finance/charges" className={styles.secondaryAction}>Charges</Link>
-        </div>
-      </section>
+      <PageHeader
+        title="Finance & Comptabilité"
+        description="Pilotage du CA, abonnements clients, charges LYSMA, URSSAF estimée et rentabilité par outil."
+      >
+        <Link href="/finance/exports" className={styles.btnPrimary}>Exporter</Link>
+        <Link href="/finance/charges" className={styles.btnSecondary}>Charges</Link>
+      </PageHeader>
 
       <FinanceNav />
 
       <section className={styles.statsGrid}>
-        <Stat label="CA mois" value={formatEuro(data.kpis.monthRevenue)} tone="cyan" />
-        <Stat label="CA annuel" value={formatEuro(data.kpis.yearRevenue)} tone="green" />
-        <Stat label="MRR" value={formatEuro(data.kpis.mrr)} tone="purple" />
-        <Stat label="ARR" value={formatEuro(data.kpis.arr)} tone="purple" />
-        <Stat label="Clients actifs" value={data.kpis.activeSubscriptions.toString()} tone="green" />
-        <Stat label="Essais en cours" value={data.kpis.trialSubscriptions.toString()} tone="yellow" />
-        <Stat label="Impayes" value={data.kpis.unpaidSubscriptions.toString()} tone={data.kpis.unpaidSubscriptions > 0 ? 'red' : 'muted'} />
-        <Stat label="Charges mensuelles" value={formatEuro(data.kpis.monthlyExpenses)} tone="yellow" />
-        <Stat label="Charges annuelles" value={formatEuro(data.kpis.annualExpenses)} tone="yellow" />
-        <Stat label="URSSAF estimee" value={formatEuro(data.kpis.urssafEstimate)} tone="red" />
-        <Stat label="Net estime" value={formatEuro(data.kpis.netResult)} tone={data.kpis.netResult >= 0 ? 'green' : 'red'} />
-        <Stat label="Rentabilite" value={formatPercent(data.kpis.profitabilityRate)} tone={data.kpis.profitabilityRate >= 0 ? 'green' : 'red'} />
-        <Stat label="Offert" value={formatEuro(data.kpis.offeredRevenue)} tone="muted" />
-        <Stat label="Potentiel essais" value={`${formatEuro(data.kpis.trialPotentialMrr)} / mois`} tone="yellow" />
+        <StatCard label="CA mois" value={formatEuro(data.kpis.monthRevenue)} color="cyan" />
+        <StatCard label="CA annuel" value={formatEuro(data.kpis.yearRevenue)} color="green" />
+        <StatCard label="MRR" value={formatEuro(data.kpis.mrr)} color="purple" />
+        <StatCard label="ARR" value={formatEuro(data.kpis.arr)} color="purple" />
+        <StatCard label="Clients actifs" value={data.kpis.activeSubscriptions} color="green" />
+        <StatCard label="Essais en cours" value={data.kpis.trialSubscriptions} color="yellow" />
+        <StatCard label="Impayés" value={data.kpis.unpaidSubscriptions} color={data.kpis.unpaidSubscriptions > 0 ? 'red' : 'muted'} />
+        <StatCard label="Charges mensuelles" value={formatEuro(data.kpis.monthlyExpenses)} color="yellow" />
+        <StatCard label="Charges annuelles" value={formatEuro(data.kpis.annualExpenses)} color="yellow" />
+        <StatCard label="URSSAF estimée" value={formatEuro(data.kpis.urssafEstimate)} color="red" />
+        <StatCard label="Net estimé" value={formatEuro(data.kpis.netResult)} color={data.kpis.netResult >= 0 ? 'green' : 'red'} />
+        <StatCard label="Rentabilité" value={formatPercent(data.kpis.profitabilityRate)} color={data.kpis.profitabilityRate >= 0 ? 'green' : 'red'} />
+        <StatCard label="Offert" value={formatEuro(data.kpis.offeredRevenue)} color="muted" />
+        <StatCard label="Potentiel essais" value={`${formatEuro(data.kpis.trialPotentialMrr)} / mois`} color="yellow" />
       </section>
 
       <section className={styles.grid}>
-        <Panel title="// revenus_entrants" subtitle="Abonnements vendus et prochaines facturations.">
+        <Panel title="Revenus entrants" subtitle="Abonnements vendus et prochaines facturations.">
           <table className={styles.table}>
             <thead>
               <tr>
-                <th>client</th>
-                <th>outil</th>
-                <th>formule</th>
-                <th>montant</th>
-                <th>statut</th>
-                <th>prochaine facture</th>
+                <th>Client</th>
+                <th>Outil</th>
+                <th>Formule</th>
+                <th>Montant</th>
+                <th>Statut</th>
+                <th>Prochaine facture</th>
               </tr>
             </thead>
             <tbody>
-              {data.revenues.filter((item) => item.status === 'ACTIF' || item.status === 'ACTIF_PAYANT').slice(0, 6).map((item) => (
+              {activeRevenues.slice(0, 6).map((item) => (
                 <tr key={item.id}>
-                  <td><span className={styles.mainText}>{item.clientCompany ?? item.clientName}</span><span className={styles.muted}>{item.clientName}</span></td>
+                  <td>
+                    <span className={styles.mainText}>{item.clientCompany ?? item.clientName}</span>
+                    <span className={styles.muted}>{item.clientName}</span>
+                  </td>
                   <td><span className={styles.tag}>{item.tool}</span></td>
                   <td>{item.planName}</td>
-                  <td><span className={styles.green}>{formatEuro(item.amountHT)} HT</span><span className={styles.muted}>{item.frequency.toLowerCase()}</span></td>
-                  <td><Status value={item.status} /></td>
+                  <td>
+                    <span className={styles.green}>{formatEuro(item.amountHT)} HT</span>
+                    <span className={styles.muted}>{item.frequency.toLowerCase()}</span>
+                  </td>
+                  <td><RevenueStatus value={item.status} /></td>
                   <td>{formatDate(item.nextInvoiceAt)}</td>
                 </tr>
               ))}
-              {data.revenues.filter((item) => item.status === 'ACTIF' || item.status === 'ACTIF_PAYANT').length === 0 && (
-                <tr><td colSpan={6} className={styles.empty}>Aucun revenu actif payant enregistre</td></tr>
+              {activeRevenues.length === 0 && (
+                <tr><td colSpan={6} className={styles.empty}>Aucun revenu actif payant enregistré</td></tr>
               )}
             </tbody>
           </table>
         </Panel>
 
-        <Panel title="// prevision" subtitle="Lecture rapide du mois prochain.">
+        <Panel title="Prévision" subtitle="Lecture rapide du mois prochain.">
           <div className={styles.panelBody}>
-            <Stat label="Prevision mois prochain" value={formatEuro(data.kpis.nextMonthForecast)} tone={data.kpis.nextMonthForecast >= 0 ? 'green' : 'red'} />
-            <p className={styles.muted}>
-              Calcul : MRR - charges mensuelles - URSSAF estimee. La TVA reste separee pour preparer la logique Sage et facturation electronique.
+            <StatCard
+              label="Prévision mois prochain"
+              value={formatEuro(data.kpis.nextMonthForecast)}
+              color={data.kpis.nextMonthForecast >= 0 ? 'green' : 'red'}
+            />
+            <p className={styles.muted} style={{ marginTop: '12px' }}>
+              Calcul : MRR − charges mensuelles − URSSAF estimée. TVA séparée pour Sage.
             </p>
           </div>
         </Panel>
       </section>
 
-      <Panel title="// essais_en_cours" subtitle="Ces montants ne sont pas comptes dans le CA, l'URSSAF, la rentabilite ou les exports comptables.">
+      <Panel title="Essais en cours" subtitle="Ces montants ne sont pas comptés dans le CA ou les exports comptables.">
         <table className={styles.table}>
           <thead>
             <tr>
-              <th>client</th>
-              <th>outil</th>
-              <th>formule</th>
-              <th>potentiel</th>
-              <th>fin essai</th>
+              <th>Client</th>
+              <th>Outil</th>
+              <th>Formule</th>
+              <th>Potentiel</th>
+              <th>Fin essai</th>
             </tr>
           </thead>
           <tbody>
-            {data.revenues.filter((item) => item.status === 'ESSAI').map((item) => (
+            {trialRevenues.map((item) => (
               <tr key={item.id}>
-                <td><span className={styles.mainText}>{item.clientCompany ?? item.clientName}</span><span className={styles.muted}>{item.clientName}</span></td>
+                <td>
+                  <span className={styles.mainText}>{item.clientCompany ?? item.clientName}</span>
+                  <span className={styles.muted}>{item.clientName}</span>
+                </td>
                 <td><span className={styles.tag}>{item.tool}</span></td>
                 <td>{item.planName}</td>
                 <td>{formatEuro(item.amountHT)} / mois</td>
                 <td>{formatDate(item.trialEndAt)}</td>
               </tr>
             ))}
-            {data.revenues.filter((item) => item.status === 'ESSAI').length === 0 && (
+            {trialRevenues.length === 0 && (
               <tr><td colSpan={5} className={styles.empty}>Aucun essai en cours</td></tr>
             )}
           </tbody>
         </table>
       </Panel>
 
-      <Panel title="// marge_par_outil" subtitle="Vue produit : ce qui rapporte, ce qui consomme.">
+      <Panel title="Marge par outil" subtitle="Vue produit : ce qui rapporte, ce qui consomme.">
         <table className={styles.table}>
           <thead>
             <tr>
-              <th>outil</th>
+              <th>Outil</th>
               <th>CA mensuel</th>
-              <th>charges</th>
-              <th>marge estimee</th>
-              <th>rentabilite</th>
-              <th>clients</th>
+              <th>Charges</th>
+              <th>Marge estimée</th>
+              <th>Rentabilité</th>
+              <th>Clients</th>
             </tr>
           </thead>
           <tbody>
@@ -139,7 +146,9 @@ export default async function FinancePage() {
                 <td><span className={styles.tag}>{item.tool}</span></td>
                 <td>{formatEuro(item.revenue)}</td>
                 <td>{formatEuro(item.expenses)}</td>
-                <td className={item.grossMargin >= 0 ? styles.green : styles.red}>{formatEuro(item.grossMargin)}</td>
+                <td className={item.grossMargin >= 0 ? styles.green : styles.red}>
+                  {formatEuro(item.grossMargin)}
+                </td>
                 <td>{formatPercent(item.netMargin)}</td>
                 <td>{item.customers}</td>
               </tr>
@@ -151,22 +160,13 @@ export default async function FinancePage() {
   )
 }
 
-function Stat({ label, value, tone }: { label: string; value: string; tone: string }) {
-  return (
-    <div className={styles.statCard}>
-      <span className={styles.statLabel}>{label}</span>
-      <span className={`${styles.statValue} ${styles[tone] ?? ''}`}>{value}</span>
-    </div>
-  )
-}
-
 function Panel({ title, subtitle, children }: { title: string; subtitle?: string; children: React.ReactNode }) {
   return (
     <section className={styles.panel}>
       <div className={styles.panelHeader}>
         <div>
           <span className={styles.panelTitle}>{title}</span>
-          {subtitle && <p>{subtitle}</p>}
+          {subtitle && <span className={styles.panelSubtitle}>{subtitle}</span>}
         </div>
       </div>
       {children}
@@ -174,8 +174,11 @@ function Panel({ title, subtitle, children }: { title: string; subtitle?: string
   )
 }
 
-function Status({ value }: { value: string }) {
-  const tone = value === 'ACTIF' || value === 'ACTIF_PAYANT' ? 'green' : value === 'ESSAI' ? 'yellow' : value === 'IMPAYE' ? 'red' : 'muted'
-  return <span className={styles[tone] ?? styles.muted}>{value.toLowerCase()}</span>
+function RevenueStatus({ value }: { value: string }) {
+  const variant =
+    value === 'ACTIF' || value === 'ACTIF_PAYANT' ? 'success' :
+    value === 'ESSAI' ? 'warning' :
+    value === 'IMPAYE' ? 'error' : 'muted'
+  const label = value.toLowerCase().replace('_', ' ')
+  return <Badge variant={variant as 'success' | 'warning' | 'error' | 'muted'}>{label}</Badge>
 }
-

@@ -1,82 +1,161 @@
+/* ============================================================
+   LYSMA Super-Admin — Design Tokens
+   Partagés avec livo-app (même palette exacte)
+   ============================================================ */
+
 :root {
-  /* ── Couleurs VS Code dark ──────────────────────────────── */
-  --bg-base:        #0d1117;
-  --bg-surface:     #161b22;
-  --bg-elevated:    #1c2128;
-  --bg-input:       #0d1117;
-  --bg-hover:       rgba(255,255,255,0.06);
+  /* ── Couleurs primaires ─────────────────────────────────── */
+  --color-blue-deep:      #0a2a6e;
+  --color-blue-electric: #1a6fff;
+  --color-cyan:           #40c0ff;
+  --color-ice:            #a0e0ff;
 
-  /* Bordures */
-  --border-subtle:  #21262d;
-  --border-default: #30363d;
-  --border-focus:   #58a6ff;
+  /* ── Couleurs chaleur ───────────────────────────────────── */
+  --color-gold:           #f0a020;
+  --color-orange:         #e07010;
+  --color-bronze:         #c05010;
 
-  /* Accents — vert terminal + cyan + bleu github */
-  --green:          #3fb950;
-  --green-dim:      rgba(63,185,80,0.15);
-  --cyan:           #79c0ff;
-  --cyan-dim:       rgba(121,192,255,0.12);
-  --blue:           #58a6ff;
-  --blue-dim:       rgba(88,166,255,0.12);
-  --yellow:         #e3b341;
-  --yellow-dim:     rgba(227,179,65,0.12);
-  --red:            #f85149;
-  --red-dim:        rgba(248,81,73,0.12);
-  --purple:         #bc8cff;
-  --orange:         #ffa657;
+  /* ── Fonds ──────────────────────────────────────────────── */
+  --color-bg-base:        #04060f;
+  --color-bg-surface:     #080e1e;
+  --color-bg-elevated:    #0d1530;
+  --color-bg-input:       #0f1a38;
 
-  /* Texte */
-  --text-primary:   #e6edf3;
-  --text-secondary: #8b949e;
-  --text-muted:     #6e7681;
-  --text-inverse:   #0d1117;
+  /* ── Texte ──────────────────────────────────────────────── */
+  --color-text-primary:   #f0f4ff;
+  --color-text-secondary: #8099cc;
+  --color-text-muted:     #4a5a80;
+  --color-text-inverse:   #04060f;
 
-  /* Fonts */
-  --font-mono:  'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
-  --font-sans:  'Inter', -apple-system, sans-serif;
+  /* ── Bordures ───────────────────────────────────────────── */
+  --color-border-subtle:  rgba(26, 111, 255, 0.12);
+  --color-border-default: rgba(26, 111, 255, 0.25);
+  --color-border-strong:  rgba(26, 111, 255, 0.50);
+  --color-border-focus:   #1a6fff;
 
-  /* Tailles texte */
-  --text-xs:   11px;
-  --text-sm:   12px;
-  --text-base: 13px;
-  --text-md:   14px;
-  --text-lg:   16px;
-  --text-xl:   20px;
-  --text-2xl:  24px;
-  --text-3xl:  32px;
+  /* ── États sémantiques ──────────────────────────────────── */
+  --color-success:        #20c060;
+  --color-success-bg:     rgba(32, 192, 96, 0.10);
+  --color-warning:        #f0a020;
+  --color-warning-bg:     rgba(240, 160, 32, 0.10);
+  --color-error:          #ff4040;
+  --color-error-bg:       rgba(255, 64, 64, 0.10);
+  --color-info:           #40c0ff;
+  --color-info-bg:        rgba(64, 192, 255, 0.10);
 
-  /* Spacing */
-  --sp-1: 4px;
-  --sp-2: 8px;
-  --sp-3: 12px;
-  --sp-4: 16px;
-  --sp-5: 20px;
-  --sp-6: 24px;
-  --sp-8: 32px;
-  --sp-10: 40px;
-  --sp-12: 48px;
+  /* ── Typographie ────────────────────────────────────────── */
+  --font-sans:  'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono:  'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
 
-  /* Radius */
-  --radius-sm:  3px;
-  --radius-md:  6px;
-  --radius-lg:  8px;
-  --radius-xl:  12px;
+  --text-xs:    0.75rem;
+  --text-sm:    0.875rem;
+  --text-base:  1rem;
+  --text-lg:    1.125rem;
+  --text-xl:    1.25rem;
+  --text-2xl:   1.5rem;
+  --text-3xl:   1.875rem;
+  --text-4xl:   2.25rem;
+
+  --leading-tight:  1.2;
+  --leading-normal: 1.5;
+  --leading-loose:  1.8;
+
+  --font-normal:   400;
+  --font-medium:   500;
+  --font-semibold: 600;
+  --font-bold:     700;
+
+  /* ── Espacement ─────────────────────────────────────────── */
+  --space-1:  0.25rem;
+  --space-2:  0.5rem;
+  --space-3:  0.75rem;
+  --space-4:  1rem;
+  --space-5:  1.25rem;
+  --space-6:  1.5rem;
+  --space-8:  2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+
+  /* ── Border radius ──────────────────────────────────────── */
+  --radius-sm:   0.375rem;
+  --radius-md:   0.625rem;
+  --radius-lg:   0.875rem;
+  --radius-xl:   1.25rem;
+  --radius-2xl:  1.75rem;
   --radius-full: 9999px;
 
-  /* Layout */
-  --sidebar-w:     220px;
-  --sidebar-w-col: 44px;
-  --header-h:      36px;
-  --status-h:      22px;
+  /* ── Ombres ─────────────────────────────────────────────── */
+  --shadow-sm:  0 1px 3px rgba(0, 0, 0, 0.4), 0 0 0 1px var(--color-border-subtle);
+  --shadow-md:  0 4px 16px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--color-border-subtle);
+  --shadow-lg:  0 8px 32px rgba(0, 0, 0, 0.6), 0 0 0 1px var(--color-border-default);
+  --shadow-xl:  0 16px 48px rgba(0, 0, 0, 0.7), 0 0 0 1px var(--color-border-default);
+  --shadow-glow-blue:  0 0 20px rgba(26, 111, 255, 0.30);
+  --shadow-glow-cyan:  0 0 20px rgba(64, 192, 255, 0.25);
+  --shadow-glow-gold:  0 0 20px rgba(240, 160, 32, 0.30);
 
-  /* Z-index */
+  /* ── Transitions ────────────────────────────────────────── */
+  --ease-default: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-in:      cubic-bezier(0.4, 0, 1, 1);
+  --ease-out:     cubic-bezier(0, 0, 0.2, 1);
+  --ease-spring:  cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --duration-fast:   100ms;
+  --duration-base:   200ms;
+  --duration-slow:   350ms;
+  --duration-slower: 500ms;
+
+  /* ── Z-index ────────────────────────────────────────────── */
+  --z-base:    0;
+  --z-raised:  10;
   --z-sidebar: 30;
-  --z-header:  20;
-  --z-modal:   100;
-  --z-tooltip: 200;
+  --z-overlay: 100;
+  --z-modal:   200;
+  --z-toast:   300;
+  --z-tooltip: 400;
 
-  /* Transitions */
-  --ease: cubic-bezier(0.4, 0, 0.2, 1);
-  --dur-fast: 100ms;
-  --dur-base: 200ms;
+  /* ── Layout ─────────────────────────────────────────────── */
+  --sidebar-width:           240px;
+  --sidebar-width-collapsed: 64px;
+  --header-height:           56px;
+  --content-max-width:       1280px;
+
+  /* ── Alias de compatibilité (pages secondaires) ─────────── */
+  --bg-base:        var(--color-bg-base);
+  --bg-surface:     var(--color-bg-surface);
+  --bg-elevated:    var(--color-bg-elevated);
+  --bg-input:       var(--color-bg-input);
+  --bg-hover:       rgba(26, 111, 255, 0.06);
+
+  --border-subtle:  var(--color-border-subtle);
+  --border-default: var(--color-border-default);
+  --border-strong:  var(--color-border-strong);
+  --border-focus:   var(--color-border-focus);
+
+  --text-primary:   var(--color-text-primary);
+  --text-secondary: var(--color-text-secondary);
+  --text-muted:     var(--color-text-muted);
+  --text-inverse:   var(--color-text-inverse);
+
+  --green:   var(--color-success);
+  --green-dim: var(--color-success-bg);
+  --yellow:  var(--color-warning);
+  --yellow-dim: var(--color-warning-bg);
+  --red:     var(--color-error);
+  --red-dim: var(--color-error-bg);
+  --cyan:    var(--color-cyan);
+  --cyan-dim: var(--color-info-bg);
+  --blue:    var(--color-blue-electric);
+  --blue-dim: rgba(26, 111, 255, 0.12);
+  --purple:  #bc8cff;
+  --orange:  var(--color-orange);
+
+  --dur-fast: var(--duration-fast);
+  --dur-base: var(--duration-base);
+  --ease:     var(--ease-default);
+
+  --sidebar-w:     var(--sidebar-width);
+  --sidebar-w-col: var(--sidebar-width-collapsed);
+  --header-h:      var(--header-height);
 }

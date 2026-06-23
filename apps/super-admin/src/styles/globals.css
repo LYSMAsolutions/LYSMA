@@ -1,35 +1,59 @@
 @import './tokens.css';
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap');
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-html { font-size: 13px; }
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
 
 body {
   font-family: var(--font-sans);
-  background: var(--bg-base);
-  color: var(--text-primary);
+  font-size: var(--text-sm);
+  background: var(--color-bg-base);
+  color: var(--color-text-primary);
   -webkit-font-smoothing: antialiased;
-  line-height: 1.5;
-  overflow: hidden;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: var(--leading-normal);
 }
 
-::selection { background: rgba(88,166,255,0.3); color: var(--text-primary); }
+::selection {
+  background: rgba(26, 111, 255, 0.3);
+  color: var(--color-text-primary);
+}
 
-a { color: inherit; text-decoration: none; }
-button { border: none; background: none; font-family: inherit; }
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  border: none;
+  background: none;
+  font-family: inherit;
+  cursor: pointer;
+}
+
 input, textarea, select {
   font-family: inherit;
-  color: var(--text-primary);
+  font-size: inherit;
+  color: var(--color-text-primary);
   background: transparent;
+}
+
+code, pre, kbd, samp {
+  font-family: var(--font-mono);
 }
 
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #30363d; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #484f58; }
-
-.mono { font-family: var(--font-mono); }
+::-webkit-scrollbar-thumb { background: var(--color-border-default); border-radius: var(--radius-full); }
+::-webkit-scrollbar-thumb:hover { background: var(--color-border-strong); }
 
 @keyframes fadeIn {
   from { opacity: 0; }
@@ -37,11 +61,6 @@ input, textarea, select {
 }
 
 @keyframes slideIn {
-  from { opacity: 0; transform: translateY(4px); }
+  from { opacity: 0; transform: translateY(6px); }
   to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
 }
