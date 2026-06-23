@@ -295,6 +295,7 @@ model Garage {
   externalWorkOrders        ExternalWorkOrder[]
   externalWorkOrderSyncLogs ExternalWorkOrderSyncLog[]
   externalIntegrations      ExternalGarageIntegration[]
+  demandesIntegration       DemandeIntegration[]
 
   @@map("garages")
 }
@@ -671,6 +672,32 @@ model ExternalWorkOrderSyncLog {
   @@index([garageId, createdAt])
   @@index([externalWorkOrderId, createdAt])
   @@map("external_work_order_sync_logs")
+}
+
+model DemandeIntegration {
+  id                String                   @id @default(cuid())
+  nomLogiciel       String
+  nomEditeur        String?
+  contactEditeur    String?
+  identifiantGarage String
+  message           String?                  @db.Text
+  statut            DemandeIntegrationStatut @default(EN_ATTENTE)
+  noteAdmin         String?                  @db.Text
+  createdAt         DateTime                 @default(now())
+  updatedAt         DateTime                 @updatedAt
+
+  garageId String
+  garage   Garage @relation(fields: [garageId], references: [id], onDelete: Cascade)
+
+  @@unique([garageId, nomLogiciel])
+  @@index([statut, createdAt])
+  @@map("demandes_integration")
+}
+
+enum DemandeIntegrationStatut {
+  EN_ATTENTE
+  APPROUVEE
+  REFUSEE
 }
 
 model Absence {

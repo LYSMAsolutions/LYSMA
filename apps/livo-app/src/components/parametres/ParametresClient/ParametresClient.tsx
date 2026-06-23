@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button, Input } from '@/components/ui'
-import { Check, Buildings, CurrencyEur, LockKey, Eye, EyeSlash, DeviceMobile, ShieldCheck } from '@phosphor-icons/react'
+import { Check, Buildings, CurrencyEur, LockKey, Eye, EyeSlash, DeviceMobile, ShieldCheck, QrCode, Clock, CheckCircle, XCircle } from '@phosphor-icons/react'
 import styles from './ParametresClient.module.css'
 
 type TauxGarage = {
@@ -33,6 +33,18 @@ type Compagnon = {
   hasPin: boolean
 }
 
+type DemandeIntegration = {
+  id: string
+  nomLogiciel: string
+  nomEditeur: string | null
+  contactEditeur: string | null
+  identifiantGarage: string
+  message: string | null
+  statut: 'EN_ATTENTE' | 'APPROUVEE' | 'REFUSEE'
+  noteAdmin: string | null
+  createdAt: string
+}
+
 type Props = {
   garage: Garage
   taux: TauxGarage[]
@@ -40,11 +52,12 @@ type Props = {
   security: {
     twoFactorEnabled: boolean
   }
+  demandesIntegration: DemandeIntegration[]
 }
 
 const ATELIER_PASSWORD_MIN_LENGTH = 8
 
-export function ParametresClient({ garage, taux: tauxInit, compagnons, security }: Props) {
+export function ParametresClient({ garage, taux: tauxInit, compagnons, security, demandesIntegration: demandesInit }: Props) {
   const router = useRouter()
 
   // Garage
@@ -76,6 +89,48 @@ export function ParametresClient({ garage, taux: tauxInit, compagnons, security 
   const [savingPins, setSavingPins] = useState<Record<string, boolean>>({})
   const [savedPins, setSavedPins] = useState<Record<string, boolean>>({})
   const [errorPins, setErrorPins] = useState<Record<string, string>>({})
+
+  // Intégration logiciel facturation
+  const [demandes, setDemandes] = useState<DemandeIntegration[]>(demandesInit)
+  const [intNomLogiciel, setIntNomLogiciel] = useState('')
+  const [intNomEditeur, setIntNomEditeur] = useState('')
+  const [intContactEditeur, setIntContactEditeur] = useState('')
+  const [intIdentifiantGarage, setIntIdentifiantGarage] = useState('')
+  const [intMessage, setIntMessage] = useState('')
+  const [submittingInt, setSubmittingInt] = useState(false)
+  const [errorInt, setErrorInt] = useState('')
+  const [successInt, setSuccessInt] = useState(false)
+
+  async function submitDemandeIntegration() {
+    setErrorInt('')
+    if (!intNomLogiciel.trim()) { setErrorInt('Le nom du logiciel est requis.'); return }
+    if (!intIdentifiantGarage.trim()) { setErrorInt('Votre identifiant garage dans le logiciel est requis.'); return }
+    setSubmittingInt(true)
+    try {
+      const res = await fetch('/api/integrations/demande', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          nomLogiciel: intNomLogiciel,
+          nomEditeur: intNomEditeur || null,
+          contactEditeur: intContactEditeur || null,
+          identifiantGarage: intIdentifiantGarage,
+          message: intMessage || null,
+        }),
+      })
+      const data = await res.json().catch(() => null)
+      if (!res.ok) { setErrorInt(data?.error ?? 'Impossible d\'envoyer la demande.'); return }
+      setSuccessInt(true)
+      setIntNomLogiciel('')
+      setIntNomEditeur('')
+      setIntContactEditeur('')
+      setIntIdentifiantGarage('')
+      setIntMessage('')
+      router.refresh()
+      const updated = await fetch('/api/integrations/demande').then(r => r.json()).catch(() => null)
+      if (updated?.demandes) setDemandes(updated.demandes)
+    } finally { setSubmittingInt(false) }
+  }
 
   // Double authentification
   const [twoFactorEnabled, setTwoFactorEnabled] = useState(security.twoFactorEnabled)
@@ -351,6 +406,97 @@ export function ParametresClient({ garage, taux: tauxInit, compagnons, security 
           {twoFactorSuccess && <p className={styles.successSm}>{twoFactorSuccess}</p>}
           {twoFactorError && <p className={styles.errorSm}>{twoFactorError}</p>}
         </div>
+      </section>
+
+      {/* ── Intégration logiciel de facturation ────────────── */}
+      <section className={styles.section}>
+        <div className={styles.sectionHeader}>
+          <div className={styles.sectionIcon}><QrCode size={16} /></div>
+          <div>
+            <h2 className={styles.sectionTitle}>Intégration logiciel de facturation</h2>
+            <p className={styles.sectionDesc}>Scannez les QR codes de vos ordres de réparation directement depuis l'espace atelier</p>
+          </div>
+        </div>
+
+        <div className={styles.integrationNotice}>
+          <p className={styles.integrationNoticeText}>
+            Cette intégration permet à vos compagnons de scanner l'ordre de réparation imprimé depuis votre logiciel de facturation — le numéro d'OR, le client, le véhicule et les travaux prévus sont alors reconnus automatiquement par LIVO, sans aucune ressaisie.
+          </p>
+          <p className={styles.integrationNoticeAlert}>
+            Attention : cette fonctionnalité ne peut être activée que si votre éditeur de logiciel s'engage à intégrer le QR code LIVO sur ses ordres de réparation imprimés. Votre demande nous permettra de le contacter en votre nom pour explorer cette possibilité.
+          </p>
+        </div>
+
+        {demandes.length > 0 && (
+          <div className={styles.demandesList}>
+            {demandes.map(d => (
+              <div key={d.id} className={`${styles.demandeCard} ${styles[`demande_${d.statut}`]}`}>
+                <div className={styles.demandeCardHeader}>
+                  <span className={styles.demandeLogiciel}>{d.nomLogiciel}</span>
+                  <span className={`${styles.demandeBadge} ${styles[`badge_${d.statut}`]}`}>
+                    {d.statut === 'EN_ATTENTE' && <><Clock size={12} /> En attente</>}
+                    {d.statut === 'APPROUVEE' && <><CheckCircle size={12} /> Approuvée</>}
+                    {d.statut === 'REFUSEE' && <><XCircle size={12} /> Refusée</>}
+                  </span>
+                </div>
+                {d.nomEditeur && <p className={styles.demandeMeta}>Éditeur : {d.nomEditeur}</p>}
+                {d.noteAdmin && (
+                  <p className={styles.demandeNote}>{d.noteAdmin}</p>
+                )}
+                <p className={styles.demandeDate}>Demande envoyée le {new Date(d.createdAt).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {!demandes.some(d => d.statut === 'EN_ATTENTE' || d.statut === 'APPROUVEE') && (
+          <div className={styles.form}>
+            <Input
+              label="Nom du logiciel de facturation *"
+              value={intNomLogiciel}
+              onChange={e => setIntNomLogiciel(e.target.value)}
+              placeholder="Ex : EV, Winmotor, Autodata, Icar..."
+            />
+            <div className={styles.row2}>
+              <Input
+                label="Nom de l'éditeur"
+                value={intNomEditeur}
+                onChange={e => setIntNomEditeur(e.target.value)}
+                placeholder="Société éditrice du logiciel"
+              />
+              <Input
+                label="Contact de l'éditeur"
+                value={intContactEditeur}
+                onChange={e => setIntContactEditeur(e.target.value)}
+                placeholder="Email ou téléphone de l'éditeur"
+              />
+            </div>
+            <Input
+              label="Votre identifiant garage dans ce logiciel *"
+              value={intIdentifiantGarage}
+              onChange={e => setIntIdentifiantGarage(e.target.value)}
+              placeholder="Référence ou numéro client attribué par l'éditeur"
+            />
+            <div>
+              <label className={styles.textareaLabel}>Message (optionnel)</label>
+              <textarea
+                className={styles.textarea}
+                value={intMessage}
+                onChange={e => setIntMessage(e.target.value)}
+                placeholder="Précisions sur votre logiciel, votre usage, vos besoins..."
+                rows={3}
+                maxLength={2000}
+              />
+            </div>
+            {errorInt && <p className={styles.errorSm}>{errorInt}</p>}
+            {successInt && <p className={styles.successSm}>Votre demande a bien été envoyée. Nous reviendrons vers vous dès que possible.</p>}
+            <div className={styles.sectionFooter}>
+              <Button variant="primary" size="sm" loading={submittingInt} icon={successInt ? <Check weight="bold" /> : undefined} onClick={submitDemandeIntegration}>
+                {successInt ? 'Demande envoyée !' : 'Envoyer la demande'}
+              </Button>
+            </div>
+          </div>
+        )}
       </section>
 
       {/* ── Accès atelier ──────────────────────────────────── */}

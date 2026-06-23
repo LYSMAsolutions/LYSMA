@@ -15,7 +15,7 @@ export default async function ParametresPage() {
   const garage = await getPrimaryGarageForUser(session.user.id)
   if (!garage) redirect('/dashboard')
 
-  const [user, taux, compagnons] = await Promise.all([
+  const [user, taux, compagnons, demandesIntegration] = await Promise.all([
     prisma.user.findUnique({
       where: { id: session.user.id },
       select: { twoFactorEnabled: true },
@@ -25,6 +25,10 @@ export default async function ParametresPage() {
       where: { garageId: garage.id, actif: true },
       include: { user: true },
       orderBy: { user: { nom: 'asc' } },
+    }),
+    prisma.demandeIntegration.findMany({
+      where: { garageId: garage.id },
+      orderBy: { createdAt: 'desc' },
     }),
   ])
 
@@ -60,6 +64,17 @@ export default async function ParametresPage() {
           security={{
             twoFactorEnabled: user?.twoFactorEnabled ?? false,
           }}
+          demandesIntegration={demandesIntegration.map(d => ({
+            id: d.id,
+            nomLogiciel: d.nomLogiciel,
+            nomEditeur: d.nomEditeur,
+            contactEditeur: d.contactEditeur,
+            identifiantGarage: d.identifiantGarage,
+            message: d.message,
+            statut: d.statut as 'EN_ATTENTE' | 'APPROUVEE' | 'REFUSEE',
+            noteAdmin: d.noteAdmin,
+            createdAt: d.createdAt.toISOString(),
+          }))}
         />
       </div>
     </>

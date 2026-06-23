@@ -15,7 +15,7 @@ export async function GET(
   const partner = await prisma.externalIntegrationPartner.findUnique({
     where: { id },
     include: {
-      garageIntegrations: {
+      integrations: {
         include: { garage: { select: { id: true, nom: true, ville: true } } },
         orderBy: { createdAt: 'desc' },
       },
@@ -33,7 +33,7 @@ export async function GET(
       key: partner.key,
       active: partner.active,
       createdAt: partner.createdAt.toISOString(),
-      integrations: partner.garageIntegrations.map((i) => ({
+      integrations: partner.integrations.map((i) => ({
         id: i.id,
         externalGarageId: i.externalGarageId,
         active: i.active,

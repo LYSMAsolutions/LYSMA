@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
   const partners = await prisma.externalIntegrationPartner.findMany({
     orderBy: { createdAt: 'desc' },
     include: {
-      _count: { select: { garageIntegrations: true } },
+      _count: { select: { integrations: true } },
     },
   })
 
@@ -27,7 +27,7 @@ export async function GET(req: NextRequest) {
       key: p.key,
       active: p.active,
       createdAt: p.createdAt.toISOString(),
-      integrationsCount: p._count.garageIntegrations,
+      integrationsCount: p._count.integrations,
     })),
   })
 }

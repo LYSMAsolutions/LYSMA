@@ -434,3 +434,135 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ── Intégration logiciel ─────────────────────────────────── */
+.integrationNotice {
+  margin: var(--space-6) var(--space-6) 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.integrationNoticeText {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+.integrationNoticeAlert {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  background: rgba(255, 170, 0, 0.08);
+  border: 1px solid rgba(255, 170, 0, 0.25);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+}
+
+.demandesList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-6);
+}
+
+.demandeCard {
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-subtle);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.demandeCard.demande_APPROUVEE {
+  background: rgba(0, 200, 110, 0.06);
+  border-color: rgba(0, 200, 110, 0.3);
+}
+
+.demandeCard.demande_REFUSEE {
+  background: rgba(255, 80, 80, 0.06);
+  border-color: rgba(255, 80, 80, 0.3);
+}
+
+.demandeCardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.demandeLogiciel {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.demandeBadge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 8px;
+  border-radius: 999px;
+}
+
+.badge_EN_ATTENTE {
+  background: rgba(255, 170, 0, 0.12);
+  color: #b37700;
+}
+
+.badge_APPROUVEE {
+  background: rgba(0, 200, 110, 0.12);
+  color: #007a40;
+}
+
+.badge_REFUSEE {
+  background: rgba(255, 80, 80, 0.12);
+  color: #c02020;
+}
+
+.demandeMeta {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+.demandeNote {
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+  font-style: italic;
+}
+
+.demandeDate {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+.textareaLabel {
+  display: block;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-2);
+}
+
+.textarea {
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-input);
+  color: var(--color-text-primary);
+  font-size: var(--text-sm);
+  font-family: inherit;
+  resize: vertical;
+  min-height: 80px;
+  box-sizing: border-box;
+}
+
+.textarea:focus {
+  outline: none;
+  border-color: var(--color-blue-electric);
+  box-shadow: 0 0 0 3px rgba(26,111,255,0.1);
+}

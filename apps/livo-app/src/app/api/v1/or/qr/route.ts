@@ -88,7 +88,7 @@ export async function POST(req: NextRequest) {
 
   const { number, client, vehicule, travaux } = parsed.data
 
-  const vehiculeLabel = [vehicule?.marque, vehicule?.modele].filter(Boolean).join(' ') || null
+  const vehicleLabel = [vehicule?.marque, vehicule?.modele].filter(Boolean).join(' ') || null
   const operation = travaux || null
 
   const existing = await prisma.externalWorkOrder.findUnique({
