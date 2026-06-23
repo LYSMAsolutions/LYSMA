@@ -66,6 +66,8 @@ export function NouvelleFiche({ garageId, onClose, onCreated }: Props) {
   const [interventionsLoading, setInterventionsLoading] = useState(false)
   const [selectedInterventions, setSelectedInterventions] = useState<InterventionMetier[]>([])
   const [expandedInterventionId, setExpandedInterventionId] = useState<string | null>(null)
+  const [chipSelections, setChipSelections] = useState<Record<string, { pieces: Set<string>; controles: Set<string> }>>({})
+
 
   useEffect(() => {
     if (search.length < 1) { setVehicules([]); return }
@@ -137,6 +139,13 @@ export function NouvelleFiche({ garageId, onClose, onCreated }: Props) {
       if (current.some((item) => item.id === intervention.id)) return current
       return [...current, intervention]
     })
+    setChipSelections((current) => ({
+      ...current,
+      [intervention.id]: {
+        pieces: new Set(intervention.pieces_suggerees),
+        controles: new Set<string>(),
+      },
+    }))
     setTravaux((current) => appendUniqueLines(current, [intervention.intervention]))
     setExpandedInterventionId(intervention.id)
     setInterventionSearch('')
@@ -144,16 +153,23 @@ export function NouvelleFiche({ garageId, onClose, onCreated }: Props) {
 
   function removeIntervention(interventionId: string) {
     setSelectedInterventions((current) => current.filter((item) => item.id !== interventionId))
+    setChipSelections((current) => {
+      const next = { ...current }
+      delete next[interventionId]
+      return next
+    })
     setExpandedInterventionId((current) => current === interventionId ? null : current)
   }
 
-  function addSuggestedTasks(intervention: InterventionMetier) {
-    setTravaux((current) => appendUniqueLines(current, [
-      intervention.intervention,
-      ...intervention.pieces_suggerees,
-      ...intervention.controles_suggeres,
-      ...intervention.operations_fin,
-    ]))
+  function toggleChip(interventionId: string, type: 'pieces' | 'controles', value: string) {
+    setChipSelections((current) => {
+      const prev = current[interventionId]
+      if (!prev) return current
+      const set = new Set(prev[type])
+      if (set.has(value)) set.delete(value)
+      else set.add(value)
+      return { ...current, [interventionId]: { ...prev, [type]: set } }
+    })
   }
 
   async function handleSubmit() {
@@ -165,7 +181,12 @@ export function NouvelleFiche({ garageId, onClose, onCreated }: Props) {
         garageId,
         travaux,
         notes,
-        interventionsMetier: selectedInterventions.map(({ id }) => ({ id })),
+        interventionsMetier: selectedInterventions.map((intervention) => ({
+          id: intervention.id,
+          intervention: intervention.intervention,
+          piecesConfirmees: [...(chipSelections[intervention.id]?.pieces ?? [])],
+          controlesConfirmes: [...(chipSelections[intervention.id]?.controles ?? [])],
+        })),
       }
       if (vehiculeSelectionne) {
         body.vehiculeId = vehiculeSelectionne.id
@@ -508,46 +529,59 @@ export function NouvelleFiche({ garageId, onClose, onCreated }: Props) {
                           </button>
                         </div>
 
+                        {!expanded && (
+                          <span className={styles.interventionSummary}>
+                            {(chipSelections[intervention.id]?.pieces.size ?? 0)} pièce{(chipSelections[intervention.id]?.pieces.size ?? 0) !== 1 ? 's' : ''}
+                            {' · '}
+                            {(chipSelections[intervention.id]?.controles.size ?? 0)} contrôle{(chipSelections[intervention.id]?.controles.size ?? 0) !== 1 ? 's' : ''}
+                          </span>
+                        )}
+
                         {expanded && (
-                          <div className={styles.interventionDetails}>
-                            <div className={styles.suggestionColumn}>
-                              <span className={styles.suggestionTitle}>Pièces suggérées</span>
-                              <ul className={styles.suggestionList}>
-                                {intervention.pieces_suggerees.length > 0 ? intervention.pieces_suggerees.slice(0, 6).map((piece) => (
-                                  <li key={piece}>{piece}</li>
-                                )) : (
-                                  <li>Aucune pièce systématique</li>
-                                )}
-                              </ul>
-                            </div>
+                          <div className={styles.interventionDetails} style={{ gridTemplateColumns: '1fr', gap: 0 }}>
+                            {intervention.pieces_suggerees.length > 0 && (
+                              <div className={styles.chipsSection}>
+                                <span className={styles.chipsSectionTitle}>Pièces à remplacer</span>
+                                <div className={styles.chipsRow}>
+                                  {intervention.pieces_suggerees.map((piece) => {
+                                    const selected = chipSelections[intervention.id]?.pieces.has(piece) ?? false
+                                    return (
+                                      <button
+                                        key={piece}
+                                        type="button"
+                                        className={cn(styles.chip, selected && styles.chipSelected)}
+                                        onClick={() => toggleChip(intervention.id, 'pieces', piece)}
+                                      >
+                                        <span className={styles.chipCheck}>{selected ? '✓' : ''}</span>
+                                        {piece}
+                                      </button>
+                                    )
+                                  })}
+                                </div>
+                              </div>
+                            )}
 
-                            <div className={styles.suggestionColumn}>
-                              <span className={styles.suggestionTitle}>Contrôles suggérés</span>
-                              <ul className={styles.suggestionList}>
-                                {intervention.controles_suggeres.slice(0, 5).map((controle) => (
-                                  <li key={controle}>{controle}</li>
-                                ))}
-                              </ul>
-                            </div>
-
-                            <div className={styles.suggestionColumn}>
-                              <span className={styles.suggestionTitle}>Opérations de fin</span>
-                              <ul className={styles.suggestionList}>
-                                {intervention.operations_fin.slice(0, 4).map((operation) => (
-                                  <li key={operation}>{operation}</li>
-                                ))}
-                              </ul>
-                            </div>
-
-                            <Button
-                              type="button"
-                              variant="secondary"
-                              size="sm"
-                              icon={<Plus />}
-                              onClick={() => addSuggestedTasks(intervention)}
-                            >
-                              Ajouter les éléments
-                            </Button>
+                            {intervention.controles_suggeres.length > 0 && (
+                              <div className={styles.chipsSection}>
+                                <span className={styles.chipsSectionTitle}>Contrôles à effectuer</span>
+                                <div className={styles.chipsRow}>
+                                  {intervention.controles_suggeres.map((controle) => {
+                                    const selected = chipSelections[intervention.id]?.controles.has(controle) ?? false
+                                    return (
+                                      <button
+                                        key={controle}
+                                        type="button"
+                                        className={cn(styles.chip, selected && styles.chipSelected)}
+                                        onClick={() => toggleChip(intervention.id, 'controles', controle)}
+                                      >
+                                        <span className={styles.chipCheck}>{selected ? '✓' : ''}</span>
+                                        {controle}
+                                      </button>
+                                    )
+                                  })}
+                                </div>
+                              </div>
+                            )}
                           </div>
                         )}
                       </div>

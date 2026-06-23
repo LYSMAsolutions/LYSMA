@@ -608,6 +608,95 @@
   }
 }
 
+/* ── Chips ──────────────────────────────────────────────────── */
+.chipsSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-border-subtle);
+}
+
+.chipsSection + .chipsSection {
+  padding-top: var(--space-3);
+  margin-top: var(--space-1);
+}
+
+.chipsSectionTitle {
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.chipsRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-family: var(--font-sans);
+  font-weight: var(--font-medium);
+  cursor: pointer;
+  border: 1px solid var(--color-border-default);
+  background: var(--color-bg-input);
+  color: var(--color-text-muted);
+  transition: all var(--duration-fast) var(--ease-out);
+  line-height: 1.4;
+  user-select: none;
+}
+
+.chip:hover {
+  border-color: var(--color-border-strong);
+  color: var(--color-text-secondary);
+}
+
+.chipSelected {
+  background: rgba(26,111,255,0.12);
+  border-color: rgba(26,111,255,0.35);
+  color: var(--color-blue-electric);
+}
+
+.chipSelected:hover {
+  background: rgba(26,111,255,0.18);
+  border-color: rgba(26,111,255,0.5);
+}
+
+.chipCheck {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  border: 1.5px solid currentColor;
+  flex-shrink: 0;
+  opacity: 0.6;
+  font-size: 9px;
+  line-height: 1;
+}
+
+.chipSelected .chipCheck {
+  opacity: 1;
+  background: var(--color-blue-electric);
+  border-color: var(--color-blue-electric);
+  color: #fff;
+}
+
+.interventionSummary {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
 /* ── Info box ───────────────────────────────────────────────── */
 .infoBox {
   display: flex;

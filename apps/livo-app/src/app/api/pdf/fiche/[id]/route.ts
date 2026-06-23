@@ -74,37 +74,38 @@ export async function GET(
     },
   })
 
-  const stream = await renderToStream(
-    React.createElement(FichePDF as any, {
-      fiche: {
-        ...fiche,
-        tempsFacture: fiche.tempsFacture ? Number(fiche.tempsFacture) : null,
-        tempsReel: fiche.tempsReel ? Number(fiche.tempsReel) : null,
-        montantHT: fiche.montantHT ? Number(fiche.montantHT) : null,
-        pointagesFiche: fiche.pointagesFiche.map((pf) => ({
-          compagnon: {
-            prenom: pf.compagnon.user?.prenom ?? pf.compagnon.prenom,
-            nom: pf.compagnon.user?.nom ?? pf.compagnon.nom,
-            poste: pf.compagnon.poste,
-          },
-          dureeMinutes: pf.dureeMinutes,
-          debutAt: pf.debutAt,
-          finAt: pf.finAt,
-        })),
-      },
-      garage: {
-        nom: fiche.garage.nom,
-        adresse: fiche.garage.adresse,
-        codePostal: fiche.garage.codePostal,
-        ville: fiche.garage.ville,
-        telephone: fiche.garage.telephone,
-        email: fiche.garage.email,
-        siret: fiche.garage.siret,
-      },
-      logoSrc,
-      qrCodeSrc,
-    }) as any
-  )
+  const pdfProps = {
+    fiche: {
+      ...fiche,
+      tempsFacture: fiche.tempsFacture ? Number(fiche.tempsFacture) : null,
+      tempsReel: fiche.tempsReel ? Number(fiche.tempsReel) : null,
+      montantHT: fiche.montantHT ? Number(fiche.montantHT) : null,
+      pointagesFiche: fiche.pointagesFiche.map((pf) => ({
+        compagnon: {
+          prenom: pf.compagnon.user?.prenom ?? pf.compagnon.prenom,
+          nom: pf.compagnon.user?.nom ?? pf.compagnon.nom,
+          poste: pf.compagnon.poste,
+        },
+        dureeMinutes: pf.dureeMinutes,
+        debutAt: pf.debutAt,
+        finAt: pf.finAt,
+      })),
+    },
+    garage: {
+      nom: fiche.garage.nom,
+      adresse: fiche.garage.adresse,
+      codePostal: fiche.garage.codePostal,
+      ville: fiche.garage.ville,
+      telephone: fiche.garage.telephone,
+      email: fiche.garage.email,
+      siret: fiche.garage.siret,
+    },
+    logoSrc: logoSrc ?? '',
+    qrCodeSrc,
+  }
+  // renderToStream attend ReactElement<DocumentProps> mais FichePDF encapsule <Document> — cast nécessaire
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const stream = await (renderToStream as any)(React.createElement(FichePDF, pdfProps))
 
   const chunks: Buffer[] = []
 

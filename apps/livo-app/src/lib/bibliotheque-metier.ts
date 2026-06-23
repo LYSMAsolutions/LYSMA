@@ -20,17 +20,6 @@ export type InterventionMetier = {
   frequence: InterventionFrequence
 }
 
-export type FicheInterventionMetier = Pick<
-  InterventionMetier,
-  | 'id'
-  | 'categorie'
-  | 'intervention'
-  | 'synonymes'
-  | 'pieces_suggerees'
-  | 'controles_suggeres'
-  | 'operations_fin'
-  | 'frequence'
->
 
 type BibliothequeMetier = {
   meta: {
@@ -82,21 +71,6 @@ export function getInterventionsMetierByIds(ids: string[]) {
     const intervention = getInterventionMetierById(id)
     return intervention ? [intervention] : []
   })
-}
-
-export function toFicheInterventionMetier(
-  intervention: InterventionMetier
-): FicheInterventionMetier {
-  return {
-    id: intervention.id,
-    categorie: intervention.categorie,
-    intervention: intervention.intervention,
-    synonymes: intervention.synonymes,
-    pieces_suggerees: intervention.pieces_suggerees,
-    controles_suggeres: intervention.controles_suggeres,
-    operations_fin: intervention.operations_fin,
-    frequence: intervention.frequence,
-  }
 }
 
 export function getCategoriesInterventionsMetier() {

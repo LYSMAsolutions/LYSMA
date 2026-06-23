@@ -1,8 +1,8 @@
 import crypto from 'node:crypto'
 
 function key() {
-  const raw = process.env.SECURITY_ENCRYPTION_KEY || process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET
-  if (!raw) throw new Error('SECURITY_ENCRYPTION_KEY manquant')
+  const raw = process.env.SECURITY_ENCRYPTION_KEY
+  if (!raw) throw new Error('SECURITY_ENCRYPTION_KEY manquant — variable d\'environnement requise')
   return crypto.createHash('sha256').update(raw).digest()
 }
 

@@ -4,15 +4,11 @@ import React from 'react'
 
 type Compagnon = { prenom: string; nom: string; poste: string | null }
 type PointageFiche = { compagnon: Compagnon; dureeMinutes: number | null; debutAt: Date; finAt: Date | null }
-type InterventionMetier = {
+type InterventionConfirmee = {
   id: string
-  categorie: string
   intervention: string
-  synonymes: string[]
-  pieces_suggerees: string[]
-  controles_suggeres: string[]
-  operations_fin: string[]
-  frequence: string
+  piecesConfirmees: string[]
+  controlesConfirmes: string[]
 }
 
 type Props = {
@@ -69,32 +65,19 @@ function isStringArray(value: unknown): value is string[] {
   return Array.isArray(value) && value.every((item) => typeof item === 'string')
 }
 
-function parseInterventionsMetier(value: unknown): InterventionMetier[] {
+function parseInterventionsConfirmees(value: unknown): InterventionConfirmee[] {
   if (!Array.isArray(value)) return []
 
   return value.flatMap((item) => {
     if (!item || typeof item !== 'object') return []
-
-    const intervention = item as Record<string, unknown>
-    if (
-      typeof intervention.id !== 'string' ||
-      typeof intervention.categorie !== 'string' ||
-      typeof intervention.intervention !== 'string'
-    ) {
-      return []
-    }
+    const i = item as Record<string, unknown>
+    if (typeof i.id !== 'string' || typeof i.intervention !== 'string') return []
 
     return [{
-      id: intervention.id,
-      categorie: intervention.categorie,
-      intervention: intervention.intervention,
-      synonymes: isStringArray(intervention.synonymes) ? intervention.synonymes : [],
-      pieces_suggerees: isStringArray(intervention.pieces_suggerees) ? intervention.pieces_suggerees : [],
-      controles_suggeres: isStringArray(intervention.controles_suggeres)
-        ? intervention.controles_suggeres
-        : isStringArray(intervention.controles_associes) ? intervention.controles_associes : [],
-      operations_fin: isStringArray(intervention.operations_fin) ? intervention.operations_fin : [],
-      frequence: typeof intervention.frequence === 'string' ? intervention.frequence : '',
+      id: i.id,
+      intervention: i.intervention,
+      piecesConfirmees: isStringArray(i.piecesConfirmees) ? i.piecesConfirmees : [],
+      controlesConfirmes: isStringArray(i.controlesConfirmes) ? i.controlesConfirmes : [],
     }]
   })
 }
@@ -198,21 +181,43 @@ const s = StyleSheet.create({
   notesLabel: { fontSize: 7, color: '#8a6a00', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 3 },
   notesText: { fontSize: 8, color: '#665500' },
 
-  metierSection: { marginBottom: 14 },
-  metierItem: {
-    marginBottom: 8,
-    padding: 8,
-    backgroundColor: '#f8faff',
+  piecesPreRow: {
+    flexDirection: 'row',
+    paddingVertical: 7,
+    paddingHorizontal: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#dde8f5',
+    backgroundColor: '#f4f8ff',
+    minHeight: 22,
+  },
+  controleSection: { marginBottom: 14 },
+  controleRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 6,
+    paddingVertical: 4,
+  },
+  controleItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    paddingVertical: 4,
+    paddingHorizontal: 8,
     borderWidth: 1,
     borderColor: '#dde8f5',
     borderRadius: 3,
+    backgroundColor: '#f8faff',
+    marginBottom: 4,
+    marginRight: 4,
   },
-  metierTitle: { fontSize: 8, fontFamily: 'Helvetica-Bold', color: COLORS.blueDeep, marginBottom: 2 },
-  metierMeta: { fontSize: 6, color: COLORS.textMuted, marginBottom: 5 },
-  metierColumns: { flexDirection: 'row', gap: 10 },
-  metierColumn: { flex: 1 },
-  metierSubtitle: { fontSize: 6, fontFamily: 'Helvetica-Bold', color: COLORS.blueElectric, marginBottom: 3 },
-  metierLine: { fontSize: 6.5, color: '#555555', marginBottom: 2, lineHeight: 1.25 },
+  controleBox: {
+    width: 10,
+    height: 10,
+    borderWidth: 1,
+    borderColor: '#8899bb',
+    borderRadius: 2,
+  },
+  controleText: { fontSize: 7.5, color: '#333333' },
 
   // ── Travaux à prévoir ─────────────────────────────────────
   prevoir: {
@@ -302,7 +307,9 @@ const EMPTY_ROWS = 7
 
 export function FichePDF({ fiche, garage, logoSrc, qrCodeSrc }: Props) {
   const travailsLignes = fiche.travaux.split('\n').filter(Boolean)
-  const interventionsMetier = parseInterventionsMetier(fiche.interventionsMetier)
+  const interventionsConfirmees = parseInterventionsConfirmees(fiche.interventionsMetier)
+  const allPiecesConfirmees = interventionsConfirmees.flatMap((i) => i.piecesConfirmees)
+  const allControlesConfirmes = interventionsConfirmees.flatMap((i) => i.controlesConfirmes)
   const tReel = fiche.tempsReel ?? 0
   const tFacture = fiche.tempsFacture ?? 0
   const delta = tFacture - tReel
@@ -386,46 +393,6 @@ export function FichePDF({ fiche, garage, logoSrc, qrCodeSrc }: Props) {
           </View>
         </View>
 
-        {interventionsMetier.length > 0 && (
-          <View style={s.metierSection}>
-            <Text style={s.sectionTitle}>Interventions métier</Text>
-            {interventionsMetier.map((intervention) => (
-              <View key={intervention.id} style={s.metierItem}>
-                <Text style={s.metierTitle}>{intervention.intervention}</Text>
-                <Text style={s.metierMeta}>
-                  {intervention.categorie} - {intervention.id}{intervention.frequence ? ` - ${intervention.frequence}` : ''}
-                </Text>
-                <View style={s.metierColumns}>
-                  {intervention.pieces_suggerees.length > 0 && (
-                    <View style={s.metierColumn}>
-                      <Text style={s.metierSubtitle}>Pièces suggérées</Text>
-                      {intervention.pieces_suggerees.slice(0, 4).map((piece) => (
-                        <Text key={piece} style={s.metierLine}>- {piece}</Text>
-                      ))}
-                    </View>
-                  )}
-                  {intervention.controles_suggeres.length > 0 && (
-                    <View style={s.metierColumn}>
-                      <Text style={s.metierSubtitle}>Contrôles suggérés</Text>
-                      {intervention.controles_suggeres.slice(0, 3).map((controle) => (
-                        <Text key={controle} style={s.metierLine}>- {controle}</Text>
-                      ))}
-                    </View>
-                  )}
-                  {intervention.operations_fin.length > 0 && (
-                    <View style={s.metierColumn}>
-                      <Text style={s.metierSubtitle}>Opérations de fin</Text>
-                      {intervention.operations_fin.slice(0, 3).map((operation) => (
-                        <Text key={operation} style={s.metierLine}>- {operation}</Text>
-                      ))}
-                    </View>
-                  )}
-                </View>
-              </View>
-            ))}
-          </View>
-        )}
-
         {/* Travaux à prévoir */}
         <Text style={s.sectionTitle}>Travaux à prévoir</Text>
         <View style={s.prevoir} />
@@ -469,6 +436,21 @@ export function FichePDF({ fiche, garage, logoSrc, qrCodeSrc }: Props) {
           </>
         )}
 
+        {/* Contrôles à effectuer */}
+        {allControlesConfirmes.length > 0 && (
+          <View style={s.controleSection}>
+            <Text style={s.sectionTitle}>Contrôles à effectuer</Text>
+            <View style={s.controleRow}>
+              {allControlesConfirmes.map((controle) => (
+                <View key={controle} style={s.controleItem}>
+                  <View style={s.controleBox} />
+                  <Text style={s.controleText}>{controle}</Text>
+                </View>
+              ))}
+            </View>
+          </View>
+        )}
+
         {/* Tableau travaux effectués */}
         <View style={s.tableSection}>
           <Text style={s.sectionTitle}>Travaux effectués</Text>
@@ -477,8 +459,16 @@ export function FichePDF({ fiche, garage, logoSrc, qrCodeSrc }: Props) {
             <Text style={[s.thCell, { flex: 1 }]}>Désignation</Text>
             <Text style={[s.thCell, { width: 100 }]}>Référence</Text>
           </View>
-          {/* Lignes vides pour remplissage manuel */}
-          {Array.from({ length: EMPTY_ROWS }).map((_, i) => (
+          {/* Pièces confirmées pré-remplies */}
+          {allPiecesConfirmees.map((piece, i) => (
+            <View key={piece} style={i % 2 === 0 ? s.piecesPreRow : [s.piecesPreRow, { backgroundColor: '#eef3ff' }]}>
+              <Text style={[s.tdCell, { width: 35 }]}></Text>
+              <Text style={[s.tdCell, { flex: 1 }]}>{piece}</Text>
+              <Text style={[s.tdCell, { width: 100 }]}></Text>
+            </View>
+          ))}
+          {/* Lignes vides pour ajout manuel */}
+          {Array.from({ length: Math.max(3, EMPTY_ROWS - allPiecesConfirmees.length) }).map((_, i) => (
             <View key={i} style={i % 2 === 1 ? [s.tableRow, s.tableRowAlt] : s.tableRow}>
               <Text style={[s.tdCell, { width: 35 }]}></Text>
               <Text style={[s.tdCell, { flex: 1 }]}></Text>
