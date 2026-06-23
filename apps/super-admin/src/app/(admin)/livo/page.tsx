@@ -28,7 +28,10 @@ export default async function LivoPage() {
           <span className={styles.cmd}>livo-app --garages --status</span>
           <span className={styles.count}>{garages.length} garages</span>
         </div>
-        <Link href="/livo/api-or" className={styles.actionBtn}>api_or_mail</Link>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <Link href="/livo/integrations" className={styles.actionBtn}>intégrations_qr</Link>
+          <Link href="/livo/api-or" className={styles.actionBtn}>api_or_mail</Link>
+        </div>
         {garages.length === 0 && (
           <span className={styles.warning}>⚠ API LIVO non joignable — vérifier LIVO_API_URL et INTERNAL_API_KEY</span>
         )}

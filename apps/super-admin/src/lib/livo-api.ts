@@ -124,6 +124,49 @@ export async function getLivoTrash() {
   }
 }
 
+export type DemandeIntegration = {
+  id: string
+  nomLogiciel: string
+  nomEditeur: string | null
+  contactEditeur: string | null
+  identifiantGarage: string
+  message: string | null
+  statut: 'EN_ATTENTE' | 'APPROUVEE' | 'REFUSEE'
+  noteAdmin: string | null
+  createdAt: string
+  garage: {
+    id: string
+    nom: string
+    ville: string | null
+    telephone: string | null
+    email: string | null
+    owner: { nom: string; prenom: string; email: string }
+  }
+}
+
+export async function getLivoDemandes(statut?: string): Promise<DemandeIntegration[]> {
+  try {
+    const url = `${LIVO_API_URL}/api/internal/integrations/demandes${statut ? `?statut=${statut}` : ''}`
+    const res = await fetch(url, { headers: headers(), next: { revalidate: 0 } })
+    if (!res.ok) throw new Error(`HTTP ${res.status}`)
+    const data = await res.json()
+    return data.demandes ?? []
+  } catch (err) {
+    console.error('LIVO demandes API error:', err)
+    return []
+  }
+}
+
+export async function traiteLivoDemande(id: string, statut: 'APPROUVEE' | 'REFUSEE', noteAdmin?: string) {
+  const res = await fetch(`${LIVO_API_URL}/api/internal/integrations/demandes/${id}`, {
+    method: 'PATCH',
+    headers: headers(),
+    body: JSON.stringify({ statut, noteAdmin: noteAdmin || null }),
+  })
+  if (!res.ok) throw new Error(`Erreur traitement demande: HTTP ${res.status}`)
+  return res.json()
+}
+
 export async function restoreLivoTrashItem(type: string, id: string, userId?: string) {
   const res = await fetch(`${LIVO_API_URL}/api/internal/trash/${type}/${id}/restore`, {
     method: 'POST',
