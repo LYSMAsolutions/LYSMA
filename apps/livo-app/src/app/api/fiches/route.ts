@@ -1,10 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { requireSecureSession } from '@/lib/security/secure-session'
-import {
-  getInterventionsMetierByIds,
-  toFicheInterventionMetier,
-} from '@/lib/bibliotheque-metier'
 import { z } from 'zod'
 import { Prisma } from '@prisma/client'
 import { createFicheScanToken } from '@/lib/work-order-qr'
@@ -25,7 +21,12 @@ const schema = z.object({
   }).optional(),
   travaux: z.string().min(1),
   notes: z.string().optional(),
-  interventionsMetier: z.array(z.object({ id: z.string().min(1) })).max(20).optional(),
+  interventionsMetier: z.array(z.object({
+    id: z.string().min(1),
+    intervention: z.string().min(1),
+    piecesConfirmees: z.array(z.string()).max(30),
+    controlesConfirmes: z.array(z.string()).max(20),
+  })).max(20).optional(),
 })
 
 async function getOwnedGarage(garageId: string, userId: string) {
@@ -75,9 +76,7 @@ export async function POST(req: NextRequest) {
 
   if (!finalVehiculeId) return NextResponse.json({ error: 'Vehicule requis' }, { status: 400 })
 
-  const selectedInterventions = getInterventionsMetierByIds(
-    interventionsMetier?.map(({ id }) => id) ?? []
-  ).map(toFicheInterventionMetier)
+  const selectedInterventions = interventionsMetier ?? []
 
   for (let attempt = 0; attempt < 3; attempt++) {
     try {

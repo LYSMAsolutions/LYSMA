@@ -6,7 +6,7 @@ import { cookies } from 'next/headers'
 
 const schema = z.object({
   email: z.string().email(),
-  password: z.string().min(4),
+  password: z.string().min(8),
 })
 
 export async function POST(req: NextRequest) {

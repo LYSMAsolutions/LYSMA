@@ -20,11 +20,6 @@
         "vidange + filtre",
         "oil change"
       ],
-      "pieces_suggerees": [
-        "Huile moteur",
-        "Filtre à huile",
-        "Joint de vidange si nécessaire"
-      ],
       "controles_suggeres": [
         "Contrôle niveau huile",
         "Contrôle niveaux",
@@ -50,16 +45,7 @@
       "pieces_suggerees": [
         "Filtre à air moteur"
       ],
-      "controles_suggeres": [
-        "Contrôle état conduit d'admission",
-        "Contrôle état durites d'air",
-        "Contrôle débit massique air (si anomalie)",
-        "Contrôle niveaux",
-        "Contrôle visuel absence de fuite"
-      ],
-      "operations_fin": [
-        "Remise à zéro maintenance si nécessaire"
-      ],
+
       "frequence": "Très fréquent"
     },
     {
@@ -76,15 +62,7 @@
       "pieces_suggerees": [
         "Filtre habitacle"
       ],
-      "controles_suggeres": [
-        "Contrôle état boîtier filtre habitacle",
-        "Test fonctionnement ventilation",
-        "Contrôle niveaux",
-        "Contrôle visuel absence de fuite"
-      ],
-      "operations_fin": [
-        "Remise à zéro maintenance si nécessaire"
-      ],
+
       "frequence": "Très fréquent"
     },
     {
@@ -102,16 +80,7 @@
       "pieces_suggerees": [
         "Filtre à carburant"
       ],
-      "controles_suggeres": [
-        "Contrôle état tuyaux carburant",
-        "Contrôle pression carburant",
-        "Contrôle absence de fuite",
-        "Contrôle niveaux",
-        "Contrôle visuel absence de fuite"
-      ],
-      "operations_fin": [
-        "Remise à zéro maintenance si nécessaire"
-      ],
+      
       "frequence": "Fréquent"
     },
     {
@@ -189,13 +158,7 @@
       "pieces_suggerees": [
         "Bougies de préchauffage"
       ],
-      "controles_suggeres": [
-        "Diagnostic préchauffage",
-        "Contrôle relais de préchauffage",
-        "Contrôle voyant tableau de bord",
-        "Contrôle niveaux",
-        "Contrôle visuel absence de fuite"
-      ],
+
       "operations_fin": [
         "Remise à zéro maintenance si nécessaire"
       ],
@@ -216,16 +179,6 @@
         "Courroie accessoires",
         "Galet tendeur si nécessaire"
       ],
-      "controles_suggeres": [
-        "Contrôle état alternateur",
-        "Contrôle état compresseur climatisation",
-        "Contrôle état pompe de direction assistée",
-        "Contrôle niveaux",
-        "Contrôle visuel absence de fuite"
-      ],
-      "operations_fin": [
-        "Remise à zéro maintenance si nécessaire"
-      ],
       "frequence": "Fréquent"
     },
     {
@@ -244,17 +197,7 @@
       "pieces_suggerees": [
         "Liquide de refroidissement"
       ],
-      "controles_suggeres": [
-        "Contrôle état durites de refroidissement",
-        "Contrôle état radiateur",
-        "Contrôle thermostat",
-        "Contrôle pompe à eau",
-        "Contrôle niveaux",
-        "Contrôle visuel absence de fuite"
-      ],
-      "operations_fin": [
-        "Remise à zéro maintenance si nécessaire"
-      ],
+
       "frequence": "Fréquent"
     },
     {
@@ -271,16 +214,7 @@
       "pieces_suggerees": [
         "Liquide de frein"
       ],
-      "controles_suggeres": [
-        "Contrôle état flexibles de frein",
-        "Contrôle état organe de frein",
-        "Contrôle voyant niveau liquide",
-        "Contrôle niveaux",
-        "Contrôle visuel absence de fuite",
-        "Contrôle niveau liquide de frein"
-      ],
       "operations_fin": [
-        "Remise à zéro maintenance si nécessaire",
         "Essai freinage"
       ],
       "frequence": "Fréquent"
@@ -300,12 +234,6 @@
       "pieces_suggerees": [
         "Plaquettes de frein avant"
       ],
-      "controles_suggeres": [
-        "Contrôle visuel des disques avant",
-        "Contrôle niveau liquide de frein",
-        "Contrôle flexibles de frein",
-        "Contrôle témoin d’usure si équipé"
-      ],
       "operations_fin": [
         "Essai freinage"
       ],
@@ -324,12 +252,6 @@
       ],
       "pieces_suggerees": [
         "Plaquettes de frein arrière"
-      ],
-      "controles_suggeres": [
-        "Contrôle visuel des disques arrière",
-        "Contrôle niveau liquide de frein",
-        "Contrôle frein de parking",
-        "Contrôle témoin d’usure si équipé"
       ],
       "operations_fin": [
         "Essai freinage"
@@ -353,9 +275,7 @@
         "Plaquettes de frein avant"
       ],
       "controles_suggeres": [
-        "Contrôle flexibles de frein avant",
-        "Contrôle roulements de roue avant",
-        "Contrôle niveau liquide de frein"
+        "Contrôle flexibles de frein avant"
       ],
       "operations_fin": [
         "Essai freinage"
@@ -379,8 +299,6 @@
         "Plaquettes de frein arrière"
       ],
       "controles_suggeres": [
-        "Contrôle flexibles de frein arrière",
-        "Contrôle frein de parking",
         "Contrôle niveau liquide de frein"
       ],
       "operations_fin": [
@@ -401,16 +319,12 @@
         "Tambours et garnitures arrière"
       ],
       "pieces_suggerees": [
-        "Tambours arrière si nécessaires",
         "Garnitures arrière",
         "Cylindres de roue si nécessaires"
       ],
       "controles_suggeres": [
-        "Contrôle cylindres de roue",
-        "Contrôle câble frein de parking",
-        "Contrôle ressorts de rappel garnitures",
-        "Contrôle niveau liquide de frein",
-        "Contrôle visuel freinage"
+        
+        "Contrôle câble frein de parking"
       ],
       "operations_fin": [
         "Essai freinage"
@@ -511,7 +425,8 @@
       ],
       "pieces_suggerees": [
         "2 pneus avant",
-        "2 valves"
+        "2 valves",
+        "Equilibrage des roues"
       ],
       "controles_suggeres": [
         "Contrôle état jantes",
@@ -519,7 +434,6 @@
         "Contrôle visuel train avant"
       ],
       "operations_fin": [
-        "Équilibrage",
         "Réinitialisation TPMS si nécessaire"
       ],
       "frequence": "Très fréquent"
@@ -547,7 +461,6 @@
       ],
       "operations_fin": [
         "Contrôle pression finale",
-        "Équilibrage si nécessaire",
         "Réinitialisation TPMS si nécessaire"
       ],
       "frequence": "Très fréquent"
@@ -566,7 +479,6 @@
       "controles_suggeres": [
         "Contrôle usure pneus",
         "Contrôle état pneus",
-        "Contrôle freinage",
         "Contrôle pression pneus",
         "Contrôle état jantes"
       ],

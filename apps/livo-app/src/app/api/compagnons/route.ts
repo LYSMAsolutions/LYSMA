@@ -63,7 +63,7 @@ export async function POST(req: NextRequest) {
       poste: poste ?? 'Mécanicien',
       heuresContrat,
       matricule,
-      dateEntree: dateEntree ? new Date(dateEntree) : new Date(),
+      dateEntree: dateEntree ? new Date(dateEntree) : null,
       actif: true,
       pin: pinHash,
     },

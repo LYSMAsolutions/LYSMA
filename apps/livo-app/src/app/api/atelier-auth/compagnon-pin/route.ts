@@ -3,6 +3,8 @@ import { prisma } from '@/lib/prisma'
 import bcrypt from 'bcryptjs'
 import { cookies } from 'next/headers'
 import { z } from 'zod'
+import { checkRateLimit } from '@/lib/security/rate-limit'
+import { requestIp } from '@/lib/security/audit'
 
 const schema = z.object({
   compagnonId: z.string().min(1),
@@ -10,6 +12,17 @@ const schema = z.object({
 })
 
 export async function POST(req: NextRequest) {
+  const ip = requestIp(req.headers)
+  const limiter = await checkRateLimit({
+    key: `pin:${ip ?? 'unknown'}`,
+    limit: 5,
+    windowSeconds: 60 * 5,
+    blockSeconds: 60 * 15,
+  })
+  if (!limiter.allowed) {
+    return NextResponse.json({ error: 'Trop de tentatives. Réessayez dans 15 minutes.' }, { status: 429 })
+  }
+
   const cookieStore = await cookies()
   const garageId = cookieStore.get('atelier-garage-id')?.value
 

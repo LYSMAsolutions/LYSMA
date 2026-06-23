@@ -38,11 +38,15 @@ export async function GET(req: NextRequest) {
   const garage = await getPrimaryGarageForUser(session.user.id)
   if (!garage) return NextResponse.json({ error: 'Garage introuvable.' }, { status: 404 })
 
-  const status = new URL(req.url).searchParams.get('status')
+  const statusParam = new URL(req.url).searchParams.get('status')
+  const VALID_STATUSES = ['OUVERT', 'EN_COURS', 'EN_PAUSE', 'TERMINE', 'CLOTURE'] as const
+  type ValidStatus = typeof VALID_STATUSES[number]
+  const status = VALID_STATUSES.includes(statusParam as ValidStatus) ? (statusParam as ValidStatus) : null
+
   const orders = await prisma.externalWorkOrder.findMany({
     where: {
       garageId: garage.id,
-      ...(status ? { status: status as any } : {}),
+      ...(status ? { status } : {}),
     },
     include: {
       lines: { orderBy: { position: 'asc' } },

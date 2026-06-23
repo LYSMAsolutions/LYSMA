@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Input, Button } from '@/components/ui'
@@ -29,6 +29,7 @@ export default function InscriptionPage() {
   const router = useRouter()
   const [step, setStep] = useState<'compte' | 'garage'>('compte')
   const [loading, setLoading] = useState(false)
+  const submittingRef = useRef(false)
   const [error, setError] = useState('')
   const [cookiesAccepted, setCookiesAccepted] = useState(false)
   const [consentReady, setConsentReady] = useState(false)
@@ -87,6 +88,8 @@ export default function InscriptionPage() {
       return
     }
 
+    if (submittingRef.current) return
+    submittingRef.current = true
     setLoading(true)
     try {
       const res = await fetch('/api/inscription', {
@@ -104,6 +107,7 @@ export default function InscriptionPage() {
 
       router.push(`/verification-email/envoye?email=${encodeURIComponent(email)}`)
     } finally {
+      submittingRef.current = false
       setLoading(false)
     }
   }
