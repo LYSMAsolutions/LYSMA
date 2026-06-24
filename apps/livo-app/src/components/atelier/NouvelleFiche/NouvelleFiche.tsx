@@ -5,6 +5,7 @@ import { X, MagnifyingGlass, Car, Plus, Info, FilePdf, Check, Wrench } from '@ph
 import { Button, Input } from '@/components/ui'
 import { cn } from '@/lib/utils'
 import { formatImmat, formatVIN, formatVehiculeLabel, formatNom, formatPrenom, formatTelephone } from '@/lib/formatters'
+import { getInterventionsLiees } from '@/lib/bibliotheque-metier'
 import styles from './NouvelleFiche.module.css'
 
 type Vehicule = {
@@ -590,6 +591,34 @@ export function NouvelleFiche({ garageId, onClose, onCreated }: Props) {
                 </div>
               )}
             </div>
+
+            {selectedInterventions.length > 0 && (() => {
+              const suggestions = selectedInterventions
+                .flatMap((i) => getInterventionsLiees(i.id))
+                .filter((s, idx, arr) =>
+                  !selectedInterventionIds.has(s.id) &&
+                  arr.findIndex((x) => x.id === s.id) === idx
+                )
+                .slice(0, 6)
+              return suggestions.length > 0 ? (
+                <div className={styles.suggestionsPanel}>
+                  <span className={styles.suggestionsLabel}>Ajouter aussi</span>
+                  <div className={styles.suggestionsRow}>
+                    {suggestions.map((s) => (
+                      <button
+                        key={s.id}
+                        type="button"
+                        className={styles.suggestionBtn}
+                        onClick={() => addIntervention(s)}
+                      >
+                        <Plus size={12} />
+                        {s.intervention}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ) : null
+            })()}
 
             <div className={styles.field}>
               <label className={styles.label}>Travaux à effectuer *</label>
