@@ -20,6 +20,14 @@
         "vidange + filtre",
         "oil change"
       ],
+      "pieces_suggerees": [
+        "Huile moteur",
+        "Filtre à huile",
+        "Filtre à air",
+        "Filtre habitacle",
+        "Filtre à carburant si applicable",
+        "Bougies d'allumage si applicable"
+      ],
       "controles_suggeres": [
         "Contrôle niveau huile",
         "Contrôle niveaux",
@@ -34,59 +42,86 @@
     {
       "id": "ENT-002",
       "categorie": "Entretien",
-      "intervention": "Filtre à air moteur",
+      "intervention": "Filtre à huile",
       "synonymes": [
         "filtre air",
         "filtre à air",
         "changement filtre air",
         "remplacement filtre air moteur",
-        "Filtre à air moteur"
+        "Filtre à huile"
       ],
       "pieces_suggerees": [
-        "Filtre à air moteur"
+        "Filtre à huile"
       ],
-
+      "controles_suggeres": [
+        "Contrôle état conduit d'admission",
+        "Contrôle état durites d'air",
+        "Contrôle débit massique air (si anomalie)",
+        "Contrôle niveaux",
+        "Contrôle visuel absence de fuite"
+      ],
+      "operations_fin": [
+        "Remise à zéro maintenance si nécessaire"
+      ],
       "frequence": "Très fréquent"
     },
     {
       "id": "ENT-003",
       "categorie": "Entretien",
-      "intervention": "Filtre habitacle",
+      "intervention": "Filtre à air moteur",
       "synonymes": [
         "filtre habitacle",
         "filtre pollen",
         "filtre climatisation habitacle",
         "filtre cabine",
-        "changement filtre pollen"
+        "changement filtre pollen",
+        "Filtre à air moteur"
       ],
       "pieces_suggerees": [
-        "Filtre habitacle"
+        "Filtre à air moteur"
       ],
-
+      "controles_suggeres": [
+        "Contrôle état boîtier filtre habitacle",
+        "Test fonctionnement ventilation",
+        "Contrôle niveaux",
+        "Contrôle visuel absence de fuite"
+      ],
+      "operations_fin": [
+        "Remise à zéro maintenance si nécessaire"
+      ],
       "frequence": "Très fréquent"
     },
     {
       "id": "ENT-004",
       "categorie": "Entretien",
-      "intervention": "Filtre à carburant",
+      "intervention": "Filtre habitacle",
       "synonymes": [
         "filtre carburant",
         "filtre gasoil",
         "filtre essence",
         "changement filtre carburant",
         "filtre gazole",
-        "Filtre à carburant"
+        "Filtre habitacle"
       ],
       "pieces_suggerees": [
-        "Filtre à carburant"
+        "Filtre habitacle"
       ],
-      
+      "controles_suggeres": [
+        "Contrôle état tuyaux carburant",
+        "Contrôle pression carburant",
+        "Contrôle absence de fuite",
+        "Contrôle niveaux",
+        "Contrôle visuel absence de fuite"
+      ],
+      "operations_fin": [
+        "Remise à zéro maintenance si nécessaire"
+      ],
       "frequence": "Fréquent"
     },
     {
       "id": "ENT-005",
       "categorie": "Entretien",
-      "intervention": "Révision moteur",
+      "intervention": "Filtre à carburant",
       "synonymes": [
         "révision",
         "grande révision",
@@ -94,6 +129,34 @@
         "service complet",
         "entretien complet",
         "full service",
+        "Filtre à carburant"
+      ],
+      "pieces_suggerees": [
+        "Filtre à carburant"
+      ],
+      "controles_suggeres": [
+        "Contrôle état batterie",
+        "Contrôle état courroie accessoires",
+        "Contrôle état suspension",
+        "Contrôle direction",
+        "Contrôle échappement",
+        "Contrôle niveaux"
+      ],
+      "operations_fin": [
+        "Remise à zéro maintenance si nécessaire"
+      ],
+      "frequence": "Très fréquent"
+    },
+    {
+      "id": "ENT-006",
+      "categorie": "Entretien",
+      "intervention": "Révision moteur",
+      "synonymes": [
+        "bougies",
+        "bougie allumage",
+        "changement bougies",
+        "remplacement bougies",
+        "spark plugs",
         "Révision moteur"
       ],
       "pieces_suggerees": [
@@ -102,7 +165,7 @@
         "Filtre à air",
         "Filtre habitacle",
         "Filtre à carburant si applicable",
-        "Bougies d’allumage si applicable"
+        "Bougies d'allumage si applicable"
       ],
       "controles_suggeres": [
         "Contrôle niveaux",
@@ -115,27 +178,26 @@
         "Remise à zéro maintenance",
         "Essai routier si nécessaire"
       ],
-      "frequence": "Très fréquent"
+      "frequence": "Fréquent"
     },
     {
-      "id": "ENT-006",
+      "id": "ENT-007",
       "categorie": "Entretien",
-      "intervention": "Bougies d’allumage",
+      "intervention": "Bougies d'allumage",
       "synonymes": [
-        "bougies",
-        "bougie allumage",
-        "changement bougies",
-        "remplacement bougies",
-        "spark plugs",
-        "Bougies d’allumage"
+        "bougies préchauffage",
+        "bougies de chauffe",
+        "préchauffage diesel",
+        "remplacement bougies diesel",
+        "Bougies d'allumage"
       ],
       "pieces_suggerees": [
-        "Bougies d’allumage"
+        "Bougies d'allumage"
       ],
       "controles_suggeres": [
-        "Contrôle état bobines d'allumage",
-        "Contrôle fils de bougie",
-        "Diagnostic allumage si anomalie",
+        "Diagnostic préchauffage",
+        "Contrôle relais de préchauffage",
+        "Contrôle voyant tableau de bord",
         "Contrôle niveaux",
         "Contrôle visuel absence de fuite"
       ],
@@ -145,46 +207,36 @@
       "frequence": "Fréquent"
     },
     {
-      "id": "ENT-007",
+      "id": "ENT-008",
       "categorie": "Entretien",
       "intervention": "Bougies de préchauffage",
       "synonymes": [
-        "bougies préchauffage",
-        "bougies de chauffe",
-        "préchauffage diesel",
-        "remplacement bougies diesel",
+        "courroie accessoires",
+        "courroie alternateur",
+        "courroie poly-V",
+        "courroie serpentine",
+        "remplacement courroie",
         "Bougies de préchauffage"
       ],
       "pieces_suggerees": [
         "Bougies de préchauffage"
       ],
-
+      "controles_suggeres": [
+        "Contrôle état alternateur",
+        "Contrôle état compresseur climatisation",
+        "Contrôle état pompe de direction assistée",
+        "Contrôle niveaux",
+        "Contrôle visuel absence de fuite"
+      ],
       "operations_fin": [
         "Remise à zéro maintenance si nécessaire"
       ],
       "frequence": "Fréquent"
     },
     {
-      "id": "ENT-008",
-      "categorie": "Entretien",
-      "intervention": "Courroie accessoires",
-      "synonymes": [
-        "courroie accessoires",
-        "courroie alternateur",
-        "courroie poly-V",
-        "courroie serpentine",
-        "remplacement courroie"
-      ],
-      "pieces_suggerees": [
-        "Courroie accessoires",
-        "Galet tendeur si nécessaire"
-      ],
-      "frequence": "Fréquent"
-    },
-    {
       "id": "ENT-009",
       "categorie": "Entretien",
-      "intervention": "Liquide de refroidissement",
+      "intervention": "Courroie accessoires",
       "synonymes": [
         "liquide refroidissement",
         "liquide refroidissement moteur",
@@ -192,30 +244,49 @@
         "remplacement antigel",
         "vidange circuit de refroidissement",
         "coolant",
-        "Liquide de refroidissement"
+        "Courroie accessoires"
       ],
       "pieces_suggerees": [
-        "Liquide de refroidissement"
+        "Courroie accessoires",
+        "Galet tendeur si nécessaire"
       ],
-
+      "controles_suggeres": [
+        "Contrôle état durites de refroidissement",
+        "Contrôle état radiateur",
+        "Contrôle thermostat",
+        "Contrôle pompe à eau",
+        "Contrôle niveaux",
+        "Contrôle visuel absence de fuite"
+      ],
+      "operations_fin": [
+        "Remise à zéro maintenance si nécessaire"
+      ],
       "frequence": "Fréquent"
     },
     {
       "id": "ENT-010",
       "categorie": "Entretien",
-      "intervention": "Liquide de frein",
+      "intervention": "Liquide de refroidissement",
       "synonymes": [
         "liquide de frein",
         "purge freins",
         "remplacement liquide freinage",
         "DOT",
-        "brake fluid"
+        "brake fluid",
+        "Liquide de refroidissement"
       ],
       "pieces_suggerees": [
-        "Liquide de frein"
+        "Liquide de refroidissement"
+      ],
+      "controles_suggeres": [
+        "Contrôle état flexibles de frein",
+        "Contrôle état organe de frein",
+        "Contrôle voyant niveau liquide",
+        "Contrôle niveaux",
+        "Contrôle visuel absence de fuite"
       ],
       "operations_fin": [
-        "Essai freinage"
+        "Remise à zéro maintenance si nécessaire"
       ],
       "frequence": "Fréquent"
     },
@@ -233,6 +304,12 @@
       ],
       "pieces_suggerees": [
         "Plaquettes de frein avant"
+      ],
+      "controles_suggeres": [
+        "Contrôle visuel des disques avant",
+        "Contrôle niveau liquide de frein",
+        "Contrôle flexibles de frein",
+        "Contrôle témoin d'usure si équipé"
       ],
       "operations_fin": [
         "Essai freinage"
@@ -252,6 +329,12 @@
       ],
       "pieces_suggerees": [
         "Plaquettes de frein arrière"
+      ],
+      "controles_suggeres": [
+        "Contrôle visuel des disques arrière",
+        "Contrôle niveau liquide de frein",
+        "Contrôle frein de parking",
+        "Contrôle témoin d'usure si équipé"
       ],
       "operations_fin": [
         "Essai freinage"
@@ -275,7 +358,9 @@
         "Plaquettes de frein avant"
       ],
       "controles_suggeres": [
-        "Contrôle flexibles de frein avant"
+        "Contrôle flexibles de frein avant",
+        "Contrôle roulements de roue avant",
+        "Contrôle niveau liquide de frein"
       ],
       "operations_fin": [
         "Essai freinage"
@@ -299,6 +384,8 @@
         "Plaquettes de frein arrière"
       ],
       "controles_suggeres": [
+        "Contrôle flexibles de frein arrière",
+        "Contrôle frein de parking",
         "Contrôle niveau liquide de frein"
       ],
       "operations_fin": [
@@ -319,12 +406,16 @@
         "Tambours et garnitures arrière"
       ],
       "pieces_suggerees": [
+        "Tambours arrière si nécessaires",
         "Garnitures arrière",
         "Cylindres de roue si nécessaires"
       ],
       "controles_suggeres": [
-        
-        "Contrôle câble frein de parking"
+        "Contrôle cylindres de roue",
+        "Contrôle câble frein de parking",
+        "Contrôle ressorts de rappel garnitures",
+        "Contrôle niveau liquide de frein",
+        "Contrôle visuel freinage"
       ],
       "operations_fin": [
         "Essai freinage"
@@ -425,8 +516,7 @@
       ],
       "pieces_suggerees": [
         "2 pneus avant",
-        "2 valves",
-        "Equilibrage des roues"
+        "2 valves"
       ],
       "controles_suggeres": [
         "Contrôle état jantes",
@@ -434,6 +524,7 @@
         "Contrôle visuel train avant"
       ],
       "operations_fin": [
+        "Équilibrage",
         "Réinitialisation TPMS si nécessaire"
       ],
       "frequence": "Très fréquent"
@@ -450,7 +541,7 @@
         "Équilibrage roues"
       ],
       "pieces_suggerees": [
-        "Masses d’équilibrage",
+        "Masses d'équilibrage",
         "Valve si nécessaire"
       ],
       "controles_suggeres": [
@@ -461,6 +552,7 @@
       ],
       "operations_fin": [
         "Contrôle pression finale",
+        "Équilibrage si nécessaire",
         "Réinitialisation TPMS si nécessaire"
       ],
       "frequence": "Très fréquent"
@@ -479,6 +571,7 @@
       "controles_suggeres": [
         "Contrôle usure pneus",
         "Contrôle état pneus",
+        "Contrôle freinage",
         "Contrôle pression pneus",
         "Contrôle état jantes"
       ],
@@ -710,15 +803,15 @@
     {
       "id": "EMB-003",
       "categorie": "Embrayage",
-      "intervention": "Câble d’embrayage",
+      "intervention": "Câble d'embrayage",
       "synonymes": [
         "câble embrayage",
         "câble de débrayage",
         "remplacement câble embrayage",
-        "Câble d’embrayage"
+        "Câble d'embrayage"
       ],
       "pieces_suggerees": [
-        "Câble d’embrayage"
+        "Câble d'embrayage"
       ],
       "controles_suggeres": [
         "Contrôle état fourchette d'embrayage",
@@ -1095,7 +1188,7 @@
         "Contrôle filtrer déshydrateur",
         "Contrôle compresseur climatisation",
         "Contrôle ventilateur condenseur",
-        "Contrôle température sortie d’air",
+        "Contrôle température sortie d'air",
         "Contrôle absence fuite visible"
       ],
       "operations_fin": [
@@ -1122,7 +1215,7 @@
         "Contrôle état tuyaux et raccords",
         "Contrôle condenseur",
         "Contrôle évaporateur",
-        "Contrôle température sortie d’air",
+        "Contrôle température sortie d'air",
         "Contrôle absence fuite visible"
       ],
       "operations_fin": [
@@ -1148,7 +1241,7 @@
         "Contrôle condenseur",
         "Contrôle embrayage compresseur",
         "Contrôle ventilateur condenseur",
-        "Contrôle température sortie d’air",
+        "Contrôle température sortie d'air",
         "Contrôle absence fuite visible"
       ],
       "operations_fin": [
@@ -1174,7 +1267,7 @@
       "controles_suggeres": [
         "Contrôle état filtre habitacle",
         "Contrôle drainage bac condensats évaporateur",
-        "Contrôle température sortie d’air",
+        "Contrôle température sortie d'air",
         "Contrôle absence fuite visible"
       ],
       "operations_fin": [
@@ -1199,7 +1292,7 @@
       "controles_suggeres": [
         "Contrôle tuyaux et raccords",
         "Contrôle état compresseur",
-        "Contrôle température sortie d’air",
+        "Contrôle température sortie d'air",
         "Contrôle absence fuite visible"
       ],
       "operations_fin": [
@@ -1777,17 +1870,17 @@
     {
       "id": "ECH-004",
       "categorie": "Échappement",
-      "intervention": "Joint / collier d’échappement",
+      "intervention": "Joint / collier d'échappement",
       "synonymes": [
         "joint échappement",
         "collier échappement",
         "fuite échappement",
         "remplacement joint",
-        "Joint / collier d’échappement"
+        "Joint / collier d'échappement"
       ],
       "pieces_suggerees": [
-        "Joint d’échappement",
-        "Collier d’échappement"
+        "Joint d'échappement",
+        "Collier d'échappement"
       ],
       "controles_suggeres": [
         "Contrôle état général de la ligne d'échappement",
@@ -2457,16 +2550,16 @@
     {
       "id": "DIV-012",
       "categorie": "Divers",
-      "intervention": "Collecteur d’admission",
+      "intervention": "Collecteur d'admission",
       "synonymes": [
         "collecteur admission",
         "pipe d'admission",
         "intake manifold",
         "remplacement collecteur",
-        "Collecteur d’admission"
+        "Collecteur d'admission"
       ],
       "pieces_suggerees": [
-        "Collecteur d’admission",
+        "Collecteur d'admission",
         "Joint collecteur"
       ],
       "controles_suggeres": [
@@ -2570,7 +2663,7 @@
       ],
       "pieces_suggerees": [
         "Intercooler",
-        "Durites d’air si nécessaires"
+        "Durites d'air si nécessaires"
       ],
       "controles_suggeres": [
         "Contrôle état conduits turbo",

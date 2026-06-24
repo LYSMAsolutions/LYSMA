@@ -116,16 +116,19 @@ function scoreIntervention(intervention: InterventionMetier, query: string) {
 
 const INTERVENTIONS_LIEES: Record<string, string[]> = {
   // Entretien
-  'ENT-001': ['ENT-002', 'ENT-003', 'ENT-004', 'PNE-005', 'ELE-005', 'ELE-004'],
-  'ENT-002': ['ENT-001', 'ENT-006', 'INJ-001'],
-  'ENT-003': ['ENT-001', 'CLI-004', 'DIV-014'],
-  'ENT-004': ['ENT-001', 'INJ-001', 'INJ-003'],
-  'ENT-005': ['ENT-001', 'ENT-002', 'ENT-003', 'ENT-004', 'ENT-008', 'PNE-005', 'ELE-005', 'ELE-004'],
-  'ENT-006': ['ENT-001', 'ENT-002', 'DIA-002'],
+  // ENT après rename V2 : ENT-001=Vidange, ENT-002=Filtre huile, ENT-003=Filtre air,
+  // ENT-004=Filtre habitacle, ENT-005=Filtre carburant, ENT-006=Révision,
+  // ENT-007=Bougies allumage, ENT-008=Bougies préchauffage, ENT-009=Courroie, ENT-010=Liquide refroid.
+  'ENT-001': ['ENT-002', 'ENT-003', 'ENT-004', 'ENT-005', 'PNE-005', 'ELE-005', 'ELE-004'],
+  'ENT-002': ['ENT-001', 'ENT-003', 'ENT-007', 'INJ-001'],
+  'ENT-003': ['ENT-001', 'ENT-002', 'CLI-004', 'DIV-014'],
+  'ENT-004': ['ENT-001', 'ENT-003', 'CLI-004'],
+  'ENT-005': ['ENT-001', 'INJ-001', 'INJ-003'],
+  'ENT-006': ['ENT-001', 'ENT-002', 'ENT-003', 'ENT-004', 'ENT-005', 'ENT-009', 'PNE-005', 'ELE-005', 'ELE-004'],
   'ENT-007': ['ENT-001', 'ENT-002', 'DIA-002'],
-  'ENT-008': ['DIS-001', 'DIS-002', 'DIV-002'],
-  'ENT-009': ['DIV-002', 'DIV-005', 'DIS-002', 'DIV-017', 'DIV-001'],
-  'ENT-010': ['FRE-001', 'FRE-002', 'FRE-007', 'DIV-008'],
+  'ENT-008': ['ENT-001', 'ENT-002', 'DIA-002'],
+  'ENT-009': ['DIS-001', 'DIS-002', 'DIV-002'],
+  'ENT-010': ['DIV-002', 'DIV-005', 'DIS-002', 'DIV-017', 'DIV-001'],
   // Freinage
   'FRE-001': ['FRE-002', 'FRE-003', 'ENT-010', 'DIR-001'],
   'FRE-002': ['FRE-001', 'FRE-004', 'ENT-010', 'FRE-008'],
@@ -133,7 +136,7 @@ const INTERVENTIONS_LIEES: Record<string, string[]> = {
   'FRE-004': ['FRE-003', 'ENT-010', 'FRE-008'],
   'FRE-005': ['ENT-010', 'FRE-008'],
   'FRE-006': ['ENT-010', 'FRE-007', 'DIV-008'],
-  'FRE-007': ['ENT-010', 'DIV-008', 'DIA-013'],
+  'FRE-007': ['ENT-010', 'DIV-008', 'DIV-013'],
   'FRE-008': ['FRE-002', 'FRE-004'],
   // Pneumatiques
   'PNE-001': ['PNE-002', 'DIR-001', 'PNE-003', 'SUS-007', 'DIV-018'],
