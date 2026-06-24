@@ -549,3 +549,13 @@
     flex-direction: column;
   }
 }
+
+@media (max-width: 768px) {
+  .content { padding: var(--space-4); gap: var(--space-4); }
+  .kpis { grid-template-columns: repeat(2, 1fr); }
+  .flowGrid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 480px) {
+  .kpis { grid-template-columns: 1fr 1fr; }
+}

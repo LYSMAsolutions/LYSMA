@@ -1,4 +1,6 @@
 import { Sidebar } from '@/components/layout/Sidebar'
+import { MobileMenuProvider } from '@/components/layout/MobileMenuContext'
+import { MobileBar } from '@/components/layout/MobileBar/MobileBar'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { getPrimaryGarageForUser } from '@/lib/garage'
@@ -63,7 +65,9 @@ export async function AppShell({ children }: AppShellProps) {
   const userInitiale = `${user.prenom?.[0] ?? ''}${user.nom?.[0] ?? ''}`.toUpperCase() || 'U'
 
   return (
+    <MobileMenuProvider>
     <div className={styles.shell}>
+      <MobileBar />
       <Sidebar
         garageNom={garageNom}
         userNom={userNom}
@@ -85,5 +89,6 @@ export async function AppShell({ children }: AppShellProps) {
 
       <ConnectedDataNotice />
     </div>
+    </MobileMenuProvider>
   )
 }

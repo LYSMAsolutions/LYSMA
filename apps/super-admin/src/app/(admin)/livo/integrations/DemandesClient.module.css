@@ -330,3 +330,8 @@
   color: var(--color-text-secondary);
   cursor: pointer;
 }
+
+@media (max-width: 768px) {
+  .tableWrapper { overflow-x: auto; }
+  .approveFields { flex-direction: column; }
+}

@@ -114,6 +114,13 @@
   color: var(--color-text-primary);
 }
 
+@media (max-width: 768px) {
+  .main {
+    margin-left: 0;
+    padding-top: 56px;
+  }
+}
+
 @media (max-width: 720px) {
   .footer {
     padding: var(--space-4);

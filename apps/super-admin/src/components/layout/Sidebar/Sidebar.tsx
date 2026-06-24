@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 import { signOut } from 'next-auth/react'
+import { useMobileMenu } from '../MobileMenuContext'
 import {
   House,
   Users,
@@ -118,6 +119,7 @@ type Props = {
 export function Sidebar({ userName, userEmail, messagesNonLus = 0, erreursOuvertes = 0 }: Props) {
   const pathname = usePathname()
   const [isOpen, setIsOpen] = useState(false)
+  const { isOpen: isMobileOpen, close: closeMobile } = useMobileMenu()
 
   function isActive(href: string) {
     return pathname === href || pathname.startsWith(href + '/')
@@ -130,11 +132,16 @@ export function Sidebar({ userName, userEmail, messagesNonLus = 0, erreursOuvert
   }
 
   return (
+    <>
+      {isMobileOpen && (
+        <div className={styles.backdrop} onClick={closeMobile} aria-hidden />
+      )}
     <aside
       className={styles.sidebar}
       onMouseEnter={() => setIsOpen(true)}
       onMouseLeave={() => setIsOpen(false)}
       data-open={isOpen}
+      data-mobile-open={isMobileOpen}
     >
       <div className={styles.logo}>
         <div className={styles.logoMark}>SA</div>
@@ -202,6 +209,8 @@ export function Sidebar({ userName, userEmail, messagesNonLus = 0, erreursOuvert
 
       <div style={{ flex: 1 }} />
 
+      <button className={styles.mobileClose} onClick={closeMobile} aria-label="Fermer le menu">✕</button>
+
       <div className={styles.bottomNav}>
         <div className={styles.userRow}>
           <div className={`${styles.userInfo} ${styles.fadeItem}`}>
@@ -218,5 +227,6 @@ export function Sidebar({ userName, userEmail, messagesNonLus = 0, erreursOuvert
         </button>
       </div>
     </aside>
+    </>
   )
 }

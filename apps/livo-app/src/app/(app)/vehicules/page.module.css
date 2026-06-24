@@ -192,3 +192,4 @@
 
 .empty p { font-size: var(--text-sm); }
 .emptyHint { font-size: var(--text-xs) !important; }
+@media (max-width: 768px) { .content { padding: var(--space-4); } }

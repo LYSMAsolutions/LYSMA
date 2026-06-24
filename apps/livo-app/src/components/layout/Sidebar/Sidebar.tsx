@@ -2,9 +2,10 @@
 
 import { SignOutButton } from '@/components/layout/SignOutButton/SignOutButton'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
+import { useMobileMenu } from '@/components/layout/MobileMenuContext'
 import {
   Car,
   ChartBar,
@@ -39,12 +40,18 @@ type SidebarProps = {
 export function Sidebar({ garageNom, userNom, userEmail, userInitiale }: SidebarProps) {
   const pathname = usePathname()
   const [isOpen, setIsOpen] = useState(false)
+  const { isOpen: isMobileOpen, close: closeMobile } = useMobileMenu()
 
   return (
+    <>
+      {isMobileOpen && (
+        <div className={styles.backdrop} onClick={closeMobile} aria-hidden />
+      )}
     <aside
       className={styles.sidebar}
       onMouseEnter={() => setIsOpen(true)}
       onMouseLeave={() => setIsOpen(false)}
+      data-mobile-open={isMobileOpen}
     >
       <div className={styles.logo}>
         <img
@@ -73,6 +80,7 @@ export function Sidebar({ garageNom, userNom, userEmail, userInitiale }: Sidebar
               key={href}
               href={href}
               className={cn(styles.navItem, isActive && styles.active)}
+              onClick={closeMobile}
             >
               <Icon
                 weight={isActive ? 'fill' : 'regular'}
@@ -112,5 +120,6 @@ export function Sidebar({ garageNom, userNom, userEmail, userInitiale }: Sidebar
         </div>
       )}
     </aside>
+    </>
   )
 }

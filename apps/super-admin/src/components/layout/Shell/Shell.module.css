@@ -28,3 +28,14 @@
   overflow-x: hidden;
   padding: var(--space-6);
 }
+
+@media (max-width: 768px) {
+  .main {
+    margin-left: 0;
+    padding-top: 56px;
+  }
+
+  .content {
+    padding: var(--space-4);
+  }
+}

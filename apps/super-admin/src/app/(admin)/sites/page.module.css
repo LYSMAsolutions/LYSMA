@@ -202,3 +202,8 @@
     overflow-x: auto;
   }
 }
+
+@media (max-width: 640px) {
+  .statsGrid { grid-template-columns: 1fr 1fr; }
+  .table { display: block; overflow-x: auto; }
+}

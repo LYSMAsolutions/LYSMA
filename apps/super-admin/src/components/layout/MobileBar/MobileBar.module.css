@@ -1,0 +1,69 @@
+.bar {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .bar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 56px;
+    padding: 0 var(--space-4);
+    background: var(--color-bg-surface);
+    border-bottom: 1px solid var(--color-border-subtle);
+    z-index: calc(var(--z-sidebar) + 1);
+  }
+
+  .hamburger {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 36px;
+    height: 36px;
+    padding: 6px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .hamburger span {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background: var(--color-text-primary);
+    border-radius: 2px;
+    transition: all 200ms ease;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .logoMark {
+    width: 28px;
+    height: 28px;
+    display: grid;
+    place-items: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+    background: var(--color-blue-electric);
+    border-radius: var(--radius-md);
+    flex-shrink: 0;
+  }
+
+  .logoName {
+    font-size: var(--text-sm);
+    font-weight: var(--font-bold);
+    color: var(--color-text-primary);
+    letter-spacing: 0.04em;
+  }
+}

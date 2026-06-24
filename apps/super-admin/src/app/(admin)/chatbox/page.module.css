@@ -722,3 +722,9 @@
     text-align: left;
   }
 }
+
+@media (max-width: 768px) {
+  .statsGrid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  .panel { overflow-x: auto; }
+  .tableWrapper { overflow-x: auto; }
+}
