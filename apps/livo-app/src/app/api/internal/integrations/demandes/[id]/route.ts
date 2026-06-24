@@ -253,6 +253,34 @@ Content-Type: application/json
       </tbody>
     </table>
 
+    <!-- Sandbox -->
+    <div style="background:#f0fff4;border:1px solid #a0d8b0;border-radius:8px;padding:20px 24px;margin-bottom:28px">
+      <h2 style="margin:0 0 10px;font-size:16px;font-weight:700;color:#1a7a40">🧪 Tester votre intégration avant la mise en production</h2>
+      <p style="margin:0 0 14px;font-size:14px;line-height:1.6;color:#1a4a2e">
+        Utilisez l'endpoint sandbox pour valider que votre code fonctionne correctement avec vos credentials, sans créer de données réelles dans LIVO.
+        Les mêmes headers et le même format de body sont attendus — seul l'endpoint change.
+      </p>
+      <div style="background:#1a1a2e;border-radius:6px;padding:16px 20px;margin-bottom:12px;overflow-x:auto">
+        <pre style="margin:0;color:#a0ffb0;font-family:monospace;font-size:12px;line-height:1.7;white-space:pre-wrap">POST https://livo-app.com/api/v1/or/sandbox
+x-livo-partner-key: ${credentials.partnerKey}
+x-livo-garage-id: ${credentials.externalGarageId}
+x-livo-api-secret: ${credentials.apiSecret}
+Content-Type: application/json
+
+{
+  "number": "TEST-001",
+  "client": { "nom": "Client Test" },
+  "vehicule": { "immat": "XX-000-XX", "marque": "Peugeot", "modele": "308" },
+  "travaux": "Test intégration"
+}</pre>
+      </div>
+      <p style="margin:0;font-size:13px;color:#1a5a30">
+        La réponse sandbox inclut <code style="background:#d0f0dc;padding:1px 5px;border-radius:3px">"sandbox": true</code> et un message de confirmation.
+        Le champ <code style="background:#d0f0dc;padding:1px 5px;border-radius:3px">qr_payload</code> retourné est fictif — ne l'imprimez pas.
+        Une fois vos tests concluants, basculez sur l'endpoint de production ci-dessus.
+      </p>
+    </div>
+
     <!-- Codes erreur -->
     <h2 style="margin:0 0 12px;font-size:17px;font-weight:700;color:#1a1a2e">Codes de retour</h2>
     <table style="width:100%;border-collapse:collapse;font-size:13px;margin-bottom:32px">
