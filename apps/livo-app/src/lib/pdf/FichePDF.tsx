@@ -67,12 +67,10 @@ function isStringArray(value: unknown): value is string[] {
 
 function parseInterventionsConfirmees(value: unknown): InterventionConfirmee[] {
   if (!Array.isArray(value)) return []
-
   return value.flatMap((item) => {
     if (!item || typeof item !== 'object') return []
     const i = item as Record<string, unknown>
     if (typeof i.id !== 'string' || typeof i.intervention !== 'string') return []
-
     return [{
       id: i.id,
       intervention: i.intervention,
@@ -82,246 +80,202 @@ function parseInterventionsConfirmees(value: unknown): InterventionConfirmee[] {
   })
 }
 
+const DEFAULT_CONTROLES = [
+  'Contrôle niveaux',
+  'Contrôle éclairage',
+  'Contrôle pression pneus',
+  'Contrôle essuie-glaces',
+  'Contrôle visuel freinage',
+]
+
 const s = StyleSheet.create({
   page: {
     fontFamily: 'Helvetica',
-    fontSize: 9,
+    fontSize: 8.5,
     backgroundColor: '#ffffff',
-    paddingTop: 28,
-    paddingBottom: 44,
-    paddingHorizontal: 32,
+    paddingTop: 24,
+    paddingBottom: 36,
+    paddingHorizontal: 28,
   },
 
-  // ── Filigrane ─────────────────────────────────────────────
   watermark: {
     position: 'absolute',
-    top: '30%',
+    top: '28%',
     left: 0,
     right: 0,
     alignItems: 'center',
     opacity: 0.04,
   },
-  watermarkImg: { width: 280, height: 280 },
+  watermarkImg: { width: 260, height: 260 },
 
-  // ── Header ────────────────────────────────────────────────
+  // Header
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 16,
-    paddingBottom: 12,
+    alignItems: 'flex-start',
+    marginBottom: 12,
+    paddingBottom: 10,
     borderBottomWidth: 2,
     borderBottomColor: COLORS.blueElectric,
   },
   headerLeft: { flexDirection: 'column', flex: 1 },
-  headerCenter: { flex: 0.2 },
-  garageNom: { fontSize: 18, fontFamily: 'Helvetica-Bold', color: COLORS.blueDeep, marginBottom: 3 },
-  garageInfo: { fontSize: 8, color: '#444444', marginBottom: 1 },
-
+  garageNom: { fontSize: 16, fontFamily: 'Helvetica-Bold', color: COLORS.blueDeep, marginBottom: 2 },
+  garageInfo: { fontSize: 7.5, color: '#444444', marginBottom: 1 },
   headerRight: { flexDirection: 'column', alignItems: 'flex-end' },
-  docTitle: { fontSize: 20, fontFamily: 'Helvetica-Bold', color: COLORS.blueDeep, marginBottom: 4 },
-  docNumero: { fontSize: 10, color: COLORS.blueElectric, fontFamily: 'Helvetica-Bold', marginBottom: 2 },
-  docDate: { fontSize: 8, color: '#666666' },
+  docTitle: { fontSize: 18, fontFamily: 'Helvetica-Bold', color: COLORS.blueDeep, marginBottom: 3 },
+  docNumero: { fontSize: 9.5, color: COLORS.blueElectric, fontFamily: 'Helvetica-Bold', marginBottom: 2 },
+  docDate: { fontSize: 7.5, color: '#666666' },
 
-  livoSmall: { flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 6 },
-  livoLogo: { width: 20, height: 20 },
-  livoText: { fontSize: 7, color: COLORS.textMuted },
-
-  // ── Section title ─────────────────────────────────────────
+  // Section title
   sectionTitle: {
-    fontSize: 8,
+    fontSize: 7.5,
     fontFamily: 'Helvetica-Bold',
     color: COLORS.blueElectric,
     textTransform: 'uppercase',
     letterSpacing: 1.5,
-    marginBottom: 8,
-    paddingBottom: 4,
+    marginBottom: 6,
+    paddingBottom: 3,
     borderBottomWidth: 1,
     borderBottomColor: '#dde8f5',
   },
 
-  // ── Véhicule + Client ─────────────────────────────────────
-  vcGrid: {
-    flexDirection: 'row',
-    gap: 12,
-    marginBottom: 14,
-  },
+  // Véhicule + Client
+  vcGrid: { flexDirection: 'row', gap: 10, marginBottom: 10 },
   vcBlock: {
     flex: 1,
     backgroundColor: '#f8faff',
     borderWidth: 1,
     borderColor: '#dde8f5',
     borderRadius: 4,
-    padding: 10,
-  },
-  vcLabel: { fontSize: 7, color: COLORS.textMuted, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 4 },
-  vcNom: { fontSize: 13, fontFamily: 'Helvetica-Bold', color: COLORS.blueDeep, marginBottom: 4 },
-  vcInfo: { fontSize: 8, color: '#555555', marginBottom: 2 },
-  vcMono: { fontSize: 8, color: '#555555', fontFamily: 'Helvetica', marginBottom: 2 },
-
-  // ── Travaux ───────────────────────────────────────────────
-  travauxSection: { marginBottom: 14 },
-  travauxContent: { flexDirection: 'row', gap: 12, alignItems: 'flex-start' },
-  travauxList: { flex: 1 },
-  qrBlock: { width: 92, alignItems: 'center', paddingTop: 8 },
-  qrImage: { width: 72, height: 72 },
-  qrLabel: { fontSize: 6, color: COLORS.textMuted, marginTop: 4, textTransform: 'uppercase' },
-  travailRow: { flexDirection: 'row', alignItems: 'flex-start', marginBottom: 5, gap: 6 },
-  travailBullet: { fontSize: 10, color: COLORS.blueElectric, fontFamily: 'Helvetica-Bold', marginTop: -1 },
-  travailText: { flex: 1, fontSize: 9, color: '#222222', lineHeight: 1.3 },
-
-  notesBox: {
-    marginTop: 8,
     padding: 8,
-    backgroundColor: '#fffbf0',
-    borderWidth: 1,
-    borderColor: '#f0d8a0',
-    borderRadius: 3,
   },
-  notesLabel: { fontSize: 7, color: '#8a6a00', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 3 },
-  notesText: { fontSize: 8, color: '#665500' },
+  vcLabel: { fontSize: 6.5, color: COLORS.textMuted, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 3 },
+  vcNom: { fontSize: 12, fontFamily: 'Helvetica-Bold', color: COLORS.blueDeep, marginBottom: 3 },
+  vcInfo: { fontSize: 7.5, color: '#555555', marginBottom: 1 },
+  vcMono: { fontSize: 7.5, color: '#555555', marginBottom: 1 },
 
-  piecesPreRow: {
-    flexDirection: 'row',
-    paddingVertical: 7,
-    paddingHorizontal: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: '#dde8f5',
-    backgroundColor: '#f4f8ff',
-    minHeight: 22,
-  },
-  controleSection: { marginBottom: 14 },
-  controleRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 6,
-    paddingVertical: 4,
-  },
+  // Travaux | Contrôles+QR — colonnes côte à côte
+  middleRow: { flexDirection: 'row', gap: 12, marginBottom: 10, alignItems: 'flex-start' },
+  travauxCol: { flex: 1 },
+  rightCol: { flex: 1, flexDirection: 'row', gap: 8, alignItems: 'flex-start' },
+  controlesCol: { flex: 1 },
+
+  travailRow: { flexDirection: 'row', alignItems: 'flex-start', marginBottom: 4, gap: 5 },
+  travailBullet: { fontSize: 9, color: COLORS.blueElectric, fontFamily: 'Helvetica-Bold', marginTop: -1 },
+  travailText: { flex: 1, fontSize: 8.5, color: '#222222', lineHeight: 1.3 },
+
   controleItem: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 5,
     paddingVertical: 4,
-    paddingHorizontal: 8,
+    paddingHorizontal: 6,
     borderWidth: 1,
     borderColor: '#dde8f5',
     borderRadius: 3,
     backgroundColor: '#f8faff',
     marginBottom: 4,
-    marginRight: 4,
   },
-  controleBox: {
-    width: 10,
-    height: 10,
-    borderWidth: 1,
-    borderColor: '#8899bb',
-    borderRadius: 2,
-  },
-  controleText: { fontSize: 7.5, color: '#333333' },
+  controleBox: { width: 9, height: 9, borderWidth: 1, borderColor: '#8899bb', borderRadius: 1 },
+  controleText: { fontSize: 7, color: '#333333' },
 
-  // ── Travaux à prévoir ─────────────────────────────────────
-  prevoir: {
-    marginBottom: 14,
-    padding: 10,
-    borderWidth: 1,
-    borderColor: '#dde8f5',
-    borderRadius: 4,
-    minHeight: 40,
-  },
+  qrBlock: { alignItems: 'center' },
+  qrImage: { width: 64, height: 64 },
+  qrLabel: { fontSize: 5.5, color: COLORS.textMuted, marginTop: 3, textTransform: 'uppercase', letterSpacing: 0.5 },
 
-  // ── Tableau travaux effectués ─────────────────────────────
-  tableSection: { marginBottom: 14 },
+  notesBox: {
+    marginTop: 6, padding: 6,
+    backgroundColor: '#fffbf0', borderWidth: 1, borderColor: '#f0d8a0', borderRadius: 3,
+  },
+  notesLabel: { fontSize: 6.5, color: '#8a6a00', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 2 },
+  notesText: { fontSize: 7.5, color: '#665500' },
+
+  // KPIs
+  kpiRow: { flexDirection: 'row', gap: 8, marginBottom: 10 },
+  kpi: { flex: 1, backgroundColor: '#f0f5ff', borderWidth: 1, borderColor: '#dde8f5', borderRadius: 4, padding: 6, alignItems: 'center' },
+  kpiVal: { fontSize: 12, fontFamily: 'Helvetica-Bold', color: COLORS.blueDeep },
+  kpiLabel: { fontSize: 6.5, color: COLORS.textMuted, marginTop: 2, textTransform: 'uppercase', letterSpacing: 0.5 },
+  kpiGain: { flex: 1, borderRadius: 4, padding: 6, alignItems: 'center', borderWidth: 1 },
+
+  // Tableau
+  tableSection: { marginBottom: 8 },
   tableHeader: {
     flexDirection: 'row',
     backgroundColor: COLORS.blueDeep,
-    paddingVertical: 6,
-    paddingHorizontal: 8,
+    paddingVertical: 5,
+    paddingHorizontal: 7,
     borderRadius: 3,
-    marginBottom: 1,
   },
-  thCell: { fontSize: 8, color: '#ffffff', fontFamily: 'Helvetica-Bold', textTransform: 'uppercase', letterSpacing: 0.6 },
+  thCell: { fontSize: 7.5, color: '#ffffff', fontFamily: 'Helvetica-Bold', textTransform: 'uppercase', letterSpacing: 0.5 },
+  tableRowPre: {
+    flexDirection: 'row', paddingVertical: 6, paddingHorizontal: 7,
+    borderBottomWidth: 1, borderBottomColor: '#dde8f5',
+    backgroundColor: '#f4f8ff', minHeight: 20,
+  },
   tableRow: {
-    flexDirection: 'row',
-    paddingVertical: 10,
-    paddingHorizontal: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: '#eef2fa',
-    minHeight: 28,
+    flexDirection: 'row', paddingVertical: 6, paddingHorizontal: 7,
+    borderBottomWidth: 1, borderBottomColor: '#eef2fa', minHeight: 20,
   },
   tableRowAlt: { backgroundColor: '#f8faff' },
-  tdCell: { fontSize: 8, color: '#333333' },
+  tdCell: { fontSize: 7.5, color: '#333333' },
 
-  // ── KPIs si clôturée ─────────────────────────────────────
-  kpiRow: { flexDirection: 'row', gap: 10, marginBottom: 14 },
-  kpi: { flex: 1, backgroundColor: '#f0f5ff', borderWidth: 1, borderColor: '#dde8f5', borderRadius: 4, padding: 8, alignItems: 'center' },
-  kpiVal: { fontSize: 14, fontFamily: 'Helvetica-Bold', color: COLORS.blueDeep },
-  kpiLabel: { fontSize: 7, color: COLORS.textMuted, marginTop: 2, textTransform: 'uppercase', letterSpacing: 0.6 },
-  kpiGain: { flex: 1, borderRadius: 4, padding: 8, alignItems: 'center', borderWidth: 1 },
+  // Travaux à prévoir
+  prevoir: {
+    marginBottom: 8, padding: 8,
+    borderWidth: 1, borderColor: '#dde8f5', borderRadius: 4, minHeight: 30,
+  },
 
-  // ── Signatures ────────────────────────────────────────────
-  sigRow: { flexDirection: 'row', gap: 12, marginTop: 8 },
+  // Signatures
+  sigRow: { flexDirection: 'row', gap: 10 },
   sigBox: {
-    flex: 1,
-    borderWidth: 1,
-    borderColor: '#dde8f5',
-    borderRadius: 4,
-    padding: 10,
-    minHeight: 60,
+    flex: 1, borderWidth: 1, borderColor: '#dde8f5', borderRadius: 4, padding: 8, minHeight: 52,
   },
-  sigTitle: { fontSize: 8, fontFamily: 'Helvetica-Bold', color: COLORS.blueDeep, textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 4 },
-  sigSub: { fontSize: 7, color: '#888888', marginBottom: 24 },
+  sigTitle: { fontSize: 7.5, fontFamily: 'Helvetica-Bold', color: COLORS.blueDeep, textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 3 },
+  sigSub: { fontSize: 6.5, color: '#888888', marginBottom: 18 },
   sigLine: { borderBottomWidth: 1, borderBottomColor: '#b0c0d8' },
-  sigDate: { fontSize: 7, color: '#888888', marginTop: 4 },
+  sigDate: { fontSize: 6.5, color: '#888888', marginTop: 3 },
 
-  // ── Barcode ───────────────────────────────────────────
-  barcodeSection: {
-    alignItems: 'flex-end',
-    marginBottom: 8,
-  },
-  barcodeImg: { width: 160, height: 40 },
-
-  // ── Footer ────────────────────────────────────────────────
+  // Footer
   footer: {
     position: 'absolute',
-    bottom: 14,
-    left: 32,
-    right: 32,
+    bottom: 12, left: 28, right: 28,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingTop: 6,
+    paddingTop: 5,
     borderTopWidth: 1,
     borderTopColor: '#dde8f5',
   },
-  footerLeft: { flexDirection: 'row', alignItems: 'center', gap: 6 },
-  footerLogoCircle: { width: 18, height: 18, borderRadius: 9, backgroundColor: COLORS.blueElectric, alignItems: 'center', justifyContent: 'center' },
-  footerLogoText: { fontSize: 7, color: '#ffffff', fontFamily: 'Helvetica-Bold' },
-  footerAppName: { fontSize: 7, fontFamily: 'Helvetica-Bold', color: COLORS.blueDeep },
-  footerBy: { fontSize: 6, color: COLORS.textMuted, marginTop: 1 },
-  footerCenter: { fontSize: 7, color: '#666666' },
-  footerRight: { fontSize: 7, color: '#888888' },
+  footerLeft: { flexDirection: 'row', alignItems: 'center', gap: 5 },
+  footerLogoCircle: {
+    width: 16, height: 16, borderRadius: 8,
+    backgroundColor: COLORS.blueElectric,
+    alignItems: 'center', justifyContent: 'center', overflow: 'hidden',
+  },
+  footerAppName: { fontSize: 6.5, fontFamily: 'Helvetica-Bold', color: COLORS.blueDeep },
+  footerBy: { fontSize: 6, color: COLORS.textMuted },
+  footerCenter: { fontSize: 6.5, color: '#666666' },
+  footerRight: { fontSize: 6.5, color: '#888888' },
 })
-
-// Lignes vides pour le tableau manuel
-const EMPTY_ROWS = 7
 
 export function FichePDF({ fiche, garage, logoSrc, qrCodeSrc }: Props) {
   const travailsLignes = fiche.travaux.split('\n').filter(Boolean)
   const interventionsConfirmees = parseInterventionsConfirmees(fiche.interventionsMetier)
   const allPiecesConfirmees = interventionsConfirmees.flatMap((i) => i.piecesConfirmees)
   const allControlesConfirmes = interventionsConfirmees.flatMap((i) => i.controlesConfirmes)
+  const controles = allControlesConfirmes.length > 0 ? allControlesConfirmes : DEFAULT_CONTROLES
   const tReel = fiche.tempsReel ?? 0
   const tFacture = fiche.tempsFacture ?? 0
   const delta = tFacture - tReel
   const tauxVal = fiche.montantHT && tFacture > 0 ? fiche.montantHT / tFacture : null
   const isGain = delta >= 0
   const isCloturee = fiche.statut === 'CLOTUREE'
+  const emptyRowsCount = Math.max(2, 5 - allPiecesConfirmees.length)
 
   return (
     <Document title={`${garage.nom} — ${fiche.numero}`} author="LIVO-APP">
       <Page size="A4" style={s.page}>
 
-        {/* Filigrane */}
         <View style={s.watermark} fixed>
           <Image src={logoSrc} style={s.watermarkImg} />
         </View>
@@ -338,13 +292,11 @@ export function FichePDF({ fiche, garage, logoSrc, qrCodeSrc }: Props) {
             {garage.email && <Text style={s.garageInfo}>{garage.email}</Text>}
             {garage.siret && <Text style={s.garageInfo}>SIRET : {garage.siret}</Text>}
           </View>
-          <View style={s.headerCenter} />
           <View style={s.headerRight}>
             <Text style={s.docTitle}>Fiche de Travaux</Text>
             <Text style={s.docNumero}>{fiche.numero}</Text>
             <Text style={s.docDate}>Ouverture : {formatDate(fiche.dateOuverture)}</Text>
             {fiche.dateFermeture && <Text style={s.docDate}>Clôture : {formatDate(fiche.dateFermeture)}</Text>}
-            
           </View>
         </View>
 
@@ -366,23 +318,33 @@ export function FichePDF({ fiche, garage, logoSrc, qrCodeSrc }: Props) {
           </View>
         </View>
 
-        {/* Travaux à effectuer */}
-        <View style={s.travauxSection}>
-          <Text style={s.sectionTitle}>Travaux à effectuer</Text>
-          <View style={s.travauxContent}>
-            <View style={s.travauxList}>
-              {travailsLignes.map((t, i) => (
-            <View key={i} style={s.travailRow}>
-              <Text style={s.travailBullet}>›</Text>
-              <Text style={s.travailText}>{t}</Text>
-            </View>
-          ))}
-          {fiche.notes && (
-            <View style={s.notesBox}>
-              <Text style={s.notesLabel}>Notes internes</Text>
-              <Text style={s.notesText}>{fiche.notes}</Text>
-            </View>
-          )}
+        {/* Travaux à effectuer | Contrôles + QR */}
+        <View style={s.middleRow}>
+          <View style={s.travauxCol}>
+            <Text style={s.sectionTitle}>Travaux à effectuer</Text>
+            {travailsLignes.map((t, i) => (
+              <View key={i} style={s.travailRow}>
+                <Text style={s.travailBullet}>›</Text>
+                <Text style={s.travailText}>{t}</Text>
+              </View>
+            ))}
+            {fiche.notes && (
+              <View style={s.notesBox}>
+                <Text style={s.notesLabel}>Notes internes</Text>
+                <Text style={s.notesText}>{fiche.notes}</Text>
+              </View>
+            )}
+          </View>
+
+          <View style={s.rightCol}>
+            <View style={s.controlesCol}>
+              <Text style={s.sectionTitle}>Contrôles à effectuer</Text>
+              {controles.map((c) => (
+                <View key={c} style={s.controleItem}>
+                  <View style={s.controleBox} />
+                  <Text style={s.controleText}>{c}</Text>
+                </View>
+              ))}
             </View>
             {qrCodeSrc && (
               <View style={s.qrBlock}>
@@ -392,10 +354,6 @@ export function FichePDF({ fiche, garage, logoSrc, qrCodeSrc }: Props) {
             )}
           </View>
         </View>
-
-        {/* Travaux à prévoir */}
-        <Text style={s.sectionTitle}>Travaux à prévoir</Text>
-        <View style={s.prevoir} />
 
         {/* KPIs si clôturée */}
         {isCloturee && tFacture > 0 && (
@@ -424,7 +382,7 @@ export function FichePDF({ fiche, garage, logoSrc, qrCodeSrc }: Props) {
               )}
               {tReel > 0 && (
                 <View style={[s.kpiGain, { backgroundColor: isGain ? '#f0fff4' : '#fff0f0', borderColor: isGain ? '#a0d8b0' : '#f0b0b0' }]}>
-                  <Text style={[s.kpiVal, { color: isGain ? COLORS.success : COLORS.error, fontSize: 11 }]}>
+                  <Text style={[s.kpiVal, { color: isGain ? COLORS.success : COLORS.error, fontSize: 10 }]}>
                     {isGain ? '+' : ''}{tauxVal ? formatEur(delta * tauxVal) : '—'}
                   </Text>
                   <Text style={[s.kpiLabel, { color: isGain ? COLORS.success : COLORS.error }]}>
@@ -436,46 +394,33 @@ export function FichePDF({ fiche, garage, logoSrc, qrCodeSrc }: Props) {
           </>
         )}
 
-        {/* Contrôles à effectuer */}
-        {allControlesConfirmes.length > 0 && (
-          <View style={s.controleSection}>
-            <Text style={s.sectionTitle}>Contrôles à effectuer</Text>
-            <View style={s.controleRow}>
-              {allControlesConfirmes.map((controle) => (
-                <View key={controle} style={s.controleItem}>
-                  <View style={s.controleBox} />
-                  <Text style={s.controleText}>{controle}</Text>
-                </View>
-              ))}
-            </View>
-          </View>
-        )}
-
         {/* Tableau travaux effectués */}
         <View style={s.tableSection}>
           <Text style={s.sectionTitle}>Travaux effectués</Text>
           <View style={s.tableHeader}>
-            <Text style={[s.thCell, { width: 35 }]}>Qté</Text>
+            <Text style={[s.thCell, { width: 32 }]}>Qté</Text>
             <Text style={[s.thCell, { flex: 1 }]}>Désignation</Text>
-            <Text style={[s.thCell, { width: 100 }]}>Référence</Text>
+            <Text style={[s.thCell, { width: 90 }]}>Référence</Text>
           </View>
-          {/* Pièces confirmées pré-remplies */}
           {allPiecesConfirmees.map((piece, i) => (
-            <View key={piece} style={i % 2 === 0 ? s.piecesPreRow : [s.piecesPreRow, { backgroundColor: '#eef3ff' }]}>
-              <Text style={[s.tdCell, { width: 35 }]}></Text>
+            <View key={piece} style={[s.tableRowPre, i % 2 !== 0 ? { backgroundColor: '#eef3ff' } : {}]}>
+              <Text style={[s.tdCell, { width: 32 }]}></Text>
               <Text style={[s.tdCell, { flex: 1 }]}>{piece}</Text>
-              <Text style={[s.tdCell, { width: 100 }]}></Text>
+              <Text style={[s.tdCell, { width: 90 }]}></Text>
             </View>
           ))}
-          {/* Lignes vides pour ajout manuel */}
-          {Array.from({ length: Math.max(3, EMPTY_ROWS - allPiecesConfirmees.length) }).map((_, i) => (
+          {Array.from({ length: emptyRowsCount }).map((_, i) => (
             <View key={i} style={i % 2 === 1 ? [s.tableRow, s.tableRowAlt] : s.tableRow}>
-              <Text style={[s.tdCell, { width: 35 }]}></Text>
+              <Text style={[s.tdCell, { width: 32 }]}></Text>
               <Text style={[s.tdCell, { flex: 1 }]}></Text>
-              <Text style={[s.tdCell, { width: 100 }]}></Text>
+              <Text style={[s.tdCell, { width: 90 }]}></Text>
             </View>
           ))}
         </View>
+
+        {/* Travaux à prévoir */}
+        <Text style={s.sectionTitle}>Travaux à prévoir</Text>
+        <View style={s.prevoir} />
 
         {/* Signatures */}
         <View style={s.sigRow}>
@@ -495,13 +440,11 @@ export function FichePDF({ fiche, garage, logoSrc, qrCodeSrc }: Props) {
         {/* Footer */}
         <View style={s.footer} fixed>
           <View style={s.footerLeft}>
-            <View style={{ alignItems: 'center' }}>
-              <View style={s.footerLogoCircle}>
-                <Image src={logoSrc} style={{ width: 25, height: 25 }} />
-              </View>
-              <Text style={s.footerBy}>by LYSMA Solutions</Text>
+            <View style={s.footerLogoCircle}>
+              <Image src={logoSrc} style={{ width: 16, height: 16 }} />
             </View>
             <View>
+              <Text style={s.footerAppName}>by LYSMA Solutions</Text>
               <Text style={s.footerBy}>{garage.nom}</Text>
             </View>
           </View>
