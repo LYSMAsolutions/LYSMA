@@ -29,7 +29,7 @@ import {
   Trash,
   IdentificationCard,
   Cube,
-  Activity,
+  Pulse,
   SignOut,
 } from '@phosphor-icons/react'
 import type { Icon } from '@phosphor-icons/react'
@@ -76,7 +76,7 @@ const NAV: NavEntry[] = [
   },
   {
     section: 'Opérations',
-    Icon: Activity,
+    Icon: Pulse,
     items: [
       { href: '/messagerie', label: 'Messagerie', Icon: Envelope, badge: 'messages' },
       { href: '/erreurs', label: 'Erreurs', Icon: Bug, badge: 'erreurs' },
