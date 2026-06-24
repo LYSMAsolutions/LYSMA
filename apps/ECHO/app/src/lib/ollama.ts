@@ -27,8 +27,8 @@ type OllamaStructuredAnswer = {
 };
 
 const DEFAULT_OLLAMA_BASE_URL = "http://localhost:11434";
-const DEFAULT_OLLAMA_MODEL = "gemma3:1b";
-const DEFAULT_OLLAMA_TIMEOUT_MS = 60000;
+const DEFAULT_OLLAMA_MODEL = "mistral:7b";
+const DEFAULT_OLLAMA_TIMEOUT_MS = 120000;
 const MAX_REPLY_WORDS = 80;
 const FINAL_ANSWER_SCHEMA = {
   type: "object",
@@ -162,9 +162,9 @@ export async function askOllama(
     stream: false,
     format: FINAL_ANSWER_SCHEMA,
     options: {
-      num_ctx: 4096,
-      num_predict: 96,
-      temperature: 0.1,
+      num_ctx: 8192,
+      num_predict: 150,
+      temperature: 0.15,
       seed: 42
     }
   };

@@ -431,6 +431,59 @@ export async function saveDecision(input: SaveDecisionInput) {
   return result.id;
 }
 
+export async function listMemoryEntries(filter?: { status?: string }) {
+  const prisma = getPrismaClient();
+  if (!prisma) return [];
+
+  return prisma.echoMemoryEntry.findMany({
+    where: filter?.status ? { status: filter.status } : undefined,
+    orderBy: { createdAt: "desc" },
+    select: {
+      id: true,
+      type: true,
+      sensitivity: true,
+      confidence: true,
+      humanSummary: true,
+      sourceContent: true,
+      status: true,
+      validated: true,
+      category: true,
+      source: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+  });
+}
+
+export async function updateMemoryEntryStatus(
+  id: string,
+  status: MemoryStatus,
+  validated: boolean
+) {
+  const prisma = getPrismaClient();
+  if (!prisma) return null;
+
+  return prisma.echoMemoryEntry.update({
+    where: { id },
+    data: { status, validated, updatedAt: new Date() },
+    select: { id: true, status: true, validated: true },
+  });
+}
+
+export async function deleteMemoryEntry(id: string) {
+  const prisma = getPrismaClient();
+  if (!prisma) return null;
+  return prisma.echoMemoryEntry.delete({ where: { id }, select: { id: true } });
+}
+
+export async function countValidatedMemories() {
+  const prisma = getPrismaClient();
+  if (!prisma) return 0;
+  return prisma.echoMemoryEntry.count({
+    where: { status: { in: ["valide", "autonome"] } },
+  });
+}
+
 export async function checkDatabaseConnection() {
   const prisma = getPrismaClient();
 

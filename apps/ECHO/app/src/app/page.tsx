@@ -3,18 +3,23 @@ import Link from "next/link";
 const statusItems = [
   {
     label: "Ollama",
-    value: "à vérifier",
+    value: "actif",
     detail: "Endpoint local http://localhost:11434"
   },
   {
     label: "Modèle",
-    value: "gemma3:1b",
-    detail: "Réponse générée localement"
+    value: "mistral:7b",
+    detail: "Réponse générée localement — prompt V2.3 respecté"
   },
   {
     label: "Mémoire",
-    value: "documentaire / PostgreSQL prévu",
-    detail: "Historique V2 stocké côté navigateur"
+    value: "PostgreSQL active",
+    detail: "Injection au démarrage · extraction après chaque réponse"
+  },
+  {
+    label: "IdentityEngine",
+    value: "connecté",
+    detail: "Condition réelle basée sur les mémoires validées"
   }
 ];
 
@@ -25,7 +30,7 @@ export default function HomePage() {
         <div className="grid w-full gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
           <div className="space-y-8">
             <div className="inline-flex rounded-lg border border-echo-line bg-black/30 px-3 py-2 text-sm text-zinc-300">
-              Local cockpit / V2 privée
+              Local cockpit / V3 privée
             </div>
 
             <div className="space-y-5">
@@ -36,9 +41,9 @@ export default function HomePage() {
                 IA personnelle privée de Mathieu
               </p>
               <p className="max-w-2xl leading-7 text-zinc-400">
-                Une première interface locale pour dialoguer avec ECHO via Ollama,
-                garder un historique simple dans le navigateur et préparer la
-                future mémoire PostgreSQL.
+                Mémoire vivante PostgreSQL — ECHO injecte ses souvenirs validés au démarrage
+                de chaque conversation et extrait automatiquement de nouveaux candidats
+                après chaque échange.
               </p>
             </div>
 
@@ -49,9 +54,12 @@ export default function HomePage() {
               >
                 Ouvrir ECHO
               </Link>
-              <span className="rounded-lg border border-echo-line bg-echo-panel px-5 py-3 text-zinc-300">
-                100% local
-              </span>
+              <Link
+                href="/memoire"
+                className="rounded-lg border border-echo-line bg-echo-panel px-5 py-3 text-zinc-300 transition hover:border-echo-cyan hover:text-echo-cyan"
+              >
+                Gérer la mémoire
+              </Link>
             </div>
           </div>
 
@@ -59,9 +67,9 @@ export default function HomePage() {
             <div className="mb-5 flex items-center justify-between gap-4 border-b border-echo-line pb-4">
               <div>
                 <p className="text-sm text-zinc-400">Statut système</p>
-                <h2 className="text-2xl font-semibold text-white">ECHO V2</h2>
+                <h2 className="text-2xl font-semibold text-white">ECHO V3</h2>
               </div>
-              <div className="h-3 w-3 rounded-full bg-echo-amber shadow-[0_0_18px_rgba(244,201,93,0.65)]" />
+              <div className="h-3 w-3 rounded-full bg-echo-green shadow-[0_0_18px_rgba(80,250,123,0.65)]" />
             </div>
 
             <div className="space-y-4">

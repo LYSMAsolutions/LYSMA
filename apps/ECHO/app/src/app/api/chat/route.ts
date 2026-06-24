@@ -4,6 +4,9 @@ import { getDirectAnswer } from "@/lib/direct-answer";
 import { saveChatMessage, type ChatRole } from "@/lib/db";
 import { askOllama, type EchoChatMessage } from "@/lib/ollama";
 import { sanitizeConversation } from "@/lib/response-safety";
+import { buildMemoryContextMessage } from "@/lib/memory-context";
+import { extractAndStoreMemories } from "@/lib/memory-extractor";
+import { identityEngine } from "@/lib/engines/identityEngine";
 
 export const runtime = "nodejs";
 
@@ -199,13 +202,22 @@ export async function POST(request: Request) {
       return NextResponse.json({ reply: directAnswer.reply });
     }
 
+    // Charger les mémoires actives et l'état identité en parallèle
+    const [memoryContextMessage, identityState] = await Promise.all([
+      buildMemoryContextMessage(),
+      identityEngine.getEnrichedState(),
+    ]);
+
+    const identityNote = identityState.canSuggestFirstName
+      ? `\n[IDENTITY] Tu connais suffisamment Mathieu pour personnaliser tes réponses avec son prénom.`
+      : "";
+
     const messages: EchoChatMessage[] = [
       {
         role: "system",
-        content: ECHO_SYSTEM_PROMPT
+        content: ECHO_SYSTEM_PROMPT + identityNote
       },
-      // No database memory is read in this version. When it is added, its
-      // context messages must be inserted here, before history.
+      ...(memoryContextMessage ? [memoryContextMessage] : []),
       ...sanitizedHistory,
       {
         role: "user",
@@ -242,7 +254,7 @@ export async function POST(request: Request) {
 
     const reply = await askOllama(messages, requestId);
 
-    await saveChatMessageBestEffort({
+    const assistantMessageId = await saveChatMessageBestEffort({
       role: "assistant",
       content: reply,
       model,
@@ -254,6 +266,11 @@ export async function POST(request: Request) {
         promptSizeChars,
         messageCount: messages.length
       }
+    });
+
+    // Extraction asynchrone — ne bloque pas la réponse
+    extractAndStoreMemories(message, reply, assistantMessageId).catch((err) => {
+      console.error(`[ECHO][api/chat][${requestId}] memory_extraction_error`, err);
     });
 
     console.log(`[ECHO][api/chat][${requestId}] success`, {
