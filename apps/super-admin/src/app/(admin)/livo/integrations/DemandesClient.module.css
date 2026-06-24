@@ -164,3 +164,169 @@
 .btnRefuse:hover:not(:disabled) {
   background: rgba(255, 64, 64, 0.2);
 }
+
+/* Integration column */
+.integrationActive {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.btnCreate {
+  padding: var(--space-1) var(--space-3);
+  background: rgba(26, 111, 255, 0.1);
+  border: 1px solid rgba(26, 111, 255, 0.3);
+  border-radius: var(--radius-md);
+  color: var(--color-blue-electric);
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
+  font-family: var(--font-sans);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background var(--duration-fast) var(--ease-default);
+}
+
+.btnCreate:hover {
+  background: rgba(26, 111, 255, 0.18);
+}
+
+.inlineForm {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  align-items: center;
+  min-width: 260px;
+}
+
+.select {
+  background: var(--color-bg-input);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-md);
+  padding: var(--space-1) var(--space-2);
+  font-size: var(--text-xs);
+  font-family: var(--font-sans);
+  color: var(--color-text-primary);
+  height: 28px;
+}
+
+.select:focus {
+  outline: none;
+  border-color: var(--color-border-focus);
+}
+
+.inlineInput {
+  width: 140px;
+  background: var(--color-bg-input);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-md);
+  padding: var(--space-1) var(--space-2);
+  font-size: var(--text-xs);
+  font-family: var(--font-sans);
+  color: var(--color-text-primary);
+  height: 28px;
+}
+
+.inlineInput:focus {
+  outline: none;
+  border-color: var(--color-border-focus);
+}
+
+.inlineError {
+  width: 100%;
+  font-size: var(--text-xs);
+  color: var(--color-error);
+  margin: 0;
+}
+
+/* Credentials box */
+.credentialsBox {
+  background: rgba(26, 111, 255, 0.08);
+  border: 1px solid rgba(26, 111, 255, 0.3);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.credentialsTitle {
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.credentialsNote {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  font-style: italic;
+  margin: 0;
+}
+
+.credentialsList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.credRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.credLabel {
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
+  color: var(--color-text-muted);
+  width: 100px;
+  flex-shrink: 0;
+}
+
+.credValue {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 2px var(--space-2);
+  color: var(--color-cyan);
+  word-break: break-all;
+}
+
+.copyBtn {
+  padding: 2px var(--space-2);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-xs);
+  font-family: var(--font-sans);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: border-color var(--duration-fast) var(--ease-default);
+}
+
+.copyBtn:hover {
+  border-color: var(--color-blue-electric);
+  color: var(--color-text-primary);
+}
+
+.credentialsWarning {
+  font-size: var(--text-xs);
+  color: var(--color-warning);
+  font-weight: var(--font-medium);
+  margin: 0;
+}
+
+.credentialsClose {
+  align-self: flex-end;
+  padding: var(--space-1) var(--space-3);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-md);
+  font-size: var(--text-xs);
+  font-family: var(--font-sans);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+}

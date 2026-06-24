@@ -1,6 +1,6 @@
 import { auth } from '@/lib/auth'
 import { redirect } from 'next/navigation'
-import { getLivoDemandes } from '@/lib/livo-api'
+import { getLivoDemandes, getLivoPartners, getLivoGarageLinks } from '@/lib/livo-api'
 import Link from 'next/link'
 import { StatCard, PageHeader } from '@/components/ui'
 import { DemandesClient } from './DemandesClient'
@@ -12,7 +12,11 @@ export default async function LivoIntegrationsPage() {
   const session = await auth()
   if (!session) redirect('/connexion')
 
-  const toutes = await getLivoDemandes()
+  const [toutes, partners, garageLinks] = await Promise.all([
+    getLivoDemandes(),
+    getLivoPartners(),
+    getLivoGarageLinks(),
+  ])
 
   const enAttente = toutes.filter(d => d.statut === 'EN_ATTENTE')
   const approuvees = toutes.filter(d => d.statut === 'APPROUVEE')
@@ -24,6 +28,7 @@ export default async function LivoIntegrationsPage() {
         title="Intégrations QR LIVO"
         description="Demandes d'intégration logiciel soumises par les garages."
       >
+        <Link href="/livo/partenaires" className={styles.btnSecondary}>Gérer les partenaires →</Link>
         <Link href="/livo" className={styles.btnSecondary}>← Retour LIVO</Link>
       </PageHeader>
 
@@ -42,7 +47,7 @@ export default async function LivoIntegrationsPage() {
           </span>
         </div>
       ) : (
-        <DemandesClient demandes={toutes} />
+        <DemandesClient demandes={toutes} partners={partners} garageLinks={garageLinks} />
       )}
     </div>
   )

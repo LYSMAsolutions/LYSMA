@@ -167,6 +167,79 @@ export async function traiteLivoDemande(id: string, statut: 'APPROUVEE' | 'REFUS
   return res.json()
 }
 
+export type Partner = {
+  id: string
+  name: string
+  key: string
+  active: boolean
+  createdAt: string
+  integrationsCount: number
+}
+
+export type GarageLink = {
+  id: string
+  externalGarageId: string
+  active: boolean
+  qrKeyId: string
+  createdAt: string
+  partner: { id: string; name: string; key: string }
+  garage: { id: string; nom: string; ville: string | null }
+  ordersCount: number
+}
+
+export type Credentials = {
+  partnerKey: string
+  apiSecret: string
+  externalGarageId: string
+}
+
+export async function getLivoPartners(): Promise<Partner[]> {
+  try {
+    const res = await fetch(`${LIVO_API_URL}/api/internal/integrations/partners`, {
+      headers: headers(),
+      next: { revalidate: 0 },
+    })
+    if (!res.ok) throw new Error(`HTTP ${res.status}`)
+    const data = await res.json()
+    return data.partners ?? []
+  } catch (err) {
+    console.error('LIVO partners API error:', err)
+    return []
+  }
+}
+
+export async function getLivoGarageLinks(): Promise<GarageLink[]> {
+  try {
+    const res = await fetch(`${LIVO_API_URL}/api/internal/integrations/garage-links`, {
+      headers: headers(),
+      next: { revalidate: 0 },
+    })
+    if (!res.ok) throw new Error(`HTTP ${res.status}`)
+    const data = await res.json()
+    return data.integrations ?? []
+  } catch (err) {
+    console.error('LIVO garage-links API error:', err)
+    return []
+  }
+}
+
+export async function getLivoGarageLinkCredentials(
+  id: string
+): Promise<{ credentials: Credentials; endpoint: string } | null> {
+  try {
+    const res = await fetch(
+      `${LIVO_API_URL}/api/internal/integrations/garage-links/${id}/credentials`,
+      { headers: headers(), next: { revalidate: 0 } }
+    )
+    if (!res.ok) return null
+    const data = await res.json()
+    return { credentials: data.credentials, endpoint: data.endpoint }
+  } catch (err) {
+    console.error('LIVO credentials API error:', err)
+    return null
+  }
+}
+
 export async function restoreLivoTrashItem(type: string, id: string, userId?: string) {
   const res = await fetch(`${LIVO_API_URL}/api/internal/trash/${type}/${id}/restore`, {
     method: 'POST',
