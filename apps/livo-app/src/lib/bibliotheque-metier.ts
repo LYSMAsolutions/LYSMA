@@ -35,7 +35,13 @@ type BibliothequeMetier = {
 const data = bibliotheque as BibliothequeMetier
 
 export const bibliothequeMetierMeta = data.meta
-export const interventionsMetier = data.interventions
+export const interventionsMetier: InterventionMetier[] = data.interventions.map((i) => ({
+  ...i,
+  pieces_suggerees: i.pieces_suggerees ?? [],
+  controles_suggeres: i.controles_suggeres ?? [],
+  operations_fin: i.operations_fin ?? [],
+  synonymes: i.synonymes ?? [],
+}))
 
 const FREQUENCY_SCORE: Record<InterventionFrequence, number> = {
   'Très fréquent': 4,
