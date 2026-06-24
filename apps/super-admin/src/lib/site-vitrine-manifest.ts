@@ -6,6 +6,7 @@ export type ShowcaseManifestItem = {
   kind: ShowcaseKind
   entry: string
   relativePath: string
+  interne?: boolean
   repository?: string
   repoPathBase?: string
   packageName?: string
@@ -30,9 +31,18 @@ export const SHOWCASE_MANIFEST: ShowcaseManifestItem[] = [
     scripts: ['dev', 'build', 'start', 'check'],
   },
   {
+    id: 'le-rex',
+    name: 'Le Rex',
+    kind: 'next',
+    entry: 'next dev',
+    relativePath: '../../../../LE REX',
+    scripts: ['dev', 'build', 'start'],
+  },
+  {
     id: 'lysma-hub',
     name: 'Lysma Hub',
     kind: 'static',
+    interne: true,
     entry: 'pnpm run build -> dist',
     relativePath: '../site-vitrine/lysma-hub',
     scripts: ['dev', 'build', 'start', 'check'],
@@ -41,6 +51,7 @@ export const SHOWCASE_MANIFEST: ShowcaseManifestItem[] = [
     id: 'calculateur-eliquide',
     name: 'Calculateur E-liquide',
     kind: 'next',
+    interne: true,
     entry: 'pnpm --filter calculateur-eliquide run dev',
     relativePath: '../site-vitrine/calculateur-eliquide',
     packageName: 'calculateur-eliquide',
@@ -59,4 +70,8 @@ export async function getShowcaseOverviewSites(): Promise<ShowcaseOverview[]> {
     files: 0,
     status: 'present',
   }))
+}
+
+export function getClientSites(): ShowcaseManifestItem[] {
+  return SHOWCASE_MANIFEST.filter((s) => !s.interne)
 }

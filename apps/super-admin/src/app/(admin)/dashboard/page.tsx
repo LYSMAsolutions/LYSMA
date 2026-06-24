@@ -1,6 +1,6 @@
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
-import { getLivoGarages } from '@/lib/livo-api'
+import { getLivoGarages, getLivoDemandes } from '@/lib/livo-api'
 import { getPublishingStatus } from '@/lib/publishing'
 import { getShowcaseOverviewSites } from '@/lib/site-vitrine-manifest'
 import { redirect } from 'next/navigation'
@@ -25,6 +25,7 @@ export default async function DashboardPage() {
     messagesNonLus,
     erreursOuvertes,
     auditLogs,
+    demandesQR,
   ] = await Promise.all([
     prisma.client.findMany({ orderBy: { createdAt: 'desc' }, take: 6 }),
     prisma.message.findMany({ where: { statut: 'NOUVEAU' }, orderBy: { createdAt: 'desc' }, take: 6 }),
@@ -36,6 +37,7 @@ export default async function DashboardPage() {
     prisma.message.count({ where: { statut: 'NOUVEAU' } }),
     prisma.errorReport.count({ where: { statut: { not: 'RESOLU' } } }),
     prisma.auditLog.findMany({ orderBy: { createdAt: 'desc' }, take: 7 }),
+    getLivoDemandes().catch(() => []),
   ])
 
   const publishing = getPublishingStatus()
@@ -44,6 +46,8 @@ export default async function DashboardPage() {
       ? `${publishing.repository} / ${publishing.branch} → ${publishing.publishBranch}`
       : `${publishing.repository} / ${publishing.branch}`
     : 'GITHUB_TOKEN + repository manquants'
+
+  const demandesEnAttente = demandesQR.filter((d) => d.statut === 'EN_ATTENTE')
 
   const trialUrgents = clients.filter((client) => {
     if (client.statut !== 'TRIAL' || !client.trialFinAt) return false
@@ -61,6 +65,18 @@ export default async function DashboardPage() {
         <Link href="/erreurs" className={styles.btnSecondary}>Erreurs</Link>
         <Link href="/sites" className={styles.btnSecondary}>Sites</Link>
       </PageHeader>
+
+      {demandesEnAttente.length > 0 && (
+        <Link href="/livo/integrations" className={styles.alertBanner}>
+          <span className={styles.alertDot} />
+          <span>
+            <strong>{demandesEnAttente.length} demande{demandesEnAttente.length > 1 ? 's' : ''} d&apos;intégration QR LIVO</strong>
+            {' '}en attente de traitement —{' '}
+            {demandesEnAttente.map((d) => d.garage.nom).join(', ')}
+          </span>
+          <span className={styles.alertAction}>Traiter →</span>
+        </Link>
+      )}
 
       <section className={styles.statsGrid} aria-label="Indicateurs de supervision">
         <StatCard label="Clients total" value={totalClients} color="cyan" />

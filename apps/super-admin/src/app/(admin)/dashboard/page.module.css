@@ -5,6 +5,46 @@
   animation: slideIn var(--duration-base) var(--ease-default) both;
 }
 
+/* Alert banner */
+.alertBanner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background: rgba(240, 160, 32, 0.08);
+  border: 1px solid rgba(240, 160, 32, 0.35);
+  border-radius: var(--radius-lg);
+  color: var(--color-text-primary);
+  text-decoration: none;
+  font-size: var(--text-sm);
+  transition: border-color var(--duration-fast) var(--ease-default);
+}
+
+.alertBanner:hover { border-color: var(--color-gold); }
+
+.alertDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-gold);
+  box-shadow: 0 0 8px var(--color-gold);
+  flex-shrink: 0;
+  animation: alertPulse 2s ease-in-out infinite;
+}
+
+@keyframes alertPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.alertAction {
+  margin-left: auto;
+  font-weight: var(--font-semibold);
+  color: var(--color-gold);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
 .statsGrid {
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
