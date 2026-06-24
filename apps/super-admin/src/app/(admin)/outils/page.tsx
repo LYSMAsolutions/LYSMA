@@ -5,6 +5,7 @@ import { prisma } from '@/lib/prisma'
 import { getLysmaTools } from '@/lib/tools'
 import { getShowcaseOverviewSites } from '@/lib/site-vitrine-manifest'
 import { getPublishingStatus } from '@/lib/publishing'
+import { PageHeader, Card, Badge } from '@/components/ui'
 import styles from './page.module.css'
 
 export const dynamic = 'force-dynamic'
@@ -60,10 +61,10 @@ export default async function OutilsPage() {
 
   return (
     <main className={styles.page}>
-      <div className={styles.termHeader}>
-        <span className={styles.termPrompt}>admin@lysma</span>
-        <span className={styles.termCmd}> $ outils --inventory --access</span>
-      </div>
+      <PageHeader
+        title="Outils"
+        description="Inventaire des outils LYSMA, santé des publications et derniers accès."
+      />
 
       <section className={styles.grid}>
         {tools.map((tool) => (

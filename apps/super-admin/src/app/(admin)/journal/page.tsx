@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/prisma'
-import styles from './page.module.css'
+import { PageHeader, Card, Badge, Table, Thead, Tbody, Th, Td, EmptyRow } from '@/components/ui'
 
 export const dynamic = 'force-dynamic'
 
@@ -30,66 +30,54 @@ export default async function JournalPage({
   })
 
   return (
-    <main className={styles.page}>
-      <div className={styles.termHeader}>
-        <span className={styles.termPrompt}>root@lysma</span>
-        <span>:</span>
-        <span className={styles.termCmd}>~/journal</span>
-      </div>
+    <main>
+      <PageHeader
+        title="Journal d'activité"
+        description="Historique des actions sensibles : publication, restauration, accès, messages, erreurs et modifications."
+      />
 
-      <section className={styles.hero}>
-        <div>
-          <span className={styles.eyebrow}>audit</span>
-          <h1>Journal d'activite</h1>
-          <p>Historique des actions sensibles : publication, restauration, acces, messages, erreurs et modifications.</p>
-        </div>
-        <div className={styles.statCard}>
-          <span>lignes</span>
-          <strong>{logs.length}</strong>
-        </div>
-      </section>
-
-      <section className={styles.panel}>
-        <div className={styles.panelHeader}>
-          <span className={styles.panelTitle}>// audit_logs</span>
-          <span className={styles.panelMeta}>120 derniers evenements</span>
-        </div>
-
-        {logs.length === 0 ? (
-          <div className={styles.empty}>Aucune action auditee.</div>
-        ) : (
-          <table className={styles.table}>
-            <thead>
-              <tr>
-                <th>date</th>
-                <th>outil</th>
-                <th>action</th>
-                <th>cible</th>
-                <th>acteur</th>
-                <th>resume</th>
-              </tr>
-            </thead>
-            <tbody>
-              {logs.map((log) => (
+      <Card>
+        <Table>
+          <Thead>
+            <tr>
+              <Th>Date</Th>
+              <Th>Outil</Th>
+              <Th>Action</Th>
+              <Th>Cible</Th>
+              <Th>Acteur</Th>
+              <Th>Résumé</Th>
+            </tr>
+          </Thead>
+          <Tbody>
+            {logs.length === 0 ? (
+              <EmptyRow colSpan={6} message="Aucune action auditée." />
+            ) : (
+              logs.map((log) => (
                 <tr key={log.id}>
-                  <td>{formatDate(log.createdAt)}</td>
-                  <td><span className={styles.tag}>{log.outil}</span></td>
-                  <td className={log.statut === 'ERROR' ? styles.red : styles.green}>{log.action}</td>
-                  <td>
-                    <strong>{log.cibleType}</strong>
-                    <small>{log.cibleId ?? '-'}</small>
-                  </td>
-                  <td>{log.acteurEmail ?? log.acteurId ?? 'systeme'}</td>
-                  <td>
-                    <strong>{log.resume ?? '-'}</strong>
-                    {log.erreur ? <small>{log.erreur}</small> : null}
-                  </td>
+                  <Td>{formatDate(log.createdAt)}</Td>
+                  <Td>
+                    <Badge>{log.outil}</Badge>
+                  </Td>
+                  <Td>
+                    <Badge variant={log.statut === 'ERROR' ? 'error' : 'success'}>
+                      {log.action}
+                    </Badge>
+                  </Td>
+                  <Td>
+                    <div>{log.cibleType}</div>
+                    {log.cibleId && <div style={{ color: 'var(--color-text-muted)', fontSize: 'var(--text-xs)' }}>{log.cibleId}</div>}
+                  </Td>
+                  <Td>{log.acteurEmail ?? log.acteurId ?? 'système'}</Td>
+                  <Td>
+                    <div>{log.resume ?? '—'}</div>
+                    {log.erreur && <div style={{ color: 'var(--color-error)', fontSize: 'var(--text-xs)' }}>{log.erreur}</div>}
+                  </Td>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-      </section>
+              ))
+            )}
+          </Tbody>
+        </Table>
+      </Card>
     </main>
   )
 }

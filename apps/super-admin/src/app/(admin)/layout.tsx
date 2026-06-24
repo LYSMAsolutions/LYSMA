@@ -19,10 +19,10 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     <Shell
       sidebar={
         <Sidebar
-          messagesNonLus={nbMessages}
-          erreursOuvertes={nbErrors}
           userName={session.user?.name ?? 'Admin'}
           userEmail={session.user?.email ?? ''}
+          messagesNonLus={nbMessages}
+          erreursOuvertes={nbErrors}
         />
       }
       header={<Header />}

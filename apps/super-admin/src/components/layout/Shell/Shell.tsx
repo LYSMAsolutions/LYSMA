@@ -10,7 +10,7 @@ type Props = {
 export function Shell({ children, sidebar, header }: Props) {
   return (
     <div className={styles.shell}>
-      <div className={styles.sidebar}>{sidebar}</div>
+      {sidebar}
       <div className={styles.main}>
         <div className={styles.header}>{header}</div>
         <div className={styles.content}>{children}</div>

@@ -3,6 +3,7 @@ import { auth } from '@/lib/auth'
 import { getShowcaseOverviewSites } from '@/lib/site-vitrine-manifest'
 import { getWorkspaceRoot } from '@/lib/workspace'
 import { RootWorkspaceClient } from './RootWorkspaceClient'
+import { PageHeader } from '@/components/ui'
 import styles from './page.module.css'
 
 export const dynamic = 'force-dynamic'
@@ -15,10 +16,10 @@ export default async function RootPage() {
 
   return (
     <main className={styles.page}>
-      <div className={styles.termHeader}>
-        <span className={styles.termPrompt}>root@lysma</span>
-        <span className={styles.termCmd}> $ workspace --control</span>
-      </div>
+      <PageHeader
+        title="Workspace"
+        description="Vue système du monorepo LYSMA — apps détectées, sites vitrine, contrôle racine."
+      />
 
       <section className={styles.statsGrid}>
         <StatCard label="workspace" value={getWorkspaceRoot()} tone="cyan" compact />

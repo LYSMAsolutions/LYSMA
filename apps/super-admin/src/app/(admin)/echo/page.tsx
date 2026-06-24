@@ -1,7 +1,7 @@
 import { prisma } from '@/lib/prisma'
 import { getEchoConfig } from '@/lib/echo'
 import { EchoClient } from './EchoClient'
-import styles from './page.module.css'
+import { PageHeader } from '@/components/ui'
 
 export const dynamic = 'force-dynamic'
 
@@ -83,11 +83,11 @@ export default async function EchoPage() {
   }))
 
   return (
-    <main className={styles.page}>
-      <div className={styles.termHeader}>
-        <span className={styles.termPrompt}>mathieu@lysma</span>
-        <span className={styles.termCmd}> $ echo --personal --memory</span>
-      </div>
+    <main>
+      <PageHeader
+        title="ECHO"
+        description="Assistant IA personnel — mémoire, hypothèses, décisions."
+      />
 
       <EchoClient
         initialMessages={messages}
@@ -116,3 +116,4 @@ export default async function EchoPage() {
     </main>
   )
 }
+

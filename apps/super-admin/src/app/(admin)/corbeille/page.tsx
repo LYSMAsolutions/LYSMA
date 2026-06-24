@@ -3,6 +3,7 @@ import { fetchPmaTrash } from '@/lib/pma-api'
 import { prisma } from '@/lib/prisma'
 import styles from './page.module.css'
 import { RestoreTrashButton } from './RestoreTrashButton'
+import { PageHeader } from '@/components/ui'
 
 export const dynamic = 'force-dynamic'
 
@@ -54,21 +55,12 @@ export default async function CorbeillePage() {
 
   return (
     <main className={styles.page}>
-      <div className={styles.termHeader}>
-        <span className={styles.termPrompt}>root@lysma</span>
-        <span>:</span>
-        <span className={styles.termCmd}>~/corbeille</span>
-      </div>
+      <PageHeader
+        title="Corbeille globale"
+        description="Les suppressions récupérables des outils sont centralisées ici : absences LIVO, utilisateurs PMA, magasins PMA et magasiniers PMA."
+      />
 
       <section className={styles.hero}>
-        <div>
-          <span className={styles.eyebrow}>recuperation</span>
-          <h1>Corbeille globale</h1>
-          <p>
-            Les suppressions recuperables des outils sont centralisees ici : absences LIVO, utilisateurs PMA,
-            magasins PMA et magasiniers PMA.
-          </p>
-        </div>
         <div className={styles.statGrid}>
           <div className={styles.statCard}>
             <span>total</span>

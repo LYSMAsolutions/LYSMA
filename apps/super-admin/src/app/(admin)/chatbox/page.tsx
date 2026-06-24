@@ -7,6 +7,7 @@ import { buildChatboxInsights, getChatboxAnalyticsTags, type ChatboxInsights } f
 import { buildCodexContext, conversationKey, formatChatLogDate, getDuplicateOf } from '@/lib/chatbox-review'
 import { prisma } from '@/lib/prisma'
 import { CopyChatContextButton } from './CopyChatContextButton'
+import { PageHeader } from '@/components/ui'
 import styles from './page.module.css'
 
 export const dynamic = 'force-dynamic'
@@ -202,18 +203,12 @@ export default async function ChatboxPage({
 
   return (
     <main className={styles.page}>
-      <div className={styles.termHeader}>
-        <span className={styles.termPrompt}>root@lysma</span>
-        <span>:</span>
-        <span className={styles.termCmd}>~/chatbox</span>
-      </div>
+      <PageHeader
+        title="Chatbox"
+        description="Questions utilisateurs, réponses assistant, qualité et contexte par chatbox."
+      />
 
       <section className={styles.hero}>
-        <div>
-          <span className={styles.eyebrow}>conversations IA</span>
-          <h1>Chatbox</h1>
-          <p>Questions utilisateurs, reponses assistant, qualite et contexte par chatbox.</p>
-        </div>
         <div className={styles.statGrid}>
           <Stat label="logs_total" value={data?.total ?? 0} />
           <Stat label="sources" value={sourceCount} />

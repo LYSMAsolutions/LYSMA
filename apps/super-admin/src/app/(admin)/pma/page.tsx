@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation'
 import { auth } from '@/lib/auth'
 import { fetchPmaAccountRequests, fetchPmaCustomers, getPmaBaseUrl } from '@/lib/pma-api'
 import PmaApproveButton from './PmaApproveButton'
+import { PageHeader } from '@/components/ui'
 import styles from './page.module.css'
 
 export const dynamic = 'force-dynamic'
@@ -21,23 +22,14 @@ export default async function PmaPage() {
 
   return (
     <main className={styles.page}>
-      <div className={styles.termHeader}>
-        <span className={styles.termPrompt}>admin@lysma</span>
-        <span className={styles.termCmd}> $ pma --requests --customers</span>
-      </div>
-
-      <section className={styles.hero}>
-        <div>
-          <span className={styles.kicker}>portail-pma</span>
-          <h1>Centre de controle PMA</h1>
-          <p>
-            Demandes d'ouverture, clients LYSMA et acces distributeurs. Source : {getPmaBaseUrl()}
-          </p>
-        </div>
-        <a className={styles.openTool} href={getPmaBaseUrl()} target="_blank" rel="noreferrer">
-          ouvrir outil
+      <PageHeader
+        title="Portail PMA"
+        description={`Demandes d'ouverture, clients LYSMA et accès distributeurs. Source : ${getPmaBaseUrl()}`}
+      >
+        <a href={getPmaBaseUrl()} target="_blank" rel="noreferrer" className={styles.openTool}>
+          Ouvrir l'outil
         </a>
-      </section>
+      </PageHeader>
 
       <section className={styles.kpis}>
         <div><span>demandes</span><strong>{requestsResult.requests.length}</strong><small>{pendingRequests.length} nouvelles</small></div>

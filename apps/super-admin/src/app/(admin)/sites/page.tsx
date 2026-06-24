@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { auth } from '@/lib/auth'
 import { getShowcaseOverviewSites, getShowcaseRootLabel } from '@/lib/site-vitrine-manifest'
+import { PageHeader } from '@/components/ui'
 import styles from './page.module.css'
 
 export default async function SitesPage() {
@@ -14,10 +15,10 @@ export default async function SitesPage() {
 
   return (
     <main className={styles.page}>
-      <div className={styles.termHeader}>
-        <span className={styles.termPrompt}>admin@lysma</span>
-        <span className={styles.termCmd}> $ sites-vitrines --inventory</span>
-      </div>
+      <PageHeader
+        title="Sites vitrine"
+        description="Inventaire des sites vitrine détectés dans le monorepo LYSMA."
+      />
 
       <section className={styles.statsGrid}>
         <StatCard label="sites_detectes" value={sites.length} tone="cyan" />
