@@ -482,6 +482,54 @@ Fichiers concernes :
 - `src/lib/plans.ts`
 - `src/components/layout/AppShell.tsx`
 
+## Integrations logiciels externes (QR Code OR)
+
+Statut : Termine.
+
+Description :
+
+- demande d'intégration depuis les paramètres garage (email contactEditeur obligatoire)
+- approbation en une action dans le super-admin (crée automatiquement l'ExternalGarageIntegration + génère les credentials)
+- credentials envoyés par email à l'éditeur avec documentation technique complète
+- endpoint sandbox pour tester l'intégration avant la mise en production
+- notification in-app au garage quand l'intégration est activée
+
+API externe :
+
+- `POST /api/v1/or/qr` : crée/met à jour un OR et retourne un `qr_payload` signé (à encoder en QR)
+- `POST /api/v1/or/sandbox` : même interface, ne crée rien en base, retourne un payload fictif
+
+Authentification API : headers `x-livo-partner-key`, `x-livo-garage-id`, `x-livo-api-secret`.
+
+Fichiers concernes :
+
+- `src/app/api/v1/or/qr/route.ts`
+- `src/app/api/v1/or/sandbox/route.ts`
+- `src/app/api/integrations/demande/route.ts`
+- `src/app/api/internal/integrations/demandes/[id]/route.ts`
+- `src/components/parametres/ParametresClient/ParametresClient.tsx`
+
+## Interface responsive mobile
+
+Statut : Termine.
+
+Description :
+
+- navigation mobile avec sidebar en drawer (slide-in depuis la gauche, < 768px)
+- barre fixe mobile avec bouton hamburger et logo
+- backdrop semi-transparent pour fermer la sidebar
+- grids adaptatifs sur toutes les pages (4 colonnes → 2 → 1 sur mobile)
+- paddings réduits sur petit écran
+- tables horizontalement scrollables
+
+Fichiers concernes :
+
+- `src/components/layout/MobileMenuContext.tsx`
+- `src/components/layout/MobileBar/MobileBar.tsx`
+- `src/components/layout/Sidebar/Sidebar.tsx`
+- `src/components/layout/AppShell/AppShell.module.css`
+- Pages `src/app/(app)/*/page.module.css`
+
 ## Tests automatises
 
 Statut : Non commence.

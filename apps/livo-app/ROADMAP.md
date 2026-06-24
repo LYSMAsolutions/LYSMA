@@ -29,6 +29,13 @@ Les elements suivants sont presents dans le code et paraissent utilisables :
 - releves mensuels de pointage ;
 - PDF mensuel de pointage ;
 - OR externes manuels/API/QR ;
+- intégrations logiciels externes avec endpoint QR signé ;
+- endpoint sandbox pour tester les intégrations ;
+- email éditeur auto-suffisant avec documentation technique complète ;
+- interface 100% responsive mobile (drawer sidebar, hamburger, grids adaptatifs) ;
+- suggestions d'interventions liées dans la création de fiche ;
+- suggestions d'interventions liées (cross-suggestions) dans la création de fiche ;
+- fiche de travail PDF mono-page ;
 - recherche globale ;
 - notifications recentes ;
 - pages publiques SEO ;
