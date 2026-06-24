@@ -7,7 +7,7 @@ import { getPrimaryGarageForUser } from '@/lib/garage'
 const schema = z.object({
   nomLogiciel: z.string().trim().min(1, 'Nom du logiciel requis').max(120),
   nomEditeur: z.string().trim().max(160).optional().nullable(),
-  contactEditeur: z.string().trim().max(200).optional().nullable(),
+  contactEditeur: z.string().trim().email('Email de contact éditeur invalide').max(200),
   identifiantGarage: z.string().trim().min(1, 'Identifiant garage requis').max(120),
   message: z.string().trim().max(2000).optional().nullable(),
 })
@@ -45,7 +45,7 @@ export async function POST(req: NextRequest) {
       garageId: garage.id,
       nomLogiciel,
       nomEditeur: nomEditeur || null,
-      contactEditeur: contactEditeur || null,
+      contactEditeur,
       identifiantGarage,
       message: message || null,
     },

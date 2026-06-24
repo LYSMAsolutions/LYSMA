@@ -104,6 +104,7 @@ export function ParametresClient({ garage, taux: tauxInit, compagnons, security,
   async function submitDemandeIntegration() {
     setErrorInt('')
     if (!intNomLogiciel.trim()) { setErrorInt('Le nom du logiciel est requis.'); return }
+    if (!intContactEditeur.trim()) { setErrorInt('L\'email de contact de l\'éditeur est requis pour lui envoyer les credentials.'); return }
     if (!intIdentifiantGarage.trim()) { setErrorInt('Votre identifiant garage dans le logiciel est requis.'); return }
     setSubmittingInt(true)
     try {
@@ -465,10 +466,11 @@ export function ParametresClient({ garage, taux: tauxInit, compagnons, security,
                 placeholder="Société éditrice du logiciel"
               />
               <Input
-                label="Contact de l'éditeur"
+                label="Email de contact de l'éditeur *"
                 value={intContactEditeur}
                 onChange={e => setIntContactEditeur(e.target.value)}
-                placeholder="Email ou téléphone de l'éditeur"
+                placeholder="Email API / technique de l'éditeur"
+                type="email"
               />
             </div>
             <Input
