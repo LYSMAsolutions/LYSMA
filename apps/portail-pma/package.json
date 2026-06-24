@@ -4,17 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev --port 3001",
-    "build": "pnpm run db:generate && next build",
+    "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "type-check": "tsc --noEmit",
-    "db:generate": "pnpm --filter @repo/db db:generate",
-    "db:push": "pnpm --filter @repo/db db:push",
-    "db:migrate": "pnpm --filter @repo/db db:migrate",
-    "db:studio": "pnpm --filter @repo/db db:studio"
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@repo/db": "workspace:*",
     "bcryptjs": "^2.4.3",
     "lucide-react": "^0.383.0",
     "next": "16.2.2",
