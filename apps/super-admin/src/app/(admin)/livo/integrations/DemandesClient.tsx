@@ -40,137 +40,130 @@ function CopyButton({ value }: { value: string }) {
   )
 }
 
-function IntegrationCell({
+function ApproveForm({
   demande,
   partners,
-  garageLinks,
-  onCreated,
+  onApproved,
+  onRefused,
 }: {
   demande: DemandeIntegration
   partners: Partner[]
-  garageLinks: GarageLink[]
-  onCreated: (c: CreatedCredentials) => void
+  onApproved: (c: CreatedCredentials) => void
+  onRefused: () => void
 }) {
-  const [open, setOpen] = useState(false)
-  const [partnerId, setPartnerId] = useState('')
+  const [partnerId, setPartnerId] = useState(partners[0]?.id ?? '')
   const [externalId, setExternalId] = useState(demande.identifiantGarage)
+  const [note, setNote] = useState('')
   const [error, setError] = useState('')
-  const [pending, startTransition] = useTransition()
+  const [pendingApprove, startApprove] = useTransition()
+  const [pendingRefuse, startRefuse] = useTransition()
   const router = useRouter()
 
-  const existingLink = garageLinks.find(gl => gl.garage.id === demande.garage.id)
-  const activePartners = partners.filter(p => p.active)
-
-  if (demande.statut === 'EN_ATTENTE' || demande.statut === 'REFUSEE') return <span className={styles.noteAdmin}>—</span>
-
-  if (existingLink) {
-    return (
-      <div className={styles.integrationActive}>
-        <Badge variant="success">Intégration active</Badge>
-        <span className={styles.muted}>{existingLink.partner.name}</span>
-      </div>
-    )
-  }
-
-  if (!open) {
-    return (
-      <button className={styles.btnCreate} onClick={() => setOpen(true)}>
-        Créer l&apos;intégration
-      </button>
-    )
-  }
-
-  async function handleCreate(e: React.FormEvent) {
+  async function handleApprove(e: React.FormEvent) {
     e.preventDefault()
     setError('')
     if (!partnerId) { setError('Sélectionnez un partenaire'); return }
     if (!externalId.trim()) { setError('ID garage requis'); return }
 
-    try {
-      const res = await fetch('/api/livo-garage-links', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ partnerId, garageId: demande.garage.id, externalGarageId: externalId.trim() }),
-      })
-      const data = await res.json().catch(() => null)
-      if (!res.ok) { setError(data?.error ?? `Erreur HTTP ${res.status}`); return }
-      onCreated({ demandeId: demande.id, credentials: data.credentials, note: data.note })
-      setOpen(false)
-      startTransition(() => router.refresh())
-    } catch {
-      setError('Erreur réseau')
-    }
+    startApprove(async () => {
+      try {
+        const res = await fetch(`/api/livo-demande/${demande.id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            statut: 'APPROUVEE',
+            noteAdmin: note || null,
+            partnerId,
+            externalGarageId: externalId.trim(),
+          }),
+        })
+        const data = await res.json().catch(() => null)
+        if (!res.ok) { setError(data?.error ?? `Erreur HTTP ${res.status}`); return }
+        if (data.credentials) {
+          onApproved({ demandeId: demande.id, credentials: data.credentials, note: data.note })
+        }
+        router.refresh()
+      } catch {
+        setError('Erreur réseau')
+      }
+    })
+  }
+
+  async function handleRefuse() {
+    setError('')
+    startRefuse(async () => {
+      try {
+        const res = await fetch(`/api/livo-demande/${demande.id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ statut: 'REFUSEE', noteAdmin: note || null }),
+        })
+        const data = await res.json().catch(() => null)
+        if (!res.ok) { setError(data?.error ?? `Erreur HTTP ${res.status}`); return }
+        onRefused()
+        router.refresh()
+      } catch {
+        setError('Erreur réseau')
+      }
+    })
   }
 
   return (
-    <form className={styles.inlineForm} onSubmit={handleCreate}>
-      <select
-        className={styles.select}
-        value={partnerId}
-        onChange={e => setPartnerId(e.target.value)}
-        disabled={pending}
-      >
-        <option value="">— Partenaire —</option>
-        {activePartners.map(p => (
-          <option key={p.id} value={p.id}>{p.name}</option>
-        ))}
-      </select>
-      <input
-        className={styles.inlineInput}
-        placeholder="ID garage logiciel"
-        value={externalId}
-        onChange={e => setExternalId(e.target.value)}
-        disabled={pending}
-      />
-      <button className={styles.btnApprove} type="submit" disabled={pending}>
-        {pending ? '…' : 'Créer'}
-      </button>
-      <button
-        className={styles.btnRefuse}
-        type="button"
-        onClick={() => { setOpen(false); setError('') }}
-      >
-        ✕
-      </button>
+    <form className={styles.approveForm} onSubmit={handleApprove}>
+      <div className={styles.approveFields}>
+        <select
+          className={styles.select}
+          value={partnerId}
+          onChange={e => setPartnerId(e.target.value)}
+          disabled={pendingApprove || pendingRefuse}
+        >
+          <option value="">— Partenaire —</option>
+          {partners.filter(p => p.active).map(p => (
+            <option key={p.id} value={p.id}>{p.name}</option>
+          ))}
+        </select>
+        <input
+          className={styles.inlineInput}
+          placeholder="ID garage logiciel"
+          value={externalId}
+          onChange={e => setExternalId(e.target.value)}
+          disabled={pendingApprove || pendingRefuse}
+        />
+        <input
+          className={styles.noteInput}
+          placeholder="Note admin (optionnel)"
+          value={note}
+          onChange={e => setNote(e.target.value)}
+          disabled={pendingApprove || pendingRefuse}
+        />
+      </div>
+      {demande.message && <p className={styles.msgClient}>Message client : {demande.message}</p>}
       {error && <p className={styles.inlineError}>{error}</p>}
+      <div className={styles.btns}>
+        <button className={styles.btnApprove} type="submit" disabled={pendingApprove || pendingRefuse}>
+          {pendingApprove ? 'Approbation…' : '✓ Approuver & activer'}
+        </button>
+        <button
+          className={styles.btnRefuse}
+          type="button"
+          onClick={handleRefuse}
+          disabled={pendingApprove || pendingRefuse}
+        >
+          {pendingRefuse ? '…' : 'Refuser'}
+        </button>
+      </div>
     </form>
   )
 }
 
 export function DemandesClient({ demandes, partners, garageLinks }: Props) {
-  const router = useRouter()
-  const [pending, startTransition] = useTransition()
-  const [activeId, setActiveId] = useState<string | null>(null)
-  const [notes, setNotes] = useState<Record<string, string>>({})
-  const [error, setError] = useState('')
   const [createdCreds, setCreatedCreds] = useState<CreatedCredentials | null>(null)
-
-  async function traiter(id: string, statut: 'APPROUVEE' | 'REFUSEE') {
-    setError('')
-    setActiveId(id)
-    try {
-      const res = await fetch(`/api/livo-demande/${id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ statut, noteAdmin: notes[id] || null }),
-      })
-      const data = await res.json().catch(() => null)
-      if (!res.ok) { setError(data?.error ?? `Erreur HTTP ${res.status}`); return }
-      startTransition(() => router.refresh())
-    } catch {
-      setError('Erreur réseau')
-    } finally {
-      setActiveId(null)
-    }
-  }
 
   return (
     <div className={styles.wrapper}>
-      {error && <div className={styles.error}>{error}</div>}
-
       {createdCreds && (
         <div className={styles.credentialsBox}>
-          <p className={styles.credentialsTitle}>✓ Intégration créée — transmettez ces identifiants à l&apos;éditeur</p>
+          <p className={styles.credentialsTitle}>✓ Intégration activée — credentials envoyés par email à l&apos;éditeur</p>
           {createdCreds.note && <p className={styles.credentialsNote}>{createdCreds.note}</p>}
           <div className={styles.credentialsList}>
             <div className={styles.credRow}>
@@ -194,7 +187,7 @@ export function DemandesClient({ demandes, partners, garageLinks }: Props) {
               <CopyButton value={createdCreds.credentials.externalGarageId} />
             </div>
           </div>
-          <p className={styles.credentialsWarning}>⚠ Ces identifiants ne seront plus affichés. Conservez-les maintenant.</p>
+          <p className={styles.credentialsWarning}>⚠ Ces credentials ne seront plus affichés ici. L&apos;éditeur les a reçus par email.</p>
           <button className={styles.credentialsClose} onClick={() => setCreatedCreds(null)}>Fermer</button>
         </div>
       )}
@@ -209,74 +202,52 @@ export function DemandesClient({ demandes, partners, garageLinks }: Props) {
               <th>ID Garage Logiciel</th>
               <th>Statut</th>
               <th>Date</th>
-              <th>Intégration</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            {demandes.map((d) => (
-              <tr key={d.id} className={d.statut === 'EN_ATTENTE' ? styles.rowAttente : ''}>
-                <td className={styles.software}>{d.nomLogiciel}</td>
-                <td>
-                  <span className={styles.editorName}>{d.nomEditeur ?? '—'}</span>
-                  {d.contactEditeur && <span className={styles.muted}>{d.contactEditeur}</span>}
-                </td>
-                <td>
-                  <span className={styles.garageName}>{d.garage.nom}</span>
-                  {d.garage.ville && <span className={styles.muted}>{d.garage.ville}</span>}
-                  <span className={styles.muted}>{d.garage.owner.email}</span>
-                </td>
-                <td>
-                  <code className={styles.code}>{d.identifiantGarage}</code>
-                </td>
-                <td>
-                  <Badge variant={statutToBadge(d.statut)}>
-                    {d.statut === 'EN_ATTENTE' ? 'En attente' : d.statut === 'APPROUVEE' ? 'Approuvée' : 'Refusée'}
-                  </Badge>
-                </td>
-                <td className={styles.muted}>{new Date(d.createdAt).toLocaleDateString('fr-FR')}</td>
-                <td>
-                  <IntegrationCell
-                    demande={d}
-                    partners={partners}
-                    garageLinks={garageLinks}
-                    onCreated={(c) => setCreatedCreds(c)}
-                  />
-                </td>
-                <td>
-                  {d.statut === 'EN_ATTENTE' ? (
-                    <div className={styles.actions}>
-                      <input
-                        className={styles.noteInput}
-                        placeholder="Note admin (optionnel)"
-                        value={notes[d.id] ?? ''}
-                        onChange={e => setNotes(n => ({ ...n, [d.id]: e.target.value }))}
-                        disabled={pending && activeId === d.id}
+            {demandes.map((d) => {
+              const existingLink = garageLinks.find(gl => gl.garage.id === d.garage.id)
+
+              return (
+                <tr key={d.id} className={d.statut === 'EN_ATTENTE' ? styles.rowAttente : ''}>
+                  <td className={styles.software}>{d.nomLogiciel}</td>
+                  <td>
+                    <span className={styles.editorName}>{d.nomEditeur ?? '—'}</span>
+                    {d.contactEditeur && <span className={styles.muted}>{d.contactEditeur}</span>}
+                  </td>
+                  <td>
+                    <span className={styles.garageName}>{d.garage.nom}</span>
+                    {d.garage.ville && <span className={styles.muted}>{d.garage.ville}</span>}
+                    <span className={styles.muted}>{d.garage.owner.email}</span>
+                  </td>
+                  <td>
+                    <code className={styles.code}>{d.identifiantGarage}</code>
+                  </td>
+                  <td>
+                    <Badge variant={statutToBadge(d.statut)}>
+                      {d.statut === 'EN_ATTENTE' ? 'En attente' : d.statut === 'APPROUVEE' ? 'Approuvée' : 'Refusée'}
+                    </Badge>
+                    {d.statut === 'APPROUVEE' && existingLink && (
+                      <span className={styles.muted}>{existingLink.partner.name}</span>
+                    )}
+                  </td>
+                  <td className={styles.muted}>{new Date(d.createdAt).toLocaleDateString('fr-FR')}</td>
+                  <td>
+                    {d.statut === 'EN_ATTENTE' ? (
+                      <ApproveForm
+                        demande={d}
+                        partners={partners}
+                        onApproved={(c) => setCreatedCreds(c)}
+                        onRefused={() => {}}
                       />
-                      {d.message && <p className={styles.msgClient}>{d.message}</p>}
-                      <div className={styles.btns}>
-                        <button
-                          className={styles.btnApprove}
-                          onClick={() => traiter(d.id, 'APPROUVEE')}
-                          disabled={pending && activeId === d.id}
-                        >
-                          {activeId === d.id ? 'Chargement…' : 'Approuver'}
-                        </button>
-                        <button
-                          className={styles.btnRefuse}
-                          onClick={() => traiter(d.id, 'REFUSEE')}
-                          disabled={pending && activeId === d.id}
-                        >
-                          Refuser
-                        </button>
-                      </div>
-                    </div>
-                  ) : (
-                    <span className={styles.noteAdmin}>{d.noteAdmin ?? '—'}</span>
-                  )}
-                </td>
-              </tr>
-            ))}
+                    ) : (
+                      <span className={styles.noteAdmin}>{d.noteAdmin ?? '—'}</span>
+                    )}
+                  </td>
+                </tr>
+              )
+            })}
           </tbody>
         </table>
       </div>

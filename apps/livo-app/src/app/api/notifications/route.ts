@@ -22,7 +22,7 @@ export async function GET() {
 
   const since = new Date(Date.now() - 1000 * 60 * 60 * 24)
 
-  const [pointagesJour, pointagesFiche, fichesTerminees, absences] = await Promise.all([
+  const [pointagesJour, pointagesFiche, fichesTerminees, absences, integrationsApprouvees] = await Promise.all([
     prisma.pointageJour.findMany({
       where: {
         updatedAt: { gte: since },
@@ -61,6 +61,15 @@ export async function GET() {
       include: { compagnon: { include: { user: true } } },
       orderBy: { createdAt: 'desc' },
       take: 4,
+    }),
+    prisma.demandeIntegration.findMany({
+      where: {
+        garageId: garage.id,
+        statut: 'APPROUVEE',
+        updatedAt: { gte: since },
+      },
+      orderBy: { updatedAt: 'desc' },
+      take: 3,
     }),
   ])
 
@@ -109,6 +118,12 @@ export async function GET() {
       title: `Absence à valider pour ${companionName(absence.compagnon)}`,
       createdAt: absence.createdAt.toISOString(),
       href: '/rapports',
+    })),
+    ...integrationsApprouvees.map((d) => ({
+      id: `integration-approuvee-${d.id}`,
+      title: `Intégration QR activée — ${d.nomLogiciel}`,
+      createdAt: d.updatedAt.toISOString(),
+      href: '/parametres',
     })),
   ]
     .sort((a, b) => b.createdAt.localeCompare(a.createdAt))

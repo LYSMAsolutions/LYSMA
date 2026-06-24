@@ -17,7 +17,10 @@ export async function PATCH(
   }
 
   try {
-    const result = await traiteLivoDemande(id, body.statut, body.noteAdmin)
+    const result = await traiteLivoDemande(id, body.statut, body.noteAdmin, {
+      partnerId: body.partnerId,
+      externalGarageId: body.externalGarageId,
+    })
     return NextResponse.json(result)
   } catch (err) {
     return NextResponse.json({ error: String(err) }, { status: 500 })

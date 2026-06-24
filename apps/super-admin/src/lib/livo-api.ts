@@ -157,13 +157,26 @@ export async function getLivoDemandes(statut?: string): Promise<DemandeIntegrati
   }
 }
 
-export async function traiteLivoDemande(id: string, statut: 'APPROUVEE' | 'REFUSEE', noteAdmin?: string) {
+export async function traiteLivoDemande(
+  id: string,
+  statut: 'APPROUVEE' | 'REFUSEE',
+  noteAdmin?: string,
+  opts?: { partnerId?: string; externalGarageId?: string }
+) {
   const res = await fetch(`${LIVO_API_URL}/api/internal/integrations/demandes/${id}`, {
     method: 'PATCH',
     headers: headers(),
-    body: JSON.stringify({ statut, noteAdmin: noteAdmin || null }),
+    body: JSON.stringify({
+      statut,
+      noteAdmin: noteAdmin || null,
+      partnerId: opts?.partnerId || null,
+      externalGarageId: opts?.externalGarageId || null,
+    }),
   })
-  if (!res.ok) throw new Error(`Erreur traitement demande: HTTP ${res.status}`)
+  if (!res.ok) {
+    const err = await res.json().catch(() => null)
+    throw new Error(err?.error ?? `Erreur traitement demande: HTTP ${res.status}`)
+  }
   return res.json()
 }
 
