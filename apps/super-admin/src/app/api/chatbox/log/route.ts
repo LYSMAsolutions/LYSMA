@@ -5,28 +5,17 @@ import { prisma } from '@/lib/prisma'
 import { writeAuditLog } from '@/lib/audit'
 import { buildQuestionSignature, enrichChatboxMetadata } from '@/lib/chatbox-analytics'
 import { sendChatboxBadAlertEmail } from '@/lib/chatbox-bad-alert-email'
+import {
+  chatboxCorsHeaders,
+  getChatboxAllowedOrigin,
+  getChatboxAllowedOrigins,
+  isAllowedChatboxSource,
+  isAuthorizedChatboxRequest,
+} from '@/lib/chatbox-access'
 
 const MAX_BODY_SIZE = 32_000
 const DEFAULT_RATE_LIMIT_WINDOW_MS = 60_000
 const DEFAULT_RATE_LIMIT_MAX = 40
-const DEFAULT_ALLOWED_ORIGINS = [
-  'http://localhost:3021',
-  'http://localhost:3022',
-  'https://lysma-hub.vercel.app',
-  'https://lysmasolutions.fr',
-  'https://www.lysmasolutions.fr',
-  'https://carrosserie-mounier.vercel.app',
-  'https://carrosserie-mounier-ruddy.vercel.app',
-  'https://carrosserie-mounier.fr',
-  'https://www.carrosserie-mounier.fr',
-  'https://livo-app.com',
-  'https://www.livo-app.com',
-]
-const DEFAULT_ALLOWED_SOURCES = [
-  'site-vitrine:lysma-hub',
-  'site-vitrine:carrosserie-mounier',
-  'app:livo-app',
-]
 const PROBLEM_TYPES = [
   'DUPLICATE',
   'USER_REPORTED',
@@ -72,8 +61,8 @@ const schema = z.object({
 })
 
 export async function OPTIONS(req: NextRequest) {
-  const allowed = getAllowedOrigin(req)
-  if (getAllowedOrigins().length > 0 && !allowed) {
+  const allowed = getChatboxAllowedOrigin(req)
+  if (getChatboxAllowedOrigins().length > 0 && !allowed) {
     return json(req, { error: 'Origine non autorisee' }, { status: 403 })
   }
 
@@ -84,7 +73,7 @@ export async function OPTIONS(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  if (!isAuthorized(req)) {
+  if (!isAuthorizedChatboxRequest(req)) {
     return json(req, { error: 'Non autorise' }, { status: 401 })
   }
 
@@ -105,7 +94,7 @@ export async function POST(req: NextRequest) {
     return json(req, { error: parsed.error.flatten() }, { status: 400 })
   }
 
-  if (!isAllowedSource(parsed.data.source)) {
+  if (!isAllowedChatboxSource(parsed.data.source)) {
     return json(req, { error: 'Source chatbox non autorisee' }, { status: 403 })
   }
 
@@ -181,36 +170,8 @@ export async function POST(req: NextRequest) {
   }, { status: 201 })
 }
 
-function parseList(value: string | undefined) {
-  return (value ?? '')
-    .split(',')
-    .map((item) => item.trim())
-    .filter(Boolean)
-}
-
-function unique(values: string[]) {
-  return Array.from(new Set(values))
-}
-
-function getAllowedOrigins() {
-  return unique([...DEFAULT_ALLOWED_ORIGINS, ...parseList(process.env.CHATBOX_ALLOWED_ORIGINS)])
-}
-
-function getAllowedOrigin(req: NextRequest) {
-  const origin = req.headers.get('origin')
-  const allowed = getAllowedOrigins()
-  if (!origin || allowed.length === 0) return null
-  return allowed.includes('*') || allowed.includes(origin) ? origin : null
-}
-
 function corsHeaders(req: NextRequest) {
-  const origin = getAllowedOrigin(req)
-  return {
-    ...(origin ? { 'Access-Control-Allow-Origin': origin, Vary: 'Origin' } : {}),
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type, x-lysma-inbound-secret',
-    'Access-Control-Max-Age': '600',
-  }
+  return chatboxCorsHeaders(req, 'POST, OPTIONS')
 }
 
 function json(req: NextRequest, body: unknown, init?: ResponseInit) {
@@ -221,22 +182,6 @@ function json(req: NextRequest, body: unknown, init?: ResponseInit) {
       ...init?.headers,
     },
   })
-}
-
-function isAuthorized(req: NextRequest) {
-  const secret = process.env.SUPER_ADMIN_INBOUND_SECRET
-  const hasValidSecret = Boolean(secret && req.headers.get('x-lysma-inbound-secret') === secret)
-  if (hasValidSecret) return true
-
-  const hasValidOrigin = Boolean(getAllowedOrigin(req))
-  if (hasValidOrigin) return true
-
-  return process.env.NODE_ENV !== 'production' && !secret
-}
-
-function isAllowedSource(source: string) {
-  const allowedSources = unique([...DEFAULT_ALLOWED_SOURCES, ...parseList(process.env.CHATBOX_ALLOWED_SOURCES)])
-  return allowedSources.includes(source)
 }
 
 function checkRateLimit(req: NextRequest, source: string) {
