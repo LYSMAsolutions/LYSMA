@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useRef, useState } from "react";
+import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import { Flag, MessageCircle, Send, X } from "lucide-react";
 import { getChatboxPageMetadata } from "../../lib/chatbox-page-metadata";
 
@@ -216,6 +216,21 @@ const getLastExchange = (messages: ChatMessage[]) => {
 
   return null;
 };
+
+function CopyEmailButton({ email }: { email: string }) {
+  const [copied, setCopied] = useState(false);
+  const copy = useCallback(() => {
+    navigator.clipboard.writeText(email).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  }, [email]);
+  return (
+    <button type="button" className="lysma-chatbox-copy-email" onClick={copy}>
+      {copied ? "Adresse copiée ✓" : "Copier l'adresse mail"}
+    </button>
+  );
+}
 
 export function LysmaChatbox() {
   const [open, setOpen] = useState(false);
@@ -477,6 +492,7 @@ export function LysmaChatbox() {
             <a className="lysma-chatbox-mail" href={mailUrl}>
               Écrire à LYSMA
             </a>
+            <CopyEmailButton email="lysmasolutions@gmail.com" />
             <button type="button" onClick={disableConversationStorage} disabled={storageDisabled}>
               {visitorId ? "Ne pas conserver ma conversation" : "Conversation non conservée"}
             </button>

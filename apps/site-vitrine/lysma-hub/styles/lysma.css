@@ -1041,6 +1041,18 @@ button, input, textarea { font: inherit; }
   opacity: .72;
 }
 
+.lysma-chatbox-copy-email {
+  color: #77b7ff !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  opacity: .8;
+  transition: opacity .15s;
+}
+
+.lysma-chatbox-copy-email:hover {
+  opacity: 1;
+}
+
 .lysma-presentation-hero,
 .lysma-presentation-ambition {
   width: min(1220px, 100%);
