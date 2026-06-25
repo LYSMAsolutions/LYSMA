@@ -89,7 +89,7 @@ function getAnswer(message: string, history: { role: string; content: string }[]
     return avoidRepeatedAnswer("LIVO est conçu pour les petits et moyens ateliers. Vous pouvez l'utiliser seul ou avec une équipe — le nombre de compagnons est illimité. L'outil reste simple et ne nécessite pas de formation longue.", history)
   }
 
-  if (hasAny(text, ['fliquer', 'surveiller', 'surveillance', 'espionner', 'controle'])) {
+  if (hasAny(text, ['fliquer', 'flicage', 'surveiller', 'surveillance', 'espionner', 'controle'])) {
     return avoidRepeatedAnswer("LIVO n'est pas un outil de surveillance individuelle. Il sert à comparer le temps passé en atelier avec le temps facturé, et à mieux piloter l'activité globale. Le pointage par véhicule doit être présenté comme un suivi d'atelier, pas un contrôle — la transparence avec l'équipe est essentielle.", history)
   }
 

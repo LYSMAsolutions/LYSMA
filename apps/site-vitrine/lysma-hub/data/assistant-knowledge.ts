@@ -44,9 +44,9 @@ export const assistantKnowledge: AssistantRule[] = [
   {
     id: "mounier-horaires",
     siteSlug: "carrosserie-mounier",
-    keywords: ["horaire", "ouvert", "ferme", "samedi", "dimanche", "contact", "telephone", "appeler", "joindre"],
+    keywords: ["horaire", "ouvert", "ferme", "samedi", "dimanche", "telephone", "appeler", "joindre"],
     answer:
-      "Pour connaître les disponibilités ou joindre l'atelier rapidement, le plus fiable est d'appeler directement. Vous pouvez aussi laisser vos coordonnées via le formulaire et l'équipe vous rappelle.",
+      "Pour connaître les horaires ou joindre l'atelier rapidement, le plus fiable est d'appeler directement. Vous pouvez aussi laisser vos coordonnées via le formulaire et l'équipe vous rappelle.",
     action: { label: "Appeler l'atelier", type: "phone" },
   },
   {
@@ -72,6 +72,14 @@ export const assistantKnowledge: AssistantRule[] = [
     answer:
       "Des phares ternis ou jaunis réduisent la visibilité et donnent un mauvais aspect au véhicule. La rénovation d'optiques redonne un résultat proche du neuf. Une photo de face suffit souvent pour un premier avis — l'atelier vous dira si la rénovation est faisable ou si un remplacement est plus adapté.",
     action: { label: "Envoyer une demande", type: "photo" },
+  },
+  {
+    id: "mounier-adresse",
+    siteSlug: "carrosserie-mounier",
+    keywords: ["adresse", "où etes-vous", "ou etes-vous", "localisation", "trouver", "itineraire", "maps", "gps", "venir", "se trouver"],
+    answer:
+      "Pour trouver l'atelier, ouvrez l'itinéraire Google Maps via le bouton ci-dessous ou appelez directement pour confirmer l'accès. L'équipe vous indique le meilleur chemin selon votre point de départ.",
+    action: { label: "Ouvrir l'itinéraire", type: "contact" as const },
   },
   {
     id: "mounier-voiture-pret",

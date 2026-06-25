@@ -115,6 +115,9 @@ const getAnswer = (message: string, history: ChatMessage[] = []) => {
   } else if (hasAnyKeyword(normalized, ["methode", "comment", "fonctionne", "processus", "etape", "demarche"])) {
     answer =
       "Notre méthode : on commence par comprendre le vrai besoin, on cadre le projet en quelques échanges, on construit proprement, on teste avec vous, on livre. Ensuite on améliore sur la durée si nécessaire. Pas de cahier des charges imposé — on avance à votre rythme.";
+  } else if (hasAnyKeyword(normalized, ["envoie", "envoyer", "transmettre", "faire parvenir", "vous l envoie", "vous envoyer"])) {
+    answer =
+      "Envoyez-nous vos informations directement à lysmasolutions@gmail.com. Vous pouvez aussi utiliser le bouton de contact ci-dessous — il prépare le message avec le bon sujet. Nous revenons vers vous rapidement.";
   } else if (hasAnyKeyword(normalized, ["contact", "mail", "email", "ecrire", "joindre", "parler", "echanger", "appel"])) {
     answer =
       "Le plus simple est de nous écrire directement à lysmasolutions@gmail.com. Le bouton de contact prépare le message avec le bon sujet. Nous répondons rapidement.";
