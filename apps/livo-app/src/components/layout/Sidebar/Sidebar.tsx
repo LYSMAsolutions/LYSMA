@@ -16,6 +16,7 @@ import {
   Users,
   Wrench,
 } from '@phosphor-icons/react'
+import { GlobalSearch } from '@/components/layout/GlobalSearch/GlobalSearch'
 import styles from './Sidebar.module.css'
 
 const NAV_ITEMS = [
@@ -72,6 +73,10 @@ export function Sidebar({ garageNom, userNom, userEmail, userInitiale }: Sidebar
       <div className={styles.garageSelector}>
         <div className={styles.garageDot} />
         <span className={cn(styles.garageName, styles.fadeItem)}>{garageNom}</span>
+      </div>
+
+      <div className={cn(styles.searchWrap, styles.fadeItem)}>
+        <GlobalSearch />
       </div>
 
       <nav className={styles.nav}>

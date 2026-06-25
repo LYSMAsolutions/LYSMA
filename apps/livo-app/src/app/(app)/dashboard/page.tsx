@@ -18,6 +18,7 @@ import {
   Wrench,
 } from '@phosphor-icons/react/dist/ssr'
 import { DashboardNewFicheButton } from '@/components/atelier/NouvelleFiche/DashboardNewFicheButton'
+import { DashboardRefresher } from '@/components/dashboard/DashboardRefresher/DashboardRefresher'
 import Link from 'next/link'
 import styles from './page.module.css'
 
@@ -71,6 +72,7 @@ export default async function DashboardPage({
 
   return (
     <>
+      <DashboardRefresher />
       <Header title="Tableau de bord" description={today} action={<DashboardNewFicheButton garageId={garage.id} />} />
       <div className={styles.content}>
         <nav className={styles.sourceFilters} aria-label="Source des activités">
