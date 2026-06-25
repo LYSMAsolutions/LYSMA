@@ -11,6 +11,7 @@ type ProblemType =
   | 'MISUNDERSTANDING'
   | 'LOST_CONTEXT'
   | 'USER_NEGATIVE_FEEDBACK'
+  | 'DUPLICATE'
 
 type Message = {
   role: 'assistant' | 'user'
@@ -57,63 +58,79 @@ function hasAny(text: string, keywords: string[]) {
   return keywords.some((keyword) => text.includes(normalize(keyword)))
 }
 
-function getAnswer(message: string) {
+function avoidRepeatedAnswer(answer: string, history: { role: string; content: string }[]): string {
+  const previousAnswers = new Set(
+    history.filter((m) => m.role === 'assistant').map((m) => m.content)
+  )
+  if (!previousAnswers.has(answer)) return answer
+  return "Je vous ai déjà donné ces éléments. Pour aller plus loin, écrivez directement à LYSMA Solutions — le bouton de contact ci-dessous prépare le message."
+}
+
+function getAnswer(message: string, history: { role: string; content: string }[] = []) {
   const text = normalize(message)
 
   if (hasAny(text, ['prix', 'tarif', 'combien', 'cout', 'coût', 'abonnement', 'mensuel', 'mois', 'euro'])) {
-    return `LIVO est à ${LIVO_PRICING.primaryPlan.priceMonthly} € / mois, compagnons illimités inclus. Vous bénéficiez de ${LIVO_PRICING.trialDays} jours d'essai gratuit sans engagement — accès complet dès l'inscription.`
+    return avoidRepeatedAnswer(`LIVO est à ${LIVO_PRICING.primaryPlan.priceMonthly} € / mois, compagnons illimités inclus. Vous bénéficiez de ${LIVO_PRICING.trialDays} jours d'essai gratuit sans engagement — accès complet dès l'inscription.`, history)
   }
 
   if (hasAny(text, ['essai', 'gratuit', 'tester', 'essayer', 'decouvrir', 'sans engagement', 'demo'])) {
-    return `Oui, LIVO propose ${LIVO_PRICING.trialDays} jours d'essai gratuit avec accès complet. Pas de carte bancaire requise pour démarrer. Vous pouvez tester toutes les fonctionnalités avec votre vrai atelier.`
+    return avoidRepeatedAnswer(`Oui, LIVO propose ${LIVO_PRICING.trialDays} jours d'essai gratuit avec accès complet. Pas de carte bancaire requise pour démarrer. Vous pouvez tester toutes les fonctionnalités avec votre vrai atelier.`, history)
   }
 
   if (hasAny(text, ['installer', 'installation', 'commencer', 'demarrer', 'lancer', 'inscrire', 'inscription', 'connexion'])) {
-    return "LIVO ne nécessite aucune installation. C'est une application web : vous vous connectez depuis n'importe quel navigateur, sur ordinateur, tablette ou smartphone. Vous créez votre garage, ajoutez vos compagnons et vous êtes opérationnel en quelques minutes."
+    return avoidRepeatedAnswer("LIVO ne nécessite aucune installation. C'est une application web : vous vous connectez depuis n'importe quel navigateur, sur ordinateur, tablette ou smartphone. Vous créez votre garage, ajoutez vos compagnons et vous êtes opérationnel en quelques minutes.", history)
   }
 
   if (hasAny(text, ['telephone', 'smartphone', 'mobile', 'tablette', 'ipad', 'ordinateur', 'pc', 'appareil'])) {
-    return "LIVO fonctionne sur tous les appareils sans installation : ordinateur, tablette et smartphone. Idéal pour les compagnons qui pointent depuis l'atelier sur une tablette, et le gérant qui consulte les indicateurs depuis son bureau ou son téléphone."
+    return avoidRepeatedAnswer("LIVO fonctionne sur tous les appareils sans installation : ordinateur, tablette et smartphone. Idéal pour les compagnons qui pointent depuis l'atelier sur une tablette, et le gérant qui consulte les indicateurs depuis son bureau ou son téléphone.", history)
   }
 
   if (hasAny(text, ['seul', 'petit garage', 'petite structure', 'mra', 'independant', 'artisan', 'solo'])) {
-    return "LIVO est conçu pour les petits et moyens ateliers. Vous pouvez l'utiliser seul ou avec une équipe — le nombre de compagnons est illimité. L'outil reste simple et ne nécessite pas de formation longue."
+    return avoidRepeatedAnswer("LIVO est conçu pour les petits et moyens ateliers. Vous pouvez l'utiliser seul ou avec une équipe — le nombre de compagnons est illimité. L'outil reste simple et ne nécessite pas de formation longue.", history)
   }
 
   if (hasAny(text, ['fliquer', 'surveiller', 'surveillance', 'espionner', 'controle'])) {
-    return "LIVO n'est pas un outil de surveillance individuelle. Il sert à comparer le temps passé en atelier avec le temps facturé, et à mieux piloter l'activité globale. Le pointage par véhicule doit être présenté comme un suivi d'atelier, pas un contrôle — la transparence avec l'équipe est essentielle."
+    return avoidRepeatedAnswer("LIVO n'est pas un outil de surveillance individuelle. Il sert à comparer le temps passé en atelier avec le temps facturé, et à mieux piloter l'activité globale. Le pointage par véhicule doit être présenté comme un suivi d'atelier, pas un contrôle — la transparence avec l'équipe est essentielle.", history)
   }
 
   if (hasAny(text, ['legal', 'loi', 'conformite', 'inspection', 'prud', 'droit du travail'])) {
-    return "LIVO génère un historique horodaté des temps de travail par compagnon et par véhicule, consultable à tout moment. Pour être conforme, l'usage du pointage doit être annoncé à l'équipe et limité aux données utiles au pilotage de l'atelier."
+    const answer = "LIVO génère un historique horodaté des temps de travail par compagnon et par véhicule, consultable à tout moment. Pour être conforme, l'usage du pointage doit être annoncé à l'équipe et limité aux données utiles au pilotage de l'atelier."
+    return avoidRepeatedAnswer(answer, history)
+  }
+
+  if (hasAny(text, ['document', 'texte', 'reference', 'loi', 'article', 'justificatif', 'preuve', 'cnil', 'rgpd', 'disposition'])) {
+    return avoidRepeatedAnswer(
+      "LIVO n'est pas un cabinet juridique et ne fournit pas de documents légaux. Pour les textes de référence sur le pointage atelier, vous pouvez consulter le Code du travail (articles L3171-1 et suivants sur le décompte du temps de travail) et les recommandations de la CNIL sur les dispositifs de contrôle. Un conseiller RH ou votre fédération professionnelle peut vous orienter précisément.",
+      history
+    )
   }
 
   if (hasAny(text, ['fiche', 'ordre de reparation', 'or externe', 'qr', 'integration', 'partenaire', 'logiciel', 'api'])) {
-    return "LIVO gère les ordres de réparation internes et les OR externes — y compris via intégration QR avec vos logiciels partenaires. Chaque fiche regroupe le véhicule, le client, les travaux, les compagnons assignés et le suivi des temps."
+    return avoidRepeatedAnswer("LIVO gère les ordres de réparation internes et les OR externes — y compris via intégration QR avec vos logiciels partenaires. Chaque fiche regroupe le véhicule, le client, les travaux, les compagnons assignés et le suivi des temps.", history)
   }
 
   if (hasAny(text, ['ordre', 'reparation', 'vehicule', 'voiture', 'dossier', 'client'])) {
-    return "Dans LIVO, chaque ordre de réparation regroupe le véhicule, le client, les travaux prévus, les compagnons affectés et le suivi des temps. Vous retrouvez toutes les informations d'un dossier en un clic, sans chercher dans plusieurs fichiers."
+    return avoidRepeatedAnswer("Dans LIVO, chaque ordre de réparation regroupe le véhicule, le client, les travaux prévus, les compagnons affectés et le suivi des temps. Vous retrouvez toutes les informations d'un dossier en un clic, sans chercher dans plusieurs fichiers.", history)
   }
 
   if (hasAny(text, ['pointage', 'pointer', 'heure', 'temps passe', 'compagnon', 'technicien', 'mecanicien'])) {
-    return "Le pointage LIVO fonctionne par véhicule : chaque compagnon indique sur quelle fiche il travaille. Vous voyez en temps réel qui fait quoi, combien de temps a été passé sur chaque OR et quel écart existe entre le temps prévu et le temps réel."
+    return avoidRepeatedAnswer("Le pointage LIVO fonctionne par véhicule : chaque compagnon indique sur quelle fiche il travaille. Vous voyez en temps réel qui fait quoi, combien de temps a été passé sur chaque OR et quel écart existe entre le temps prévu et le temps réel.", history)
   }
 
   if (hasAny(text, ['rentabilite', 'marge', 'rapport', 'indicateur', 'stat', 'kpi', 'bilan', 'analyse'])) {
-    return "LIVO calcule automatiquement des indicateurs de rentabilité à partir des données de pointage : temps facturables, écarts atelier, activité par compagnon. Pas de tableaux complexes — des chiffres utiles pour prendre des décisions."
+    return avoidRepeatedAnswer("LIVO calcule automatiquement des indicateurs de rentabilité à partir des données de pointage : temps facturables, écarts atelier, activité par compagnon. Pas de tableaux complexes — des chiffres utiles pour prendre des décisions.", history)
   }
 
   if (hasAny(text, ['absence', 'conge', 'arret', 'maladie', 'rh', 'releve', 'mensuel', 'paie'])) {
-    return "LIVO inclut un suivi des absences et des relevés mensuels de pointage par compagnon, exportables en PDF. Utile pour le suivi RH sans avoir à ressaisir les données dans un autre fichier."
+    return avoidRepeatedAnswer("LIVO inclut un suivi des absences et des relevés mensuels de pointage par compagnon, exportables en PDF. Utile pour le suivi RH sans avoir à ressaisir les données dans un autre fichier.", history)
   }
 
   if (hasAny(text, ['sert', 'utilite', 'pourquoi', 'a quoi', 'livo'])) {
-    return `LIVO est un outil de gestion d'atelier automobile : ordres de réparation, pointage compagnons, suivi véhicules, rentabilité et relevés mensuels. Tout est centralisé à ${LIVO_PRICING.primaryPlan.priceMonthly} € / mois, sans installation, compagnons illimités.`
+    return avoidRepeatedAnswer(`LIVO est un outil de gestion d'atelier automobile : ordres de réparation, pointage compagnons, suivi véhicules, rentabilité et relevés mensuels. Tout est centralisé à ${LIVO_PRICING.primaryPlan.priceMonthly} € / mois, sans installation, compagnons illimités.`, history)
   }
 
   if (hasAny(text, ['contact', 'mail', 'email', 'ecrire', 'support', 'aide', 'probleme', 'question'])) {
-    return "Pour toute question ou problème, écrivez à LYSMA Solutions via le bouton de contact ci-dessous. Nous revenons vers vous rapidement."
+    return avoidRepeatedAnswer("Pour toute question ou problème, écrivez à LYSMA Solutions via le bouton de contact ci-dessous. Nous revenons vers vous rapidement.", history)
   }
 
   return "Je peux vous renseigner sur le pointage, les ordres de réparation, les rapports de rentabilité, le prix ou l'essai gratuit de LIVO. Posez votre question !"
@@ -324,11 +341,17 @@ export function LivoChatbox() {
       return
     }
 
-    const answer = getAnswer(cleanMessage)
+    const answer = getAnswer(cleanMessage, messages)
+
+    const previousAnswers = messages.filter((m) => m.role === 'assistant').map((m) => m.content)
+    const isDuplicate = previousAnswers.includes(answer)
 
     logChatExchange({
       userPrompt: cleanMessage,
       assistantResponse: answer,
+      quality: isDuplicate ? 'BAD' : 'UNKNOWN',
+      problemType: isDuplicate ? 'DUPLICATE' : undefined,
+      qualityNotes: isDuplicate ? 'Réponse identique à une réponse précédente dans la conversation.' : undefined,
     })
 
     setMessages((current) => [
