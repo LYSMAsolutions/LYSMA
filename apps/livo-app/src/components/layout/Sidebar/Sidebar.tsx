@@ -12,6 +12,7 @@ import {
   ClipboardText,
   Gauge,
   Gear,
+  RocketLaunch,
   Users,
   Wrench,
 } from '@phosphor-icons/react'
@@ -27,8 +28,9 @@ const NAV_ITEMS = [
 ] as const
 
 const BOTTOM_ITEMS = [
-  { href: '/parametres', label: 'Paramètres', icon: Gear },
-] as const
+  { href: '/demarrage' as string, label: 'Prise en main', icon: RocketLaunch },
+  { href: '/parametres' as string, label: 'Paramètres', icon: Gear },
+]
 
 type SidebarProps = {
   garageNom: string
@@ -101,7 +103,7 @@ export function Sidebar({ garageNom, userNom, userEmail, userInitiale }: Sidebar
           {BOTTOM_ITEMS.map(({ href, label, icon: Icon }) => (
             <Link
               key={href}
-              href={href}
+              href={href as '/parametres'}
               className={cn(styles.navItem, pathname === href && styles.active)}
             >
               <Icon className={styles.navIcon} />

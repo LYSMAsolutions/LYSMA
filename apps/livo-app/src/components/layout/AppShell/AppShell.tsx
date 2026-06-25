@@ -7,6 +7,7 @@ import { getPrimaryGarageForUser } from '@/lib/garage'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { ConnectedDataNotice } from './ConnectedDataNotice'
+import { TrialBanner } from '@/components/layout/TrialBanner/TrialBanner'
 import styles from './AppShell.module.css'
 
 type AppShellProps = {
@@ -61,6 +62,9 @@ export async function AppShell({ children }: AppShellProps) {
 
   const garageNom = garage.nom ?? 'Mon Garage'
   const userNom = `${user.prenom ?? ''} ${user.nom ?? ''}`.trim() || 'Utilisateur'
+  const joursTrialRestants = !garage.abonnementActif && garage.trialEndsAt
+    ? Math.max(0, Math.ceil((garage.trialEndsAt.getTime() - Date.now()) / 86_400_000))
+    : null
   const userEmail = user.email ?? ''
   const userInitiale = `${user.prenom?.[0] ?? ''}${user.nom?.[0] ?? ''}`.toUpperCase() || 'U'
 
@@ -76,6 +80,9 @@ export async function AppShell({ children }: AppShellProps) {
       />
 
       <div className={styles.main}>
+        {joursTrialRestants !== null && joursTrialRestants <= 14 && (
+          <TrialBanner joursRestants={joursTrialRestants} />
+        )}
         {children}
         <footer className={styles.footer}>
           <span>© {new Date().getFullYear()} LIVO by LYSMA Solutions</span>

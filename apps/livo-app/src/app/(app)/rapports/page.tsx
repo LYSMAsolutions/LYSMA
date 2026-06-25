@@ -7,6 +7,7 @@ import { RapportsClient } from '@/components/rapports/RapportsClient/RapportsCli
 import { RapportsTabs } from '@/components/rapports/RapportsTabs/RapportsTabs'
 import { RHClient } from '@/components/rh/RHClient/RHClient'
 import { calculateWorkshopMetrics } from '@/lib/workshop-metrics'
+import { PrintButton } from '@/components/rapports/PrintButton/PrintButton'
 import Link from 'next/link'
 import styles from './page.module.css'
 
@@ -381,6 +382,7 @@ export default async function RapportsPage({
       <Header
         title="Rapports"
         description="Valeur vendue, écarts de temps, activité atelier et absences"
+        action={<PrintButton />}
       />
 
       <div className={styles.content}>
