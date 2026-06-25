@@ -82,32 +82,44 @@ const avoidRepeatedAnswer = (answer: string, normalized: string, history: ChatMe
 const getAnswer = (message: string, history: ChatMessage[] = []) => {
   const normalized = normalizeQuestion(message);
   let answer =
-    "Nous pouvons vous orienter sur un site premium, un outil web métier ou la meilleure façon de cadrer votre besoin. Pour une demande précise, écrivez-nous directement.";
+    "LYSMA Solutions crée des sites vitrines premium et des outils web métier sur mesure. Dites-nous ce que vous cherchez à résoudre ou à mettre en place — nous pouvons cadrer votre besoin rapidement.";
 
-  if (normalized.includes("site")) {
+  if (hasAnyKeyword(normalized, ["prix", "tarif", "combien", "cout", "budget", "investissement"])) {
     answer =
-      "Nous créons des sites vitrines premium à la demande, avec une vraie structure, un domaine propre, du contenu lisible et une base pensée pour évoluer.";
-  } else if (isToolQuestion(normalized) && hasAnyKeyword(normalized, ["plombier", "plomberie"])) {
+      "Chaque projet étant différent, nous travaillons sur devis. Le prix dépend de la complexité, du contenu à produire et des fonctionnalités souhaitées. Écrivez-nous avec quelques détails sur votre projet pour qu'on vous réponde précisément.";
+  } else if (hasAnyKeyword(normalized, ["delai", "duree", "temps", "quand", "livraison", "combien de temps"])) {
     answer =
-      "Pour un plombier, nous chercherions d'abord le vrai point de friction : demandes clients, urgences, devis, interventions, photos, suivi de chantier ou rappels. Pour cadrer l'outil, nous avons surtout besoin de savoir qui l'utilise, quelles informations reviennent à chaque intervention et ce qui vous fait perdre du temps. Deux ou trois situations réelles suffisent pour proposer une première version simple.";
+      "Les délais varient selon l'ampleur du projet. Un site vitrine peut être livré en quelques semaines. Un outil métier demande un peu plus de temps selon les fonctionnalités. Nous travaillons par étapes : on livre une première version utile rapidement, puis on améliore.";
+  } else if (normalized.includes("site") && !isToolQuestion(normalized)) {
+    answer =
+      "Nous créons des sites vitrines premium pensés pour durer : structure claire, contenu lisible, domaine propre, hébergement inclus et base technique solide. Chaque site est conçu sur mesure — pas de template générique. Vous pouvez voir Carrosserie Mounier comme exemple de réalisation.";
+  } else if (isToolQuestion(normalized) && hasAnyKeyword(normalized, ["plombier", "plomberie", "electricien", "artisan", "batiment", "chantier"])) {
+    answer =
+      "Pour un artisan, le vrai sujet c'est souvent la perte de temps : devis à rédiger, interventions à suivre, clients à rappeler. Dites-nous quel moment de votre journée vous coûte le plus de temps — c'est là qu'un outil bien ciblé fait la différence.";
+  } else if (isToolQuestion(normalized) && hasAnyKeyword(normalized, ["garage", "carrosserie", "mecanique", "atelier", "reparation"])) {
+    answer =
+      "Pour un garage ou un atelier, LIVO App est notre outil métier : suivi des ordres de réparation, pointage compagnons, fiches véhicules et indicateurs de rentabilité. Vous pouvez découvrir LIVO sur la page réalisations.";
   } else if (
     isToolQuestion(normalized) &&
-    hasAnyKeyword(normalized, ["besoin", "besoins", "metier", "artisan", "chantier", "intervention", "depannage", "planning"])
+    hasAnyKeyword(normalized, ["besoin", "metier", "suivi", "gestion", "intervention", "depannage", "planning", "organisation"])
   ) {
     answer =
-      "Pour cadrer un outil métier, nous avons besoin d'un problème concret : qui l'utilise, quelles informations doivent être suivies, ce qui prend trop de temps et quelle action doit devenir plus simple. On peut ensuite imaginer une première version utile, par exemple un suivi de demandes, un tableau d'activité ou des fiches de travail.";
+      "Pour cadrer un outil métier, nous avons besoin d'un problème concret : qui l'utilise au quotidien, quelles informations doivent être suivies et ce qui prend trop de temps. Deux ou trois situations réelles suffisent pour proposer une première structure utile.";
   } else if (isToolQuestion(normalized)) {
     answer =
-      "Pour un outil web, nous partons d'un besoin métier concret : organisation, suivi, centralisation ou gain de temps. L'objectif est de livrer une première version utile, puis de l'améliorer avec les retours terrain.";
-  } else if (normalized.includes("realisation") || normalized.includes("livo") || normalized.includes("mounier")) {
+      "Nous créons des outils web métier sur mesure : organisation interne, suivi d'activité, centralisation de données ou automatisation de tâches répétitives. On part toujours d'un besoin concret et on livre une première version utilisable rapidement.";
+  } else if (hasAnyKeyword(normalized, ["realisation", "exemple", "portfolio", "reference", "livo", "mounier"])) {
     answer =
-      "Vous pouvez découvrir nos réalisations sur la page dédiée : Carrosserie Mounier pour une vitrine premium, et LIVO App pour un outil web métier.";
-  } else if (normalized.includes("methode") || normalized.includes("comment")) {
+      "Nos deux réalisations principales : Carrosserie Mounier, un site vitrine premium pour une carrosserie locale, et LIVO App, un outil web métier pour la gestion d'atelier automobile. Les deux sont accessibles depuis la page réalisations.";
+  } else if (hasAnyKeyword(normalized, ["methode", "comment", "fonctionne", "processus", "etape", "demarche"])) {
     answer =
-      "Notre méthode reste simple : comprendre le besoin, cadrer le projet, construire proprement, tester, livrer puis améliorer si nécessaire.";
-  } else if (normalized.includes("contact") || normalized.includes("mail") || normalized.includes("devis")) {
+      "Notre méthode : on commence par comprendre le vrai besoin, on cadre le projet en quelques échanges, on construit proprement, on teste avec vous, on livre. Ensuite on améliore sur la durée si nécessaire. Pas de cahier des charges imposé — on avance à votre rythme.";
+  } else if (hasAnyKeyword(normalized, ["contact", "mail", "email", "ecrire", "joindre", "parler", "echanger", "appel"])) {
     answer =
-      "Le plus simple est de nous écrire directement. Le bouton de contact prépare un email à lysmasolutions@gmail.com.";
+      "Le plus simple est de nous écrire directement à lysmasolutions@gmail.com. Le bouton de contact prépare le message avec le bon sujet. Nous répondons rapidement.";
+  } else if (hasAnyKeyword(normalized, ["devis", "proposition", "projet"])) {
+    answer =
+      "Pour recevoir une proposition, partagez-nous votre contexte : type de projet (site ou outil), votre secteur, ce que vous voulez améliorer ou créer. Nous revenons vers vous avec une première orientation sans engagement.";
   }
 
   return avoidRepeatedAnswer(answer, normalized, history);

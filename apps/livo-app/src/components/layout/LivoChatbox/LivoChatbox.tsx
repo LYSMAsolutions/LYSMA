@@ -60,54 +60,63 @@ function hasAny(text: string, keywords: string[]) {
 function getAnswer(message: string) {
   const text = normalize(message)
 
-  if (hasAny(text, ['prix', 'tarif', 'combien', 'cout', 'coût', 'abonnement', 'mensuel', 'mois'])) {
-    return `LIVO est affiché à ${LIVO_PRICING.primaryPlan.priceMonthly} € par mois, avec ${LIVO_PRICING.trialDays} jours d'essai gratuit.`
+  if (hasAny(text, ['prix', 'tarif', 'combien', 'cout', 'coût', 'abonnement', 'mensuel', 'mois', 'euro'])) {
+    return `LIVO est à ${LIVO_PRICING.primaryPlan.priceMonthly} € / mois, compagnons illimités inclus. Vous bénéficiez de ${LIVO_PRICING.trialDays} jours d'essai gratuit sans engagement — accès complet dès l'inscription.`
   }
 
-  if (hasAny(text, ['telephone', 'smartphone', 'mobile', 'tablette', 'ordinateur', 'pc'])) {
-    return "Oui, LIVO fonctionne sur smartphone, tablette et ordinateur. C'est utile si les compagnons doivent pointer directement depuis l'atelier."
+  if (hasAny(text, ['essai', 'gratuit', 'tester', 'essayer', 'decouvrir', 'sans engagement', 'demo'])) {
+    return `Oui, LIVO propose ${LIVO_PRICING.trialDays} jours d'essai gratuit avec accès complet. Pas de carte bancaire requise pour démarrer. Vous pouvez tester toutes les fonctionnalités avec votre vrai atelier.`
   }
 
-  if (hasAny(text, ['seul', 'petit garage', 'petite structure', 'mra', 'independant', 'indépendant'])) {
-    return 'Oui. LIVO est adapté aux petits et moyens ateliers qui veulent un suivi simple, sans outil lourd.'
+  if (hasAny(text, ['installer', 'installation', 'commencer', 'demarrer', 'lancer', 'inscrire', 'inscription', 'connexion'])) {
+    return "LIVO ne nécessite aucune installation. C'est une application web : vous vous connectez depuis n'importe quel navigateur, sur ordinateur, tablette ou smartphone. Vous créez votre garage, ajoutez vos compagnons et vous êtes opérationnel en quelques minutes."
   }
 
-  if (hasAny(text, ['fliquer', 'surveillance', 'surveiller', 'espionner'])) {
-    return "L'objectif de LIVO n'est pas de surveiller les salariés. Il sert surtout à comparer le temps réellement passé dans l'atelier avec le temps facturé et à mieux piloter l'activité."
+  if (hasAny(text, ['telephone', 'smartphone', 'mobile', 'tablette', 'ipad', 'ordinateur', 'pc', 'appareil'])) {
+    return "LIVO fonctionne sur tous les appareils sans installation : ordinateur, tablette et smartphone. Idéal pour les compagnons qui pointent depuis l'atelier sur une tablette, et le gérant qui consulte les indicateurs depuis son bureau ou son téléphone."
   }
 
-  if (text.includes('sert') || text.includes('livo')) {
-    return "LIVO sert à rendre le suivi atelier plus clair : ordres de réparation, temps passé, compagnons et indicateurs utiles. L'objectif est d'avoir une vue fiable sans multiplier les fichiers à côté."
+  if (hasAny(text, ['seul', 'petit garage', 'petite structure', 'mra', 'independant', 'artisan', 'solo'])) {
+    return "LIVO est conçu pour les petits et moyens ateliers. Vous pouvez l'utiliser seul ou avec une équipe — le nombre de compagnons est illimité. L'outil reste simple et ne nécessite pas de formation longue."
   }
 
-  if (
-    (text.includes('legal') || text.includes('conformite') || text.includes('fliquer') || text.includes('surveillance')) &&
-    (text.includes('pointage') || text.includes('vehicule') || text.includes('voiture') || text.includes('or') || text.includes('reparation'))
-  ) {
-    return "Le point important, c'est la transparence. Le pointage par véhicule doit être présenté comme un suivi d'atelier, pas comme une surveillance individuelle. Il faut expliquer l'objectif, les données suivies et les personnes autorisées à les consulter."
+  if (hasAny(text, ['fliquer', 'surveiller', 'surveillance', 'espionner', 'controle'])) {
+    return "LIVO n'est pas un outil de surveillance individuelle. Il sert à comparer le temps passé en atelier avec le temps facturé, et à mieux piloter l'activité globale. Le pointage par véhicule doit être présenté comme un suivi d'atelier, pas un contrôle — la transparence avec l'équipe est essentielle."
   }
 
-  if (text.includes('conformite') || text.includes('legal') || text.includes('inspection') || text.includes('prud')) {
-    return "LIVO peut aider à garder un historique horodaté et consultable des temps de travail. Pour rester clair côté équipe, l'usage doit être annoncé et limité aux données utiles."
+  if (hasAny(text, ['legal', 'loi', 'conformite', 'inspection', 'prud', 'droit du travail'])) {
+    return "LIVO génère un historique horodaté des temps de travail par compagnon et par véhicule, consultable à tout moment. Pour être conforme, l'usage du pointage doit être annoncé à l'équipe et limité aux données utiles au pilotage de l'atelier."
   }
 
-  if (text.includes('ordre') || text.includes('or') || text.includes('reparation') || text.includes('vehicule')) {
-    return 'La partie atelier rassemble les fiches, les véhicules, les compagnons et les informations importantes autour des ordres de réparation. Le but est de retrouver vite ce qui compte pour chaque dossier.'
+  if (hasAny(text, ['fiche', 'ordre de reparation', 'or externe', 'qr', 'integration', 'partenaire', 'logiciel', 'api'])) {
+    return "LIVO gère les ordres de réparation internes et les OR externes — y compris via intégration QR avec vos logiciels partenaires. Chaque fiche regroupe le véhicule, le client, les travaux, les compagnons assignés et le suivi des temps."
   }
 
-  if (text.includes('pointage') || text.includes('temps') || text.includes('compagnon') || text.includes('rh')) {
-    return "Le pointage aide à suivre le temps de travail et à comprendre l'activité réelle de l'atelier. L'idée est d'avoir un suivi clair, sans ressaisie dans plusieurs fichiers."
+  if (hasAny(text, ['ordre', 'reparation', 'vehicule', 'voiture', 'dossier', 'client'])) {
+    return "Dans LIVO, chaque ordre de réparation regroupe le véhicule, le client, les travaux prévus, les compagnons affectés et le suivi des temps. Vous retrouvez toutes les informations d'un dossier en un clic, sans chercher dans plusieurs fichiers."
   }
 
-  if (text.includes('rentabilite') || text.includes('rapport') || text.includes('stat')) {
-    return "Les rapports donnent une lecture simple de l'activité : temps passés, suivi atelier et indicateurs utiles. Le but est d'aider à piloter, pas de noyer l'équipe sous des tableaux."
+  if (hasAny(text, ['pointage', 'pointer', 'heure', 'temps passe', 'compagnon', 'technicien', 'mecanicien'])) {
+    return "Le pointage LIVO fonctionne par véhicule : chaque compagnon indique sur quelle fiche il travaille. Vous voyez en temps réel qui fait quoi, combien de temps a été passé sur chaque OR et quel écart existe entre le temps prévu et le temps réel."
   }
 
-  if (text.includes('contact') || text.includes('mail') || text.includes('aide') || text.includes('support')) {
-    return "Pour un cas précis, le plus simple est d'écrire à LYSMA Solutions. Le bouton de contact prépare un email avec le bon sujet."
+  if (hasAny(text, ['rentabilite', 'marge', 'rapport', 'indicateur', 'stat', 'kpi', 'bilan', 'analyse'])) {
+    return "LIVO calcule automatiquement des indicateurs de rentabilité à partir des données de pointage : temps facturables, écarts atelier, activité par compagnon. Pas de tableaux complexes — des chiffres utiles pour prendre des décisions."
   }
 
-  return "Je n'ai pas assez d'éléments pour répondre précisément. Je peux quand même vous orienter sur le pointage, les OR, les rapports ou l'usage général de LIVO."
+  if (hasAny(text, ['absence', 'conge', 'arret', 'maladie', 'rh', 'releve', 'mensuel', 'paie'])) {
+    return "LIVO inclut un suivi des absences et des relevés mensuels de pointage par compagnon, exportables en PDF. Utile pour le suivi RH sans avoir à ressaisir les données dans un autre fichier."
+  }
+
+  if (hasAny(text, ['sert', 'utilite', 'pourquoi', 'a quoi', 'livo'])) {
+    return `LIVO est un outil de gestion d'atelier automobile : ordres de réparation, pointage compagnons, suivi véhicules, rentabilité et relevés mensuels. Tout est centralisé à ${LIVO_PRICING.primaryPlan.priceMonthly} € / mois, sans installation, compagnons illimités.`
+  }
+
+  if (hasAny(text, ['contact', 'mail', 'email', 'ecrire', 'support', 'aide', 'probleme', 'question'])) {
+    return "Pour toute question ou problème, écrivez à LYSMA Solutions via le bouton de contact ci-dessous. Nous revenons vers vous rapidement."
+  }
+
+  return "Je peux vous renseigner sur le pointage, les ordres de réparation, les rapports de rentabilité, le prix ou l'essai gratuit de LIVO. Posez votre question !"
 }
 
 function detectNegativeFeedback(message: string): ProblemType | null {
