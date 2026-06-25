@@ -34,10 +34,10 @@ const OPT_OUT_KEY = `${STORAGE_PREFIX}:disabled`
 
 const quickReplies = [
   'À quoi sert LIVO ?',
-  'Conformité temps',
+  'Légalité du pointage',
   'Ordres de réparation',
   'Pointage atelier',
-  'Rentabilité',
+  'Essai gratuit',
   'Contacter LYSMA',
 ]
 

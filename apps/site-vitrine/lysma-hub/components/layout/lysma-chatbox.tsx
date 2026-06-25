@@ -8,7 +8,8 @@ type ProblemType =
   | "USER_REPORTED"
   | "MISUNDERSTANDING"
   | "LOST_CONTEXT"
-  | "USER_NEGATIVE_FEEDBACK";
+  | "USER_NEGATIVE_FEEDBACK"
+  | "DUPLICATE";
 
 type ChatMessage = {
   role: "assistant" | "user";
@@ -336,6 +337,11 @@ export function LysmaChatbox() {
 
     const answer = getAnswer(cleanMessage, messages);
 
+    const previousAnswers = messages
+      .filter((m) => m.role === "assistant")
+      .map((m) => m.content);
+    const isDuplicate = previousAnswers.includes(answer);
+
     setMessages((current) => [
       ...current,
       { role: "user", content: cleanMessage },
@@ -345,6 +351,9 @@ export function LysmaChatbox() {
     logChatExchange({
       userPrompt: cleanMessage,
       assistantResponse: answer,
+      quality: isDuplicate ? "BAD" : "UNKNOWN",
+      problemType: isDuplicate ? "DUPLICATE" : undefined,
+      qualityNotes: isDuplicate ? "Réponse identique à une réponse précédente dans la conversation." : undefined,
     });
   };
 
